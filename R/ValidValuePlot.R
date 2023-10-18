@@ -1,7 +1,7 @@
 
-#' Barplot for number of valid values
+#' Barplots showing the percentage of valid values for each sample
 #'
-#' @param D_long data set in long format
+#' @param D_long the data set given in long format
 #' @param output_path output path
 #' @param suffix suffix for file name
 #' @param groupvar_name name for the group variable
@@ -32,25 +32,25 @@ ValidValuePlot <- function(D_long,
 
 
   ## generate basic plot skeleton
-  pl_valid_values <- ggplot(X) +
-    theme_bw(base_size = base_size) +
-    theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1),
-          plot.title = element_text(hjust = 0.5)) +
-    ylab("Number of valid values") + xlab("Sample")
+  pl_valid_values <- ggplot2::ggplot(X) +
+    ggplot2::theme_bw(base_size = base_size) +
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, vjust = 1, hjust = 1),
+          plot.title = ggplot2::element_text(hjust = 0.5)) +
+    ggplot2::ylab("Number of valid values") + ggplot2::xlab("Sample")
 
   # add bars and group colours
   if (use_groups) {
     pl_valid_values <- pl_valid_values +
-      geom_bar(stat = "identity",aes(x = name,y = nrvalid, fill = group)) +
-      labs(fill = groupvar_name)
-    if (!is.null(group_colours)) pl_valid_values <- pl_valid_values + scale_fill_manual(values = group_colours)
+      ggplot2::geom_bar(stat = "identity", ggplot2::aes(x = name,y = nrvalid, fill = group)) +
+      ggplot2::labs(fill = groupvar_name)
+    if (!is.null(group_colours)) pl_valid_values <- pl_valid_values + ggplot2::scale_fill_manual(values = group_colours)
   } else {
     pl_valid_values <- pl_valid_values +
-      geom_bar(stat = "identity",aes(x = name,y = nrvalid))
+      ggplot2::geom_bar(stat = "identity",ggplot2::aes(x = name,y = nrvalid))
   }
 
   # save plot
-  ggsave(paste0(output_path,"valid_value_plot", suffix,".",plot_device),
+  ggplot2::ggsave(paste0(output_path,"valid_value_plot", suffix,".",plot_device),
          plot = pl_valid_values, device = plot_device,
          height = plot_height, width = plot_width, dpi = plot_dpi)
 

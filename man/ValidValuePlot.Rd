@@ -2,7 +2,7 @@
 % Please edit documentation in R/ValidValuePlot.R
 \name{ValidValuePlot}
 \alias{ValidValuePlot}
-\title{Barplot for number of valid values}
+\title{Barplots showing the percentage of valid values for each sample}
 \usage{
 ValidValuePlot(
   D_long,
@@ -18,7 +18,7 @@ ValidValuePlot(
 )
 }
 \arguments{
-\item{D_long}{data set in long format}
+\item{D_long}{the data set given in long format}
 
 \item{output_path}{output path}
 
@@ -42,5 +42,5 @@ ValidValuePlot(
 ggplot, saves a table
 }
 \description{
-Barplot for number of valid values
+Barplots showing the percentage of valid values for each sample
 }
