@@ -16,6 +16,9 @@
 #' @export
 #'
 #' @examples
+#' 
+#' @importFrom magrittr %>%
+#' 
 ValidValuePlot <- function(D_long,
                            output_path = "", suffix = "",
                            groupvar_name = "Group", group_colours = NULL,
