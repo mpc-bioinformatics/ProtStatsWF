@@ -30,6 +30,7 @@ ValidValuePlot <- function(D_long,
   use_groups <- !all(is.na(D_long$group))
 
   ## calculate valid value table and save it
+  name <- group <- value <- nrvalid <- NULL
   X <- D_long %>% dplyr::group_by(name, group) %>% dplyr::summarize(nrvalid = sum(!is.na(value)), meanvalid = mean(!is.na(value)), .groups = 'drop')
   openxlsx::write.xlsx(x = X, file = paste0(output_path, "validvalues", suffix, ".xlsx"), overwrite = TRUE, keepNA = TRUE)
 
