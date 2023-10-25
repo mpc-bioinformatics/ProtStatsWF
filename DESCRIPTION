@@ -16,7 +16,9 @@ Config/testthat/edition: 3
 Imports: 
     dplyr,
     ggplot2,
+    limma,
     magrittr,
-    openxlsx
+    openxlsx,
+    scales
 URL: https://github.com/mpc-bioinformatics/ProtStatsWF
 BugReports: https://github.com/mpc-bioinformatics/ProtStatsWF/issues

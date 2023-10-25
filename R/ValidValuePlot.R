@@ -30,7 +30,7 @@ ValidValuePlot <- function(D_long,
   use_groups <- !all(is.na(D_long$group))
 
   ## calculate valid value table and save it
-  name <- group <- value <- nrvalid <- NULL
+  name <- group <- value <- nrvalid <- NULL  # initialize variables
   X <- D_long %>% dplyr::group_by(name, group) %>% dplyr::summarize(nrvalid = sum(!is.na(value)), meanvalid = mean(!is.na(value)), .groups = 'drop')
   openxlsx::write.xlsx(x = X, file = paste0(output_path, "validvalues", suffix, ".xlsx"), overwrite = TRUE, keepNA = TRUE)
 
@@ -54,9 +54,9 @@ ValidValuePlot <- function(D_long,
   }
 
   # save plot
-  ggplot2::ggsave(paste0(output_path,"valid_value_plot", suffix,".",plot_device),
-         plot = pl_valid_values, device = plot_device,
-         height = plot_height, width = plot_width, dpi = plot_dpi)
+  # ggplot2::ggsave(paste0(output_path,"valid_value_plot", suffix,".",plot_device),
+  #       plot = pl_valid_values, device = plot_device,
+  #       height = plot_height, width = plot_width, dpi = plot_dpi)
 
   return(pl_valid_values)
 }
