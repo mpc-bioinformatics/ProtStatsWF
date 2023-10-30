@@ -18,29 +18,37 @@ ValidValuePlot(
 )
 }
 \arguments{
-\item{D_long}{the data set given in long format}
+\item{D_long}{A data.frame of the data set given in long format.}
 
-\item{output_path}{output path}
+\item{output_path}{A character containing the output path .}
 
-\item{suffix}{suffix for file name}
+\item{suffix}{A character containing the suffix for the file name.}
 
-\item{groupvar_name}{name for the group variable}
+\item{groupvar_name}{A character containing the name for the group variable.}
 
-\item{group_colours}{colours for the groups}
+\item{group_colours}{A character vector of hex codes for the group colors.}
 
-\item{plot_device}{device}
+\item{plot_device}{A character containing the plot device to save graphics.}
 
-\item{plot_height}{height of the plot}
+\item{plot_height}{A numeric containing the height of the plot.}
 
-\item{plot_width}{width of the plot}
+\item{plot_width}{A numeric containing the width of the plot.}
 
-\item{plot_dpi}{resolution of the plot}
+\item{plot_dpi}{A numeric containing the resolution of the plot (in dots per inch).}
 
-\item{base_size}{base size of the font size}
+\item{base_size}{A numeric containing the base size of the font.}
 }
 \value{
 ggplot, saves a table
 }
 \description{
 Barplots showing the percentage of valid values for each sample
+}
+\examples{
+data <- getD_long(data)
+path <- "/User/thisUser/project/results/"
+sufx <- "median"
+
+validValuePlot(D_long = data, output_path = path, suffix = sufx)
+
 }

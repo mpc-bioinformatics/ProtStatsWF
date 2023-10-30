@@ -1,21 +1,25 @@
-
 #' Barplots showing the percentage of valid values for each sample
 #'
-#' @param D_long the data set given in long format
-#' @param output_path output path
-#' @param suffix suffix for file name
-#' @param groupvar_name name for the group variable
-#' @param group_colours colours for the groups
-#' @param plot_device device
-#' @param plot_height height of the plot
-#' @param plot_width width of the plot
-#' @param plot_dpi resolution of the plot
-#' @param base_size base size of the font size
+#' @param D_long A data.frame of the data set given in long format.
+#' @param output_path A character containing the output path .
+#' @param suffix A character containing the suffix for the file name.
+#' @param groupvar_name A character containing the name for the group variable.
+#' @param group_colours A character vector of hex codes for the group colors.
+#' @param plot_device A character containing the plot device to save graphics.
+#' @param plot_height A numeric containing the height of the plot.
+#' @param plot_width A numeric containing the width of the plot.
+#' @param plot_dpi A numeric containing the resolution of the plot (in dots per inch).
+#' @param base_size A numeric containing the base size of the font.
 #'
 #' @return ggplot, saves a table
 #' @export
 #'
 #' @examples
+#' data <- getD_long(data)
+#' path <- "/User/thisUser/project/results/"
+#' sufx <- "median"
+#' 
+#' validValuePlot(D_long = data, output_path = path, suffix = sufx)
 #' 
 #' @importFrom magrittr %>%
 #' 
