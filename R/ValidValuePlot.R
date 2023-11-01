@@ -15,11 +15,6 @@
 #' @export
 #'
 #' @examples
-#' data <- getD_long(data)
-#' path <- "/User/thisUser/project/results/"
-#' sufx <- "median"
-#' 
-#' validValuePlot(D_long = data, output_path = path, suffix = sufx)
 #' 
 #' @importFrom magrittr %>%
 #' 

@@ -44,11 +44,3 @@ ggplot, saves a table
 \description{
 Barplots showing the percentage of valid values for each sample
 }
-\examples{
-data <- getD_long(data)
-path <- "/User/thisUser/project/results/"
-sufx <- "median"
-
-validValuePlot(D_long = data, output_path = path, suffix = sufx)
-
-}

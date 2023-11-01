@@ -12,7 +12,8 @@ prepareData(
   log_data = TRUE,
   log_base = 2,
   use_groups = FALSE,
-  group_colours = NULL
+  group_colours = NULL,
+  normalization = "loess"
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ prepareData(
 
 \item{na_strings}{A character vector containing symbols to be recognized as missing values (with the exception of 0).}
 
+\item{zero_to_NA}{If \code{TRUE}, 0 will be treated as missing value.}
+
 \item{log_data}{If \code{TRUE}, the data will be log-transformed.}
 
 \item{log_base}{A numeric containing the base used, if data is log-transformed.}
@@ -30,17 +33,11 @@ prepareData(
 
 \item{group_colours}{A character vector of hex codes for the group colors, if the data has groups. If \code{NULL}, a default color scale will be used.}
 
-\item{zero_to_na}{If \code{TRUE}, 0 will be treated as missing value.}
+\item{normalization}{A character containing the method of normalization. The possible methods are no normalization "nonorm" or "median", "loess", "quantile" or "lts" normalization.}
 }
 \value{
-A list containing the prepared data and the ids of the data as well as the groups, number of groups and group colors
+A list containing the prepared data and the ids of the data as data.frames as well as the groups, number of groups and group colors
 }
 \description{
 Prepare proteomics data for analysis
-}
-\examples{
-path <- "/User/thisUser/project/data/dataFile.xlsx"
-columns <- 3:10
-prepareData(data_path = path, intensity_columns = columns)
-
 }
