@@ -1,8 +1,6 @@
 #' Barplots showing the percentage of valid values for each sample
 #'
 #' @param D_long A data.frame of the data set given in long format.
-#' @param output_path A character containing the output path .
-#' @param suffix A character containing the suffix for the file name.
 #' @param groupvar_name A character containing the name for the group variable.
 #' @param group_colours A character vector of hex codes for the group colors.
 #' @param plot_device A character containing the plot device to save graphics.
@@ -19,7 +17,6 @@
 #' @importFrom magrittr %>%
 #' 
 ValidValuePlot <- function(D_long,
-                           output_path = "", suffix = "",
                            groupvar_name = "Group", group_colours = NULL,
                            plot_device = "png",
                            plot_height = 10, plot_width = 15, plot_dpi = 300,
@@ -31,7 +28,6 @@ ValidValuePlot <- function(D_long,
   ## calculate valid value table and save it
   name <- group <- value <- nrvalid <- NULL  # initialize variables
   X <- D_long %>% dplyr::group_by(name, group) %>% dplyr::summarize(nrvalid = sum(!is.na(value)), meanvalid = mean(!is.na(value)), .groups = 'drop')
-  openxlsx::write.xlsx(x = X, file = paste0(output_path, "validvalues", suffix, ".xlsx"), overwrite = TRUE, keepNA = TRUE)
 
 
   ## generate basic plot skeleton
@@ -52,12 +48,7 @@ ValidValuePlot <- function(D_long,
       ggplot2::geom_bar(stat = "identity",ggplot2::aes(x = name,y = nrvalid))
   }
 
-  # save plot
-  # ggplot2::ggsave(paste0(output_path,"valid_value_plot", suffix,".",plot_device),
-  #       plot = pl_valid_values, device = plot_device,
-  #       height = plot_height, width = plot_width, dpi = plot_dpi)
-
-  return(pl_valid_values)
+  return(list(X, pl_valid_values))
 }
 
 
