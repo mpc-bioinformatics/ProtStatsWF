@@ -15,8 +15,7 @@
 #' @examples
 #' 
 
-automatedNormalization <- function(DATA, DATA.name = deparse(substitute(DATA)),
-                                   method = "loess", suffix = method, id_columns = NULL,
+automatedNormalization <- function(DATA, method = "loess", id_columns = NULL,
                                    groupwise = FALSE, group = NULL, lts.quantile = 0.8){
   
   mess <- ""

@@ -1,7 +1,7 @@
 # the spreadsheet is correct
 
     Code
-      pGraph[[1]]
+      pVVP[[1]]
     Output
       # A tibble: 9 x 4
         name     group  nrvalid meanvalid
