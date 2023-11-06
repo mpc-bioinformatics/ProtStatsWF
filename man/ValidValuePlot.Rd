@@ -6,8 +6,6 @@
 \usage{
 ValidValuePlot(
   D_long,
-  output_path = "",
-  suffix = "",
   groupvar_name = "Group",
   group_colours = NULL,
   plot_device = "png",
@@ -19,10 +17,6 @@ ValidValuePlot(
 }
 \arguments{
 \item{D_long}{A data.frame of the data set given in long format.}
-
-\item{output_path}{A character containing the output path .}
-
-\item{suffix}{A character containing the suffix for the file name.}
 
 \item{groupvar_name}{A character containing the name for the group variable.}
 
