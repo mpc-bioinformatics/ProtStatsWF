@@ -15,6 +15,7 @@
 #' @examples
 #' 
 #' @importFrom magrittr %>%
+#' @importFrom vdiffr expect_doppelganger
 #' 
 ValidValuePlot <- function(D_long,
                            groupvar_name = "Group", group_colours = NULL,

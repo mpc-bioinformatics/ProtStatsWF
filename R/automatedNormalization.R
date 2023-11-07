@@ -42,7 +42,6 @@ automatedNormalization <- function(DATA, method = "loess", id_columns = NULL,
     }
     
     DATA_norm_2 <- data.frame(id_columns, DATA_norm)
-    message("Normalized data successfully saved!")
     mess <- paste0(mess, "Normalized data successfully saved! \n")
     
   }
