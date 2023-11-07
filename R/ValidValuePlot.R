@@ -3,10 +3,6 @@
 #' @param D_long A data.frame of the data set given in long format.
 #' @param groupvar_name A character containing the name for the group variable.
 #' @param group_colours A character vector of hex codes for the group colors.
-#' @param plot_device A character containing the plot device to save graphics.
-#' @param plot_height A numeric containing the height of the plot.
-#' @param plot_width A numeric containing the width of the plot.
-#' @param plot_dpi A numeric containing the resolution of the plot (in dots per inch).
 #' @param base_size A numeric containing the base size of the font.
 #'
 #' @return a tibble and a ggplot of the valid values
@@ -19,8 +15,6 @@
 #' 
 ValidValuePlot <- function(D_long,
                            groupvar_name = "Group", group_colours = NULL,
-                           plot_device = "png",
-                           plot_height = 10, plot_width = 15, plot_dpi = 300,
                            base_size = 15){
 
 

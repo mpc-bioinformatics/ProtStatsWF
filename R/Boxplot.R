@@ -1,11 +1,21 @@
-
+#' Barplots showing the percentage of valid values for each sample
+#'
+#' @param D_long A data.frame of the data set given in long format.
+#' @param log_data If \code{TRUE}, the data is log-transformed
+#' @param log_base A numeric containing the base used, if data is log-transformed.
+#' @param method A character containing the method used. Possible are "boxplot" and "violinplot".
+#' @param groupvar_name A character containing the name for the group variable.
+#' @param group_colours A character vector of hex codes for the group colors.
+#' @param base_size A numeric containing the base size of the font.
+#'
+#' @return a tibble and a ggplot of the valid values
+#' @export
+#'
 
 Boxplots <- function(D_long,
                      log_data = TRUE, log_base = 2,
                      method = "boxplot",
                      groupvar_name = "Group", group_colours = NULL,
-                     plot_device = "png",
-                     plot_height = 10, plot_width = 15, plot_dpi = 300,
                      base_size = 15){
   
   
