@@ -1,9 +1,7 @@
 #' Automated normalization of proteomics data
 #'
 #' @param DATA A data.frame containing the data.
-#' @param DATA.name Needed?
 #' @param method A character containing the method of normalization. The possible methods are no normalization "nonorm" or "median", "loess", "quantile" or "lts" normalization.
-#' @param suffix Needed?
 #' @param id_columns An integer vector containing the columns of the data of the peptide/protein IDs.
 #' @param groupwise If \code{TRUE}, the data contains groups.
 #' @param group The groups of the data, if it has any.

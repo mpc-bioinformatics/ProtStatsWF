@@ -6,9 +6,7 @@
 \usage{
 automatedNormalization(
   DATA,
-  DATA.name = deparse(substitute(DATA)),
   method = "loess",
-  suffix = method,
   id_columns = NULL,
   groupwise = FALSE,
   group = NULL,
@@ -18,11 +16,7 @@ automatedNormalization(
 \arguments{
 \item{DATA}{A data.frame containing the data.}
 
-\item{DATA.name}{Needed?}
-
 \item{method}{A character containing the method of normalization. The possible methods are no normalization "nonorm" or "median", "loess", "quantile" or "lts" normalization.}
-
-\item{suffix}{Needed?}
 
 \item{id_columns}{An integer vector containing the columns of the data of the peptide/protein IDs.}
 
