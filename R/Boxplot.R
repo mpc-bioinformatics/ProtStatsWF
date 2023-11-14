@@ -21,19 +21,21 @@ Boxplots <- function(D_long,
   
   use_groups <- !all(is.na(D_long$group))
   
+  #D_long <- D_long[!is.na(D_long$value),]
+  
   #### log-transform data is necessary ####
   
   if(log_data) {
     D_long$value <- log(D_long$value, base = log_base)
   }
   
-  name <- value <- group <- X <- NULL
+  name <- value <- group <- NULL
   if (use_groups) {
     pl_boxplot <- ggplot2::ggplot(D_long, ggplot2::aes(x = name, y = value, fill = group)) +
       ggplot2::labs(fill = groupvar_name)
     if (!is.null(group_colours)) pl_boxplot <- pl_boxplot + ggplot2::scale_fill_manual(values = group_colours)
   } else {
-    pl_boxplot <- ggplot2::ggplot(X, ggplot2::aes(x = name, y = value))
+    pl_boxplot <- ggplot2::ggplot(D_long, ggplot2::aes(x = name, y = value))
   }
   
   
