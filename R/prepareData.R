@@ -30,16 +30,19 @@ prepareData <- function (data_path,
   #### read and prepare data file ####
   
   D <- openxlsx::read.xlsx(data_path, na.strings = na_strings)
+  mess = ""
   
   id <- D[, -intensity_columns]
   D <- D[, intensity_columns]
   
   if(zero_to_NA) {
     D[D == 0] <- NA
+    mess <- paste0(mess, "Zeros set to NA. \n")
   }
   
   if(log_data) {
     D <- log(D, base = log_base)
+    mess <- paste0(mess, "Log-transformation with base ", log_base ,". \n")
   }
   
   
@@ -47,8 +50,10 @@ prepareData <- function (data_path,
   
   if (use_groups) {
     group <- factor(limma::strsplit2(colnames(D), "_")[,1])
+    mess <- paste0(mess, "Groups used. \n")
   } else {
     group <- NULL
+    mess <- paste0(mess, "Groups not used. \n")
   }
   
   nr_groups <- length(levels(group))
@@ -60,9 +65,8 @@ prepareData <- function (data_path,
   
   D <- automatedNormalization(DATA = D, method = normalization, id_columns = id)
   
-  Normalization_messages <- NULL
-  Normalization_messages <- D $message
-  D <- D $data
+  mess <- paste0(mess, D$message)
+  D <- D$data
   
   
   #### calculate long form ####
@@ -75,5 +79,5 @@ prepareData <- function (data_path,
   }
   
 
-  return (list(D, id, group, nr_groups, group_colours, D_long))
+  return (list("D" = D, "ID" = id, "D_long" = D_long, "group" = group, "number_groups" = nr_groups, "group_colors" = group_colours, "message" = mess))
 }

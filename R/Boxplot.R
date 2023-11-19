@@ -19,9 +19,8 @@ Boxplots <- function(D_long,
                      base_size = 15){
   
   
+  mess <- ""
   use_groups <- !all(is.na(D_long$group))
-  
-  #D_long <- D_long[!is.na(D_long$value),]
   
   #### log-transform data is necessary ####
   
@@ -46,11 +45,13 @@ Boxplots <- function(D_long,
   
   if (method == "violinplot"){
     pl_boxplot <- pl_boxplot + ggplot2::geom_violin()
+    mess <- paste0(mess, "Violin Plot generated. \n")
   }
   
   if (method == "boxplot") {
     pl_boxplot <- pl_boxplot + ggplot2::geom_boxplot()
+    mess <- paste0(mess, "Boxplot generated. \n")
   }
   
-  return(pl_boxplot)
+  return(list("plot" = pl_boxplot, "message" = mess))
 }
