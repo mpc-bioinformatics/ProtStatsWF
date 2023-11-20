@@ -63,7 +63,7 @@ prepareData <- function (data_path,
   
   #### normalize the data ####
   
-  D <- automatedNormalization(DATA = D, method = normalization, id_columns = id)
+  D <- automatedNormalization(DATA = D, method = normalization, log_transformed = log_data, log_base = log_base)
   
   mess <- paste0(mess, D$message)
   D <- D$data

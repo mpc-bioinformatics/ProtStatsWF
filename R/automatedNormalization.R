@@ -2,7 +2,6 @@
 #'
 #' @param DATA A data.frame containing the data.
 #' @param method A character containing the method of normalization. The possible methods are no normalization "nonorm" or "median", "loess", "quantile" or "lts" normalization.
-#' @param id_columns An integer vector containing the columns of the data of the peptide/protein IDs.
 #' @param log_transformed If \code{TRUE}, the data is log-transformed.
 #' @param log_base A numeric containing the base, in case the data was log-transformed.
 #' @param lts.quantile A numeric containing the quantile for the lts normalization.
@@ -14,8 +13,7 @@
 #' 
 
 automatedNormalization <- function(DATA, 
-                                   method = "loess", 
-                                   id_columns = NULL,
+                                   method = "median", 
                                    log_transformed = TRUE,
                                    log_base = 2,
                                    lts.quantile = 0.8){
@@ -40,8 +38,7 @@ automatedNormalization <- function(DATA,
     DATA_norm <- do.call(fun, args)
     DATA_norm <- as.data.frame(DATA_norm)
     
-    DATA_norm_2 <- data.frame(id_columns, DATA_norm)
-    mess <- paste0(mess, "Normalized data successfully saved. \n")
+    mess <- paste0(mess, "Data successfully ", method ," normalized. \n")
     
   }
   
@@ -55,14 +52,12 @@ automatedNormalization <- function(DATA,
     DATA_norm <- vsn::vsn2(as.matrix(DATA), lts.quantile = lts.quantile)
     DATA_norm <- DATA_norm@hx
     DATA_norm <- as.data.frame(DATA_norm)
-    DATA_norm_2 <- cbind(id_columns, DATA_norm)
-    mess <- paste0(mess, "Normalized data successfully saved. \n")
+    mess <- paste0(mess, "Data successfully lts normalized. \n")
   }
   
   if (method == "nonorm") {
     DATA_norm <- DATA
-    DATA_norm_2 <- data.frame(id_columns, DATA_norm)
-    mess <- paste0(mess, "Normalization method was no normalization. \n")
+    mess <- paste0(mess, "Data successfully not normalized. \n")
   }
   
   return(list("data" = DATA_norm, "message" = mess))
