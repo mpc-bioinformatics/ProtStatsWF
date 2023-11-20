@@ -8,8 +8,8 @@ automatedNormalization(
   DATA,
   method = "loess",
   id_columns = NULL,
-  groupwise = FALSE,
-  group = NULL,
+  log_transformed = TRUE,
+  log_base = 2,
   lts.quantile = 0.8
 )
 }
@@ -20,9 +20,9 @@ automatedNormalization(
 
 \item{id_columns}{An integer vector containing the columns of the data of the peptide/protein IDs.}
 
-\item{groupwise}{If \code{TRUE}, the data contains groups.}
+\item{log_transformed}{If \code{TRUE}, the data is log-transformed.}
 
-\item{group}{The groups of the data, if it has any.}
+\item{log_base}{A numeric containing the base, in case the data was log-transformed.}
 
 \item{lts.quantile}{A numeric containing the quantile for the lts normalization.}
 }

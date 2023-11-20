@@ -3,6 +3,8 @@
 #' @param DATA A data.frame containing the data.
 #' @param method A character containing the method of normalization. The possible methods are no normalization "nonorm" or "median", "loess", "quantile" or "lts" normalization.
 #' @param id_columns An integer vector containing the columns of the data of the peptide/protein IDs.
+#' @param log_transformed If \code{TRUE}, the data is log-transformed.
+#' @param log_base A numeric containing the base, in case the data was log-transformed.
 #' @param lts.quantile A numeric containing the quantile for the lts normalization.
 #'
 #' @return The normalized data as well as a message.
@@ -14,6 +16,8 @@
 automatedNormalization <- function(DATA, 
                                    method = "loess", 
                                    id_columns = NULL,
+                                   log_transformed = TRUE,
+                                   log_base = 2,
                                    lts.quantile = 0.8){
   
   mess <- ""
@@ -41,8 +45,12 @@ automatedNormalization <- function(DATA,
     
   }
   
-  ### TODO: Daten müssen vor dieser Normalisierung nicht log-transformiert werden!
   if (method == "lts") {
+    
+    ### reverse log-transformation, if data is log-transformed
+    if(log_transformed){     
+      DATA <- log_base^DATA
+    }
     
     DATA_norm <- vsn::vsn2(as.matrix(DATA), lts.quantile = lts.quantile)
     DATA_norm <- DATA_norm@hx
