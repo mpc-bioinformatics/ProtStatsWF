@@ -1,3 +1,4 @@
 ^ProtStatsWF\.Rproj$
 ^\.Rproj\.user$
 ^LICENSE\.md$
+^\.github/workflows/testing\.yml$

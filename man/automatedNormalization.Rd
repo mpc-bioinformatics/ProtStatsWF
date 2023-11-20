@@ -6,8 +6,7 @@
 \usage{
 automatedNormalization(
   DATA,
-  method = "loess",
-  id_columns = NULL,
+  method = "median",
   log_transformed = TRUE,
   log_base = 2,
   lts.quantile = 0.8
@@ -17,8 +16,6 @@ automatedNormalization(
 \item{DATA}{A data.frame containing the data.}
 
 \item{method}{A character containing the method of normalization. The possible methods are no normalization "nonorm" or "median", "loess", "quantile" or "lts" normalization.}
-
-\item{id_columns}{An integer vector containing the columns of the data of the peptide/protein IDs.}
 
 \item{log_transformed}{If \code{TRUE}, the data is log-transformed.}
 
