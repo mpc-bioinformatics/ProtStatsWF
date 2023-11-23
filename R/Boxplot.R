@@ -4,6 +4,7 @@
 #' @param log_data If \code{TRUE}, the data is log-transformed
 #' @param log_base A numeric containing the base used, if data is log-transformed.
 #' @param method A character containing the method used. Possible are "boxplot" and "violinplot".
+#' @param use_groups If \code{TRUE} data will be plotted in groups.
 #' @param groupvar_name A character containing the name for the group variable.
 #' @param group_colours A character vector of hex codes for the group colors.
 #' @param base_size A numeric containing the base size of the font.
@@ -13,14 +14,28 @@
 #'
 
 Boxplots <- function(D_long,
-                     log_data = TRUE, log_base = 2,
+                     log_data = TRUE, 
+                     log_base = 2,
                      method = "boxplot",
-                     groupvar_name = "Group", group_colours = NULL,
+                     use_groups = NULL,
+                     groupvar_name = "Group", 
+                     group_colours = NULL,
                      base_size = 15){
   
   
   mess <- ""
-  use_groups <- !all(is.na(D_long$group))
+
+  if(is.null(use_groups)){
+    if(is.na(D_long$group[1])){
+      use_groups <- FALSE
+    }
+    else{use_groups <- TRUE}
+  }
+  else{
+    if(use_groups && is.na(D_long$group[1])){
+      use_groups <- FALSE
+    }
+  }
   
   #### log-transform data is necessary ####
   
@@ -33,8 +48,10 @@ Boxplots <- function(D_long,
     pl_boxplot <- ggplot2::ggplot(D_long, ggplot2::aes(x = name, y = value, fill = group)) +
       ggplot2::labs(fill = groupvar_name)
     if (!is.null(group_colours)) pl_boxplot <- pl_boxplot + ggplot2::scale_fill_manual(values = group_colours)
+    mess <- paste0("with groups. \n", mess)
   } else {
     pl_boxplot <- ggplot2::ggplot(D_long, ggplot2::aes(x = name, y = value))
+    mess <- paste0("without groups. \n", mess)
   }
   
   
@@ -45,12 +62,12 @@ Boxplots <- function(D_long,
   
   if (method == "violinplot"){
     pl_boxplot <- pl_boxplot + ggplot2::geom_violin()
-    mess <- paste0(mess, "Violin Plot generated. \n")
+    mess <- paste0("Violin Plot generated ", mess)
   }
   
   if (method == "boxplot") {
     pl_boxplot <- pl_boxplot + ggplot2::geom_boxplot()
-    mess <- paste0(mess, "Boxplot generated. \n")
+    mess <- paste0("Boxplot generated ", mess)
   }
   
   return(list("plot" = pl_boxplot, "message" = mess))

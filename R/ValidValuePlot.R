@@ -1,6 +1,7 @@
 #' Barplots showing the percentage of valid values for each sample
 #'
 #' @param D_long A data.frame of the data set given in long format.
+#' @param use_groups If \code{TRUE} data will be plotted in groups.
 #' @param groupvar_name A character containing the name for the group variable.
 #' @param group_colours A character vector of hex codes for the group colors.
 #' @param base_size A numeric containing the base size of the font.
@@ -13,12 +14,25 @@
 #' @importFrom magrittr %>%
 #' 
 ValidValuePlot <- function(D_long,
-                           groupvar_name = "Group", group_colours = NULL,
+                           use_groups = NULL,
+                           groupvar_name = "Group", 
+                           group_colours = NULL,
                            base_size = 15){
 
 
   mess <- ""
-  use_groups <- !all(is.na(D_long$group))
+  
+  if(is.null(use_groups)){
+    if(is.na(D_long$group[1])){
+      use_groups <- FALSE
+    }
+    else{use_groups <- TRUE}
+  }
+  else{
+    if(use_groups && is.na(D_long$group[1])){
+      use_groups <- FALSE
+      }
+  }
 
   
   #### calculate valid value table and save it ####
@@ -43,7 +57,7 @@ ValidValuePlot <- function(D_long,
       ggplot2::geom_bar(stat = "identity", ggplot2::aes(x = name,y = nrvalid, fill = group)) +
       ggplot2::labs(fill = groupvar_name)
     if (!is.null(group_colours)) valid_value_plot <- valid_value_plot + ggplot2::scale_fill_manual(values = group_colours)
-    mess <- paste0(mess, "Valid Value Plot with groups generated. \n")
+    mess <- paste0(mess, "Valid Value Plot generated with groups. \n")
   } else {
     valid_value_plot <- valid_value_plot +
       ggplot2::geom_bar(stat = "identity",ggplot2::aes(x = name,y = nrvalid))

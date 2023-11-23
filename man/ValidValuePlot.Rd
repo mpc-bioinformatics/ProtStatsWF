@@ -6,6 +6,7 @@
 \usage{
 ValidValuePlot(
   D_long,
+  use_groups = NULL,
   groupvar_name = "Group",
   group_colours = NULL,
   base_size = 15
@@ -13,6 +14,8 @@ ValidValuePlot(
 }
 \arguments{
 \item{D_long}{A data.frame of the data set given in long format.}
+
+\item{use_groups}{If \code{TRUE} data will be plotted in groups.}
 
 \item{groupvar_name}{A character containing the name for the group variable.}
 

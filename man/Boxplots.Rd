@@ -9,6 +9,7 @@ Boxplots(
   log_data = TRUE,
   log_base = 2,
   method = "boxplot",
+  use_groups = NULL,
   groupvar_name = "Group",
   group_colours = NULL,
   base_size = 15
@@ -22,6 +23,8 @@ Boxplots(
 \item{log_base}{A numeric containing the base used, if data is log-transformed.}
 
 \item{method}{A character containing the method used. Possible are "boxplot" and "violinplot".}
+
+\item{use_groups}{If \code{TRUE} data will be plotted in groups.}
 
 \item{groupvar_name}{A character containing the name for the group variable.}
 
