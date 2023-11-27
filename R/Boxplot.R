@@ -14,7 +14,7 @@
 #'
 
 Boxplots <- function(D_long,
-                     log_data = TRUE, 
+                     log_data = FALSE, 
                      log_base = 2,
                      method = "boxplot",
                      use_groups = NULL,
@@ -37,28 +37,32 @@ Boxplots <- function(D_long,
     }
   }
   
-  #### log-transform data is necessary ####
-  
+  # log-transform data if necessary
   if(log_data) {
     D_long$value <- log(D_long$value, base = log_base)
   }
   
+  x_axis <- sort(unique(D_long$name)) # save the different states for later
+  D_long <- D_long[!is.na(D_long$value),] # remove NA values
+  
   name <- value <- group <- NULL
   if (use_groups) {
-    pl_boxplot <- ggplot2::ggplot(D_long, ggplot2::aes(x = name, y = value, fill = group)) +
-      ggplot2::labs(fill = groupvar_name)
+   pl_boxplot <- ggplot2::ggplot(D_long, ggplot2::aes(x = name, y = value, fill = group)) +
+     ggplot2::labs(fill = groupvar_name) 
     if (!is.null(group_colours)) pl_boxplot <- pl_boxplot + ggplot2::scale_fill_manual(values = group_colours)
-    mess <- paste0("with groups. \n", mess)
+    mess <- paste0(mess, "with groups. \n")
   } else {
     pl_boxplot <- ggplot2::ggplot(D_long, ggplot2::aes(x = name, y = value))
-    mess <- paste0("without groups. \n", mess)
+    mess <- paste0(mess, "without groups. \n")
   }
   
   
   pl_boxplot <- pl_boxplot +
     ggplot2::theme_bw(base_size = base_size) +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, vjust = 1, hjust=1)) +
-    ggplot2::ylab("Log intensity") + ggplot2::xlab("Sample")
+    ggplot2::ylab("Log intensity") + ggplot2::xlab("Sample") + 
+    ggplot2::scale_x_discrete(limits = x_axis, drop = FALSE, na.translate = TRUE)
+  
   
   if (method == "violinplot"){
     pl_boxplot <- pl_boxplot + ggplot2::geom_violin()

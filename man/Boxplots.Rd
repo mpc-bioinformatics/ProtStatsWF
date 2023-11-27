@@ -6,7 +6,7 @@
 \usage{
 Boxplots(
   D_long,
-  log_data = TRUE,
+  log_data = FALSE,
   log_base = 2,
   method = "boxplot",
   use_groups = NULL,
