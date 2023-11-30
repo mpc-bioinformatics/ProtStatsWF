@@ -6,29 +6,20 @@
 \usage{
 automatedNormalization(
   DATA,
-  DATA.name = deparse(substitute(DATA)),
-  method = "loess",
-  suffix = method,
-  id_columns = NULL,
-  groupwise = FALSE,
-  group = NULL,
+  method = "median",
+  log_transformed = TRUE,
+  log_base = 2,
   lts.quantile = 0.8
 )
 }
 \arguments{
 \item{DATA}{A data.frame containing the data.}
 
-\item{DATA.name}{Needed?}
-
 \item{method}{A character containing the method of normalization. The possible methods are no normalization "nonorm" or "median", "loess", "quantile" or "lts" normalization.}
 
-\item{suffix}{Needed?}
+\item{log_transformed}{If \code{TRUE}, the data is log-transformed.}
 
-\item{id_columns}{An integer vector containing the columns of the data of the peptide/protein IDs.}
-
-\item{groupwise}{If \code{TRUE}, the data contains groups.}
-
-\item{group}{The groups of the data, if it has any.}
+\item{log_base}{A numeric containing the base, in case the data was log-transformed.}
 
 \item{lts.quantile}{A numeric containing the quantile for the lts normalization.}
 }

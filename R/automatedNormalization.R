@@ -1,22 +1,21 @@
 #' Automated normalization of proteomics data
 #'
 #' @param DATA A data.frame containing the data.
-#' @param DATA.name Needed?
 #' @param method A character containing the method of normalization. The possible methods are no normalization "nonorm" or "median", "loess", "quantile" or "lts" normalization.
-#' @param suffix Needed?
-#' @param id_columns An integer vector containing the columns of the data of the peptide/protein IDs.
-#' @param groupwise If \code{TRUE}, the data contains groups.
-#' @param group The groups of the data, if it has any.
+#' @param log_transformed If \code{TRUE}, the data is log-transformed.
+#' @param log_base A numeric containing the base, in case the data was log-transformed.
 #' @param lts.quantile A numeric containing the quantile for the lts normalization.
 #'
 #' @return The normalized data as well as a message.
 #' @export
 #'
-#' @examples
 #' 
 
-automatedNormalization <- function(DATA, method = "loess", id_columns = NULL,
-                                   groupwise = FALSE, group = NULL, lts.quantile = 0.8){
+automatedNormalization <- function(DATA, 
+                                   method = "median", 
+                                   log_transformed = TRUE,
+                                   log_base = 2,
+                                   lts.quantile = 0.8){
   
   mess <- ""
   
@@ -34,40 +33,30 @@ automatedNormalization <- function(DATA, method = "loess", id_columns = NULL,
                    "quantile" = list(object = DATA, method = "quantile"),
                    "median" = list(object = DATA, method = "scale"))
     
-    if (!groupwise) {
-      DATA_norm <- do.call(fun, args)
-      DATA_norm <- as.data.frame(DATA_norm)
-    } else {
-      DATA_split <- split.default(DATA, group)
-      DATA_split_norm <- lapply(DATA_split, limma::normalizeBetweenArrays, method = args$method)
-      DATA_norm <- do.call(cbind, DATA_split_norm)
-    }
+ 
+    DATA_norm <- do.call(fun, args)
+    DATA_norm <- as.data.frame(DATA_norm)
     
-    DATA_norm_2 <- data.frame(id_columns, DATA_norm)
-    message("Normalized data successfully saved!")
-    mess <- paste0(mess, "Normalized data successfully saved! \n")
+    mess <- paste0(mess, "Data successfully ", method ," normalized. \n")
     
   }
   
-  ### TODO: Daten müssen vor dieser Normalisierung nicht log-transformiert werden!
-  ### TODO: groupwise normalisation?
   if (method == "lts") {
+    
+    ### reverse log-transformation, if data is log-transformed
+    if(log_transformed){     
+      DATA <- log_base^DATA
+    }
     
     DATA_norm <- vsn::vsn2(as.matrix(DATA), lts.quantile = lts.quantile)
     DATA_norm <- DATA_norm@hx
     DATA_norm <- as.data.frame(DATA_norm)
-    
-    DATA_norm_2 <- cbind(id_columns, DATA_norm)
-    message("Normalized data successfully saved!")
-    mess <- paste0(mess, "Normalized data successfully saved! \n")
+    mess <- paste0(mess, "Data successfully lts normalized. \n")
   }
   
-  if (method == "nonorm") { # if method == "nonorm"
+  if (method == "nonorm") {
     DATA_norm <- DATA
-    DATA_norm_2 <- data.frame(id_columns, DATA_norm)
-    
-    message("Normalized data successfully saved!")
-    mess <- paste0(mess, "Normalized data successfully saved! \n")
+    mess <- paste0(mess, "Data successfully not normalized. \n")
   }
   
   return(list("data" = DATA_norm, "message" = mess))

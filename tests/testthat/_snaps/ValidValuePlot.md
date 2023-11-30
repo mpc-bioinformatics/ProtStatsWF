@@ -1,4 +1,4 @@
-# the spreadsheet is correct
+# Regular ValidValue Plot
 
     Code
       pVVP[[1]]
