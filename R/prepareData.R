@@ -14,7 +14,12 @@
 #' @export
 #' 
 #' @examples
-#'
+#'\dontrun{
+#' path <- "/Users/thisuser/Documents/dataFolder/data.xlsx" 
+#' intensity_cols <- 3:17
+#' 
+#' prepared_data <- prepareData(data_path = path, intensity_columns = intensity_cols)
+#'}
 #' 
 
 

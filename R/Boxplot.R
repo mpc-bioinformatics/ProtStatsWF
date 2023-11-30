@@ -12,6 +12,13 @@
 #' @return a tibble and a ggplot of the valid values
 #' @export
 #'
+#' @examples
+#' \dontrun{
+#' prepared_data <- prepareData(data_path = path, intensity_columns = intensity_cols)
+#' 
+#' boxplot <- Boxplots(D_long = prepared_data[["D_long"]])
+#' }
+#' 
 
 Boxplots <- function(D_long,
                      log_data = FALSE, 

@@ -9,7 +9,6 @@
 #' @return The normalized data as well as a message.
 #' @export
 #'
-#' @examples
 #' 
 
 automatedNormalization <- function(DATA, 

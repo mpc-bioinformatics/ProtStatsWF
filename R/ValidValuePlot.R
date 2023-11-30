@@ -10,6 +10,11 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' prepared_data <- prepareData(data_path = path, intensity_columns = intensity_cols)
+#' 
+#' vvplot <- ValidValuePlot(D_long = prepared_data[["D_long"]])
+#' }
 #' 
 #' @importFrom magrittr %>%
 #' 
