@@ -1,7 +1,7 @@
 #' Barplots showing the percentage of valid values for each sample
 #'
 #' @param D_long A data.frame of the data set given in long format.
-#' @param log_data If \code{TRUE}, the data is log-transformed
+#' @param do_log_transformation If \code{TRUE}, the data is log-transformed
 #' @param log_base A numeric containing the base used, if data is log-transformed.
 #' @param method A character containing the method used. Possible are "boxplot" and "violinplot".
 #' @param use_groups If \code{TRUE} data will be plotted in groups.
@@ -21,7 +21,7 @@
 #' 
 
 Boxplots <- function(D_long,
-                     log_data = FALSE, 
+                     do_log_transformation = FALSE, 
                      log_base = 2,
                      method = "boxplot",
                      use_groups = NULL,
@@ -45,7 +45,7 @@ Boxplots <- function(D_long,
   }
   
   # log-transform data if necessary
-  if(log_data) {
+  if(do_log_transformation) {
     D_long$value <- log(D_long$value, base = log_base)
   }
   

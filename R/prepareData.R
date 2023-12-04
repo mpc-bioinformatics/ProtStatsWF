@@ -4,7 +4,7 @@
 #' @param intensity_columns An integer vector containing the intensity columns of the table.
 #' @param na_strings A character vector containing symbols to be recognized as missing values (with the exception of 0).
 #' @param zero_to_NA If \code{TRUE}, 0 will be treated as missing value.
-#' @param log_data If \code{TRUE}, the data will be log-transformed.
+#' @param do_log_transformation If \code{TRUE}, the data will be log-transformed.
 #' @param log_base A numeric containing the base used, if data is log-transformed.
 #' @param use_groups If \code{TRUE}, the data contains groups.
 #' @param group_colours A character vector of hex codes for the group colors, if the data has groups. If \code{NULL}, a default color scale will be used.
@@ -27,7 +27,7 @@ prepareData <- function (data_path,
                          intensity_columns, 
                          na_strings = c("NA", "NaN", "Filtered","#NV"), 
                          zero_to_NA = TRUE, 
-                         log_data = TRUE, log_base = 2, 
+                         do_log_transformation = TRUE, log_base = 2, 
                          use_groups = FALSE, group_colours = NULL,
                          normalization = "loess"){
   
@@ -45,7 +45,7 @@ prepareData <- function (data_path,
     mess <- paste0(mess, "Zeros set to NA. \n")
   }
   
-  if(log_data) {
+  if(do_log_transformation) {
     D <- log(D, base = log_base)
     mess <- paste0(mess, "Log-transformation with base ", log_base ,". \n")
   }
@@ -68,7 +68,7 @@ prepareData <- function (data_path,
   
   #### normalize the data ####
   
-  D <- automatedNormalization(DATA = D, method = normalization, log_transformed = log_data, log_base = log_base)
+  D <- automatedNormalization(DATA = D, method = normalization, is_log_transformed = do_log_transformation, log_base = log_base)
   
   mess <- paste0(mess, D$message)
   D <- D$data

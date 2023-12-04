@@ -9,7 +9,7 @@ prepareData(
   intensity_columns,
   na_strings = c("NA", "NaN", "Filtered", "#NV"),
   zero_to_NA = TRUE,
-  log_data = TRUE,
+  do_log_transformation = TRUE,
   log_base = 2,
   use_groups = FALSE,
   group_colours = NULL,
@@ -25,7 +25,7 @@ prepareData(
 
 \item{zero_to_NA}{If \code{TRUE}, 0 will be treated as missing value.}
 
-\item{log_data}{If \code{TRUE}, the data will be log-transformed.}
+\item{do_log_transformation}{If \code{TRUE}, the data will be log-transformed.}
 
 \item{log_base}{A numeric containing the base used, if data is log-transformed.}
 

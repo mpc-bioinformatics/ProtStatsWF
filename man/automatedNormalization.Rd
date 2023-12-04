@@ -7,7 +7,7 @@
 automatedNormalization(
   DATA,
   method = "median",
-  log_transformed = TRUE,
+  is_log_transformed = TRUE,
   log_base = 2,
   lts.quantile = 0.8
 )
@@ -17,7 +17,7 @@ automatedNormalization(
 
 \item{method}{A character containing the method of normalization. The possible methods are no normalization "nonorm" or "median", "loess", "quantile" or "lts" normalization.}
 
-\item{log_transformed}{If \code{TRUE}, the data is log-transformed.}
+\item{is_log_transformed}{If \code{TRUE}, the data is log-transformed.}
 
 \item{log_base}{A numeric containing the base, in case the data was log-transformed.}
 
