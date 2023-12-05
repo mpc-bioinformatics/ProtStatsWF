@@ -18,6 +18,7 @@
 #' 
 #' @importFrom magrittr %>%
 #' 
+
 ValidValuePlot <- function(D_long,
                            use_groups = NULL,
                            groupvar_name = "Group", 
