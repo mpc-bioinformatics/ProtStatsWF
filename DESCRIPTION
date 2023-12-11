@@ -16,10 +16,13 @@ Suggests:
 Config/testthat/edition: 3
 Imports: 
     affy,
+    cowplot,
     dplyr,
     ggplot2,
+    ggrepel,
     limma,
     magrittr,
+    matrixStats,
     openxlsx,
     scales,
     stats,
