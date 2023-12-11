@@ -112,7 +112,7 @@ MA_Plots <- function(D,
       num <- num + 1
       utils::setTxtProgressBar(pb, num)
 
-      MA_Plot_single(D[,i], D[, j], log = do_log_transformation, main = main, ...)
+      MA_Plot_single(D[,i], D[, j], do_log_transformation = do_log_transformation, main = main, ...)
     }
   }
   
