@@ -27,5 +27,8 @@ filter_PCA_data <- function(D, impute = FALSE, impute_method = "mean", propNA = 
   ind_zeroVar <- which(v < 1e-25)
   if (length(ind_zeroVar) > 0) D <- D[-ind_zeroVar,]
   
-  return()
+  return(D)
 }
+
+
+

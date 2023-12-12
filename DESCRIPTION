@@ -16,7 +16,6 @@ Suggests:
 Config/testthat/edition: 3
 Imports: 
     affy,
-    cowplot,
     dplyr,
     ggplot2,
     ggrepel,
