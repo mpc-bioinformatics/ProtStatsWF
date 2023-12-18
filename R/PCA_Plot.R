@@ -55,63 +55,41 @@ PCA_Plot <- function(D,
   
   mess = ""
   
-  # TODO: maybe give as an argument?
-  use_groups <- !is.null(groupvar1)
-  
   filtered_D <- filter_PCA_data(D)
   
   mess <- paste0(mess, nrow(filtered_D), " of ", nrow(D), " rows are used for PCA. \n")
   
-  ### calculate PCA
+  #### calculate PCA ####
   pca <- stats::prcomp(t(filtered_D), scale. = scale.)
   pred <- stats::predict(pca, t(filtered_D))
   summ <- summary(pca)
   
   var50 <- which(summ$importance[3,] >= 0.5)[1]
-  mess <- paste0(mess, paste0(" 50% explained variance is reached with ", var50, " principle components.\n"))
+  mess <- paste0(mess, paste0("50% explained variance is reached with ", var50, " principle components.\n"))
   
   
-  
-  
-  ### version with colour and shape
+  #### prepare data.frame ####
+  # version with colour and shape
   if (!is.null(groupvar1) & !is.null(groupvar2)) {
     D_PCA <- data.frame(pred[,c(PCx,PCy)], groupvar1 = groupvar1, groupvar2 = groupvar2)
-    #colnames(D_PCA)[1:2] <- c("PCx", "PCy")
-    #pl <- ggplot2::ggplot(data = D_PCA, ggplot2::aes(x=PCx, y=PCy), text = paste("sample:", "label")) +
-    #  ggplot2::geom_point(ggplot2::aes(colour = groupvar1, shape = groupvar2), size = point.size, alpha = alpha)
-    #pl <- pl + ggplot2::labs(colour = groupvar1_name, shape = groupvar2_name)
-    #if (!is.null(group_colours)) pl <- pl + ggplot2::scale_colour_manual(values = group_colours)
     ### more than 6 different shapes will otherwise give an error message:
     if (nlevels(D_PCA$groupvar2) > 6) pl <- pl + ggplot2::scale_shape_manual(values = 1:nlevels(D$groupvar2))
-    #if(label) pl <- pl + ggrepel::geom_text_repel(ggplot2::aes(x=PCx, y=PCy, label = label, colour = groupvar1), size = label_size) +
-    #  ggplot2::guides(colour = ggplot2::guide_legend(override.aes = ggplot2::aes(label = "")))
   }
   
-  ### version with only colour
+  # version with only colour
   if (!is.null(groupvar1) & is.null(groupvar2)) {
     D_PCA <- data.frame(pred[,c(PCx,PCy)], groupvar1 = groupvar1, label = colnames(filtered_D))
-    #colnames(D_PCA)[1:2] <- c("PCx", "PCy")
-    #pl <- ggplot2::ggplot(data = D_PCA, ggplot2::aes(x=PCx, y=PCy) , text = paste("sample:", "label")) +
-    #  ggplot2::geom_point(ggplot2::aes(colour = groupvar1), size = point.size, alpha = alpha)
-    #pl <- pl + ggplot2::labs(colour = groupvar1_name)
-    #if (!is.null(group_colours)) pl <- pl + ggplot2::scale_colour_manual(values = group_colours)
-    #if(label) pl <- pl + ggrepel::geom_text_repel(ggplot2::aes(x=PCx, y=PCy, label = label, colour = groupvar1), size = label_size) +
-    #  ggplot2::guides(colour = ggplot2::guide_legend(override.aes = ggplot2::aes(label = "")))
   }
   
-  
-  ### version without colour or shape
+  # version without colour or shape
   if (is.null(groupvar1) & is.null(groupvar2)) {
     D_PCA <- data.frame(pred[,c(PCx,PCy)], label = colnames(filtered_D))
-    #colnames(D_PCA)[1:2] <- c("PCx", "PCy")
-    #pl <- ggplot2::ggplot(data = D_PCA, ggplot2::aes(x=PCx, y=PCy) , text = paste("sample:", "label")) +
-    #  ggplot2::geom_point(size = point.size, alpha = alpha)
-    #if(label) pl <- pl + ggrepel::geom_text_repel(ggplot2::aes(x=PCx, y=PCy, label = label, colour = NULL), size = label_size) +
-    #  ggplot2::guides(colour = ggplot2::guide_legend(override.aes = ggplot2::aes(label = "")))
   }
   
   colnames(D_PCA)[1:2] <- c("PCx", "PCy")
   
+  
+  #### make plot ####
   pl <- ggplot2::ggplot(data = D_PCA, ggplot2::aes(x=PCx, y=PCy), text = paste("sample:", "label")) + 
     ggplot2::geom_point(ggplot2::aes(colour = groupvar1, shape = groupvar2), size = point.size, alpha = alpha)
   
@@ -125,13 +103,13 @@ PCA_Plot <- function(D,
     ggplot2::guides(colour = ggplot2::guide_legend(override.aes = ggplot2::aes(label = "")))
   
   
-  ### % der erklärten Varianz in die Achsenbeschriftung einfügen
+  #### add % of explainable variance to the axis label ####
   pl <- pl + ggplot2::theme_bw(base_size = base_size) +
     ggplot2::xlab(paste0("PC", PCx, " (", round(100*summ$importance[2,PCx], 1), "%)")) +
     ggplot2::ylab(paste0("PC", PCy, " (", round(100*summ$importance[2,PCy], 1), "%)"))
   
   
-  ### add xlim and ylim if specified
+  #### add xlim and ylim if specified ####
   if (!is.null(xlim)) pl <- pl + xlim(xlim)
   if (!is.null(ylim)) pl <- pl + ylim(ylim)
   
