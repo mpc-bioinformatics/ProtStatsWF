@@ -1,7 +1,6 @@
 #' Title
 #'
 #' @param D              A data.frame of the data set.
-#' @param id             A data.frame of the according IDs of the data set.
 #' @param groupvar1      A variable used for colors.
 #' @param groupvar2      A variable used for shapes.
 #' @param impute         If \code{TRUE}, missing values will be imputed.
@@ -36,7 +35,7 @@
 #'}
 #' 
 
-PCA_Plot <- function(D, id,
+PCA_Plot <- function(D,
                      groupvar1 = NULL, groupvar2 = NULL,
                      
                      impute = FALSE, impute_method = "mean", propNA = 0,
