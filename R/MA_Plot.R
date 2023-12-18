@@ -120,6 +120,7 @@ MA_Plots <- function(D,
   close(pb)
   mess <- paste0(mess, number_plots, " MA plots generated. \n")
   
+  message(mess)
   
   return("message" = mess)
 }

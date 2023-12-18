@@ -81,5 +81,7 @@ Boxplots <- function(D_long,
     mess <- paste0("Boxplot generated ", mess)
   }
   
+  message(mess)
+  
   return(list("plot" = pl_boxplot, "message" = mess))
 }

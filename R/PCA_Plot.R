@@ -135,6 +135,7 @@ PCA_Plot <- function(D,
   if (!is.null(xlim)) pl <- pl + xlim(xlim)
   if (!is.null(ylim)) pl <- pl + ylim(ylim)
   
+  message(mess)
   
   return(list("plot" = pl, "D_PCA_plot" = cbind(D_PCA, "Sample" = colnames(D)), 
               "pca" = pca, "message" = mess))

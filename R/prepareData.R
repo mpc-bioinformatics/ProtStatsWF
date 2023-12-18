@@ -82,6 +82,7 @@ prepareData <- function (data_path,
     D_long$group <- NA
   }
   
+  message(mess)
 
   return (list("D" = D, "ID" = id, "D_long" = D_long, "group" = group, "number_groups" = nr_groups, "group_colors" = group_colours, "message" = mess))
 }

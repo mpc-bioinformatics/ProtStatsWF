@@ -70,6 +70,8 @@ ValidValuePlot <- function(D_long,
     mess <- paste0(mess, "Valid Value Plot generated without groups. \n")
   }
 
+  message(mess)
+  
   return(list("table" = valid_value_table, "plot" = valid_value_plot, "message" = mess))
 }
 
