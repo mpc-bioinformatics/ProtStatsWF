@@ -72,7 +72,7 @@ ValidValuePlot <- function(D_long,
 
   message(mess)
   
-  return(list("table" = valid_value_table, "plot" = valid_value_plot, "message" = mess))
+  return(list("plot" = valid_value_plot, "table" = valid_value_table, "message" = mess))
 }
 
 

@@ -1,7 +1,7 @@
 # Regular ValidValue Plot
 
     Code
-      pVVP[[1]]
+      pResult[["table"]]
     Output
       # A tibble: 9 x 4
         name     group  nrvalid meanvalid
