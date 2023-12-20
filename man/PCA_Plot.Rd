@@ -6,8 +6,7 @@
 \usage{
 PCA_Plot(
   D,
-  id,
-  groupvar1,
+  groupvar1 = NULL,
   groupvar2 = NULL,
   impute = FALSE,
   impute_method = "mean",
@@ -33,8 +32,6 @@ PCA_Plot(
 }
 \arguments{
 \item{D}{A data.frame of the data set.}
-
-\item{id}{A data.frame of the according IDs of the data set.}
 
 \item{groupvar1}{A variable used for colors.}
 

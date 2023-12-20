@@ -1,10 +1,10 @@
 #' Barplots showing the percentage of valid values for each sample
 #'
-#' @param D_long A data.frame of the data set given in long format.
-#' @param use_groups If \code{TRUE} data will be plotted in groups.
+#' @param D_long        A data.frame of the data set given in long format.
+#' @param use_groups    If \code{TRUE} data will be plotted in groups.
 #' @param groupvar_name A character containing the name for the group variable.
 #' @param group_colours A character vector of hex codes for the group colors.
-#' @param base_size A numeric containing the base size of the font.
+#' @param base_size     A numeric containing the base size of the font.
 #'
 #' @return a tibble and a ggplot of the valid values
 #' @export
