@@ -14,6 +14,7 @@
 #' @param group_colours  The colors for the groups.
 #' @param alpha          If \code{TRUE}, the data points will be transparent.
 #' @param label          If \code{TRUE}, the samples will be labeled.
+#' @param seed           A numeric, which sets the seed for the label.
 #' @param label_size     A numeric containing the size of the sample labels.
 #' @param xlim           Limit of the x-axis.
 #' @param ylim           Limit of the y-axis.
@@ -44,7 +45,7 @@ PCA_Plot <- function(D,
                      
                      groupvar1_name = "group", groupvar2_name = NULL,
                      group_colours = NULL, alpha = 1,
-                     label = FALSE, label_size = 4,
+                     label = FALSE, seed = NA, label_size = 4,
                      xlim = NULL, ylim = NULL,
                      
                      point.size = 4, base_size = 11,
@@ -108,7 +109,7 @@ PCA_Plot <- function(D,
   }
 
   if(label) {
-    pl <- pl + ggrepel::geom_text_repel(ggplot2::aes(x=PCx, y=PCy, label = label, colour = groupvar1), size = label_size) + 
+    pl <- pl + ggrepel::geom_text_repel(ggplot2::aes(x=PCx, y=PCy, label = label, colour = groupvar1), size = label_size, seed = seed) + 
       ggplot2::guides(colour = ggplot2::guide_legend(override.aes = ggplot2::aes(label = "")))
   }
   

@@ -19,6 +19,7 @@ PCA_Plot(
   group_colours = NULL,
   alpha = 1,
   label = FALSE,
+  seed = NA,
   label_size = 4,
   xlim = NULL,
   ylim = NULL,
@@ -58,6 +59,8 @@ PCA_Plot(
 \item{alpha}{If \code{TRUE}, the data points will be transparent.}
 
 \item{label}{If \code{TRUE}, the samples will be labeled.}
+
+\item{seed}{A numeric, which sets the seed for the label.}
 
 \item{label_size}{A numeric containing the size of the sample labels.}
 

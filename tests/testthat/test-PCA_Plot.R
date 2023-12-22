@@ -12,7 +12,6 @@ test_that("PCA plot with NAs", {
 
 test_that("PCA plot with NAs and label", {
   pData <- prepareData(data_path = test_path("testdata", "test01.xlsx"), intensity_columns = 3:11)
-  set.seed(42)
-  pResult <- PCA_Plot(D = pData[["D"]], propNA = 0.2, impute = TRUE)
+  pResult <- PCA_Plot(D = pData[["D"]], propNA = 0.2, impute = TRUE, seed = 42)
   vdiffr::expect_doppelganger("PCA plot labeled", pResult[["plot"]])
 })
