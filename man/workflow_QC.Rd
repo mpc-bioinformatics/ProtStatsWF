@@ -55,7 +55,7 @@ The main workflow for proteomics quality control
 path <- "/Users/thisuser/Documents/dataFolder/data.xlsx" 
 intensity_cols <- 3:17
 
-
+result <- workflow_QC(data_path = path, intensity_columns = intensity_cols)
 }
 
 }

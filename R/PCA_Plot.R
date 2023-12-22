@@ -55,7 +55,15 @@ PCA_Plot <- function(D,
   
   mess = ""
   
-  filtered_D <- filter_PCA_data(D)
+  filtered_D <- filter_PCA_data(D = D, impute = impute, impute_method = impute_method, propNA = propNA)
+  
+  if(is.null(filtered_D)){
+    mess <- paste0(mess, "All rows were filtered out. \n")
+    mess <- paste0(mess, "Try increasing the proportion of missing NAs allowed or imputing missing values. \n")
+    message(mess)
+    return(list("plot" = NULL, "D_PCA_plot" = NULL, 
+                "pca" = NULL, "message" = mess))
+  }
   
   mess <- paste0(mess, nrow(filtered_D), " of ", nrow(D), " rows are used for PCA. \n")
   
@@ -99,8 +107,10 @@ PCA_Plot <- function(D,
     pl <- pl + ggplot2::scale_colour_manual(values = group_colours)
   }
 
-  if(label) pl <- pl + ggrepel::geom_text_repel(ggplot2::aes(x=PCx, y=PCy, label = label, colour = groupvar1), size = label_size) +
-    ggplot2::guides(colour = ggplot2::guide_legend(override.aes = ggplot2::aes(label = "")))
+  if(label) {
+    pl <- pl + ggrepel::geom_text_repel(ggplot2::aes(x=PCx, y=PCy, label = label, colour = groupvar1), size = label_size) + 
+      ggplot2::guides(colour = ggplot2::guide_legend(override.aes = ggplot2::aes(label = "")))
+  }
   
   
   #### add % of explainable variance to the axis label ####
