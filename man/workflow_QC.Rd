@@ -23,6 +23,8 @@ workflow_QC(
   suffix = "",
   normalization_method = "loess",
   boxplot_method = "boxplot",
+  MA_maxPlots = 5000,
+  MA_alpha = FALSE,
   PCA_groupvar1 = NULL,
   PCA_groupvar2 = NULL,
   PCA_impute = FALSE,
@@ -79,6 +81,10 @@ workflow_QC(
 
 \item{boxplot_method}{A character containing the method used for the boxplots. Possible are "boxplot" and "violinplot".}
 
+\item{MA_maxPlots}{A numeric containing the maximum number of MA plots that should be generated.}
+
+\item{MA_alpha}{If \code{TRUE}, the data points of the MA plots will be transparent.}
+
 \item{PCA_groupvar1}{A variable used for colors.}
 
 \item{PCA_groupvar2}{A variable used for shapes.}
@@ -99,7 +105,7 @@ workflow_QC(
 
 \item{PCA_groupvar2_name}{Titles of legends for colour and shape.}
 
-\item{PCA_alpha}{If \code{TRUE}, the data points will be transparent.}
+\item{PCA_alpha}{If \code{TRUE}, the data points of the PCA plot will be transparent.}
 
 \item{PCA_label}{If \code{TRUE}, the samples will be labeled.}
 

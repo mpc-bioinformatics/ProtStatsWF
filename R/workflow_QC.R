@@ -24,6 +24,9 @@
 #' @param normalization_method A character containing the method of normalization. The possible methods are no normalization "nonorm" or "median", "loess", "quantile" or "lts" normalization. 
 #' @param boxplot_method       A character containing the method used for the boxplots. Possible are "boxplot" and "violinplot".
 #'
+#' @param MA_maxPlots A numeric containing the maximum number of MA plots that should be generated.
+#' @param MA_alpha    If \code{TRUE}, the data points of the MA plots will be transparent.
+
 #' @param PCA_groupvar1      A variable used for colors.
 #' @param PCA_groupvar2      A variable used for shapes.
 #' @param PCA_impute         If \code{TRUE}, missing values will be imputed.
@@ -34,7 +37,7 @@
 #' @param PCA_PCy            The principle component for the y-axis (default: 2).
 #' @param PCA_groupvar1_name Titles of legends for colour and shape.
 #' @param PCA_groupvar2_name Titles of legends for colour and shape.
-#' @param PCA_alpha          If \code{TRUE}, the data points will be transparent.
+#' @param PCA_alpha          If \code{TRUE}, the data points of the PCA plot will be transparent.
 #' @param PCA_label          If \code{TRUE}, the samples will be labeled.
 #' @param PCA_label_seed     A numeric, which sets the seed for the label.
 #' @param PCA_label_size     A numeric containing the size of the sample labels.
@@ -85,6 +88,9 @@ workflow_QC <- function(data_path,
                         
                         boxplot_method = "boxplot",
                         
+                        MA_maxPlots = 5000,
+                        MA_alpha = FALSE,
+                        
                         PCA_groupvar1 = NULL, PCA_groupvar2 = NULL,
                         PCA_impute = FALSE, PCA_impute_method = "mean", PCA_propNA = 0,
                         PCA_scale. = TRUE,
@@ -132,6 +138,18 @@ workflow_QC <- function(data_path,
   
   ggplot2::ggsave(paste0(output_path, boxplot_method, "_", suffix, ".", plot_device), plot = boxplot_data[["plot"]], 
          device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi, units = "cm")
+  
+  
+  #### Calculate MA Plot ####
+  
+  ma_data <- MA_Plots(D = prepared_data[["D"]],
+                      do_log_transformation = !do_log_transformation,
+                      output_path = output_path, suffix = suffix,
+                      labels = 1:ncol(prepared_data[["D"]]), labels2 = colnames(prepared_data[["D"]]),
+                      maxPlots = MA_maxPlots, alpha = MA_alpha,
+                      plot_height = plot_height, plot_width = plot_width)
+  
+  mess <- paste0(mess, ma_data)
   
   
   #### Calculate PCA Plot ####
