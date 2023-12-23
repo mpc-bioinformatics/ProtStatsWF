@@ -7,6 +7,7 @@
 workflow_QC(
   data_path,
   intensity_columns,
+  output_path,
   na_strings = c("NA", "NaN", "Filtered", "#NV"),
   zero_to_NA = TRUE,
   do_log_transformation = TRUE,
@@ -14,15 +15,39 @@ workflow_QC(
   use_groups = FALSE,
   groupvar_name = "Group",
   group_colours = NULL,
+  base_size = 15,
+  plot_device = "pdf",
+  plot_height = 10,
+  plot_width = 15,
+  plot_dpi = 300,
+  suffix = "",
   normalization_method = "loess",
   boxplot_method = "boxplot",
-  base_size = 15
+  PCA_groupvar1 = NULL,
+  PCA_groupvar2 = NULL,
+  PCA_impute = FALSE,
+  PCA_impute_method = "mean",
+  PCA_propNA = 0,
+  PCA_scale. = TRUE,
+  PCA_PCx = 1,
+  PCA_PCy = 2,
+  PCA_groupvar1_name = "group",
+  PCA_groupvar2_name = NULL,
+  PCA_alpha = 1,
+  PCA_label = FALSE,
+  PCA_label_seed = NA,
+  PCA_label_size = 4,
+  PCA_xlim = NULL,
+  PCA_ylim = NULL,
+  PCA_point.size = 4
 )
 }
 \arguments{
 \item{data_path}{A character containing the path to an .xlsx file.}
 
 \item{intensity_columns}{An integer vector containing the intensity columns of the table.}
+
+\item{output_path}{A character containing the path to an output folder.}
 
 \item{na_strings}{A character vector containing symbols to be recognized as missing values (with the exception of 0).}
 
@@ -38,11 +63,55 @@ workflow_QC(
 
 \item{group_colours}{A character vector of hex codes for the group colors, if the data has groups. If \code{NULL}, a default color scale will be used.}
 
+\item{base_size}{A numeric containing the base size of the font.}
+
+\item{plot_device}{A character containing the type of the output file, e.g. "pdf" or "png".}
+
+\item{plot_height}{A numeric of the plot height in cm.}
+
+\item{plot_width}{A numeric of the plot width in cm.}
+
+\item{plot_dpi}{A numeric of the "dots per inch" of the plot aka. the plot resolution.}
+
+\item{suffix}{A character containing the suffix for the output files.}
+
 \item{normalization_method}{A character containing the method of normalization. The possible methods are no normalization "nonorm" or "median", "loess", "quantile" or "lts" normalization.}
 
 \item{boxplot_method}{A character containing the method used for the boxplots. Possible are "boxplot" and "violinplot".}
 
-\item{base_size}{A numeric containing the base size of the font.}
+\item{PCA_groupvar1}{A variable used for colors.}
+
+\item{PCA_groupvar2}{A variable used for shapes.}
+
+\item{PCA_impute}{If \code{TRUE}, missing values will be imputed.}
+
+\item{PCA_impute_method}{A character containing the imputation method ("mean" or "median")}
+
+\item{PCA_propNA}{A numeric of the proportion of allowed missing NAs for a protein, before it is discarded.}
+
+\item{PCA_scale.}{If \code{TRUE}, the data will be scaled before computing the PCA.}
+
+\item{PCA_PCx}{The principle component for the x-axis (default: 1).}
+
+\item{PCA_PCy}{The principle component for the y-axis (default: 2).}
+
+\item{PCA_groupvar1_name}{Titles of legends for colour and shape.}
+
+\item{PCA_groupvar2_name}{Titles of legends for colour and shape.}
+
+\item{PCA_alpha}{If \code{TRUE}, the data points will be transparent.}
+
+\item{PCA_label}{If \code{TRUE}, the samples will be labeled.}
+
+\item{PCA_label_seed}{A numeric, which sets the seed for the label.}
+
+\item{PCA_label_size}{A numeric containing the size of the sample labels.}
+
+\item{PCA_xlim}{Limit of the x-axis.}
+
+\item{PCA_ylim}{Limit of the y-axis.}
+
+\item{PCA_point.size}{The size of the data points.}
 }
 \value{
 TBD
@@ -52,10 +121,13 @@ The main workflow for proteomics quality control
 }
 \examples{
 \dontrun{
-path <- "/Users/thisuser/Documents/dataFolder/data.xlsx" 
+in_path <- "/Users/thisuser/Documents/dataFolder/data.xlsx" 
 intensity_cols <- 3:17
+out_path <- "/Users/thisuser/Documents/resultsFolder/" 
 
-result <- workflow_QC(data_path = path, intensity_columns = intensity_cols)
+result <- workflow_QC(data_path = in_path, 
+                      intensity_columns = intensity_cols, 
+                      output_path = out_path)
 }
 
 }

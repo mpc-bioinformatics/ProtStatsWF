@@ -1,32 +1,69 @@
 #' The main workflow for proteomics quality control
 #'
-#' @param data_path             A character containing the path to an .xlsx file.
-#' @param intensity_columns     An integer vector containing the intensity columns of the table. 
-#' @param na_strings            A character vector containing symbols to be recognized as missing values (with the exception of 0). 
-#' @param zero_to_NA            If \code{TRUE}, 0 will be treated as missing value. 
+#' @param data_path         A character containing the path to an .xlsx file.
+#' @param intensity_columns An integer vector containing the intensity columns of the table. 
+#' @param output_path       A character containing the path to an output folder.
+#' 
+#' @param na_strings A character vector containing symbols to be recognized as missing values (with the exception of 0). 
+#' @param zero_to_NA If \code{TRUE}, 0 will be treated as missing value. 
+#' 
 #' @param do_log_transformation If \code{TRUE}, the data will be log-transformed.
 #' @param log_base              A numeric containing the base used, if data is log-transformed. 
-#' @param use_groups            If \code{TRUE}, the data contains groups. 
-#' @param groupvar_name         A character containing the name for the group variable. 
-#' @param group_colours         A character vector of hex codes for the group colors, if the data has groups. If \code{NULL}, a default color scale will be used. 
-#' @param normalization_method  A character containing the method of normalization. The possible methods are no normalization "nonorm" or "median", "loess", "quantile" or "lts" normalization. 
-#' @param boxplot_method        A character containing the method used for the boxplots. Possible are "boxplot" and "violinplot".
-#' @param base_size             A numeric containing the base size of the font.
+#' 
+#' @param use_groups    If \code{TRUE}, the data contains groups. 
+#' @param groupvar_name A character containing the name for the group variable. 
+#' @param group_colours A character vector of hex codes for the group colors, if the data has groups. If \code{NULL}, a default color scale will be used. 
+#' 
+#' @param base_size   A numeric containing the base size of the font.
+#' @param plot_device A character containing the type of the output file, e.g. "pdf" or "png".
+#' @param plot_height A numeric of the plot height in cm.
+#' @param plot_width  A numeric of the plot width in cm.
+#' @param plot_dpi    A numeric of the "dots per inch" of the plot aka. the plot resolution.
+#' @param suffix      A character containing the suffix for the output files.
+#' 
+#' @param normalization_method A character containing the method of normalization. The possible methods are no normalization "nonorm" or "median", "loess", "quantile" or "lts" normalization. 
+#' @param boxplot_method       A character containing the method used for the boxplots. Possible are "boxplot" and "violinplot".
+#'
+#' @param PCA_groupvar1      A variable used for colors.
+#' @param PCA_groupvar2      A variable used for shapes.
+#' @param PCA_impute         If \code{TRUE}, missing values will be imputed.
+#' @param PCA_impute_method  A character containing the imputation method ("mean" or "median")
+#' @param PCA_propNA         A numeric of the proportion of allowed missing NAs for a protein, before it is discarded. 
+#' @param PCA_scale.         If \code{TRUE}, the data will be scaled before computing the PCA.
+#' @param PCA_PCx            The principle component for the x-axis (default: 1).
+#' @param PCA_PCy            The principle component for the y-axis (default: 2).
+#' @param PCA_groupvar1_name Titles of legends for colour and shape.
+#' @param PCA_groupvar2_name Titles of legends for colour and shape.
+#' @param PCA_alpha          If \code{TRUE}, the data points will be transparent.
+#' @param PCA_label          If \code{TRUE}, the samples will be labeled.
+#' @param PCA_label_seed     A numeric, which sets the seed for the label.
+#' @param PCA_label_size     A numeric containing the size of the sample labels.
+#' @param PCA_xlim           Limit of the x-axis.
+#' @param PCA_ylim           Limit of the y-axis.
+#' @param PCA_point.size     The size of the data points.
+
+#'
+#'
 #'
 #' @return TBD
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' path <- "/Users/thisuser/Documents/dataFolder/data.xlsx" 
+#' in_path <- "/Users/thisuser/Documents/dataFolder/data.xlsx" 
 #' intensity_cols <- 3:17
+#' out_path <- "/Users/thisuser/Documents/resultsFolder/" 
 #' 
-#' result <- workflow_QC(data_path = path, intensity_columns = intensity_cols)
+#' result <- workflow_QC(data_path = in_path, 
+#'                       intensity_columns = intensity_cols, 
+#'                       output_path = out_path)
 #'}
 #' 
 
 workflow_QC <- function(data_path, 
                         intensity_columns, 
+                        output_path,
+                        
                         na_strings = c("NA", "NaN", "Filtered","#NV"), 
                         zero_to_NA = TRUE, 
                         
@@ -37,31 +74,84 @@ workflow_QC <- function(data_path,
                         groupvar_name = "Group",
                         group_colours = NULL,
                         
+                        base_size = 15,
+                        plot_device = "pdf",
+                        plot_height = 10,
+                        plot_width = 15,
+                        plot_dpi = 300,
+                        suffix = "",
+                        
                         normalization_method = "loess",
+                        
                         boxplot_method = "boxplot",
                         
-                        base_size = 15
+                        PCA_groupvar1 = NULL, PCA_groupvar2 = NULL,
+                        PCA_impute = FALSE, PCA_impute_method = "mean", PCA_propNA = 0,
+                        PCA_scale. = TRUE,
+                        PCA_PCx = 1, PCA_PCy = 2,
+                        PCA_groupvar1_name = "group", PCA_groupvar2_name = NULL,
+                        PCA_alpha = 1, PCA_label = FALSE, PCA_label_seed = NA, PCA_label_size = 4,
+                        PCA_xlim = NULL, PCA_ylim = NULL, PCA_point.size = 4
+                        
                         ){
   
   mess = ""
+  
+  
+  #### Prepare Data ####
   
   prepared_data <- prepareData(data_path = data_path, intensity_columns = intensity_columns,
                                na_strings = na_strings, zero_to_NA = zero_to_NA,
                                do_log_transformation = do_log_transformation, log_base = log_base,
                                use_groups = use_groups, group_colours = group_colours,
                                normalization = normalization_method)
+  
   mess <- paste0(mess, prepared_data[["message"]])
+  
+  
+  #### Calculate Valid Value Plot ####
   
   vv_plot_data <- ValidValuePlot(D_long = prepared_data[["D_long"]],
                                           use_groups = use_groups, groupvar_name = groupvar_name, group_colours = group_colours,
                                           base_size = base_size)
+  
   mess <- paste0(mess, vv_plot_data[["message"]])
+  
+  ggplot2::ggsave(paste0(output_path,"valid_value_plot_", suffix,".",plot_device), plot = vv_plot_data[["plot"]], 
+         device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi, units = "cm")
+  
+  
+  #### Calculate Valid Value Plot ####
   
   boxplot_data <- Boxplots(D_long = prepared_data[["D_long"]],
                            do_log_transformation = !do_log_transformation, log_base = log_base,
                            use_groups = use_groups, groupvar_name = groupvar_name, group_colours = group_colours,
                            base_size = base_size)
+  
   mess <- paste0(mess, boxplot_data[["message"]])
+  
+  ggplot2::ggsave(paste0(output_path, boxplot_method, "_", suffix, ".", plot_device), plot = boxplot_data[["plot"]], 
+         device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi, units = "cm")
+  
+  
+  #### Calculate PCA Plot ####
+  
+  pca_data <- PCA_Plot(D = prepared_data[["D"]],
+                       groupvar1 = PCA_groupvar1, groupvar2 = PCA_groupvar2,
+                       impute = PCA_impute, impute_method = PCA_impute_method, propNA = PCA_propNA,
+                       scale. = PCA_scale.,
+                       PCx = PCA_PCx, PCy = PCA_PCy,
+                       groupvar1_name = PCA_groupvar1_name, groupvar2_name = PCA_groupvar2_name,
+                       group_colours = group_colours, PCA_alpha = 1,
+                       label = PCA_label, PCA_label_seed = NA, PCA_label_size = 4,
+                       xlim = PCA_xlim, ylim = PCA_ylim,
+                       point.size = PCA_point.size, base_size = base_size)
+  
+  mess <- paste0(mess, pca_data[["message"]])
+  
+  ggplot2::ggsave(paste0(output_path, "PCA_plot_", suffix, ".", plot_device), plot = pca_data[["plot"]],
+         device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi, units = "cm")
+  
   
   return (list("message" = mess))
 }

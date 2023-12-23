@@ -19,15 +19,12 @@ PCA_Plot(
   group_colours = NULL,
   alpha = 1,
   label = FALSE,
-  seed = NA,
+  label_seed = NA,
   label_size = 4,
   xlim = NULL,
   ylim = NULL,
   point.size = 4,
   base_size = 11,
-  plot_height = 10,
-  plot_width = 10,
-  plot_dpi = 300,
   ...
 )
 }
@@ -60,7 +57,7 @@ PCA_Plot(
 
 \item{label}{If \code{TRUE}, the samples will be labeled.}
 
-\item{seed}{A numeric, which sets the seed for the label.}
+\item{label_seed}{A numeric, which sets the seed for the label.}
 
 \item{label_size}{A numeric containing the size of the sample labels.}
 
@@ -70,13 +67,7 @@ PCA_Plot(
 
 \item{point.size}{The size of the data points.}
 
-\item{base_size}{The base size for the plot}
-
-\item{plot_height}{A numeric containing the plot height in cm.}
-
-\item{plot_width}{A numeric containing the plot width in cm.}
-
-\item{plot_dpi}{A numeric containing the "dots-per-inch" for the plot.}
+\item{base_size}{The base size for the plot.}
 
 \item{...}{Additional arguments for ggplot2::plot.}
 }

@@ -14,15 +14,12 @@
 #' @param group_colours  The colors for the groups.
 #' @param alpha          If \code{TRUE}, the data points will be transparent.
 #' @param label          If \code{TRUE}, the samples will be labeled.
-#' @param seed           A numeric, which sets the seed for the label.
+#' @param label_seed     A numeric, which sets the seed for the label.
 #' @param label_size     A numeric containing the size of the sample labels.
 #' @param xlim           Limit of the x-axis.
 #' @param ylim           Limit of the y-axis.
 #' @param point.size     The size of the data points.
-#' @param base_size      The base size for the plot
-#' @param plot_height    A numeric containing the plot height in cm.
-#' @param plot_width     A numeric containing the plot width in cm.
-#' @param plot_dpi       A numeric containing the "dots-per-inch" for the plot.
+#' @param base_size      The base size for the plot.
 #' @param ...            Additional arguments for ggplot2::plot.
 #'
 #' @return The PCA plot for a proteomics sample 
@@ -45,11 +42,10 @@ PCA_Plot <- function(D,
                      
                      groupvar1_name = "group", groupvar2_name = NULL,
                      group_colours = NULL, alpha = 1,
-                     label = FALSE, seed = NA, label_size = 4,
+                     label = FALSE, label_seed = NA, label_size = 4,
                      xlim = NULL, ylim = NULL,
                      
                      point.size = 4, base_size = 11,
-                     plot_height = 10, plot_width = 10, plot_dpi = 300,
                      ...
                      
 ) {
@@ -109,7 +105,7 @@ PCA_Plot <- function(D,
   }
 
   if(label) {
-    pl <- pl + ggrepel::geom_text_repel(ggplot2::aes(x=PCx, y=PCy, label = label, colour = groupvar1), size = label_size, seed = seed) + 
+    pl <- pl + ggrepel::geom_text_repel(ggplot2::aes(x=PCx, y=PCy, label = label, colour = groupvar1), size = label_size, seed = label_seed) + 
       ggplot2::guides(colour = ggplot2::guide_legend(override.aes = ggplot2::aes(label = "")))
   }
   
