@@ -7,14 +7,18 @@
 #' @param point_color           A character containing the colors of the data points.
 #' @param ...                   Additional arguments for affy::ma.plot.
 #'
-#' @return An MA plot for two samples.
+#' @return Generates the MA plot for two samples.
 #' @export
 #'
 #' @examples
 #' \dontrun{
+#' prepared_data <- prepareData(...)
+#' data <- prepared_data[["D"]]
 #' 
-#' TODO!!!
+#' s1 <- D[,1]
+#' s1 <- D[,2]
 #' 
+#' MA_Plot_single(sample_1 = s1, sample_2 = s2)
 #'}
 #' 
 
@@ -60,14 +64,15 @@ MA_Plot_single <- function(sample_1, sample_2,
 #' @param plot_width  The width of the resulting MA plots.
 #' @param ...         Additional arguments for affy::ma.plot.
 #'
-#' @return MA plots for all sample combinations.
+#' @return A pdf file containing the MA plots for all sample combinations.
 #' @export
 #'
 #' @examples
 #' \dontrun{
+#' prepared_data <- prepareData(...)
+#' out_path <- "/Users/thisuser/Documents/resultsFolder/"
 #' 
-#' TODO!!!
-#' 
+#' return_message <- MA_Plots(D = prepared_data[["D"]], output_path = out_path)
 #'}
 #' 
 

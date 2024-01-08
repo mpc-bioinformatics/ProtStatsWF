@@ -26,7 +26,7 @@
 #'
 #' @param MA_maxPlots A numeric containing the maximum number of MA plots that should be generated.
 #' @param MA_alpha    If \code{TRUE}, the data points of the MA plots will be transparent.
-
+#' 
 #' @param PCA_groupvar1      A variable used for colors.
 #' @param PCA_groupvar2      A variable used for shapes.
 #' @param PCA_impute         If \code{TRUE}, missing values will be imputed.

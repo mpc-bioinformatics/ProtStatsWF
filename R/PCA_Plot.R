@@ -27,9 +27,9 @@
 #'
 #' @examples
 #' \dontrun{
+#' prepared_data <- prepareData(...)
 #' 
-#' TODO!!!
-#' 
+#' pca <- PCA_Plot(D = prepared_data[["D"]])
 #'}
 #' 
 

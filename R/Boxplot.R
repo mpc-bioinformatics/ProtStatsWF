@@ -14,7 +14,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' prepared_data <- prepareData(data_path = path, intensity_columns = intensity_cols)
+#' prepared_data <- prepareData(...)
 #' 
 #' boxplot <- Boxplots(D_long = prepared_data[["D_long"]])
 #' }
