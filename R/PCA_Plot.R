@@ -1,4 +1,4 @@
-#' Title
+#' Calculate a PCA plot for proteomics data
 #'
 #' @param D              A data.frame of the data set.
 #' @param groupvar1      A variable used for colors.

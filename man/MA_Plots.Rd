@@ -42,16 +42,17 @@ MA_Plots(
 \item{...}{Additional arguments for affy::ma.plot.}
 }
 \value{
-MA plots for all sample combinations.
+A pdf file containing the MA plots for all sample combinations.
 }
 \description{
 Calculate MA plots for proteomics data set
 }
 \examples{
 \dontrun{
+prepared_data <- prepareData(...)
+out_path <- "/Users/thisuser/Documents/resultsFolder/"
 
-TODO!!!
-
+return_message <- MA_Plots(D = prepared_data[["D"]], output_path = out_path)
 }
 
 }

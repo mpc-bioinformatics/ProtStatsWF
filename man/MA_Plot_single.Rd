@@ -27,16 +27,20 @@ MA_Plot_single(
 \item{...}{Additional arguments for affy::ma.plot.}
 }
 \value{
-An MA plot for two samples.
+Generates the MA plot for two samples.
 }
 \description{
 Calculate one MA plot for proteomics data
 }
 \examples{
 \dontrun{
+prepared_data <- prepareData(...)
+data <- prepared_data[["D"]]
 
-TODO!!!
+s1 <- D[,1]
+s1 <- D[,2]
 
+MA_Plot_single(sample_1 = s1, sample_2 = s2)
 }
 
 }

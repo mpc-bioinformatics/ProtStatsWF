@@ -2,7 +2,7 @@
 % Please edit documentation in R/PCA_Plot.R
 \name{PCA_Plot}
 \alias{PCA_Plot}
-\title{Title}
+\title{Calculate a PCA plot for proteomics data}
 \usage{
 PCA_Plot(
   D,
@@ -75,13 +75,13 @@ PCA_Plot(
 The PCA plot for a proteomics sample
 }
 \description{
-Title
+Calculate a PCA plot for proteomics data
 }
 \examples{
 \dontrun{
+prepared_data <- prepareData(...)
 
-TODO!!!
-
+pca <- PCA_Plot(D = prepared_data[["D"]])
 }
 
 }
