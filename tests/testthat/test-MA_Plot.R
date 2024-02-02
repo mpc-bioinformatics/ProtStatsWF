@@ -1,6 +1,6 @@
 test_that("Single MA plot", {
   
-  pData <- prepareData(data_path = test_path("testdata", "test01.xlsx"), intensity_columns = 3:11)
+  pData <- prepareData(data_path = test_path("testdata", "test02.xlsx"), intensity_columns = 3:6)
   D = pData[["D"]]
   s1 = D[,1]
   s2 = D[,2]
@@ -11,3 +11,14 @@ test_that("Single MA plot", {
   
   expect_snapshot_file(path = test_path("testdata", "MA_plot_snapshot.png"), name = "MA_Plot")
 })
+
+test_that("plot", {
+  
+  pData <- prepareData(data_path = test_path("testdata", "test02.xlsx"), intensity_columns = 3:6)
+  D = pData[["D"]]
+  
+  pResult <- MA_Plots(D = D, do_log_transformation = FALSE, output_path = test_path("testdata", "MA_plots.pdf"))
+  
+  expect_snapshot(pResult)
+})
+
