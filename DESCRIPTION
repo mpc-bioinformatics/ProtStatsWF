@@ -15,12 +15,16 @@ Suggests:
     vdiffr
 Config/testthat/edition: 3
 Imports: 
+    affy,
     dplyr,
     ggplot2,
+    ggrepel,
     limma,
     magrittr,
+    matrixStats,
     openxlsx,
     scales,
+    stats,
     tidyr,
     vsn
 URL: https://github.com/mpc-bioinformatics/ProtStatsWF

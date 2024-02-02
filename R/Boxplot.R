@@ -1,27 +1,27 @@
 #' Barplots showing the percentage of valid values for each sample
 #'
-#' @param D_long A data.frame of the data set given in long format.
-#' @param log_data If \code{TRUE}, the data is log-transformed
-#' @param log_base A numeric containing the base used, if data is log-transformed.
-#' @param method A character containing the method used. Possible are "boxplot" and "violinplot".
-#' @param use_groups If \code{TRUE} data will be plotted in groups.
-#' @param groupvar_name A character containing the name for the group variable.
-#' @param group_colours A character vector of hex codes for the group colors.
-#' @param base_size A numeric containing the base size of the font.
+#' @param D_long                A data.frame of the data set given in long format.
+#' @param do_log_transformation If \code{TRUE}, the data is log-transformed
+#' @param log_base              A numeric containing the base used, if data is log-transformed.
+#' @param method                A character containing the method used. Possible are "boxplot" and "violinplot".
+#' @param use_groups            If \code{TRUE} data will be plotted in groups.
+#' @param groupvar_name         A character containing the name for the group variable.
+#' @param group_colours         A character vector of hex codes for the group colors.
+#' @param base_size             A numeric containing the base size of the font.
 #'
 #' @return a tibble and a ggplot of the valid values
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' prepared_data <- prepareData(data_path = path, intensity_columns = intensity_cols)
+#' prepared_data <- prepareData(...)
 #' 
 #' boxplot <- Boxplots(D_long = prepared_data[["D_long"]])
 #' }
 #' 
 
 Boxplots <- function(D_long,
-                     log_data = FALSE, 
+                     do_log_transformation = FALSE, 
                      log_base = 2,
                      method = "boxplot",
                      use_groups = NULL,
@@ -45,7 +45,7 @@ Boxplots <- function(D_long,
   }
   
   # log-transform data if necessary
-  if(log_data) {
+  if(do_log_transformation) {
     D_long$value <- log(D_long$value, base = log_base)
   }
   
@@ -80,6 +80,8 @@ Boxplots <- function(D_long,
     pl_boxplot <- pl_boxplot + ggplot2::geom_boxplot()
     mess <- paste0("Boxplot generated ", mess)
   }
+  
+  message(mess)
   
   return(list("plot" = pl_boxplot, "message" = mess))
 }

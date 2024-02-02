@@ -6,7 +6,7 @@
 \usage{
 Boxplots(
   D_long,
-  log_data = FALSE,
+  do_log_transformation = FALSE,
   log_base = 2,
   method = "boxplot",
   use_groups = NULL,
@@ -18,7 +18,7 @@ Boxplots(
 \arguments{
 \item{D_long}{A data.frame of the data set given in long format.}
 
-\item{log_data}{If \code{TRUE}, the data is log-transformed}
+\item{do_log_transformation}{If \code{TRUE}, the data is log-transformed}
 
 \item{log_base}{A numeric containing the base used, if data is log-transformed.}
 
@@ -40,7 +40,7 @@ Barplots showing the percentage of valid values for each sample
 }
 \examples{
 \dontrun{
-prepared_data <- prepareData(data_path = path, intensity_columns = intensity_cols)
+prepared_data <- prepareData(...)
 
 boxplot <- Boxplots(D_long = prepared_data[["D_long"]])
 }

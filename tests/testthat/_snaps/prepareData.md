@@ -1,7 +1,7 @@
-# Data preparation with groups
+# Data preparation with groups (median normalization)
 
     Code
-      prepData[[1]]
+      prepData[["D"]]
     Output
         state1_1 state1_2 state1_3 state2_1 state2_2 state2_3 state3_1 state3_2
       1       NA       NA       NA       NA       NA       NA       NA       NA
@@ -27,7 +27,7 @@
 ---
 
     Code
-      prepData[[2]]
+      prepData[["ID"]]
     Output
         peptides proteins
       1     pep1     pro1
@@ -43,7 +43,7 @@
 ---
 
     Code
-      prepData[[3]]
+      prepData[["D_long"]]
     Output
       # A tibble: 81 x 3
          name     value group 
@@ -60,10 +60,10 @@
       10 state1_1    NA state1
       # i 71 more rows
 
-# Data preparation without groups
+# Data preparation without groups (loess normalization)
 
     Code
-      prepData[[1]]
+      prepData[["D"]]
     Output
         state1_1 state1_2 state1_3 state2_1 state2_2 state2_3 state3_1 state3_2
       1 26.08083 26.13939 26.41706 26.24908 26.33195       NA 26.15211       NA
@@ -89,7 +89,7 @@
 ---
 
     Code
-      prepData[[2]]
+      prepData[["ID"]]
     Output
         peptides proteins
       1     pep1     pro1
@@ -105,7 +105,7 @@
 ---
 
     Code
-      prepData[[3]]
+      prepData[["D_long"]]
     Output
       # A tibble: 81 x 3
          name     value group
