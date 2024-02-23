@@ -55,7 +55,7 @@ MA_Plot_single <- function(sample_1, sample_2,
 #' @param D           A data.frame of the data set.
 #' @param do_log_transformation If \code{TRUE}, the data will be log-transformed.
 #' @param output_path A character containing the path to a folder.
-#' @param suffix      A character containing the suffix, with which the output file will be named.
+#' @param suffix      A character containing the suffix, with which the output file will be named. Should start with an underscore.
 #' @param labels      The sample labels for the title of the MA-Plot.
 #' @param labels2     The second line in sample title (e.g. group membership).
 #' @param maxPlots    A numeric containing the maximum number of MA plots that should be generated.
@@ -78,7 +78,7 @@ MA_Plot_single <- function(sample_1, sample_2,
 
 MA_Plots <- function(D,
                     do_log_transformation = FALSE,
-                    output_path = "", suffix = "",
+                    output_path = "", suffix = "_",
                     labels = 1:ncol(D), labels2 = colnames(D),
                     maxPlots = 5000,
                     alpha = FALSE,
@@ -96,7 +96,7 @@ MA_Plots <- function(D,
   num <- 0
   pb <- utils::txtProgressBar(min = 0,max = number_plots,char = "#",style = 3)
   
-  grDevices::pdf(paste0(output_path, "MA_Plots_", suffix, ".pdf"), height = plot_height/2.54, width = plot_width/2.54)
+  grDevices::pdf(paste0(output_path, "MA_Plots", suffix, ".pdf"), height = plot_height/2.54, width = plot_width/2.54)
   
   for(i in 1:(ncol(D)-1)) {
     for (j in (i + 1):ncol(D)) {
