@@ -141,9 +141,9 @@ workflow_QC <- function(data_path,
 
   group <- prepared_data$group
 
-  write.csv(x = prepared_data$ID, file = paste0(output_path, "ID", suffix, ".csv"), row.names = FALSE)
-  write.csv(x = prepared_data$D, file = paste0(output_path, "D_norm_wide", suffix, ".csv"), row.names = FALSE)
-  write.csv(x = prepared_data$D_long, file = paste0(output_path, "D_norm_long", suffix, ".csv"), row.names = FALSE)
+  write.csv(x = prepared_data$ID, file = paste0(output_path, "/ID", suffix, ".csv"), row.names = FALSE)
+  write.csv(x = prepared_data$D, file = paste0(output_path, "/D_norm_wide", suffix, ".csv"), row.names = FALSE)
+  write.csv(x = prepared_data$D_long, file = paste0(output_path, "/D_norm_long", suffix, ".csv"), row.names = FALSE)
 
   #### Calculate Valid Value Plot ####
 
@@ -153,9 +153,9 @@ workflow_QC <- function(data_path,
 
   mess <- paste0(mess, vv_plot_data[["message"]])
 
-  ggplot2::ggsave(paste0(output_path, "valid_value_plot", suffix, ".", plot_device), plot = vv_plot_data[["plot"]],
+  ggplot2::ggsave(paste0(output_path, "/valid_value_plot", suffix, ".", plot_device), plot = vv_plot_data[["plot"]],
          device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi, units = "cm")
-  write.csv(x = vv_plot_data$table, file = paste0(output_path, "D_validvalues", suffix, ".csv"), row.names = FALSE)
+  write.csv(x = vv_plot_data$table, file = paste0(output_path, "/D_validvalues", suffix, ".csv"), row.names = FALSE)
 
 
 
@@ -168,7 +168,7 @@ workflow_QC <- function(data_path,
 
   mess <- paste0(mess, boxplot_data[["message"]])
 
-  ggplot2::ggsave(paste0(output_path, "boxplot", suffix, ".", plot_device), plot = boxplot_data[["plot"]],
+  ggplot2::ggsave(paste0(output_path, "/boxplot", suffix, ".", plot_device), plot = boxplot_data[["plot"]],
          device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi, units = "cm")
 
 
@@ -208,9 +208,9 @@ workflow_QC <- function(data_path,
 
   mess <- paste0(mess, pca_data[["message"]])
 
-  ggplot2::ggsave(paste0(output_path, "PCA_plot", suffix, ".", plot_device), plot = pca_data[["plot"]],
+  ggplot2::ggsave(paste0(output_path, "/PCA_plot", suffix, ".", plot_device), plot = pca_data[["plot"]],
          device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi, units = "cm")
-  write.csv(x = pca_data$D_PCA_plot, file = paste0(output_path, "D_PCA", suffix, ".csv"), row.names = FALSE)
+  write.csv(x = pca_data$D_PCA_plot, file = paste0(output_path, "/D_PCA", suffix, ".csv"), row.names = FALSE)
 
   return (list("message" = mess))
 }
