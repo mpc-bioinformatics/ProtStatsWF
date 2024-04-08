@@ -82,6 +82,9 @@ prepareData <- function (data_path,
     D_long$group <- NA
   }
   
+  ### add column with sample number
+  D_long$sample <- limma::strsplit2(D_long$name, "_")[,2]
+  
   message(mess)
 
   return (list("D" = D, "ID" = id, "D_long" = D_long, "group" = group, "number_groups" = nr_groups, "group_colors" = group_colours, "message" = mess))

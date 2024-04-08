@@ -45,19 +45,19 @@
     Code
       prepData[["D_long"]]
     Output
-      # A tibble: 81 x 3
-         name     value group 
-         <chr>    <dbl> <fct> 
-       1 state1_1    NA state1
-       2 state1_2    NA state1
-       3 state1_3    NA state1
-       4 state2_1    NA state2
-       5 state2_2    NA state2
-       6 state2_3    NA state2
-       7 state3_1    NA state3
-       8 state3_2    NA state3
-       9 state3_3    NA state3
-      10 state1_1    NA state1
+      # A tibble: 81 x 4
+         name     value group  sample
+         <chr>    <dbl> <fct>  <chr> 
+       1 state1_1    NA state1 1     
+       2 state1_2    NA state1 2     
+       3 state1_3    NA state1 3     
+       4 state2_1    NA state2 1     
+       5 state2_2    NA state2 2     
+       6 state2_3    NA state2 3     
+       7 state3_1    NA state3 1     
+       8 state3_2    NA state3 2     
+       9 state3_3    NA state3 3     
+      10 state1_1    NA state1 1     
       # i 71 more rows
 
 # Data preparation without groups (loess normalization)
@@ -107,18 +107,18 @@
     Code
       prepData[["D_long"]]
     Output
-      # A tibble: 81 x 3
-         name     value group
-         <chr>    <dbl> <lgl>
-       1 state1_1  26.1 NA   
-       2 state1_2  26.1 NA   
-       3 state1_3  26.4 NA   
-       4 state2_1  26.2 NA   
-       5 state2_2  26.3 NA   
-       6 state2_3  NA   NA   
-       7 state3_1  26.2 NA   
-       8 state3_2  NA   NA   
-       9 state3_3  26.3 NA   
-      10 state1_1  22.4 NA   
+      # A tibble: 81 x 4
+         name     value group sample
+         <chr>    <dbl> <lgl> <chr> 
+       1 state1_1  26.1 NA    1     
+       2 state1_2  26.1 NA    2     
+       3 state1_3  26.4 NA    3     
+       4 state2_1  26.2 NA    1     
+       5 state2_2  26.3 NA    2     
+       6 state2_3  NA   NA    3     
+       7 state3_1  26.2 NA    1     
+       8 state3_2  NA   NA    2     
+       9 state3_3  26.3 NA    3     
+      10 state1_1  22.4 NA    1     
       # i 71 more rows
 

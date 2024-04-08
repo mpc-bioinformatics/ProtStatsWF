@@ -39,22 +39,28 @@ ValidValuePlot <- function(D_long,
       use_groups <- FALSE
       }
   }
-
+  
   
   #### calculate valid value table and save it ####
   
   name <- group <- value <- nrvalid <- NULL  # initialize variables 
-  valid_value_table <- D_long %>% dplyr::group_by(name, group) %>% dplyr::summarize(nrvalid = sum(!is.na(value)), meanvalid = mean(!is.na(value)), .groups = 'drop')
+  valid_value_table <- D_long %>% 
+    dplyr::group_by(name, group) %>% 
+    dplyr::summarize(nrvalid = sum(!is.na(value)), meanvalid = mean(!is.na(value)), .groups = 'drop')
+  
+  ### add column with sample number
+  valid_value_table$sample <- limma::strsplit2(valid_value_table$name, "_")[,2]
 
-
+  
+  
   #### generate basic plot skeleton ####
   
   valid_value_plot <- ggplot2::ggplot(valid_value_table) +
     ggplot2::theme_bw(base_size = base_size) +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, vjust = 1, hjust = 1),
-          plot.title = ggplot2::element_text(hjust = 0.5)) +
+                   plot.title = ggplot2::element_text(hjust = 0.5)) +
     ggplot2::ylab("Number of valid values") + ggplot2::xlab("Sample")
-
+  
   
   #### add bars and group colours ####
   
@@ -69,6 +75,8 @@ ValidValuePlot <- function(D_long,
       ggplot2::geom_bar(stat = "identity",ggplot2::aes(x = name,y = nrvalid))
     mess <- paste0(mess, "Valid Value Plot generated without groups. \n")
   }
+  
+  
 
   message(mess)
   
