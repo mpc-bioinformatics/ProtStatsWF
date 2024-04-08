@@ -2,6 +2,7 @@
 #'
 #' # path parameters
 #' @param data_path         A character containing the path to an .xlsx file.
+
 #' @param output_path       A character containing the path to an output folder.
 #'
 #' # mandatory parameters
@@ -21,6 +22,7 @@
 #' @param suffix      A character containing the suffix for the output files. Needs to start with an underscore.
 #' #'
 #' ### general plot parameters
+
 #' @param base_size   A numeric containing the base size of the font.
 #' @param plot_device A character containing the type of the output file, e.g. "pdf" or "png".
 #' @param plot_height A numeric of the plot height in cm.
@@ -36,14 +38,14 @@
 #' @param MA_alpha    If \code{TRUE}, the data points of the MA plots will be transparent.
 #'
 #' ### PCA parameters:
+#' @param PCA_groupvar1      A variable used for colors.
+#' @param PCA_groupvar2      A variable used for shapes.
 #' @param PCA_impute         If \code{TRUE}, missing values will be imputed.
 #' @param PCA_impute_method  A character containing the imputation method ("mean" or "median")
 #' @param PCA_propNA         A numeric of the proportion of allowed missing NAs for a protein, before it is discarded.
 #' @param PCA_scale.         If \code{TRUE}, the data will be scaled before computing the PCA.
 #' @param PCA_PCx            The principle component for the x-axis (default: 1).
 #' @param PCA_PCy            The principle component for the y-axis (default: 2).
-# @param PCA_groupvar1 Variable used for colour.
-# @param PCA_groupvar2 Variable used for  shape.
 #' @param PCA_groupvar1_name Titles of legends for colour.
 # @param PCA_groupvar2_name Titles of legends for shape.
 #' @param PCA_alpha          If \code{TRUE}, the data points of the PCA plot will be transparent.
@@ -73,6 +75,7 @@
 #'                       output_path = out_path)
 #'}
 #'
+
 #'
 #'
 #
@@ -99,6 +102,7 @@ workflow_QC <- function(data_path,
                         zero_to_NA = TRUE,
                         do_log_transformation = TRUE,
                         log_base = 2,
+
                         groupvar_name = "Group",
                         group_colours = NULL,
 
@@ -107,7 +111,9 @@ workflow_QC <- function(data_path,
                         plot_height = 10,
                         plot_width = 15,
                         plot_dpi = 300,
+
                         suffix = "_",
+
 
                         boxplot_method = "boxplot",
 
@@ -116,6 +122,7 @@ workflow_QC <- function(data_path,
 
                         #PCA_groupvar1 = "group",
                         #PCA_groupvar2 = NULL,
+
                         PCA_impute = FALSE, PCA_impute_method = "mean", PCA_propNA = 0,
                         PCA_scale. = TRUE,
                         PCA_PCx = 1, PCA_PCy = 2,
@@ -137,6 +144,7 @@ workflow_QC <- function(data_path,
                                use_groups = use_groups, group_colours = group_colours,
                                normalization = normalization_method)
 
+
   mess <- paste0(mess, prepared_data[["message"]])#
 
   group <- prepared_data$group
@@ -145,6 +153,7 @@ workflow_QC <- function(data_path,
   write.csv(x = prepared_data$D, file = paste0(output_path, "/D_norm_wide", suffix, ".csv"), row.names = FALSE)
   write.csv(x = prepared_data$D_long, file = paste0(output_path, "/D_norm_long", suffix, ".csv"), row.names = FALSE)
 
+
   #### Calculate Valid Value Plot ####
 
   vv_plot_data <- ValidValuePlot(D_long = prepared_data[["D_long"]],
@@ -152,6 +161,7 @@ workflow_QC <- function(data_path,
                                           base_size = base_size)
 
   mess <- paste0(mess, vv_plot_data[["message"]])
+
 
   ggplot2::ggsave(paste0(output_path, "/valid_value_plot", suffix, ".", plot_device), plot = vv_plot_data[["plot"]],
          device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi, units = "cm")
@@ -164,11 +174,13 @@ workflow_QC <- function(data_path,
   boxplot_data <- Boxplots(D_long = prepared_data[["D_long"]],
                            do_log_transformation = !do_log_transformation, log_base = log_base,
                            use_groups = use_groups, groupvar_name = groupvar_name, group_colours = group_colours,
+
                            base_size = base_size, method = boxplot_method)
 
   mess <- paste0(mess, boxplot_data[["message"]])
 
   ggplot2::ggsave(paste0(output_path, "/boxplot", suffix, ".", plot_device), plot = boxplot_data[["plot"]],
+
          device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi, units = "cm")
 
 
@@ -186,12 +198,14 @@ workflow_QC <- function(data_path,
 
   #### Calculate PCA Plot ####
 
+
   ### depending of groups should be used or not, the group variable is used in the PCA function
   if (use_groups) {
     PCA_groupvar1 <- group
   } else {
     PCA_groupvar1 <- NULL
   }
+
 
   pca_data <- PCA_Plot(D = prepared_data[["D"]],
                        groupvar1 = group,
@@ -208,9 +222,11 @@ workflow_QC <- function(data_path,
 
   mess <- paste0(mess, pca_data[["message"]])
 
+
   ggplot2::ggsave(paste0(output_path, "/PCA_plot", suffix, ".", plot_device), plot = pca_data[["plot"]],
          device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi, units = "cm")
   write.csv(x = pca_data$D_PCA_plot, file = paste0(output_path, "/D_PCA", suffix, ".csv"), row.names = FALSE)
+
 
   return (list("message" = mess))
 }
