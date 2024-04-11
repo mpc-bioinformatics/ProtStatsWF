@@ -1,45 +1,26 @@
 #' The main workflow for quality control of quantitative proteomics data
 #'
-#' # path parameters
-#' @param data_path         A character containing the path to an .xlsx file.
-
-#' @param output_path       A character containing the path to an output folder.
 #'
-#' # mandatory parameters
+#' @param data_path         A character containing the path to an .xlsx file.
+#' @param output_path       A character containing the path to an output folder.
 #' @param intensity_columns An integer vector containing the intensity columns of the table.
 #' @param normalization_method A character containing the method of normalization. The possible methods are no normalization "nonorm" or "median", "loess", "quantile" or "lts" normalization.
 #' @param use_groups    If \code{TRUE}, group information encoded in the column names are used. Default is \code{TRUE}.
-#' #'
-#' ### additional parameters
 #' @param na_strings A character vector containing symbols to be recognized as missing values (with the exception of 0).
 #' @param zero_to_NA If \code{TRUE}, 0 will be treated as missing value.
 #' @param do_log_transformation If \code{TRUE}, the data will be log-transformed.
 #' @param log_base              A numeric containing the base used, if data is log-transformed.
 #' @param groupvar_name A character containing the name for the group variable.
 #' @param group_colours A character vector of hex codes for the group colors, if the data has groups. If \code{NULL}, a default color scale will be used.
-#' ### TODO: ideally, group_colours would be a named vector!
-#'
 #' @param suffix      A character containing the suffix for the output files. Needs to start with an underscore.
-#' #'
-#' ### general plot parameters
-
 #' @param base_size   A numeric containing the base size of the font.
 #' @param plot_device A character containing the type of the output file, e.g. "pdf" or "png".
 #' @param plot_height A numeric of the plot height in cm.
 #' @param plot_width  A numeric of the plot width in cm.
 #' @param plot_dpi    A numeric of the "dots per inch" of the plot aka. the plot resolution.
-#'
-#'
-#' ### Boxplot parameters
 #' @param boxplot_method A character containing the method used. Possible are "boxplot" and "violinplot". Default is "boxplot".
-#' #'
-#' ### MA-Plot parameters
 #' @param MA_maxPlots A numeric containing the maximum number of MA plots that should be generated. Defaults is 5000.
 #' @param MA_alpha    If \code{TRUE}, the data points of the MA plots will be transparent.
-#'
-#' ### PCA parameters:
-#' @param PCA_groupvar1      A variable used for colors.
-#' @param PCA_groupvar2      A variable used for shapes.
 #' @param PCA_impute         If \code{TRUE}, missing values will be imputed.
 #' @param PCA_impute_method  A character containing the imputation method ("mean" or "median")
 #' @param PCA_propNA         A numeric of the proportion of allowed missing NAs for a protein, before it is discarded.
@@ -47,7 +28,6 @@
 #' @param PCA_PCx            The principle component for the x-axis (default: 1).
 #' @param PCA_PCy            The principle component for the y-axis (default: 2).
 #' @param PCA_groupvar1_name Titles of legends for colour.
-# @param PCA_groupvar2_name Titles of legends for shape.
 #' @param PCA_alpha          If \code{TRUE}, the data points of the PCA plot will be transparent.
 #' @param PCA_label          If \code{TRUE}, the samples will be labeled.
 #' @param PCA_label_seed     A numeric, which sets the seed for the label.
@@ -56,12 +36,7 @@
 #' @param PCA_ylim           Limit of the y-axis.
 #' @param PCA_point.size     The size of the data points.
 #'
-#'
-#'
-#'
-#'
-#'
-#' @return # TODO
+#' @return List with the messages. Different csv and plot files are saved.
 #' @export
 #'
 #' @examples
@@ -76,20 +51,8 @@
 #'}
 #'
 
-#'
-#'
-#
 
-
-### remove those parameters for the workflow. We have always 1 group encoded in the column names
-### or we have only one group, the use_groups is FALSE
-# @param PCA_groupvar1      A variable used for colors.
-# @param PCA_groupvar2      A variable used for shapes.
-# #' @param PCA_groupvar2_name Titles of legends for colour and shape.
-#
-
-# ### boxplots parameters
-# #@param boxplot_method       A character containing the method used for the boxplots. Possible are "boxplot" and "violinplot".
+# TODO: MA-Plot separate height and width
 
 workflow_QC <- function(data_path,
                         output_path,
@@ -149,9 +112,9 @@ workflow_QC <- function(data_path,
 
   group <- prepared_data$group
 
-  write.csv(x = prepared_data$ID, file = paste0(output_path, "/ID", suffix, ".csv"), row.names = FALSE)
-  write.csv(x = prepared_data$D, file = paste0(output_path, "/D_norm_wide", suffix, ".csv"), row.names = FALSE)
-  write.csv(x = prepared_data$D_long, file = paste0(output_path, "/D_norm_long", suffix, ".csv"), row.names = FALSE)
+  utils::write.csv(x = prepared_data$ID, file = paste0(output_path, "/ID", suffix, ".csv"), row.names = FALSE)
+  utils::write.csv(x = prepared_data$D, file = paste0(output_path, "/D_norm_wide", suffix, ".csv"), row.names = FALSE)
+  utils::write.csv(x = prepared_data$D_long, file = paste0(output_path, "/D_norm_long", suffix, ".csv"), row.names = FALSE)
 
 
   #### Calculate Valid Value Plot ####
@@ -165,7 +128,7 @@ workflow_QC <- function(data_path,
 
   ggplot2::ggsave(paste0(output_path, "/valid_value_plot", suffix, ".", plot_device), plot = vv_plot_data[["plot"]],
          device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi, units = "cm")
-  write.csv(x = vv_plot_data$table, file = paste0(output_path, "/D_validvalues", suffix, ".csv"), row.names = FALSE)
+  utils::write.csv(x = vv_plot_data$table, file = paste0(output_path, "/D_validvalues", suffix, ".csv"), row.names = FALSE)
 
 
 
@@ -225,7 +188,7 @@ workflow_QC <- function(data_path,
 
   ggplot2::ggsave(paste0(output_path, "/PCA_plot", suffix, ".", plot_device), plot = pca_data[["plot"]],
          device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi, units = "cm")
-  write.csv(x = pca_data$D_PCA_plot, file = paste0(output_path, "/D_PCA", suffix, ".csv"), row.names = FALSE)
+  utils::write.csv(x = pca_data$D_PCA_plot, file = paste0(output_path, "/D_PCA", suffix, ".csv"), row.names = FALSE)
 
 
   return (list("message" = mess))

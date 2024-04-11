@@ -2,17 +2,18 @@
 % Please edit documentation in R/workflow_QC.R
 \name{workflow_QC}
 \alias{workflow_QC}
-\title{The main workflow for proteomics quality control}
+\title{The main workflow for quality control of quantitative proteomics data}
 \usage{
 workflow_QC(
   data_path,
-  intensity_columns,
   output_path,
+  intensity_columns,
+  normalization_method = "loess",
+  use_groups = TRUE,
   na_strings = c("NA", "NaN", "Filtered", "#NV"),
   zero_to_NA = TRUE,
   do_log_transformation = TRUE,
   log_base = 2,
-  use_groups = FALSE,
   groupvar_name = "Group",
   group_colours = NULL,
   base_size = 15,
@@ -20,13 +21,10 @@ workflow_QC(
   plot_height = 10,
   plot_width = 15,
   plot_dpi = 300,
-  suffix = "",
-  normalization_method = "loess",
+  suffix = "_",
   boxplot_method = "boxplot",
   MA_maxPlots = 5000,
   MA_alpha = FALSE,
-  PCA_groupvar1 = NULL,
-  PCA_groupvar2 = NULL,
   PCA_impute = FALSE,
   PCA_impute_method = "mean",
   PCA_propNA = 0,
@@ -34,7 +32,6 @@ workflow_QC(
   PCA_PCx = 1,
   PCA_PCy = 2,
   PCA_groupvar1_name = "group",
-  PCA_groupvar2_name = NULL,
   PCA_alpha = 1,
   PCA_label = FALSE,
   PCA_label_seed = NA,
@@ -47,9 +44,13 @@ workflow_QC(
 \arguments{
 \item{data_path}{A character containing the path to an .xlsx file.}
 
+\item{output_path}{A character containing the path to an output folder.}
+
 \item{intensity_columns}{An integer vector containing the intensity columns of the table.}
 
-\item{output_path}{A character containing the path to an output folder.}
+\item{normalization_method}{A character containing the method of normalization. The possible methods are no normalization "nonorm" or "median", "loess", "quantile" or "lts" normalization.}
+
+\item{use_groups}{If \code{TRUE}, group information encoded in the column names are used. Default is \code{TRUE}.}
 
 \item{na_strings}{A character vector containing symbols to be recognized as missing values (with the exception of 0).}
 
@@ -58,8 +59,6 @@ workflow_QC(
 \item{do_log_transformation}{If \code{TRUE}, the data will be log-transformed.}
 
 \item{log_base}{A numeric containing the base used, if data is log-transformed.}
-
-\item{use_groups}{If \code{TRUE}, the data contains groups.}
 
 \item{groupvar_name}{A character containing the name for the group variable.}
 
@@ -75,19 +74,13 @@ workflow_QC(
 
 \item{plot_dpi}{A numeric of the "dots per inch" of the plot aka. the plot resolution.}
 
-\item{suffix}{A character containing the suffix for the output files.}
+\item{suffix}{A character containing the suffix for the output files. Needs to start with an underscore.}
 
-\item{normalization_method}{A character containing the method of normalization. The possible methods are no normalization "nonorm" or "median", "loess", "quantile" or "lts" normalization.}
+\item{boxplot_method}{A character containing the method used. Possible are "boxplot" and "violinplot". Default is "boxplot".}
 
-\item{boxplot_method}{A character containing the method used for the boxplots. Possible are "boxplot" and "violinplot".}
-
-\item{MA_maxPlots}{A numeric containing the maximum number of MA plots that should be generated.}
+\item{MA_maxPlots}{A numeric containing the maximum number of MA plots that should be generated. Defaults is 5000.}
 
 \item{MA_alpha}{If \code{TRUE}, the data points of the MA plots will be transparent.}
-
-\item{PCA_groupvar1}{A variable used for colors.}
-
-\item{PCA_groupvar2}{A variable used for shapes.}
 
 \item{PCA_impute}{If \code{TRUE}, missing values will be imputed.}
 
@@ -101,9 +94,7 @@ workflow_QC(
 
 \item{PCA_PCy}{The principle component for the y-axis (default: 2).}
 
-\item{PCA_groupvar1_name}{Titles of legends for colour and shape.}
-
-\item{PCA_groupvar2_name}{Titles of legends for colour and shape.}
+\item{PCA_groupvar1_name}{Titles of legends for colour.}
 
 \item{PCA_alpha}{If \code{TRUE}, the data points of the PCA plot will be transparent.}
 
@@ -120,19 +111,19 @@ workflow_QC(
 \item{PCA_point.size}{The size of the data points.}
 }
 \value{
-TBD
+List with the messages. Different csv and plot files are saved.
 }
 \description{
-The main workflow for proteomics quality control
+The main workflow for quality control of quantitative proteomics data
 }
 \examples{
 \dontrun{
-in_path <- "/Users/thisuser/Documents/dataFolder/data.xlsx" 
+in_path <- "/Users/thisuser/Documents/dataFolder/data.xlsx"
 intensity_cols <- 3:17
-out_path <- "/Users/thisuser/Documents/resultsFolder/" 
+out_path <- "/Users/thisuser/Documents/resultsFolder/"
 
-result <- workflow_QC(data_path = in_path, 
-                      intensity_columns = intensity_cols, 
+result <- workflow_QC(data_path = in_path,
+                      intensity_columns = intensity_cols,
                       output_path = out_path)
 }
 

@@ -9,7 +9,7 @@ Description: This package offers a statistics workflows for proteomics data.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 Suggests: 
     testthat (>= 3.0.0),
     vdiffr
@@ -23,6 +23,7 @@ Imports:
     magrittr,
     matrixStats,
     openxlsx,
+    pbapply,
     scales,
     stats,
     tidyr,
