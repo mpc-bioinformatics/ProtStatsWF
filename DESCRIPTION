@@ -16,12 +16,16 @@ Suggests:
 Config/testthat/edition: 3
 Imports: 
     affy,
+    car,
     dplyr,
     ggplot2,
     ggrepel,
+    gtools,
     limma,
     magrittr,
     matrixStats,
+    multcomp,
+    nlme,
     openxlsx,
     pbapply,
     scales,
