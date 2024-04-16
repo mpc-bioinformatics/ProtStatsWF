@@ -26,3 +26,6 @@ list of 3 ggplot objects
 \description{
 Generates histograms for p-values, adjusted p-values and fold changes
 }
+\examples{
+# TODO
+}

@@ -17,6 +17,7 @@ Config/testthat/edition: 3
 Imports: 
     affy,
     car,
+    ComplexHeatmap,
     dplyr,
     ggplot2,
     ggrepel,
