@@ -239,7 +239,7 @@ add_labels <- function(RES_Volcano,
     }
   }
   if (label_type == "noFDR") {
-    ind_label <- which(RES_Volcano$RES$significance == "significant")
+    ind_label <- which(RES_Volcano$RES$significance %in% c("significant", "significant after FDR correction"))
     if (length(ind_label) == 0) {
       warning("No significant proteins for labelling. Try lowering the fold change threshold.")
       return(RES_Volcano$plot)
