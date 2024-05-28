@@ -8,7 +8,7 @@ MA_Plots(
   D,
   do_log_transformation = FALSE,
   output_path = "",
-  suffix = "",
+  suffix = "_",
   labels = 1:ncol(D),
   labels2 = colnames(D),
   maxPlots = 5000,
@@ -25,7 +25,7 @@ MA_Plots(
 
 \item{output_path}{A character containing the path to a folder.}
 
-\item{suffix}{A character containing the suffix, with which the output file will be named.}
+\item{suffix}{A character containing the suffix, with which the output file will be named. Should start with an underscore.}
 
 \item{labels}{The sample labels for the title of the MA-Plot.}
 
