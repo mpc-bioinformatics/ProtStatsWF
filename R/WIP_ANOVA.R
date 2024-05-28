@@ -78,7 +78,7 @@ ANOVA <- function(D,
   if (!is.null(id)) {
     D <- cbind(id, D)
   }
-  openxlsx::write.xlsx(cbind(D, RES), file, keepNA = TRUE, overwrite = TRUE)
+  openxlsx::write.xlsx(cbind(D, RES), filename, keepNA = TRUE, overwrite = TRUE)
 
   return(cbind(D, RES))
 }
