@@ -20,7 +20,7 @@
 calculate_significance_categories <- function(p, p_adj, fc, thres_fc=2, thres_p=0.05) {
 
   significance <- dplyr::case_when(
-    p_adj <= thres_p & (fc >= thres_fc | fc <= 1/thres_fc) & !is.na(p) ~ "significant after FDR correction",
+    p_adj <= thres_p & p <= thres_p & (fc >= thres_fc | fc <= 1/thres_fc) & !is.na(p) ~ "significant after FDR correction",
     p_adj > thres_p & p <= thres_p & (fc >= thres_fc | fc <= 1/thres_fc) & !is.na(p) ~ "significant",
     (p > thres_p | (fc < thres_fc & fc > 1/thres_fc)) & !is.na(p) ~ "not significant",
     is.na(p) ~ NA_character_
@@ -198,7 +198,7 @@ VolcanoPlot <- function(RES,
   ggplot2::ggsave(paste0(output_path,"Volcano_Plot", suffix, ".",plot_device),
          plot = plot, device = plot_device,
          height = plot_height, width = plot_width, dpi = plot_dpi, units = "cm")
-  return(list(RES = RES, plot = plot))
+  return(plot = plot) # its not necessary to return the data also, they are already present in the plot object
 }
 
 
@@ -219,7 +219,7 @@ VolcanoPlot <- function(RES,
 #' Add labels to a volcano plot
 #'
 #' @param RES_Volcano  result from volcanoPlot(): a list containing the data frame with the transformed data and the ggplot object
-#' @param label_type "FDR" (significant after correction) or "noFDR" (significant without correction)
+#' @param label_type "FDR" (significant after correction) or "noFDR" (significant without correction) or "index" -> define indizes to label
 #' @param protein_name_column column name of the protein names in the RES data frame
 #'
 #' @return ggplot object with labels
@@ -228,32 +228,42 @@ VolcanoPlot <- function(RES,
 #' @examples # TODO
 add_labels <- function(RES_Volcano,
                        label_type = "FDR",
+                       ind = NULL,
                        protein_name_column = "Gene.names") {
 
 
   if (label_type == "FDR") {
-    ind_label <- which(RES_Volcano$RES$significance == "significant after FDR correction")
+    ind_label <- which(RES_Volcano$data$significance == "significant after FDR correction")
     if (length(ind_label) == 0) {
       warning("No significant proteins after FDR correction for labelling. Try changing label_type to noFDR or lower the fold change threshold.")
       return(RES_Volcano$plot)
     }
   }
   if (label_type == "noFDR") {
-    ind_label <- which(RES_Volcano$RES$significance %in% c("significant", "significant after FDR correction"))
+    ind_label <- which(RES_Volcano$data$significance %in% c("significant", "significant after FDR correction"))
     if (length(ind_label) == 0) {
       warning("No significant proteins for labelling. Try lowering the fold change threshold.")
       return(RES_Volcano$plot)
     }
   }
+  if (label_type == "index") {
+    ind_label <- ind
+  }
 
+  ind0 <<- ind_label
 
-  ind_label_down <- ind_label[RES_Volcano$RES$transformed_FC[ind_label] < 0]
-  ind_label_up <- ind_label[RES_Volcano$RES$transformed_FC[ind_label] > 0]
+  print(RES_Volcano$data$transformed_FC[ind_label])
 
-  labels_up <- rep(NA, nrow(RES_Volcano$RES))
-  labels_up[ind_label_up] <- RES_Volcano$RES[, protein_name_column][ind_label_up]
-  labels_down <- rep(NA, nrow(RES_Volcano$RES))
-  labels_down[ind_label_down] <- RES_Volcano$RES[, protein_name_column][ind_label_down]
+  ind_label_down <- ind_label[RES_Volcano$data$transformed_FC[ind_label] < 0]
+  ind_label_up <- ind_label[RES_Volcano$data$transformed_FC[ind_label] > 0]
+
+  ind1 <<- ind_label_up
+  ind2 <<- ind_label_down
+
+  labels_up <- rep(NA, nrow(RES_Volcano$data))
+  labels_up[ind_label_up] <- RES_Volcano$data[, protein_name_column][ind_label_up]
+  labels_down <- rep(NA, nrow(RES_Volcano$data))
+  labels_down[ind_label_down] <- RES_Volcano$data[, protein_name_column][ind_label_down]
 
   ### TODO: what if genenames are too long?
   ### TODO: what if genenames are not unique?
@@ -264,15 +274,18 @@ add_labels <- function(RES_Volcano,
 
 
   # change axis limits to have more space for labels
-  xaxis_limits <- ggplot2::layer_scales(RES_Volcano$plot)$x$get_limits()
+  xaxis_limits <- ggplot2::layer_scales(RES_Volcano)$x$get_limits()
   xaxis_limits <- xaxis_limits * 1.1
 
-  yaxis_limits <- ggplot2::layer_scales(RES_Volcano$plot)$y$get_limits()
+  yaxis_limits <- ggplot2::layer_scales(RES_Volcano)$y$get_limits()
   yaxis_limits[2] <- yaxis_limits[2] * 1.1 # only changge upper limit
 
 
+  x1 <<- labels_up
+  x2 <<- labels_down
+
   ### add labels
-  plot <- RES_Volcano$plot +
+  plot <- RES_Volcano +
     ggplot2::ylim(yaxis_limits) + ggplot2::xlim(xaxis_limits) +
     # geom_point(data= RES_Volcano$RES[!is.na(labels_up) | !is.na(labels_down),],
     #             aes(x=transformed_FC,y=transformed_p)) +
