@@ -154,7 +154,7 @@ workflow_QC <- function(data_path,
   #### Calculate Valid Value Plot ####
 
   boxplot_data <- Boxplots(D_long = prepared_data[["D_long"]],
-                           do_log_transformation = !do_log_transformation, log_base = log_base,
+                           do_log_transformation = FALSE, log_base = log_base,
                            use_groups = use_groups, groupvar_name = groupvar_name, group_colours = group_colours,
 
                            base_size = base_size, method = boxplot_method)
@@ -169,7 +169,7 @@ workflow_QC <- function(data_path,
   #### Calculate MA Plot ####
 
   ma_data <- MA_Plots(D = prepared_data[["D"]],
-                      do_log_transformation = !do_log_transformation,
+                      do_log_transformation = FALSE,
                       output_path = output_path, suffix = suffix,
                       labels = 1:ncol(prepared_data[["D"]]), labels2 = colnames(prepared_data[["D"]]),
                       maxPlots = MA_maxPlots, alpha = MA_alpha,
