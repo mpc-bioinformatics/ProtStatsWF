@@ -348,19 +348,24 @@ VolcanoPlot_ANOVA <- function(RES,
                               legend_position = "bottom",
                               base_size = NULL,
                               xlim = NULL,
-                              ylim = NULL) {
+                              ylim = NULL,
+                              add_labels = FALSE) {
 
-  nr_groups <- length(columns_p_posthoc)
-  if (length(columns_FC) != nr_groups) stop("columns_FC and columns_p_posthoc must have the same length!")
+  nr_comparisons <- length(columns_p_posthoc)
+  if (length(columns_FC) != nr_comparisons) stop("columns_FC and columns_p_posthoc must have the same length!")
 
 
-  nr_groups <- length(columns_p_posthoc)
-  if (length(columns_FC) != nr_groups) stop("columns_FC and columns_p_posthoc must have the same length!")
+  #nr_groups <- length(columns_p_posthoc)
+  #if (length(columns_FC) != nr_groups) stop("columns_FC and columns_p_posthoc must have the same length!")
 
   p_anova <- RES_ANOVA[, columnname_p_ANOVA]
   p_anova_adj <- RES_ANOVA[, columnname_p_ANOVA_adj]
-  nr_comparisons <- choose(n = nr_groups, k = 2) # pairwise comparisons between two groups
+  #nr_comparisons <- choose(n = nr_groups, k = 2) # pairwise comparisons between two groups
 
+  # names of the comparisons
+  comp_names <- colnames(RES)[columns_p_posthoc]
+  comp_names <- stringr::str_replace_all(comp_names, "p.posthoc.", "")
+  comp_names <- stringr::str_replace_all(comp_names, "_", " ")
 
   Volcano_plots <- list()
   for (i in 1:nr_comparisons) {
@@ -368,11 +373,7 @@ VolcanoPlot_ANOVA <- function(RES,
     p_posthoc <- RES_ANOVA[, columns_p_posthoc[i]]
     fc <- RES_ANOVA[, columns_FC[i]]
 
-    ### TODO: wie heißen die Gruppen? Titel für den Volcano Plot optional.
-
-
     X <- cbind(p_anova, p_anova_adj, p_posthoc, fc)
-
 
     significance <- calculate_significance_categories_ANOVA(p_posthoc = p_posthoc, p_anova_adj = p_anova_adj, p_anova = p_anova, fc = fc, thres_fc=2, thres_p=0.05)
 
@@ -394,6 +395,19 @@ VolcanoPlot_ANOVA <- function(RES,
                         base_size = base_size,
                         xlim = xlim,
                         ylim = ylim)
+
+    plot <- plot + ggplot2::ggtitle(comp_names[i])
+
+    print(plot$data)
+
+
+    if (add_labels) {
+      plot <- add_labels(plot,
+                 label_type = "FDR",
+                 ind = NULL,
+                 protein_name_column = NULL,
+                 protein_names = RES$Gene.names) ### TODO: verallgemeinern
+    }
 
     Volcano_plots[[i]] <- plot
 

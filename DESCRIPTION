@@ -5,7 +5,7 @@ Authors@R: c(
     person("Karin", "Schork", , "karin.schork@rub.de", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-3756-4347")),
     person("Katharina", "Neuhaus", , "katharina.neuhaus@rub.de", role = c("aut")))
-Description: This package offers a statistics workflows for proteomics data.
+Description: This package offers workflows for the statistical analysis of proteomics data.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
