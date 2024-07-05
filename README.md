@@ -10,4 +10,5 @@ You can install the development version of bppg from
 ``` r
 # install.packages("devtools")
 devtools::install_github("mpc-bioinformatics/ProtStatsWF")
+library(ProtStatsWF)
 ```
