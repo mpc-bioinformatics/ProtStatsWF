@@ -4,7 +4,7 @@ Statistics Workflows for Proteomics Data
 
 ## Installation
 
-You can install the development version of bppg from
+You can install the development version of ProtStatsWF from
 [GitHub](https://github.com/) with:
 
 ``` r
