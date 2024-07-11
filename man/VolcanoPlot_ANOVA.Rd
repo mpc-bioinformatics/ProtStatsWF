@@ -21,7 +21,8 @@ VolcanoPlot_ANOVA(
   legend_position = "bottom",
   base_size = NULL,
   xlim = NULL,
-  ylim = NULL
+  ylim = NULL,
+  add_labels = FALSE
 )
 }
 \arguments{
