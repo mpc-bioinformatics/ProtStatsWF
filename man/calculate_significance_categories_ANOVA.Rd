@@ -14,7 +14,11 @@ calculate_significance_categories_ANOVA(
 )
 }
 \arguments{
-\item{thres_p}{}
+\item{fc}{vector of fold changes}
+
+\item{thres_fc}{threshold for the fold changes}
+
+\item{thres_p}{threshold for the p-values}
 }
 \description{
 Calculate significance categories for ANOVA

@@ -5,21 +5,21 @@
 
 #' Simple volcano plot from p-value, fold change and significance category
 #'
-#' @param p
-#' @param FC
-#' @param significance_category
-#' @param log_base_fc
-#' @param log_base_p
-#' @param thres_p
-#' @param thres_fc
-#' @param colour1
-#' @param colour2
-#' @param colour3
-#' @param symmetric_x
-#' @param legend_position
-#' @param base_size
-#' @param xlim
-#' @param ylim
+#' @param p                     Vector containing the p-values
+#' @param FC                    Vector containing the fold changes
+#' @param significance_category 
+#' @param log_base_fc           Numeric of the base for the fold changes log-transformation
+#' @param log_base_p            Numeric of the base for the p-values log-transformation
+#' @param thres_p               Numeric of the threshold for the p-values
+#' @param thres_fc              Numeric of the threshold for the fold changes
+#' @param colour1               Character of the color for not significant proteins
+#' @param colour2               Character of the color for significant proteins
+#' @param colour3               Character of the color for significant proteins after FDR correction
+#' @param symmetric_x           If TRUE, x-axis limits will be made symmetric (not used if xlim is defined)
+#' @param legend_position       Character of the positioning of the legend, e.g. "bottom" or "right"
+#' @param base_size             Numeric containing the base size of the font
+#' @param xlim                  The limits for x-axis. Default is NULL
+#' @param ylim                  The limits for y-axis. Default is NULL
 #'
 #' @return
 #' @export
@@ -282,9 +282,9 @@ VolcanoPlot_ttest <- function(RES,
 #' @param p_posthoc
 #' @param p_anova_adj
 #' @param p_anova
-#' @param fc
-#' @param thres_fc
-#' @param thres_p
+#' @param fc vector of fold changes
+#' @param thres_fc threshold for the fold changes
+#' @param thres_p threshold for the p-values
 #'
 #' @return
 #' @export
@@ -315,18 +315,18 @@ calculate_significance_categories_ANOVA <- function(p_posthoc, p_anova_adj, p_an
 #' @param columnname_p_ANOVA_adj
 #' @param columns_FC
 #' @param columns_p_posthoc
-#' @param log_base_fc
-#' @param log_base_p
-#' @param thres_p
-#' @param thres_fc
-#' @param colour1
-#' @param colour2
-#' @param colour3
-#' @param symmetric_x
-#' @param legend_position
-#' @param base_size
-#' @param xlim
-#' @param ylim
+#' @param log_base_fc           Numeric of the base for the fold changes log-transformation
+#' @param log_base_p            Numeric of the base for the p-values log-transformation
+#' @param thres_p               Numeric of the threshold for the p-values
+#' @param thres_fc              Numeric of the threshold for the fold changes
+#' @param colour1               Character of the color for not significant proteins
+#' @param colour2               Character of the color for significant proteins
+#' @param colour3               Character of the color for significant proteins after FDR correction
+#' @param symmetric_x           If TRUE, x-axis limits will be made symmetric (not used if xlim is defined)
+#' @param legend_position       Character of the positioning of the legend, e.g. "bottom" or "right"
+#' @param base_size             Numeric containing the base size of the font
+#' @param xlim                  The limits for x-axis. Default is NULL
+#' @param ylim                  The limits for y-axis. Default is NULL
 #'
 #' @return
 #' @export

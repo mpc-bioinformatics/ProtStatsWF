@@ -23,7 +23,35 @@ VolcanoPlot(
 )
 }
 \arguments{
-\item{ylim}{}
+\item{p}{Vector containing the p-values}
+
+\item{FC}{Vector containing the fold changes}
+
+\item{significance_category}{}
+
+\item{log_base_fc}{Numeric of the base for the fold changes log-transformation}
+
+\item{log_base_p}{Numeric of the base for the p-values log-transformation}
+
+\item{thres_p}{Numeric of the threshold for the p-values}
+
+\item{thres_fc}{Numeric of the threshold for the fold changes}
+
+\item{colour1}{Character of the color for not significant proteins}
+
+\item{colour2}{Character of the color for significant proteins}
+
+\item{colour3}{Character of the color for significant proteins after FDR correction}
+
+\item{symmetric_x}{If TRUE, x-axis limits will be made symmetric (not used if xlim is defined)}
+
+\item{legend_position}{Character of the positioning of the legend, e.g. "bottom" or "right"}
+
+\item{base_size}{Numeric containing the base size of the font}
+
+\item{xlim}{The limits for x-axis. Default is NULL}
+
+\item{ylim}{The limits for y-axis. Default is NULL}
 }
 \description{
 Simple volcano plot from p-value, fold change and significance category
