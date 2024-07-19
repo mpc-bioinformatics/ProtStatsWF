@@ -21,4 +21,29 @@ workflow_ttest <- function(data_path,
                            output_path
                            ){
   
+  mess = ""
+  
+  
+  #### Prepare Data ####
+  
+  # just for testing purposes
+  data <- prepareData(data_path = "/home/kalar_ubuntu/datasets/preprocessed_peptide_data_D1_ttest.xlsx", intensity_columns = 3:8, do_log_transformation = FALSE, use_groups = TRUE)
+  
+  
+  #### Calculate ttest ####
+  
+  ttest_data <- ttest(D = data[["D"]], id = data[["ID"]], group = data[["group"]])
+  
+  
+  #### Calculate ANOVA ####
+  
+  
+  #### Create Volcano Plot ####
+  
+  
+  #### Create Histogram for p-values and fold changes ####
+  
+  
+  return(ttest_data)
+  # return(list("message" = mess))
 }

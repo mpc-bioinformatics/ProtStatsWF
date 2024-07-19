@@ -1,40 +1,40 @@
 #' The main workflow for quality control of quantitative proteomics data
 #'
 #'
-#' @param data_path         A character containing the path to an .xlsx file.
-#' @param output_path       A character containing the path to an output folder.
-#' @param intensity_columns An integer vector containing the intensity columns of the table.
-#' @param normalization_method A character containing the method of normalization. The possible methods are no normalization "nonorm" or "median", "loess", "quantile" or "lts" normalization.
-#' @param use_groups    If \code{TRUE}, group information encoded in the column names are used. Default is \code{TRUE}.
-#' @param na_strings A character vector containing symbols to be recognized as missing values (with the exception of 0).
-#' @param zero_to_NA If \code{TRUE}, 0 will be treated as missing value.
+#' @param data_path             A character containing the path to an .xlsx file.
+#' @param output_path           A character containing the path to an output folder.
+#' @param intensity_columns     An integer vector containing the intensity columns of the table.
+#' @param normalization_method  A character containing the method of normalization. The possible methods are no normalization "nonorm" or "median", "loess", "quantile" or "lts" normalization.
+#' @param use_groups            If \code{TRUE}, group information encoded in the column names are used. Default is \code{TRUE}.
+#' @param na_strings            A character vector containing symbols to be recognized as missing values (with the exception of 0).
+#' @param zero_to_NA            If \code{TRUE}, 0 will be treated as missing value.
 #' @param do_log_transformation If \code{TRUE}, the data will be log-transformed.
 #' @param log_base              A numeric containing the base used, if data is log-transformed.
-#' @param groupvar_name A character containing the name for the group variable.
-#' @param group_colours A character vector of hex codes for the group colors, if the data has groups. If \code{NULL}, a default color scale will be used.
-#' @param suffix      A character containing the suffix for the output files. Needs to start with an underscore.
-#' @param base_size   A numeric containing the base size of the font.
-#' @param plot_device A character containing the type of the output file, e.g. "pdf" or "png".
-#' @param plot_height A numeric of the plot height in cm.
-#' @param plot_width  A numeric of the plot width in cm.
-#' @param plot_dpi    A numeric of the "dots per inch" of the plot aka. the plot resolution.
-#' @param boxplot_method A character containing the method used. Possible are "boxplot" and "violinplot". Default is "boxplot".
-#' @param MA_maxPlots A numeric containing the maximum number of MA plots that should be generated. Defaults is 5000.
-#' @param MA_alpha    If \code{TRUE}, the data points of the MA plots will be transparent.
-#' @param PCA_impute         If \code{TRUE}, missing values will be imputed.
-#' @param PCA_impute_method  A character containing the imputation method ("mean" or "median")
-#' @param PCA_propNA         A numeric of the proportion of allowed missing NAs for a protein, before it is discarded.
-#' @param PCA_scale.         If \code{TRUE}, the data will be scaled before computing the PCA.
-#' @param PCA_PCx            The principle component for the x-axis (default: 1).
-#' @param PCA_PCy            The principle component for the y-axis (default: 2).
-#' @param PCA_groupvar1_name Titles of legends for colour.
-#' @param PCA_alpha          If \code{TRUE}, the data points of the PCA plot will be transparent.
-#' @param PCA_label          If \code{TRUE}, the samples will be labeled.
-#' @param PCA_label_seed     A numeric, which sets the seed for the label.
-#' @param PCA_label_size     A numeric containing the size of the sample labels.
-#' @param PCA_xlim           Limit of the x-axis.
-#' @param PCA_ylim           Limit of the y-axis.
-#' @param PCA_point.size     The size of the data points.
+#' @param groupvar_name         A character containing the name for the group variable.
+#' @param group_colours         A character vector of hex codes for the group colors, if the data has groups. If \code{NULL}, a default color scale will be used.
+#' @param suffix                A character containing the suffix for the output files. Needs to start with an underscore.
+#' @param base_size             A numeric containing the base size of the font.
+#' @param plot_device           A character containing the type of the output file, e.g. "pdf" or "png".
+#' @param plot_height           A numeric of the plot height in cm.
+#' @param plot_width            A numeric of the plot width in cm.
+#' @param plot_dpi              A numeric of the "dots per inch" of the plot aka. the plot resolution.
+#' @param boxplot_method        A character containing the method used. Possible are "boxplot" and "violinplot". Default is "boxplot".
+#' @param MA_maxPlots           A numeric containing the maximum number of MA plots that should be generated. Defaults is 5000.
+#' @param MA_alpha             If \code{TRUE}, the data points of the MA plots will be transparent.
+#' @param PCA_impute           If \code{TRUE}, missing values will be imputed.
+#' @param PCA_impute_method    A character containing the imputation method ("mean" or "median")
+#' @param PCA_propNA           A numeric of the proportion of allowed missing NAs for a protein, before it is discarded.
+#' @param PCA_scale.           If \code{TRUE}, the data will be scaled before computing the PCA.
+#' @param PCA_PCx              The principle component for the x-axis (default: 1).
+#' @param PCA_PCy              The principle component for the y-axis (default: 2).
+#' @param PCA_groupvar1_name   Titles of legends for colour.
+#' @param PCA_alpha            If \code{TRUE}, the data points of the PCA plot will be transparent.
+#' @param PCA_label            If \code{TRUE}, the samples will be labeled.
+#' @param PCA_label_seed       A numeric, which sets the seed for the label.
+#' @param PCA_label_size       A numeric containing the size of the sample labels.
+#' @param PCA_xlim             Limit of the x-axis.
+#' @param PCA_ylim             Limit of the y-axis.
+#' @param PCA_point.size       The size of the data points.
 #'
 #' @return List with the messages. Different csv and plot files are saved.
 #' @export
