@@ -5,6 +5,7 @@
 #' @param do_log_transformation If \code{TRUE}, the data will be log-transformed.
 #' @param alpha                 If \code{TRUE}, the data points will be transparent.
 #' @param point_color           A character containing the colors of the data points.
+#' @param sampling              A numeric containing the sampling rate. Useful to sample part of the data set for data sets on peptide/feature level with many data points.
 #' @param ...                   Additional arguments for affy::ma.plot.
 #'
 #' @return Generates the MA plot for two samples.
@@ -25,7 +26,9 @@
 MA_Plot_single <- function(sample_1, sample_2,
                           do_log_transformation = FALSE,
                           alpha = FALSE,
-                          point_color = "black", ...) {
+                          point_color = "black",
+                          sampling = 1,
+                          ...) {
 
 
   if(do_log_transformation) {
@@ -38,6 +41,14 @@ MA_Plot_single <- function(sample_1, sample_2,
 
   M <- stats::na.omit(sample_1 - sample_2)
   A <- stats::na.omit((sample_1 + sample_2)/2)
+
+  ## sample only parts of the data points for data sets with many data points
+  if (sample < 1) {
+    ind_sample <- sample(1:length(M), size = ceiling(length(M) * sampling))
+    M <- M[ind_sample]
+    A <- A[ind_sample]
+  }
+
 
   if (length(point_color) > 1) {
     na.ind <- attr(M, "na.action")
@@ -62,6 +73,7 @@ MA_Plot_single <- function(sample_1, sample_2,
 #' @param alpha       If \code{TRUE}, the data points will be transparent.
 #' @param plot_height The height of the resulting MA plots.
 #' @param plot_width  The width of the resulting MA plots.
+#' @param sampling              A numeric containing the sampling rate. Useful to sample part of the data set for data sets on peptide/feature level with many data points.
 #' @param ...         Additional arguments for affy::ma.plot.
 #'
 #' @return A pdf file containing the MA plots for all sample combinations.
@@ -82,7 +94,9 @@ MA_Plots <- function(D,
                     labels = 1:ncol(D), labels2 = colnames(D),
                     maxPlots = 5000,
                     alpha = FALSE,
-                    plot_height = 15, plot_width = 15, ...) {
+                    plot_height = 15, plot_width = 15,
+                    sampling = 1,
+                    ...) {
 
 
   number_states <- max(as.integer(as.factor(colnames(D))))
@@ -117,7 +131,7 @@ MA_Plots <- function(D,
       num <- num + 1
       utils::setTxtProgressBar(pb, num)
 
-      MA_Plot_single(D[,i], D[, j], do_log_transformation = do_log_transformation, main = main, ...)
+      MA_Plot_single(D[,i], D[, j], do_log_transformation = do_log_transformation, main = main, sampling = sampling, ...)
     }
   }
 
