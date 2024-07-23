@@ -43,7 +43,7 @@ MA_Plot_single <- function(sample_1, sample_2,
   A <- stats::na.omit((sample_1 + sample_2)/2)
 
   ## sample only parts of the data points for data sets with many data points
-  if (sample < 1) {
+  if (sampling < 1) {
     ind_sample <- sample(1:length(M), size = ceiling(length(M) * sampling))
     M <- M[ind_sample]
     A <- A[ind_sample]
