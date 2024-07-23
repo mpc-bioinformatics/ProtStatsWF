@@ -34,6 +34,7 @@
 # MA-Plot parameters
 #' @param MA_maxPlots A numeric containing the maximum number of MA plots that should be generated. Defaults is 5000.
 #' @param MA_alpha    If \code{TRUE}, the data points of the MA plots will be transparent.
+#' @param MA_sampling A numeric containing the sampling rate for MA-Plots. Useful to sample part of the data set for data sets on peptide/feature level with many data points.
 #'
 # PCA parameters:
 #' @param PCA_impute         If \code{TRUE}, missing values will be imputed.
@@ -101,6 +102,7 @@ workflow_QC <- function(data_path,
 
                         MA_maxPlots = 5000,
                         MA_alpha = FALSE,
+                        MA_sampling = 1,
 
                         #PCA_groupvar1 = "group",
                         #PCA_groupvar2 = NULL,
@@ -173,7 +175,7 @@ workflow_QC <- function(data_path,
                       output_path = output_path, suffix = suffix,
                       labels = 1:ncol(prepared_data[["D"]]), labels2 = colnames(prepared_data[["D"]]),
                       maxPlots = MA_maxPlots, alpha = MA_alpha,
-                      plot_height = plot_height, plot_width = plot_width)
+                      plot_height = plot_height, plot_width = plot_width, sampling = MA_sampling)
 
   mess <- paste0(mess, ma_data)
 

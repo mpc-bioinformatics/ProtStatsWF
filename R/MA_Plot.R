@@ -73,7 +73,7 @@ MA_Plot_single <- function(sample_1, sample_2,
 #' @param alpha       If \code{TRUE}, the data points will be transparent.
 #' @param plot_height The height of the resulting MA plots.
 #' @param plot_width  The width of the resulting MA plots.
-#' @param sampling              A numeric containing the sampling rate. Useful to sample part of the data set for data sets on peptide/feature level with many data points.
+#' @param sampling    A numeric containing the sampling rate. Useful to sample part of the data set for data sets on peptide/feature level with many data points.
 #' @param ...         Additional arguments for affy::ma.plot.
 #'
 #' @return A pdf file containing the MA plots for all sample combinations.
