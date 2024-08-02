@@ -53,6 +53,9 @@ VolcanoPlot(
 
 \item{ylim}{The limits for y-axis. Default is NULL}
 }
+\value{
+A ggplot
+}
 \description{
 Simple volcano plot from p-value, fold change and significance category
 }

@@ -26,6 +26,14 @@ VolcanoPlot_ANOVA(
 )
 }
 \arguments{
+\item{RES}{Results table from ANOVA}
+
+\item{columnname_p_ANOVA}{Column names for the p-values.}
+
+\item{columnname_p_ANOVA_adj}{Column names for the adjusted p-values.}
+
+\item{columns_FC}{Vector containing the indices of the fold change columns.}
+
 \item{log_base_fc}{Numeric of the base for the fold changes log-transformation}
 
 \item{log_base_p}{Numeric of the base for the p-values log-transformation}
@@ -49,6 +57,9 @@ VolcanoPlot_ANOVA(
 \item{xlim}{The limits for x-axis. Default is NULL}
 
 \item{ylim}{The limits for y-axis. Default is NULL}
+}
+\value{
+A list of ggplots
 }
 \description{
 Volcano Plots for ANOVA

@@ -20,6 +20,9 @@ calculate_significance_categories_ANOVA(
 
 \item{thres_p}{threshold for the p-values}
 }
+\value{
+A factor containing the significances
+}
 \description{
 Calculate significance categories for ANOVA
 }

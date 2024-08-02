@@ -2,20 +2,35 @@
 % Please edit documentation in R/workflow_ttest.R
 \name{workflow_ttest}
 \alias{workflow_ttest}
-\title{The main workflow for quality control of quantitative proteomics data}
+\title{The workflow for t-test, ANOVA etc. of quantitative proteomics data}
 \usage{
-workflow_ttest(data_path, output_path)
+workflow_ttest(
+  data_path,
+  output_path,
+  ttest_sample = NULL,
+  ttest_paired = FALSE,
+  ttest_log_before_test = TRUE,
+  ttest_delog_for_FC = TRUE
+)
 }
 \arguments{
 \item{data_path}{A character containing the path to an .xlsx file.}
 
 \item{output_path}{A character containing the path to an output folder.}
+
+\item{ttest_sample}{A factor of  which column belongs to which sample for the t-test.}
+
+\item{ttest_paired}{If \code{TRUE}, a paired t-test will be done, otherwise an unpaired t-test.}
+
+\item{ttest_log_before_test}{If \code{TRUE}, the data will be log-transformed before the t-test.}
+
+\item{ttest_delog_for_FC}{If \code{TRUE}, the fold change will be calculated without the log-transformation in the t-test.}
 }
 \value{
-TODO
+Message log of the workflow
 }
 \description{
-The main workflow for quality control of quantitative proteomics data
+The workflow for t-test, ANOVA etc. of quantitative proteomics data
 }
 \examples{
 \dontrun{

@@ -21,7 +21,7 @@
 #' @param xlim                  The limits for x-axis. Default is NULL
 #' @param ylim                  The limits for y-axis. Default is NULL
 #'
-#' @return
+#' @return A ggplot
 #' @export
 #'
 #' @examples
@@ -286,7 +286,7 @@ VolcanoPlot_ttest <- function(RES,
 #' @param thres_fc threshold for the fold changes
 #' @param thres_p threshold for the p-values
 #'
-#' @return
+#' @return A factor containing the significances
 #' @export
 #'
 #' @examples
@@ -310,25 +310,25 @@ calculate_significance_categories_ANOVA <- function(p_posthoc, p_anova_adj, p_an
 
 #' Volcano Plots for ANOVA
 #'
-#' @param RES
-#' @param columnname_p_ANOVA
-#' @param columnname_p_ANOVA_adj
-#' @param columns_FC
+#' @param RES                    Results table from ANOVA
+#' @param columnname_p_ANOVA     Column names for the p-values.
+#' @param columnname_p_ANOVA_adj Column names for the adjusted p-values.
+#' @param columns_FC             Vector containing the indices of the fold change columns.
 #' @param columns_p_posthoc
-#' @param log_base_fc           Numeric of the base for the fold changes log-transformation
-#' @param log_base_p            Numeric of the base for the p-values log-transformation
-#' @param thres_p               Numeric of the threshold for the p-values
-#' @param thres_fc              Numeric of the threshold for the fold changes
-#' @param colour1               Character of the color for not significant proteins
-#' @param colour2               Character of the color for significant proteins
-#' @param colour3               Character of the color for significant proteins after FDR correction
-#' @param symmetric_x           If TRUE, x-axis limits will be made symmetric (not used if xlim is defined)
-#' @param legend_position       Character of the positioning of the legend, e.g. "bottom" or "right"
-#' @param base_size             Numeric containing the base size of the font
-#' @param xlim                  The limits for x-axis. Default is NULL
-#' @param ylim                  The limits for y-axis. Default is NULL
+#' @param log_base_fc            Numeric of the base for the fold changes log-transformation
+#' @param log_base_p             Numeric of the base for the p-values log-transformation
+#' @param thres_p                Numeric of the threshold for the p-values
+#' @param thres_fc               Numeric of the threshold for the fold changes
+#' @param colour1                Character of the color for not significant proteins
+#' @param colour2                Character of the color for significant proteins
+#' @param colour3                Character of the color for significant proteins after FDR correction
+#' @param symmetric_x            If TRUE, x-axis limits will be made symmetric (not used if xlim is defined)
+#' @param legend_position        Character of the positioning of the legend, e.g. "bottom" or "right"
+#' @param base_size              Numeric containing the base size of the font
+#' @param xlim                   The limits for x-axis. Default is NULL
+#' @param ylim                   The limits for y-axis. Default is NULL
 #'
-#' @return
+#' @return A list of ggplots
 #' @export
 #'
 #' @examples
