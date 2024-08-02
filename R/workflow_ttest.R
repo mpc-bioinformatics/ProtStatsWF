@@ -79,6 +79,17 @@ workflow_ttest <- function(data_path,
   
   #### Create Volcano Plot ####
   
+  if(do_ttest){
+    
+    volcano_plot <- VolcanoPlot_ttest(RES = test_results, columnname_p = , columnname_padj = , columnname_FC = )
+    
+  }else{
+    
+    volcano_plot <- VolcanoPlot_ANOVA(RES = test_results, columnname_p = , columnname_padj = , columnname_FC = )
+    
+  }
+  
+  
   
   #### Create Boxplots of Biomarker Candidates ####
   
