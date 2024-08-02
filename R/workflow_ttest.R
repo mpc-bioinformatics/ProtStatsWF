@@ -3,10 +3,11 @@
 #'
 #' @param data_path              A character containing the path to an .xlsx file.
 #' @param output_path            A character containing the path to an output folder.
-#' @param ttest_sample           A factor of  which column belongs to which sample for the t-test.
-#' @param ttest_paired           If \code{TRUE}, a paired t-test will be done, otherwise an unpaired t-test.
-#' @param ttest_log_before_test  If \code{TRUE}, the data will be log-transformed before the t-test.
-#' @param ttest_delog_for_FC     If \code{TRUE}, the fold change will be calculated without the log-transformation in the t-test.
+#' @param sample                 A factor of  which column belongs to which sample.
+#' @param paired                 If \code{TRUE}, a paired test will be done, otherwise an unpaired test.
+#' @param var.equal              If \code{TRUE}, the variances are assumed to be equal.
+#' @param log_before_test        If \code{TRUE}, the data will be log-transformed.
+#' @param delog_for_FC           If \code{TRUE}, the fold change will be calculated without the log-transformation.
 #' 
 #' 
 #' @return Message log of the workflow
@@ -24,10 +25,11 @@
 workflow_ttest <- function(data_path,
                            output_path,
                            
-                           ttest_sample = NULL, 
-                           ttest_paired = FALSE,
-                           ttest_log_before_test = TRUE, 
-                           ttest_delog_for_FC = TRUE
+                           sample = NULL, 
+                           paired = FALSE,
+                           var.equal = FALSE,
+                           log_before_test = TRUE, 
+                           delog_for_FC = TRUE
                            ){
   
   mess = ""
@@ -39,7 +41,7 @@ workflow_ttest <- function(data_path,
   output_path = "/home/kalar_ubuntu/dataresults/"
   
   data <- prepareData(data_path = "/home/kalar_ubuntu/datasets/preprocessed_peptide_data_D1_ttest.xlsx", intensity_columns = 3:8, do_log_transformation = FALSE, use_groups = TRUE)
-  ttest_sample <- as.factor(c("1","2","3","1","2","3"))
+  sample <- as.factor(c("1","2","3","1","2","3"))
   
   biomarker_data = data[["D"]][c(1,3,5,7,9,11,13),]
   biomarker_names = data[["ID"]][c(1,3,5,7,9,11,13),1]
@@ -49,16 +51,33 @@ workflow_ttest <- function(data_path,
   
   
   
+  do_ttest <- TRUE
   
-  #### Calculate ttest ####
+  if(do_ttest){
+    
+    #### Calculate ttest ####
+    
+    test_results <- ttest(D = data[["D"]], id = data[["ID"]], 
+                          group = data[["group"]],  sample = sample, 
+                          paired = paired, var.equal = var.equal,
+                          log_before_test = log_before_test, delog_for_FC = delog_for_FC, log_base = 2,
+                          min_obs_per_group = 3, min_obs_per_group_ratio = NULL,
+                          filename = paste0(output_path, "results_ttest.xlsx"))
+  }else{
+    
+    #### Calculate ANOVA ####
+    
+    test_results <- ANOVA(D = data[["D"]], id = data[["ID"]], 
+                          group = data[["group"]],  sample = sample, 
+                          paired = paired, var.equal = var.equal,
+                          log_before_test = log_before_test, delog_for_FC = delog_for_FC, log_base = 2,
+                          min_obs_per_group = 3, min_perc_per_group = NULL,
+                          filename = paste0(output_path, "results_ANOVA.xlsx"))
+  }
   
-  ttest_data <- ttest(D = data[["D"]], id = data[["ID"]], 
-                      group = data[["group"]],  sample = ttest_sample, 
-                      paired = ttest_paired, var.equal = FALSE,
-                      log_before_test = ttest_log_before_test, delog_for_FC = ttest_delog_for_FC, log_base = 2,
-                      min_obs_per_group = 3,
-                      filename = paste0(output_path, "results_ttest.xlsx"),
-                      min_obs_per_group_ratio = NULL)
+  
+  
+  #### Create Volcano Plot ####
   
   
   #### Create Boxplots of Biomarker Candidates ####
@@ -66,8 +85,7 @@ workflow_ttest <- function(data_path,
   Boxplots_candidates(D = biomarker_data, protein.names = biomarker_names, output_path = output_path, group = biomarker_group)
   
   
-  #### Calculate ANOVA ####
-  #### Create Volcano Plot ####
+  
   #### Create Histogram for p-values and fold changes ####
   #### Create Heatmap ####
   #### Create On-Off Heatmap ####
