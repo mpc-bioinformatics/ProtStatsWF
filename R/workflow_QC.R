@@ -143,6 +143,10 @@ workflow_QC <- function(data_path,
   vv_plot_data <- ValidValuePlot(D_long = prepared_data[["D_long"]],
                                           use_groups = use_groups, groupvar_name = groupvar_name, group_colours = group_colours,
                                           base_size = base_size)
+  #### reorder valid values table to stay in the same order as the original data ####
+  cnames <- colnames(prepared_data$D)
+  vv_plot_data$table$name <- factor(vv_plot_data$table$name, levels = cnames)
+  vv_plot_data$table <- vv_plot_data$table[order(vv_plot_data$table$name),]
 
   mess <- paste0(mess, vv_plot_data[["message"]])
 
