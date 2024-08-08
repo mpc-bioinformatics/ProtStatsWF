@@ -32,6 +32,7 @@
 #' @param boxplot_method A character containing the method used. Possible are "boxplot" and "violinplot". Default is "boxplot".
 #'
 # MA-Plot parameters
+#' @param generate_MAplots If \code{TRUE}, MA plots will be generated, if \code{FALSE} they will not be generated (mostly for debugging purposes).
 #' @param MA_maxPlots A numeric containing the maximum number of MA plots that should be generated. Defaults is 5000.
 #' @param MA_alpha    If \code{TRUE}, the data points of the MA plots will be transparent.
 #' @param MA_sampling A numeric containing the sampling rate for MA-Plots. Useful to sample part of the data set for data sets on peptide/feature level with many data points.
@@ -100,6 +101,7 @@ workflow_QC <- function(data_path,
 
                         boxplot_method = "boxplot",
 
+                        generate_MAplots = TRUE,
                         MA_maxPlots = 5000,
                         MA_alpha = FALSE,
                         MA_sampling = 1,
@@ -174,6 +176,7 @@ workflow_QC <- function(data_path,
 
   #### Calculate MA Plot ####
 
+  if (generate_MAplots) {
   ma_data <- MA_Plots(D = prepared_data[["D"]],
                       do_log_transformation = FALSE,
                       output_path = output_path, suffix = suffix,
@@ -182,6 +185,7 @@ workflow_QC <- function(data_path,
                       plot_height = plot_height, plot_width = plot_width, sampling = MA_sampling)
 
   mess <- paste0(mess, ma_data)
+  }
 
 
   #### Calculate PCA Plot ####
