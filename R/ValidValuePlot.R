@@ -77,6 +77,7 @@ ValidValuePlot <- function(D_long,
   }
 
 
+  ### TODO: plot sorts samples alphabetically, not by the order it appears in the data set.
 
   message(mess)
 

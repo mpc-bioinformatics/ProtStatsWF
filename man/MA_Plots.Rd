@@ -15,6 +15,7 @@ MA_Plots(
   alpha = FALSE,
   plot_height = 15,
   plot_width = 15,
+  sampling = 1,
   ...
 )
 }
@@ -38,6 +39,8 @@ MA_Plots(
 \item{plot_height}{The height of the resulting MA plots.}
 
 \item{plot_width}{The width of the resulting MA plots.}
+
+\item{sampling}{A numeric containing the sampling rate. Useful to sample part of the data set for data sets on peptide/feature level with many data points.}
 
 \item{...}{Additional arguments for affy::ma.plot.}
 }
