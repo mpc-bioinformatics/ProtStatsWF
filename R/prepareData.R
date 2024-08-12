@@ -9,6 +9,7 @@
 #' @param use_groups            If \code{TRUE}, the data contains groups.
 #' @param group_colours         A character vector of hex codes for the group colors, if the data has groups. If \code{NULL}, a default color scale will be used.
 #' @param normalization         A character containing the method of normalization. The possible methods are no normalization "nonorm" or "median", "loess", "quantile" or "lts" normalization.
+#' @param lts_quantile          A numeric containing the quantile for the lts normalization if \code{normalization = "lts"}, default is 0.8.
 #'
 #' @return A list containing the prepared data and the ids of the data as data.frames as well as the groups, number of groups and group colors
 #' @export
@@ -28,7 +29,7 @@ prepareData <- function (data_path,
                          zero_to_NA = TRUE,
                          do_log_transformation = TRUE, log_base = 2,
                          use_groups = FALSE, group_colours = NULL,
-                         normalization = "loess"){
+                         normalization = "loess", lts_quantile = 0.8){
 
 
   #### read and prepare data file ####
@@ -67,7 +68,7 @@ prepareData <- function (data_path,
 
   #### normalize the data ####
 
-  D <- automatedNormalization(DATA = D, method = normalization, is_log_transformed = do_log_transformation, log_base = log_base)
+  D <- automatedNormalization(DATA = D, method = normalization, is_log_transformed = do_log_transformation, log_base = log_base, lts.quantile = lts_quantile)
 
   mess <- paste0(mess, D$message)
   D <- D$data

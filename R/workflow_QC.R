@@ -7,6 +7,7 @@
 # mandatory parameters
 #' @param intensity_columns An integer vector containing the intensity columns of the table.
 #' @param normalization_method A character containing the method of normalization. The possible methods are no normalization "nonorm" or "median", "loess", "quantile" or "lts" normalization.
+#' @param lts_quantile          A numeric containing the quantile for the lts normalization if \code{normalization = "lts"}, default is 0.8.
 #' @param use_groups    If \code{TRUE}, group information encoded in the column names are used. Default is \code{TRUE}.
 #'
 # additional parameters
@@ -80,6 +81,7 @@ workflow_QC <- function(data_path,
 
                         intensity_columns,
                         normalization_method = "loess",
+                        lts_quantile = 0.8,
                         use_groups = TRUE,
 
                         na_strings = c("NA", "NaN", "Filtered","#NV"),
@@ -128,7 +130,7 @@ workflow_QC <- function(data_path,
                                na_strings = na_strings, zero_to_NA = zero_to_NA,
                                do_log_transformation = do_log_transformation, log_base = log_base,
                                use_groups = use_groups, group_colours = group_colours,
-                               normalization = normalization_method)
+                               normalization = normalization_method, lts_quantile = lts_quantile)
 
 
   mess <- paste0(mess, prepared_data[["message"]])#
