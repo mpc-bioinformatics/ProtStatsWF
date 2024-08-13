@@ -107,8 +107,13 @@ Heatmap_with_groups <- function(D, id, protein_names_col = NULL,
   data.asmatrix <- data.asmatrix_scaled
   }
 
+
+  ### export data used in heatmap
+  openxlsx::write.xlsx(cbind(id, zscore = data.asmatrix), paste0(output_path,"Heatmap_data_wo_imputation_", suffix, ".xlsx"), overwrite = TRUE, keepNA = TRUE)
+
+
   ### remove rows with only missing values
-  ind  <- rowSums(!is.na(data.asmatrix)) >= filtermissings
+  ind  <- !(rowSums(is.na(data.asmatrix)) >= filtermissings)
   data.asmatrix <- data.asmatrix[ind,]
   id <- id[ind,, drop = FALSE]
 
