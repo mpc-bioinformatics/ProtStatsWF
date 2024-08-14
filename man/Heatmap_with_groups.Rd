@@ -98,8 +98,21 @@ The name for legend.}
 \item{title}{\strong{character} \cr
 The title of the plot.}
 
-\item{legend_colours}{\strong{character} \cr
-A vector of colours for colour gradient.}
+\item{legend_colours}{colours for colour gradient}
+
+\item{plot_height}{plot height}
+
+\item{plot_width}{plot width}
+
+\item{plot_dpi}{plot resolution in DPI}
+
+\item{log_data}{if TRUE, data will be log-transformed}
+
+\item{log_base}{base for log-transformation}
+
+\item{colour_scale_max}{maximum value for colour scale (useful if data contains strong outliers)}
+
+\item{textsize}{test size for labels}
 
 \item{plot_height}{\strong{numeric} \cr
 The plot height in cm.}
@@ -125,7 +138,7 @@ The size of text in the plot.}
 \item{...}{Further arguments to Heatmap}
 }
 \value{
-A heatmap of the given data.
+heatmap + data used for the heatmap before and after imputation
 }
 \description{
 Create a Heatmap.

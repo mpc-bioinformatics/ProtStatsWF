@@ -27,13 +27,13 @@ VolcanoPlot_ANOVA(
 }
 \arguments{
 \item{RES}{\strong{data.frame} \cr
-The results from an ANOVA.}
+The result of ProtStatsWF::ANOVA() or other ANOVA function.}
 
 \item{columnname_p_ANOVA}{\strong{character} \cr
-The column name for the p-values.}
+The column name for the p-values of the ANOVA.}
 
 \item{columnname_p_ANOVA_adj}{\strong{character} \cr
-The column name for the adjusted p-values.}
+The column name for the adjusted p-values of the ANOVA.}
 
 \item{columns_FC}{\strong{integer vector} \cr
 The column indices of the fold changes.}
