@@ -9,15 +9,17 @@ Description: This package offers workflows for the statistical analysis of prote
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 Suggests: 
     testthat (>= 3.0.0),
     vdiffr
 Config/testthat/edition: 3
 Imports: 
     affy,
+    amap,
     car,
     ComplexHeatmap,
+    dendextend,
     dplyr,
     ggplot2,
     ggrepel,
@@ -29,6 +31,7 @@ Imports:
     nlme,
     openxlsx,
     pbapply,
+    reshape2,
     scales,
     stats,
     tidyr,
