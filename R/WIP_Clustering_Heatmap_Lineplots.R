@@ -52,7 +52,7 @@ Clustering_heatmap_lineplots <- function(D, id, output_path, suffix = "", nr_clu
   ### get cluster for each protein (cluster number from heatmap doesn't correspond to apply cutree() on the dendrogram. This is why we need to get the cluster number from the heatmap directly).
   ht = ComplexHeatmap::draw(ht$Heatmap)
   x <- ComplexHeatmap::row_dend(ht)
-  cluster <- integer(nrow(D_norm_tmp_signi))
+  cluster <- integer(nrow(D))
   for (j in 1:nr_clusters) {
     cluster_members <- as.integer(names(stats::cutree(x[[j]],1))) ### get cluster members
     cluster[cluster_members] <- j
@@ -93,6 +93,7 @@ Clustering_heatmap_lineplots <- function(D, id, output_path, suffix = "", nr_clu
     X_long <- dplyr::mutate(X_long, ClusterCenter = dplyr::case_when(is.na(Dists_euclidean) ~ "Cluster Center", TRUE ~ "Cluster Members"))
 
 
+    variable <- value <- ClusterCenter <- NULL # to silence notes while checking the package
 
     pl <- ggplot2::ggplot(data = X_long, ggplot2::aes(x = variable, y = value, group = id,
                                                       colour = Dists_euclidean, linetype = ClusterCenter, size = ClusterCenter)) +
@@ -105,7 +106,7 @@ Clustering_heatmap_lineplots <- function(D, id, output_path, suffix = "", nr_clu
       ggplot2::scale_x_discrete(expand = c(0.03, 0.03)) +
       ggplot2::ggtitle(paste0("Cluster ", i, " (", nrow(X), " proteins)")) +
       ggplot2::theme_bw(base_size = 20) +
-      ggplot2::theme(legend.key.width = ggplot2:unit(1.5,"cm"), axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5, hjust=1)) +
+      ggplot2::theme(legend.key.width = ggplot2::unit(1.5,"cm"), axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5, hjust=1)) +
       ggplot2::guides(linetype = ggplot2::guide_legend(override.aes = list(linewidth = 1.3)))+
       ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5, colour = cluster_colours[i]), legend.position = "bottom")
 

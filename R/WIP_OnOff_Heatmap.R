@@ -37,6 +37,9 @@ calculate_onoff <- function(D, id, group, max_vv_off, min_vv_on, protein_id_col 
   D_long <- tidyr::pivot_longer(data = cbind(Protein.IDs = Protein.IDs, D), cols = colnames(D))
   D_long$group <- group[match(D_long$name, colnames(D))]
 
+
+  value <- valid_values <- valid_values_rel <- NULL # silence notes when checking the package
+
   ## calculate on/off values
   D_onoff <- D_long %>% dplyr::group_by(group, Protein.IDs) %>%
     dplyr::summarise(valid_values = sum(!is.na(value)), valid_values_rel = mean(!is.na(value)))
@@ -107,7 +110,11 @@ Onoff_plus_heatmap <- function(RES_onoff,
   RES_onoff2[, protein_name_column] <- make.names(RES_onoff2[, protein_name_column], unique = TRUE)
 
 
+<<<<<<< HEAD
   RES_onoff2_long <- as.data.frame(tidyr::pivot_longer(RES_onoff2, cols = tidyselect::all_of(validvalue_cols), names_to = "group"))
+=======
+  RES_onoff2_long <- as.data.frame(tidyr::pivot_longer(RES_onoff2, cols = tidyr::all_of(validvalue_cols), names_to = "group"))
+>>>>>>> cdea481 (clean up to get rid of most warnings and notes when checking)
 
 
   if (relative) {
@@ -128,15 +135,28 @@ Onoff_plus_heatmap <- function(RES_onoff,
   RES_onoff2_long[, protein_name_column] <- factor(RES_onoff2_long[, protein_name_column],
                                      levels = RES_onoff2[, protein_name_column][ord])
 
+<<<<<<< HEAD
   pl <- ggplot2::ggplot(data = RES_onoff2_long, ggplot2::aes(x = RES_onoff2_long[["group"]], y = RES_onoff2_long[["Gene.names"]], fill = RES_onoff2_long[["value"]])) +  ## TODO: Gene.names
+=======
+  group <- Gene.names <- value <- NULL # silence notes when checking the package
+
+  pl <- ggplot2::ggplot(data = RES_onoff2_long, ggplot2::aes(x = group, y = Gene.names, fill = value)) +  ## TODO: Gene.names
+>>>>>>> cdea481 (clean up to get rid of most warnings and notes when checking)
     ggplot2::geom_tile() +  ggplot2::ylab("Gene name") + ggplot2::xlab("group") + ggplot2::theme_bw()
 
   #if (onoffGreaterThanEqual < 1 | !is.null(onoffdiff)) {
   pl <- pl + ggplot2::scale_fill_gradient(limits = c(0,max(RES_onoff2_long$value)), low = "white", high = "forestgreen") #
   pl <- pl + ggplot2::theme(axis.text = ggplot2::element_text(size = ggplot2::rel(1.8)),
+<<<<<<< HEAD
                             axis.title = ggplot2::element_text(size = ggplot2::rel(1.8)),
                             legend.title = ggplot2::element_text(size= ggplot2::rel(1.8)),
                             legend.text = ggplot2::element_text(size= ggplot2::rel(1.8)))
+=======
+                   axis.title = ggplot2::element_text(size = ggplot2::rel(1.8)),
+                   legend.title = ggplot2::element_text(size = ggplot2::rel(1.8)),
+                   legend.text = ggplot2::element_text(size = ggplot2::rel(1.8)))
+  pl
+>>>>>>> cdea481 (clean up to get rid of most warnings and notes when checking)
 
   return(pl)
 
