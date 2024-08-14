@@ -77,10 +77,24 @@ note that clustering may not work when too many missing values are present}
 
 \item{legend_colours}{colours for colour gradient}
 
+\item{plot_height}{plot height}
+
+\item{plot_width}{plot width}
+
+\item{plot_dpi}{plot resolution in DPI}
+
+\item{log_data}{if TRUE, data will be log-transformed}
+
+\item{log_base}{base for log-transformation}
+
+\item{colour_scale_max}{maximum value for colour scale (useful if data contains strong outliers)}
+
+\item{textsize}{test size for labels}
+
 \item{...}{further arguments to Heatmap}
 }
 \value{
-heatmap
+heatmap + data used for the heatmap before and after imputation
 }
 \description{
 Heatmap

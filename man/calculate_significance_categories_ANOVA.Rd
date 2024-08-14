@@ -14,8 +14,24 @@ calculate_significance_categories_ANOVA(
 )
 }
 \arguments{
-\item{thres_p}{}
+\item{p_posthoc}{vector of posthoc p-values}
+
+\item{p_anova_adj}{vector of ANOVA p-values adjusted for multiple testing}
+
+\item{p_anova}{vector of ANOVA p-values before p-value correction}
+
+\item{fc}{vector of fold changes}
+
+\item{thres_fc}{threshold for fold change}
+
+\item{thres_p}{threshold for p-value}
+}
+\value{
+vector of significance categories
 }
 \description{
 Calculate significance categories for ANOVA
+}
+\examples{
+# TODO
 }

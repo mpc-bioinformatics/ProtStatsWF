@@ -26,8 +26,46 @@ VolcanoPlot_ANOVA(
 )
 }
 \arguments{
-\item{ylim}{}
+\item{RES}{result of ProtStatsWF::ANOVA() or other ANOVA function}
+
+\item{columnname_p_ANOVA}{column name of the p-values from the ANOVA}
+
+\item{columnname_p_ANOVA_adj}{column name of the adjusted p-values from the ANOVA}
+
+\item{columns_FC}{vector of column numbers for the fold changes}
+
+\item{columns_p_posthoc}{vector of column numbers for the posthoc p-values}
+
+\item{log_base_fc}{base for log2 transformation of fold changes}
+
+\item{log_base_p}{base for log10 transformation of p-values}
+
+\item{thres_p}{threshold for p-values}
+
+\item{thres_fc}{threshold for fold changes}
+
+\item{colour1}{colour for not significant proteins}
+
+\item{colour2}{colour for significant proteins}
+
+\item{colour3}{colour for significant proteins after FDR correction}
+
+\item{symmetric_x}{logical, if TRUE, x-axis will be made symmetric}
+
+\item{legend_position}{position of the legend}
+
+\item{base_size}{base size for the ggplot theme}
+
+\item{xlim}{x-axis limits}
+
+\item{ylim}{y-axis limits}
+}
+\value{
+list of volcano plots as ggplot objects
 }
 \description{
 Volcano Plots for ANOVA
+}
+\examples{
+# TODO
 }

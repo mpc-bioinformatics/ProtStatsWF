@@ -1,45 +1,3 @@
-################################################################################
-#### Heatmap script using the ComplexHeatmap R package
-
-
-### TODO: einbauen, dass er die Gruppenfarben richtig macht! (evtl. in getrennter Funktion?)
-
-
-
-# D: data set with only intensities (should be log-transformed if necessary)
-# id: data set with further columns, e.g. protein or gene names
-# protein_names_col: column with protein or gene names (NULL if no protein names should be plotted)
-# na.method: "na.omit" -> proteins with any missing values will be removed
-#            "impute" -> imputation of missing values
-#            "keep" -> keep missing values
-# filtermissings: filter out proteins with more than X missing values
-#                 (rows with only 1 or 2 valid values may cause problems with clustering)
-
-# groups: data.frame with one or more grouping variables
-# group_colours: named list of group colours (discrete vars) or colour functions (continuous vars)
-# column_split = should columns be split? NULL if not, name of column in groups if yes
-# cluster_column_slices: cluster the column slices?
-
-# cluster_rows, cluster_columns: if TRUE, rows/columns will be clustered
-# dist_method: distance metric for clustering, e.g. "pearson", "spearman", "euclidean"
-# clust_method: linkage method for clustering, e.g. "complete", "single", "average"
-
-# symmetric_legend: should colour code be made symmetric? (only make sense for z-scored data)
-# scale_data: should data be scaled ( = z-scored)?
-# output_path: path for exporting the plot
-# suffix: suffix for file name
-
-# legend_name: name for legend
-# title: title
-# legend_colours
-# plot_height, plot_width, plot_dpi: setting for plot output (height/width in cm)
-# ... further arguments to Heatmap
-
-
-
-
-
-
 #' Heatmap
 #'
 #' @param D data set containing only protein intensities, already filtered for interesting candidates
@@ -65,16 +23,16 @@
 #' @param legend_name name for legend
 #' @param title title
 #' @param legend_colours colours for colour gradient
-#' @param plot_height
-#' @param plot_width
-#' @param plot_dpi
-#' @param log_data
-#' @param log_base
-#' @param colour_scale_max
-#' @param textsize
+#' @param plot_height plot height
+#' @param plot_width plot width
+#' @param plot_dpi plot resolution in DPI
+#' @param log_data if TRUE, data will be log-transformed
+#' @param log_base base for log-transformation
+#' @param colour_scale_max maximum value for colour scale (useful if data contains strong outliers)
+#' @param textsize test size for labels
 #' @param ... further arguments to Heatmap
 #'
-#' @return heatmap
+#' @return heatmap + data used for the heatmap before and after imputation
 #' @export
 #'
 #' @examples # TODO
@@ -107,6 +65,8 @@ Heatmap_with_groups <- function(D, id, protein_names_col = NULL,
   data.asmatrix <- data.asmatrix_scaled
   }
 
+
+  data_wo_imputation <- cbind(id, zscore = data.asmatrix)
 
   ### export data used in heatmap
   openxlsx::write.xlsx(cbind(id, zscore = data.asmatrix), paste0(output_path,"Heatmap_data_wo_imputation_", suffix, ".xlsx"), overwrite = TRUE, keepNA = TRUE)
@@ -147,7 +107,6 @@ Heatmap_with_groups <- function(D, id, protein_names_col = NULL,
   if (!is.null(colour_scale_max)) {
     data.asmatrix[data.asmatrix < -colour_scale_max] <- -colour_scale_max
     data.asmatrix[data.asmatrix > colour_scale_max] <- colour_scale_max
-
   }
 
 
@@ -203,7 +162,7 @@ Heatmap_with_groups <- function(D, id, protein_names_col = NULL,
   ComplexHeatmap::draw(ht, annotation_legend_side = "right", heatmap_legend_side = "right", merge_legend = TRUE)
   dev.off()
 
-  return(ht)
+  return(Heatmap = ht, data_wo_imputation = data_wo_imputation, data_heatmap = cbind(id, zscore = data.asmatrix))
 }
 
 

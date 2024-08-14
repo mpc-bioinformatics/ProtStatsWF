@@ -5,26 +5,26 @@
 
 #' Simple volcano plot from p-value, fold change and significance category
 #'
-#' @param p
-#' @param FC
-#' @param significance_category
-#' @param log_base_fc
-#' @param log_base_p
-#' @param thres_p
-#' @param thres_fc
-#' @param colour1
-#' @param colour2
-#' @param colour3
-#' @param symmetric_x
-#' @param legend_position
-#' @param base_size
-#' @param xlim
-#' @param ylim
+#' @param p vector of p-values (before p-value correction)
+#' @param FC vector of fold changes
+#' @param significance_category vector of significance categories ("not significant", "significant", "significant after FDR correction")
+#' @param log_base_fc base for logarithm of the fold change (default is 2).
+#' @param log_base_p base for logarithm of the p-value (default is 10, the negative log-p-value is plotted, e.g. -log10(p)).
+#' @param thres_p  threshold for p-value (default is 0.05)
+#' @param thres_fc threshold for fold change (default is 2)
+#' @param colour1 colour for not significant points, default is grey
+#' @param colour2 colour for significant points, default is black
+#' @param colour3 colour for significant points after FDR correction, default is orange
+#' @param symmetric_x if TRUE, x-axis will be made symmetric, default is FALSE
+#' @param legend_position position of the legen, default is "bottom"
+#' @param base_size base size for ggplot2 theme, default is NULL
+#' @param xlim x-axis limits, default is NULL, i.e. will be determined automatically
+#' @param ylim y-axis limits, default is NULL, i.e. will be determined automatically
 #'
-#' @return
+#' @return Volcano plot as ggplot object
 #' @export
 #'
-#' @examples
+#' @examples # TODO
 VolcanoPlot <- function(p,
                         FC,
                         significance_category,
@@ -279,17 +279,17 @@ VolcanoPlot_ttest <- function(RES,
 
 #' Calculate significance categories for ANOVA
 #'
-#' @param p_posthoc
-#' @param p_anova_adj
-#' @param p_anova
-#' @param fc
-#' @param thres_fc
-#' @param thres_p
+#' @param p_posthoc vector of posthoc p-values
+#' @param p_anova_adj vector of ANOVA p-values adjusted for multiple testing
+#' @param p_anova vector of ANOVA p-values before p-value correction
+#' @param fc vector of fold changes
+#' @param thres_fc threshold for fold change
+#' @param thres_p threshold for p-value
 #'
-#' @return
+#' @return vector of significance categories
 #' @export
 #'
-#' @examples
+#' @examples # TODO
 calculate_significance_categories_ANOVA <- function(p_posthoc, p_anova_adj, p_anova, fc, thres_fc=2, thres_p=0.05) {
 
   significance <- dplyr::case_when(
@@ -310,28 +310,28 @@ calculate_significance_categories_ANOVA <- function(p_posthoc, p_anova_adj, p_an
 
 #' Volcano Plots for ANOVA
 #'
-#' @param RES
-#' @param columnname_p_ANOVA
-#' @param columnname_p_ANOVA_adj
-#' @param columns_FC
-#' @param columns_p_posthoc
-#' @param log_base_fc
-#' @param log_base_p
-#' @param thres_p
-#' @param thres_fc
-#' @param colour1
-#' @param colour2
-#' @param colour3
-#' @param symmetric_x
-#' @param legend_position
-#' @param base_size
-#' @param xlim
-#' @param ylim
+#' @param RES result of ProtStatsWF::ANOVA() or other ANOVA function
+#' @param columnname_p_ANOVA column name of the p-values from the ANOVA
+#' @param columnname_p_ANOVA_adj column name of the adjusted p-values from the ANOVA
+#' @param columns_FC vector of column numbers for the fold changes
+#' @param columns_p_posthoc vector of column numbers for the posthoc p-values
+#' @param log_base_fc base for log2 transformation of fold changes
+#' @param log_base_p base for log10 transformation of p-values
+#' @param thres_p threshold for p-values
+#' @param thres_fc threshold for fold changes
+#' @param colour1 colour for not significant proteins
+#' @param colour2 colour for significant proteins
+#' @param colour3 colour for significant proteins after FDR correction
+#' @param symmetric_x logical, if TRUE, x-axis will be made symmetric
+#' @param legend_position position of the legend
+#' @param base_size base size for the ggplot theme
+#' @param xlim x-axis limits
+#' @param ylim y-axis limits
 #'
-#' @return
+#' @return list of volcano plots as ggplot objects
 #' @export
 #'
-#' @examples
+#' @examples # TODO
 VolcanoPlot_ANOVA <- function(RES,
                               columnname_p_ANOVA = "p.anova",
                               columnname_p_ANOVA_adj = "p.anova.fdr",
