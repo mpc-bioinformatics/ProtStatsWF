@@ -27,6 +27,9 @@ calculate_onoff <- function(D, id, group, max_vv_off, min_vv_on, protein_id_col 
   D_long <- tidyr::pivot_longer(data = cbind(Protein.IDs = Protein.IDs, D), cols = colnames(D))
   D_long$group <- group[match(D_long$name, colnames(D))]
 
+
+  value <- valid_values <- valid_values_rel <- NULL # silence notes when checking the package
+
   ## calculate on/off values
   D_onoff <- D_long %>% dplyr::group_by(group, Protein.IDs) %>%
     dplyr::summarise(valid_values = sum(!is.na(value)), valid_values_rel = mean(!is.na(value)))
@@ -80,13 +83,13 @@ Onoff_plus_heatmap <- function(RES_onoff,
   RES_onoff2[, protein_name_column] <- make.names(RES_onoff2[, protein_name_column], unique = TRUE)
 
 
-  RES_onoff2_long <- as.data.frame(pivot_longer(RES_onoff2, cols = all_of(validvalue_cols), names_to = "group"))
+  RES_onoff2_long <- as.data.frame(tidyr::pivot_longer(RES_onoff2, cols = tidyr::all_of(validvalue_cols), names_to = "group"))
 
 
   if (relative) {
-    RES_onoff2_long$group <- str_replace(RES_onoff2_long$group, "valid_values_rel_", "")
+    RES_onoff2_long$group <- stringr::str_replace(RES_onoff2_long$group, "valid_values_rel_", "")
   } else {
-    RES_onoff2_long$group <- str_replace(RES_onoff2_long$group, "valid_values_", "")
+    RES_onoff2_long$group <- stringr::str_replace(RES_onoff2_long$group, "valid_values_", "")
   }
 
   ### TODO: level Reihenfolge der Gruppe nutzen statt alphabetisch
@@ -101,15 +104,17 @@ Onoff_plus_heatmap <- function(RES_onoff,
   RES_onoff2_long[, protein_name_column] <- factor(RES_onoff2_long[, protein_name_column],
                                      levels = RES_onoff2[, protein_name_column][ord])
 
-  pl <- ggplot(data = RES_onoff2_long, aes(x = group, y = Gene.names, fill = value)) +  ## TODO: Gene.names
-    geom_tile() +  ylab("Gene name") + xlab("group") + theme_bw()
+  group <- Gene.names <- value <- NULL # silence notes when checking the package
+
+  pl <- ggplot2::ggplot(data = RES_onoff2_long, ggplot2::aes(x = group, y = Gene.names, fill = value)) +  ## TODO: Gene.names
+    ggplot2::geom_tile() +  ggplot2::ylab("Gene name") + ggplot2::xlab("group") + ggplot2::theme_bw()
 
   #if (onoffGreaterThanEqual < 1 | !is.null(onoffdiff)) {
-  pl <- pl + scale_fill_gradient(limits = c(0,max(RES_onoff2_long$value)), low = "white", high = "forestgreen") #
-  pl <- pl + theme(axis.text = element_text(size = rel(1.8)),
-                   axis.title = element_text(size = rel(1.8)),
-                   legend.title = element_text(size=rel(1.8)),
-                   legend.text = element_text(size=rel(1.8)))
+  pl <- pl + ggplot2::scale_fill_gradient(limits = c(0,max(RES_onoff2_long$value)), low = "white", high = "forestgreen") #
+  pl <- pl + ggplot2::theme(axis.text = ggplot2::element_text(size = ggplot2::rel(1.8)),
+                   axis.title = ggplot2::element_text(size = ggplot2::rel(1.8)),
+                   legend.title = ggplot2::element_text(size = ggplot2::rel(1.8)),
+                   legend.text = ggplot2::element_text(size = ggplot2::rel(1.8)))
   pl
 
   return(pl)

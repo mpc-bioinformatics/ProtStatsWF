@@ -17,7 +17,11 @@ add_labels(
 
 \item{label_type}{"FDR" (significant after correction) or "noFDR" (significant without correction) or "index" -> define indizes to label}
 
+\item{ind}{index of the proteins to label}
+
 \item{protein_name_column}{column name of the protein names in the RES data frame}
+
+\item{protein_names}{vector of protein names to label}
 }
 \value{
 ggplot object with labels

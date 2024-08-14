@@ -59,6 +59,8 @@ VolcanoPlot_ANOVA(
 \item{xlim}{x-axis limits}
 
 \item{ylim}{y-axis limits}
+
+\item{add_labels}{add labels to interesting proteins in the volcano plot}
 }
 \value{
 list of volcano plots as ggplot objects

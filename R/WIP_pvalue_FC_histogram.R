@@ -21,6 +21,8 @@ pvalue_foldchange_histogram <- function(RES,
                   padj = RES[[columnname_padj]],
                   FC = RES[[columnname_FC]])
 
+  p <- padj <- FC <- NULL # silence notes when checking the package
+
   pl_hist_p <- ggplot2::ggplot(D, ggplot2::aes(x = p)) +
     ggplot2::geom_histogram(breaks = seq(0,1, 0.05)) +
     ggplot2::theme_bw() +

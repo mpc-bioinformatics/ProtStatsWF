@@ -55,6 +55,7 @@ VolcanoPlot <- function(p,
                     significance = significance_category)
 
 
+  significance <- NULL # silence notes when checking the package
 
   plot <- ggplot2::ggplot(data = RES, ggplot2::aes(x = transformed_FC, y = transformed_p, colour = significance)) +
     ggplot2::geom_point(alpha = 5/10) +
@@ -327,6 +328,7 @@ calculate_significance_categories_ANOVA <- function(p_posthoc, p_anova_adj, p_an
 #' @param base_size base size for the ggplot theme
 #' @param xlim x-axis limits
 #' @param ylim y-axis limits
+#' @param add_labels add labels to interesting proteins in the volcano plot
 #'
 #' @return list of volcano plots as ggplot objects
 #' @export
@@ -358,8 +360,8 @@ VolcanoPlot_ANOVA <- function(RES,
   #nr_groups <- length(columns_p_posthoc)
   #if (length(columns_FC) != nr_groups) stop("columns_FC and columns_p_posthoc must have the same length!")
 
-  p_anova <- RES_ANOVA[, columnname_p_ANOVA]
-  p_anova_adj <- RES_ANOVA[, columnname_p_ANOVA_adj]
+  p_anova <- RES[, columnname_p_ANOVA]
+  p_anova_adj <- RES[, columnname_p_ANOVA_adj]
   #nr_comparisons <- choose(n = nr_groups, k = 2) # pairwise comparisons between two groups
 
   # names of the comparisons
@@ -370,8 +372,8 @@ VolcanoPlot_ANOVA <- function(RES,
   Volcano_plots <- list()
   for (i in 1:nr_comparisons) {
 
-    p_posthoc <- RES_ANOVA[, columns_p_posthoc[i]]
-    fc <- RES_ANOVA[, columns_FC[i]]
+    p_posthoc <- RES[, columns_p_posthoc[i]]
+    fc <- RES[, columns_FC[i]]
 
     X <- cbind(p_anova, p_anova_adj, p_posthoc, fc)
 
@@ -436,6 +438,8 @@ VolcanoPlot_ANOVA <- function(RES,
 #' @param RES_Volcano  result from volcanoPlot(): a list containing the data frame with the transformed data and the ggplot object
 #' @param label_type "FDR" (significant after correction) or "noFDR" (significant without correction) or "index" -> define indizes to label
 #' @param protein_name_column column name of the protein names in the RES data frame
+#' @param ind index of the proteins to label
+#' @param protein_names vector of protein names to label
 #'
 #' @return ggplot object with labels
 #' @export
@@ -467,15 +471,9 @@ add_labels <- function(RES_Volcano,
     ind_label <- ind
   }
 
-  ind0 <<- ind_label
-
-  print(RES_Volcano$data$transformed_FC[ind_label])
-
   ind_label_down <- ind_label[RES_Volcano$data$transformed_FC[ind_label] < 0]
   ind_label_up <- ind_label[RES_Volcano$data$transformed_FC[ind_label] > 0]
 
-  ind1 <<- ind_label_up
-  ind2 <<- ind_label_down
 
   labels_up <- rep(NA, nrow(RES_Volcano$data))
   labels_down <- rep(NA, nrow(RES_Volcano$data))
@@ -500,17 +498,11 @@ add_labels <- function(RES_Volcano,
   xaxis_limits <- xaxis_limits * 1.1
 
   yaxis_limits <- ggplot2::layer_scales(RES_Volcano)$y$get_limits()
-  yaxis_limits[2] <- yaxis_limits[2] * 1.1 # only changge upper limit
-
-
-  x1 <<- labels_up
-  x2 <<- labels_down
+  yaxis_limits[2] <- yaxis_limits[2] * 1.1 # only change upper limit
 
   ### add labels
   plot <- RES_Volcano +
     ggplot2::ylim(yaxis_limits) + ggplot2::xlim(xaxis_limits) +
-    # geom_point(data= RES_Volcano$RES[!is.na(labels_up) | !is.na(labels_down),],
-    #             aes(x=transformed_FC,y=transformed_p)) +
     ggrepel::geom_label_repel(ggplot2::aes(label = labels_up), size = 2,
                               nudge_x = nudge_x, nudge_y = nudge_y, show.legend = FALSE,
                               max.overlaps = 20) +

@@ -61,6 +61,8 @@ Boxplots_candidates <- function(D,
     data$group <- factor(data$group, levels = levels(group))
 
 
+    value <- NULL # to silence notes while checking package
+
     plot <- ggplot2::ggplot(data = data, ggplot2::aes(x = group, y = value, fill = group)) +
       ggplot2::geom_boxplot(outlier.shape = NA) +
       ggplot2::labs(title = protein.names[i]) +

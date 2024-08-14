@@ -84,7 +84,7 @@ Heatmap_with_groups <- function(D, id, protein_names_col = NULL,
   if(na_method == "na.omit") {
     data.asmatrix_tmp <- data.asmatrix
     rownames(data.asmatrix_tmp) <- 1:nrow(data.asmatrix_tmp)
-    data.asmatrix_tmp <- na.omit(data.asmatrix_tmp)
+    data.asmatrix_tmp <- stats::na.omit(data.asmatrix_tmp)
     ind <- as.numeric(rownames(data.asmatrix_tmp))
 
     id <- id[ind,, drop = FALSE]
@@ -158,9 +158,9 @@ Heatmap_with_groups <- function(D, id, protein_names_col = NULL,
                 column_title_gp = grid::gpar(fontsize = textsize),
                 ...)
 
-  png(paste0(output_path,"Heatmap_", suffix, ".png"), width = plot_width, height = plot_height, units = "cm", res = plot_dpi)
+  grDevices::png(paste0(output_path,"Heatmap_", suffix, ".png"), width = plot_width, height = plot_height, units = "cm", res = plot_dpi)
   ComplexHeatmap::draw(ht, annotation_legend_side = "right", heatmap_legend_side = "right", merge_legend = TRUE)
-  dev.off()
+  grDevices::dev.off()
 
   return(Heatmap = ht, data_wo_imputation = data_wo_imputation, data_heatmap = cbind(id, zscore = data.asmatrix))
 }
