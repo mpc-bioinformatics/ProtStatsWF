@@ -25,8 +25,6 @@
 
 calculate_onoff <- function(D, id, group, max_vv_off, min_vv_on, protein_id_col = 1) {
 
-  ### TODO: check that protein_id_col has only unique entries, otherwise the on/off calculation will fail
-
   group <- droplevels(group)
   nr_groups <- length(levels(group))
 
@@ -106,7 +104,6 @@ Onoff_plus_heatmap <- function(RES_onoff,
 
   validvalue_cols <- setdiff(colnames(RES_onoff2)[grep("valid_values_", colnames(RES_onoff2))], colnames(RES_onoff2)[grep("valid_values_rel_", colnames(RES_onoff2))])
 
-  ### TODO: schlauere Methode um doppelte Proteinname zu behandeln? (Das sind meist die leeren! -> überschreiben mit protein accession z.B.)
   RES_onoff2[, protein_name_column] <- make.names(RES_onoff2[, protein_name_column], unique = TRUE)
 
 

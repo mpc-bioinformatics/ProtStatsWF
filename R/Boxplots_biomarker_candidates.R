@@ -86,8 +86,7 @@ Boxplots_candidates <- function(D,
       ggplot2::theme_bw() +
       ggplot2::theme(legend.position = "bottom") +
       ggplot2::labs(fill = groupvar_name, y = "log2(intensity)", x = groupvar_name) +
-      ggplot2::ggtitle(protein.names[i]) #+
-      #ggplot2::scale_x_discrete(drop = FALSE)
+      ggplot2::ggtitle(protein.names[i])
 
 
     if (is.null(group_colours)) {
@@ -116,6 +115,3 @@ Boxplots_candidates <- function(D,
 }
 
 
-
-
-### TODO: Verbindungslinien zwischen den Punkten, die zum gleichen Sample gehören?
