@@ -78,7 +78,6 @@ ttest_single_row <- function(x, group, log_before_test = TRUE, delog_for_FC = TR
 
   # it is still possible, that the ttest fails (e.g. if variance in one group is 0)
   if ("try-error" %in% class(ttest)) {warning(paste0("ttest failed for row ", row));res[12] <- 3;return(res)}  ### reason: other, e.g. var = 0
-  ### TODO: error message mit ausgeben
 
   res[1:2] <- ttest$estimate
   res[3] <- ttest$statistic
@@ -109,9 +108,6 @@ ttest_single_row <- function(x, group, log_before_test = TRUE, delog_for_FC = TR
 ###################################################################################################
 ###################################################################################################
 
-### TODO: add possibility to calculate FC pair-wise (diff of the values on log-scale, then mean, then delog)
-### TODO: add possibility to set min_nr_pairs as a ratio!
-### TODO: add error codes
 
 #' Paired T-test for a single row of a data set
 #'

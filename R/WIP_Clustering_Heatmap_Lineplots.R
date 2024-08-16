@@ -15,17 +15,6 @@ Clustering_heatmap_lineplots <- function(D, id, output_path, suffix = "", nr_clu
   rownames(D) <- 1:nrow(D)  # reset rownames (important to match cluster information later)
   row_dend = stats::as.dendrogram(stats::hclust(amap::Dist(D, method = "pearson"))) # cluster the proteins
 
-  ## generate global heatmap
-  ## TODO: is this necessary?
-  # ProtStatsWF::Heatmap_with_groups(D = D,
-  #                                  id = id,
-  #                                  #groups = timepoint_tmp,
-  #                                  cluster_rows = TRUE,
-  #                                  cluster_columns = FALSE,
-  #                                  output_path = output_path,
-  #                                  suffix = suffix)
-
-
   if (is.null(nr_clusters)) {
   # find optimal number of clusters based on silhouette values
   nr_clusters <- dendextend::find_k(row_dend)$k

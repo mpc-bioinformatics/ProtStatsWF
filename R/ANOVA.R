@@ -135,7 +135,7 @@ ANOVA_standard_single_row <- function(x,
   }
 
 
-  ### TODO: die Benennung der Spalten in die aeussere Funktion verlagern
+  ### generate column names
   namesfc1 <- paste0("FC_", comparisons[,1], "_divided_by_", comparisons[,2])
   namesfc2 <- paste0("FC_", comparisons[,2], "_divided_by_", comparisons[,1])
   namesfc <- character(2*nr_comparisons)
@@ -186,9 +186,6 @@ ANOVA_standard_single_row <- function(x,
     x2 <- x
   }
 
-
-  ### TODO: fold changes nur berechnen, wenn für die Gruppe auch ein posthoc test berechnet werden konnte
-
   fcs <- NULL
   name.fcs <- NULL
   for (j in 1:(nr_groups-1)) {
@@ -210,11 +207,6 @@ ANOVA_standard_single_row <- function(x,
 
 ################################################################################
 ################################################################################
-
-
-#### TODO: Derzeit müssen Factor-levels der Gruppen alphabetisch sortiert sein,
-### damit die Ergebnisse des posthoc tests richtig ausgelesen werden können
-### TODO: Option einbauen, dass nur getestet wird, wenn alle Gruppen vorhanden sind
 
 
 #' Repeated measures ANOVA (paired samples)
@@ -275,7 +267,7 @@ ANOVA_repeatedMeasurements_single_row <- function(x,
     D_tmp_naomit <- droplevels(D_tmp_naomit)
   }
 
-  ### TODO: die Benennung der Spalten in die aeussere Funktion verlagern
+  ### generating column names
   namesfc1 <- paste0("FC_", comparisons[,1], "_divided_by_", comparisons[,2])
   namesfc2 <- paste0("FC_", comparisons[,2], "_divided_by_", comparisons[,1])
   namesfc <- character(2*nr_comparisons)
@@ -329,8 +321,6 @@ ANOVA_repeatedMeasurements_single_row <- function(x,
     x2 <- x
   }
 
-
-  ### TODO: fold changes nur berechnen, wenn für die Gruppe auch ein posthoc test berechnet werden konnte
   fcs <- NULL
   name.fcs <- NULL
   for (j in 1:(nr_groups - 1)) {
@@ -409,7 +399,7 @@ ANOVA_Welch_single_row <- function(x,
     D_tmp_naomit <- droplevels(D_tmp_naomit)
   }
 
-  ### TODO: die Benennung der Spalten in die aeussere Funktion verlagern
+  ### generating column names
   namesfc1 <- paste0("FC_", comparisons[,1], "_divided_by_", comparisons[,2])
   namesfc2 <- paste0("FC_", comparisons[,2], "_divided_by_", comparisons[,1])
   namesfc <- character(2*nr_comparisons)
@@ -450,8 +440,6 @@ ANOVA_Welch_single_row <- function(x,
     x2 <- x
   }
 
-
-  ### TODO: fold changes nur berechnen, wenn für die Gruppe auch ein posthoc test berechnet werden konnte
   fcs <- NULL
   name.fcs <- NULL
   for (j in 1:(nr_groups-1)) {
