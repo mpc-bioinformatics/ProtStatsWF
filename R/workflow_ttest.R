@@ -1,3 +1,35 @@
+#' Prepare data from an xlsx sheet
+#'
+#'
+#' @param data_path              A character containing the path to an .xlsx file.
+#' @param intensity_columns      An integer vector containing the intensity columns of the table.
+#' 
+#' @return A list containing an intensity data.frame, an IDs data frame and a factor of the sample groups
+#'
+#' @examples
+#' \dontrun{
+#' in_path <- "/Users/thisuser/Documents/dataFolder/data.xlsx"
+#' int_cols <- 3:8
+#'
+#' result <- workflow_ttest(data_path = in_path, intensity_columns = int_cols)
+#'}
+
+prepareTtestData <- function(data_path,
+                             intensity_columns
+){
+  
+  D <- openxlsx::read.xlsx(data_path)
+  
+  id <- D[, -intensity_columns]
+  D <- D[, intensity_columns]
+  
+  group <- factor(limma::strsplit2(colnames(D), "_")[,1])
+  number_of_groups <- length(levels(group))
+  
+  
+  return(list("D" = D, "ID" = id, "group" = group, "number_of_groups" = number_of_groups))
+}
+
 
 
 
@@ -42,15 +74,9 @@ workflow_ttest <- function(data_path,
   
   #### Prepare Data ####
   
-  # JUST FOR TESTING PURPOSES!!! 
-  output_path = "/home/kalar_ubuntu/dataresults/"
+  # data <- prepareTtestData(data_path = "C:/Users/kalar/Documents/0_Studium/WHK/Testdata/ttest/preprocessed_peptide_data_D3.xlsx" , intensity_columns = 3:8)
+  data <- prepareTtestData(data_path = data_path , intensity_columns = intensity_columns)
   
-  data <- prepareData(data_path = "/home/kalar_ubuntu/datasets/preprocessed_peptide_data_D1_ttest.xlsx", intensity_columns = 3:8, do_log_transformation = FALSE, use_groups = TRUE)
-  sample <- as.factor(c("1","2","3","1","2","3"))
-  
-  biomarker_data = data[["D"]][c(1,3,5,7,9,11,13),]
-  biomarker_names = data[["ID"]][c(1,3,5,7,9,11,13),1]
-  biomarker_group = data[["group"]][c(1,3,5,7,9,11,13)]
   
   
   #### Calculate ttest ####
