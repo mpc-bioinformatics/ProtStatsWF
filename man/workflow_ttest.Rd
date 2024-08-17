@@ -7,10 +7,11 @@
 workflow_ttest(
   data_path,
   output_path,
-  ttest_sample = NULL,
-  ttest_paired = FALSE,
-  ttest_log_before_test = TRUE,
-  ttest_delog_for_FC = TRUE
+  sample = NULL,
+  paired = FALSE,
+  var.equal = FALSE,
+  log_before_test = TRUE,
+  delog_for_FC = TRUE
 )
 }
 \arguments{
@@ -18,13 +19,15 @@ workflow_ttest(
 
 \item{output_path}{A character containing the path to an output folder.}
 
-\item{ttest_sample}{A factor of  which column belongs to which sample for the t-test.}
+\item{sample}{A factor of  which column belongs to which sample.}
 
-\item{ttest_paired}{If \code{TRUE}, a paired t-test will be done, otherwise an unpaired t-test.}
+\item{paired}{If \code{TRUE}, a paired test will be done, otherwise an unpaired test.}
 
-\item{ttest_log_before_test}{If \code{TRUE}, the data will be log-transformed before the t-test.}
+\item{var.equal}{If \code{TRUE}, the variances are assumed to be equal.}
 
-\item{ttest_delog_for_FC}{If \code{TRUE}, the fold change will be calculated without the log-transformation in the t-test.}
+\item{log_before_test}{If \code{TRUE}, the data will be log-transformed.}
+
+\item{delog_for_FC}{If \code{TRUE}, the fold change will be calculated without the log-transformation.}
 }
 \value{
 Message log of the workflow
