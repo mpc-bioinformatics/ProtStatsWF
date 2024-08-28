@@ -226,8 +226,8 @@ VolcanoPlot_ttest <- function(RES,
                                                               thres_p = thres_p)
 
 
-  plot <- VolcanoPlot(p = RES$p,
-                      FC = RES$FC,
+  plot <- VolcanoPlot(p = p,
+                      FC = FC,
                       significance_category = RES$significance,
                       log_base_fc = log_base_fc,
                       log_base_p = log_base_p,

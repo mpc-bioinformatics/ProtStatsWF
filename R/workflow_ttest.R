@@ -45,6 +45,11 @@ prepareTtestData <- function(data_path,
 #' @param log_before_test        If \code{TRUE}, the data will be log-transformed.
 #' @param delog_for_FC           If \code{TRUE}, the fold change will be calculated without the log-transformation.
 #' 
+#' @param plot_device            A character containing the type of the output file, e.g. "pdf" or "png".
+#' @param plot_height            A numeric of the plot height in cm.
+#' @param plot_width             A numeric of the plot width in cm.
+#' @param plot_dpi               A numeric of the "dots per inch" of the plot aka. the plot resolution.
+#' 
 #' 
 #' @return Message log of the workflow
 #' @export
@@ -66,7 +71,12 @@ workflow_ttest <- function(data_path,
                            paired = FALSE,
                            var.equal = FALSE,
                            log_before_test = TRUE, 
-                           delog_for_FC = TRUE
+                           delog_for_FC = TRUE,
+                           
+                           plot_device = "pdf",
+                           plot_height = 15,
+                           plot_width = 15,
+                           plot_dpi = 300
                            ){
   
   mess = ""
@@ -75,6 +85,7 @@ workflow_ttest <- function(data_path,
   #### Prepare Data ####
   
   # data <- prepareTtestData(data_path = "C:/Users/kalar/Documents/0_Studium/WHK/Testdata/ttest/preprocessed_peptide_data_D3.xlsx" , intensity_columns = 3:8)
+  # output_path = "C:/Users/kalar/Documents/0_Studium/WHK/Testdata/ttest/results/"
   data <- prepareTtestData(data_path = data_path , intensity_columns = intensity_columns)
   
   
@@ -88,14 +99,29 @@ workflow_ttest <- function(data_path,
                         min_obs_per_group = 3, min_obs_per_group_ratio = NULL,
                         filename = paste0(output_path, "results_ttest.xlsx"))
   
-  
+  mess <- paste0(mess, 
+                 ifelse(paired, "Unpaired", "Paired"), 
+                 " t-test calculated with the variance assumed to be ", 
+                 ifelse(var.equal, "equal", "unequal"), ". \n",
+                 "Data was ", 
+                 ifelse(log_before_test, "", "not"), 
+                 "log-transformed before the t-test and ", 
+                 ifelse(delog_for_FC, "", "not"),
+                 "de-log-transformed for the fold change. \n")
   
   
   
   
   #### Create Volcano Plot ####
   
-  volcano_plot <- VolcanoPlot_ttest(RES = test_results, columnname_p = , columnname_padj = , columnname_FC = )
+  volcano_plot <- VolcanoPlot_ttest(RES = test_results, 
+                                    columnname_p = "p", columnname_padj = "p.fdr", 
+                                    columnname_FC = "FC_state1_divided_by_state2")
+  
+  mess <- paste0(mess, "Volcano plot calculated. \n")
+  
+  ggplot2::ggsave(paste0(output_path, "volcano_plot", ".", plot_device), plot = volcano_plot,
+                  device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi)
   
   
   
@@ -105,8 +131,7 @@ workflow_ttest <- function(data_path,
   #### Create On-Off Heatmap ####
   
   
-  return(ttest_data)
-  # return(list("message" = mess))
+  return(list("message" = mess))
 }
 
 
