@@ -44,7 +44,7 @@ pvalue_foldchange_histogram <- function(RES,
          x = "log2 Fold change",
          y = "Frequency")
 
-  return(list(pl_hist_p, pl_hist_padj, pl_hist_FC))
+  return(list("histogram_p_value" = pl_hist_p, "histogram_adjusted_p_value" = pl_hist_padj, "histogram_fold_change" = pl_hist_FC))
 
 }
 

@@ -125,8 +125,26 @@ workflow_ttest <- function(data_path,
   
   
   
-  #### Create Boxplots of Biomarker Candidates ####
   #### Create Histogram for p-values and fold changes ####
+  
+  histograms <- pvalue_foldchange_histogram(RES = test_results, 
+                                            columnname_p = "p", columnname_padj = "p.fdr", 
+                                            columnname_FC = "FC_state1_divided_by_state2")
+  
+  mess <- paste0(mess, "p-value, adjusted p-value and fold change histograms calculated. \n")
+  
+  ggplot2::ggsave(paste0(output_path, "histogram_p_value", ".", plot_device), plot = histograms[["histogram_p_value"]],
+                  device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi)
+  ggplot2::ggsave(paste0(output_path, "histogram_adjusted_p_value", ".", plot_device), plot = histograms[["histogram_adjusted_p_value"]],
+                  device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi)
+  ggplot2::ggsave(paste0(output_path, "histogram_fold_change", ".", plot_device), plot = histograms[["histogram_fold_change"]],
+                  device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi)
+  
+  
+  
+  
+  
+  #### Create Boxplots of Biomarker Candidates ####
   #### Create Heatmap ####
   #### Create On-Off Heatmap ####
   
@@ -180,7 +198,15 @@ workflow_ANOVA <- function(data_path,
   mess = ""
   
   
-  #### Run ANOVA ####
+  #### Prepare Data ####
+  
+  # data <- prepareTtestData(data_path = "C:/Users/kalar/Documents/0_Studium/WHK/Testdata/ANOVA/preprocessed_peptide_data_D1.xlsx" , intensity_columns = 3:17)
+  # output_path = "C:/Users/kalar/Documents/0_Studium/WHK/Testdata/ANOVA/results/"
+  data <- prepareTtestData(data_path = data_path , intensity_columns = intensity_columns)
+  
+  
+  
+  #### Calculate ANOVA ####
   
   ANOVA_results <- ANOVA(D = data[["D"]], id = data[["ID"]], 
                          group = data[["group"]],  sample = sample, 
