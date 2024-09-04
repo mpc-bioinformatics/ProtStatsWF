@@ -10,6 +10,7 @@ MA_Plot_single(
   do_log_transformation = FALSE,
   alpha = FALSE,
   point_color = "black",
+  sampling = 1,
   ...
 )
 }
@@ -23,6 +24,8 @@ MA_Plot_single(
 \item{alpha}{If \code{TRUE}, the data points will be transparent.}
 
 \item{point_color}{A character containing the colors of the data points.}
+
+\item{sampling}{A numeric containing the sampling rate. Useful to sample part of the data set for data sets on peptide/feature level with many data points.}
 
 \item{...}{Additional arguments for affy::ma.plot.}
 }

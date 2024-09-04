@@ -13,7 +13,8 @@ prepareData(
   log_base = 2,
   use_groups = FALSE,
   group_colours = NULL,
-  normalization = "loess"
+  normalization = "loess",
+  lts_quantile = 0.8
 )
 }
 \arguments{
@@ -34,6 +35,8 @@ prepareData(
 \item{group_colours}{A character vector of hex codes for the group colors, if the data has groups. If \code{NULL}, a default color scale will be used.}
 
 \item{normalization}{A character containing the method of normalization. The possible methods are no normalization "nonorm" or "median", "loess", "quantile" or "lts" normalization.}
+
+\item{lts_quantile}{A numeric containing the quantile for the lts normalization if \code{normalization = "lts"}, default is 0.8.}
 }
 \value{
 A list containing the prepared data and the ids of the data as data.frames as well as the groups, number of groups and group colors
@@ -43,7 +46,7 @@ Prepare proteomics data for analysis
 }
 \examples{
 \dontrun{
-path <- "/Users/thisuser/Documents/dataFolder/data.xlsx" 
+path <- "/Users/thisuser/Documents/dataFolder/data.xlsx"
 intensity_cols <- 3:17
 
 prepared_data <- prepareData(data_path = path, intensity_columns = intensity_cols)
