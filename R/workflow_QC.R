@@ -102,12 +102,12 @@ workflow_QC <- function(data_path,
                         
                         
                         boxplot_method = "boxplot",
-                        
+
                         generate_MAplots = TRUE,
                         MA_maxPlots = 5000,
                         MA_alpha = FALSE,
                         MA_sampling = 1,
-                        
+
                         #PCA_groupvar1 = "group",
                         #PCA_groupvar2 = NULL,
                         
@@ -131,8 +131,7 @@ workflow_QC <- function(data_path,
                                do_log_transformation = do_log_transformation, log_base = log_base,
                                use_groups = use_groups, group_colours = group_colours,
                                normalization = normalization_method, lts_quantile = lts_quantile)
-  
-  
+
   mess <- paste0(mess, prepared_data[["message"]])#
   
   group <- prepared_data$group
@@ -147,11 +146,12 @@ workflow_QC <- function(data_path,
   vv_plot_data <- ValidValuePlot(D_long = prepared_data[["D_long"]],
                                  use_groups = use_groups, groupvar_name = groupvar_name, group_colours = group_colours,
                                  base_size = base_size)
+
   #### reorder valid values table to stay in the same order as the original data ####
   cnames <- colnames(prepared_data$D)
   vv_plot_data$table$name <- factor(vv_plot_data$table$name, levels = cnames)
   vv_plot_data$table <- vv_plot_data$table[order(vv_plot_data$table$name),]
-  
+
   mess <- paste0(mess, vv_plot_data[["message"]])
   
   
@@ -177,19 +177,19 @@ workflow_QC <- function(data_path,
   
   
   #### Calculate MA Plot ####
-  
+
   if (generate_MAplots) {
-    ma_data <- MA_Plots(D = prepared_data[["D"]],
-                        do_log_transformation = FALSE,
-                        output_path = output_path, suffix = suffix,
-                        labels = 1:ncol(prepared_data[["D"]]), labels2 = colnames(prepared_data[["D"]]),
-                        maxPlots = MA_maxPlots, alpha = MA_alpha,
-                        plot_height = plot_height, plot_width = plot_width, sampling = MA_sampling)
-    
-    mess <- paste0(mess, ma_data)
+  ma_data <- MA_Plots(D = prepared_data[["D"]],
+                      do_log_transformation = FALSE,
+                      output_path = output_path, suffix = suffix,
+                      labels = 1:ncol(prepared_data[["D"]]), labels2 = colnames(prepared_data[["D"]]),
+                      maxPlots = MA_maxPlots, alpha = MA_alpha,
+                      plot_height = plot_height, plot_width = plot_width, sampling = MA_sampling)
+
+  mess <- paste0(mess, ma_data)
   }
-  
-  
+
+
   #### Calculate PCA Plot ####
   
   
