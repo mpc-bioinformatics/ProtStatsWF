@@ -26,8 +26,9 @@ prepareTtestData <- function(data_path,
   group <- factor(limma::strsplit2(colnames(D), "_")[,1])
   number_of_groups <- length(levels(group))
   
+  sample <- factor(limma::strsplit2(colnames(D), "_")[,2])
   
-  return(list("D" = D, "ID" = id, "group" = group, "number_of_groups" = number_of_groups))
+  return(list("D" = D, "ID" = id, "group" = group, "number_of_groups" = number_of_groups, "sample" = sample))
 }
 
 
@@ -39,7 +40,6 @@ prepareTtestData <- function(data_path,
 #' @param data_path              A character containing the path to an .xlsx file.
 #' @param output_path            A character containing the path to an output folder.
 #' @param intensity_columns      An integer vector containing the intensity columns of the table.
-#' @param sample                 A factor of  which column belongs to which sample.
 #' @param paired                 If \code{TRUE}, a paired test will be done, otherwise an unpaired test.
 #' @param var.equal              If \code{TRUE}, the variances are assumed to be equal.
 #' @param log_before_test        If \code{TRUE}, the data will be log-transformed.
@@ -67,7 +67,7 @@ workflow_ttest <- function(data_path,
                            output_path,
                            intensity_columns,
                            
-                           sample = NULL, 
+                           # sample = NULL, 
                            paired = FALSE,
                            var.equal = FALSE,
                            log_before_test = TRUE, 
@@ -93,7 +93,7 @@ workflow_ttest <- function(data_path,
   #### Calculate ttest ####
   
   test_results <- ttest(D = data[["D"]], id = data[["ID"]], 
-                        group = data[["group"]],  sample = sample, 
+                        group = data[["group"]],  sample = data[["sample"]], 
                         paired = paired, var.equal = var.equal,
                         log_before_test = log_before_test, delog_for_FC = delog_for_FC, log_base = 2,
                         min_obs_per_group = 3, min_obs_per_group_ratio = NULL,
@@ -143,8 +143,26 @@ workflow_ttest <- function(data_path,
   
   
   
-  
   #### Create Boxplots of Biomarker Candidates ####
+  
+  # Filter D for candidates of interest
+  candidates <- as.character(calculate_significance_categories_ttest(p = test_results[["p"]], 
+                                                        p_adj = test_results[["p.fdr"]],
+                                                        fc = test_results[["FC_state1_divided_by_state2"]]))
+
+  candidates <- which(candidates == "significant after FDR correction")
+  
+  # candidates <- data[["D"]][candidates, ]
+    
+  Boxplots_candidates(D = data[["D"]][candidates, ], 
+                      protein.names = data[["ID"]][candidates, "protein"],
+                      group = data[["group"]],
+                      output_path = output_path)
+  
+  
+  
+  
+  
   #### Create Heatmap ####
   #### Create On-Off Heatmap ####
   
@@ -165,7 +183,6 @@ workflow_ttest <- function(data_path,
 #' @param data_path              A character containing the path to an .xlsx file.
 #' @param output_path            A character containing the path to an output folder.
 #' @param intensity_columns      An integer vector containing the intensity columns of the table.
-#' @param sample                 A factor of  which column belongs to which sample.
 #' @param paired                 If \code{TRUE}, a paired test will be done, otherwise an unpaired test.
 #' @param var.equal              If \code{TRUE}, the variances are assumed to be equal.
 #' @param log_before_test        If \code{TRUE}, the data will be log-transformed.
@@ -188,7 +205,7 @@ workflow_ANOVA <- function(data_path,
                            output_path,
                            intensity_columns,
                            
-                           sample = NULL, 
+                           # sample = NULL, 
                            paired = FALSE,
                            var.equal = FALSE,
                            log_before_test = TRUE, 
@@ -209,7 +226,7 @@ workflow_ANOVA <- function(data_path,
   #### Calculate ANOVA ####
   
   ANOVA_results <- ANOVA(D = data[["D"]], id = data[["ID"]], 
-                         group = data[["group"]],  sample = sample, 
+                         group = data[["group"]],  sample = data[["sample"]], 
                          paired = paired, var.equal = var.equal,
                          log_before_test = log_before_test, delog_for_FC = delog_for_FC, log_base = 2,
                          min_obs_per_group = 3, min_perc_per_group = NULL,
@@ -218,12 +235,19 @@ workflow_ANOVA <- function(data_path,
   
   #### Create Volcano Plot ####
   
-  volcano_plot <- VolcanoPlot_ANOVA(RES = test_results, columnname_p = , columnname_padj = , columnname_FC = )
+  # volcano_plot <- VolcanoPlot_ANOVA(RES = test_results, columnname_p = , columnname_padj = , columnname_FC = )
+  
+  # mess <- paste0(mess, "Volcano plot calculated. \n")
+  
+  # ggplot2::ggsave(paste0(output_path, "volcano_plot", ".", plot_device), plot = volcano_plot,
+  #                        device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi)
+  
+  
+  
   
   
   
   #### Create Boxplots of Biomarker Candidates ####
-  #### Create Histogram for p-values and fold changes ####
   #### Create Heatmap ####
   #### Create On-Off Heatmap ####
   
