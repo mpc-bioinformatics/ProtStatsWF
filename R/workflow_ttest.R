@@ -45,6 +45,7 @@ prepareTtestData <- function(data_path,
 #' @param log_before_test        If \code{TRUE}, the data will be log-transformed.
 #' @param delog_for_FC           If \code{TRUE}, the fold change will be calculated without the log-transformation.
 #' 
+#' @param suffix                 A character if the filenames should contain a suffix.
 #' @param plot_device            A character containing the type of the output file, e.g. "pdf" or "png".
 #' @param plot_height            A numeric of the plot height in cm.
 #' @param plot_width             A numeric of the plot width in cm.
@@ -73,6 +74,7 @@ workflow_ttest <- function(data_path,
                            log_before_test = TRUE, 
                            delog_for_FC = TRUE,
                            
+                           suffix = "",
                            plot_device = "pdf",
                            plot_height = 15,
                            plot_width = 15,
@@ -97,10 +99,10 @@ workflow_ttest <- function(data_path,
                         paired = paired, var.equal = var.equal,
                         log_before_test = log_before_test, delog_for_FC = delog_for_FC, log_base = 2,
                         min_obs_per_group = 3, min_obs_per_group_ratio = NULL,
-                        filename = paste0(output_path, "results_ttest.xlsx"))
+                        filename = paste0(output_path, "results_ttest", suffix, ".xlsx"))
   
   mess <- paste0(mess, 
-                 ifelse(paired, "Unpaired", "Paired"), 
+                 ifelse(paired, "Paired", "Unaired"), 
                  " t-test calculated with the variance assumed to be ", 
                  ifelse(var.equal, "equal", "unequal"), ". \n",
                  "Data was ", 
@@ -120,7 +122,7 @@ workflow_ttest <- function(data_path,
   
   mess <- paste0(mess, "Volcano plot calculated. \n")
   
-  ggplot2::ggsave(paste0(output_path, "volcano_plot", ".", plot_device), plot = volcano_plot,
+  ggplot2::ggsave(paste0(output_path, "volcano_plot", suffix, ".", plot_device), plot = volcano_plot,
                   device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi)
   
   
@@ -133,11 +135,11 @@ workflow_ttest <- function(data_path,
   
   mess <- paste0(mess, "p-value, adjusted p-value and fold change histograms calculated. \n")
   
-  ggplot2::ggsave(paste0(output_path, "histogram_p_value", ".", plot_device), plot = histograms[["histogram_p_value"]],
+  ggplot2::ggsave(paste0(output_path, "histogram_p_value", suffix, ".", plot_device), plot = histograms[["histogram_p_value"]],
                   device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi)
-  ggplot2::ggsave(paste0(output_path, "histogram_adjusted_p_value", ".", plot_device), plot = histograms[["histogram_adjusted_p_value"]],
+  ggplot2::ggsave(paste0(output_path, "histogram_adjusted_p_value", suffix, ".", plot_device), plot = histograms[["histogram_adjusted_p_value"]],
                   device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi)
-  ggplot2::ggsave(paste0(output_path, "histogram_fold_change", ".", plot_device), plot = histograms[["histogram_fold_change"]],
+  ggplot2::ggsave(paste0(output_path, "histogram_fold_change", suffix, ".", plot_device), plot = histograms[["histogram_fold_change"]],
                   device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi)
   
   
@@ -157,13 +159,35 @@ workflow_ttest <- function(data_path,
   Boxplots_candidates(D = data[["D"]][candidates, ], 
                       protein.names = data[["ID"]][candidates, "protein"],
                       group = data[["group"]],
-                      output_path = output_path)
+                      suffix = suffix,
+                      output_path = paste0(output_path))
   
   
-  
+  mess <- paste0(mess, "Boxplots made from candidates which were significant after FDR correction. \n")
   
   
   #### Create Heatmap ####
+  
+  
+  t_heatmap <- Heatmap_with_groups(D = data[["D"]][candidates, ], 
+                                   id = data[["ID"]][candidates, ],
+                                   groups = data[["group"]])
+  
+  
+  #grDevices::pdf(paste0(output_path, "/heatmap", suffix, ".", plot_device), height = plot_height, width = plot_width)
+  grDevices::pdf(paste0(output_path, "/heatmap", suffix, ".pdf"), height = plot_height, width = plot_width)
+  
+  graphics::plot(t_heatmap)
+  
+  grDevices::dev.off()
+  
+  mess <- paste0(mess, "Heatmap made from candidates which were significant after FDR correction. \n")
+  
+  
+  
+  
+  
+  
   #### Create On-Off Heatmap ####
   
   
