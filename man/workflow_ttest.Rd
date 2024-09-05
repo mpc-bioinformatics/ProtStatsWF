@@ -8,11 +8,11 @@ workflow_ttest(
   data_path,
   output_path,
   intensity_columns,
-  sample = NULL,
   paired = FALSE,
   var.equal = FALSE,
   log_before_test = TRUE,
   delog_for_FC = TRUE,
+  suffix = "",
   plot_device = "pdf",
   plot_height = 15,
   plot_width = 15,
@@ -26,8 +26,6 @@ workflow_ttest(
 
 \item{intensity_columns}{An integer vector containing the intensity columns of the table.}
 
-\item{sample}{A factor of  which column belongs to which sample.}
-
 \item{paired}{If \code{TRUE}, a paired test will be done, otherwise an unpaired test.}
 
 \item{var.equal}{If \code{TRUE}, the variances are assumed to be equal.}
@@ -35,6 +33,8 @@ workflow_ttest(
 \item{log_before_test}{If \code{TRUE}, the data will be log-transformed.}
 
 \item{delog_for_FC}{If \code{TRUE}, the fold change will be calculated without the log-transformation.}
+
+\item{suffix}{A character if the filenames should contain a suffix.}
 
 \item{plot_device}{A character containing the type of the output file, e.g. "pdf" or "png".}
 

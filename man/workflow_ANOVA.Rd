@@ -8,7 +8,6 @@ workflow_ANOVA(
   data_path,
   output_path,
   intensity_columns,
-  sample = NULL,
   paired = FALSE,
   var.equal = FALSE,
   log_before_test = TRUE,
@@ -21,8 +20,6 @@ workflow_ANOVA(
 \item{output_path}{A character containing the path to an output folder.}
 
 \item{intensity_columns}{An integer vector containing the intensity columns of the table.}
-
-\item{sample}{A factor of  which column belongs to which sample.}
 
 \item{paired}{If \code{TRUE}, a paired test will be done, otherwise an unpaired test.}
 

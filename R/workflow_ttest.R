@@ -68,7 +68,6 @@ workflow_ttest <- function(data_path,
                            output_path,
                            intensity_columns,
                            
-                           # sample = NULL, 
                            paired = FALSE,
                            var.equal = FALSE,
                            log_before_test = TRUE, 
@@ -113,17 +112,16 @@ workflow_ttest <- function(data_path,
   
   
   
-  
   #### Create Volcano Plot ####
   
   volcano_plot <- VolcanoPlot_ttest(RES = test_results, 
                                     columnname_p = "p", columnname_padj = "p.fdr", 
                                     columnname_FC = "FC_state1_divided_by_state2")
   
-  mess <- paste0(mess, "Volcano plot calculated. \n")
-  
   ggplot2::ggsave(paste0(output_path, "volcano_plot", suffix, ".", plot_device), plot = volcano_plot,
                   device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi)
+  
+  mess <- paste0(mess, "Volcano plot calculated. \n")
   
   
   
@@ -133,8 +131,6 @@ workflow_ttest <- function(data_path,
                                             columnname_p = "p", columnname_padj = "p.fdr", 
                                             columnname_FC = "FC_state1_divided_by_state2")
   
-  mess <- paste0(mess, "p-value, adjusted p-value and fold change histograms calculated. \n")
-  
   ggplot2::ggsave(paste0(output_path, "histogram_p_value", suffix, ".", plot_device), plot = histograms[["histogram_p_value"]],
                   device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi)
   ggplot2::ggsave(paste0(output_path, "histogram_adjusted_p_value", suffix, ".", plot_device), plot = histograms[["histogram_adjusted_p_value"]],
@@ -142,49 +138,43 @@ workflow_ttest <- function(data_path,
   ggplot2::ggsave(paste0(output_path, "histogram_fold_change", suffix, ".", plot_device), plot = histograms[["histogram_fold_change"]],
                   device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi)
   
+  mess <- paste0(mess, "p-value, adjusted p-value and fold change histograms calculated. \n")
   
   
+  #### Get significant candidates ####
   
-  #### Create Boxplots of Biomarker Candidates ####
-  
-  # Filter D for candidates of interest
   candidates <- as.character(calculate_significance_categories_ttest(p = test_results[["p"]], 
                                                         p_adj = test_results[["p.fdr"]],
                                                         fc = test_results[["FC_state1_divided_by_state2"]]))
 
   candidates <- which(candidates == "significant after FDR correction")
   
-  # candidates <- data[["D"]][candidates, ]
-    
+  mess <- paste0(mess, "There are ", length(candidates), " candidates, which were significant after FDR correction. \n")
+  
+  
+  #### Create Boxplots of Biomarker Candidates ####
+
   Boxplots_candidates(D = data[["D"]][candidates, ], 
                       protein.names = data[["ID"]][candidates, "protein"],
                       group = data[["group"]],
                       suffix = suffix,
                       output_path = paste0(output_path))
   
+  mess <- paste0(mess, "Boxplots made for the candidates. \n")
   
-  mess <- paste0(mess, "Boxplots made from candidates which were significant after FDR correction. \n")
   
   
   #### Create Heatmap ####
-  
   
   t_heatmap <- Heatmap_with_groups(D = data[["D"]][candidates, ], 
                                    id = data[["ID"]][candidates, ],
                                    groups = data[["group"]])
   
-  
-  #grDevices::pdf(paste0(output_path, "/heatmap", suffix, ".", plot_device), height = plot_height, width = plot_width)
   grDevices::pdf(paste0(output_path, "/heatmap", suffix, ".pdf"), height = plot_height, width = plot_width)
-  
   graphics::plot(t_heatmap)
-  
   grDevices::dev.off()
   
-  mess <- paste0(mess, "Heatmap made from candidates which were significant after FDR correction. \n")
-  
-  
-  
+  mess <- paste0(mess, "Heatmap made for the candidates. \n")
   
   
   
@@ -229,7 +219,6 @@ workflow_ANOVA <- function(data_path,
                            output_path,
                            intensity_columns,
                            
-                           # sample = NULL, 
                            paired = FALSE,
                            var.equal = FALSE,
                            log_before_test = TRUE, 
