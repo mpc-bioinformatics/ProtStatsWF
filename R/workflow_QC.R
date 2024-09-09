@@ -142,7 +142,7 @@ workflow_QC <- function(data_path,
   write.csv(x = prepared_data$D_long, file = paste0(output_path, "/D_norm_long", suffix, ".csv"), row.names = FALSE)
 
   openxlsx::write.xlsx(x = cbind(prepared_data$ID, prepared_data$D), file = paste0(output_path, "/D_norm_ID", suffix, ".xlsx"),
-                       row.names = FALSE, overwrite = TRUE, keepNA = TRUE)
+                       rowNames = FALSE, overwrite = TRUE, keepNA = TRUE)
 
 
   #### Calculate Valid Value Plot ####
