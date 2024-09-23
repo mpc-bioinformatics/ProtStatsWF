@@ -9,6 +9,9 @@
 #' @param log_before_test        If \code{TRUE}, the data will be log-transformed.
 #' @param delog_for_FC           If \code{TRUE}, the fold change will be calculated without the log-transformation.
 #' 
+#' @param max_valid_values_off   A numeric of the maximum number of valid values to be an off protein
+#' @param min_valid_values_on    A numeric of the minimum number of valid values to be an on protein
+#' 
 #' @param suffix                 A character if the filenames should contain a suffix.
 #' @param plot_device            A character containing the type of the output file, e.g. "pdf" or "png".
 #' @param plot_height            A numeric of the plot height in cm.
@@ -37,7 +40,7 @@ workflow_ttest <- function(data_path,
                            log_before_test = TRUE, 
                            delog_for_FC = TRUE,
                            
-                           max_valid_values_off = NULL,
+                           max_valid_values_off = 0,
                            min_valid_values_on = NULL,
                            
                            suffix = "",
@@ -146,6 +149,24 @@ workflow_ttest <- function(data_path,
   
   
   #### Create On-Off Heatmap ####
+  
+  if(is.null(min_valid_values_on)){
+    min_valid_values_on <- length(intensity_columns)
+  }
+  
+  t_on_off_heatmap <- calculate_onoff(D = data[["D"]], 
+                                      id = data[["ID"]],
+                                      group = data[["group"]],
+                                      max_vv_off = max_valid_values_off,
+                                      min_vv_on = min_valid_values_on,
+                                      protein_id_col = 1)
+  
+  grDevices::pdf(paste0(output_path, "/on_off_heatmap", suffix, ".pdf"), height = plot_height, width = plot_width)
+  graphics::plot(t_on_off_heatmap)
+  grDevices::dev.off()
+  
+  mess <- paste0(mess, "On-Off-Heatmap made. \n", "There were ", sum(t_on_off_heatmap[["isonoff"]]), " on/off proteins.")
+  
   
   
   return(list("message" = mess))
