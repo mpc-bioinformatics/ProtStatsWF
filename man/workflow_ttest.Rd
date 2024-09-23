@@ -12,6 +12,8 @@ workflow_ttest(
   var.equal = FALSE,
   log_before_test = TRUE,
   delog_for_FC = TRUE,
+  max_valid_values_off = 0,
+  min_valid_values_on = NULL,
   suffix = "",
   plot_device = "pdf",
   plot_height = 15,
@@ -33,6 +35,10 @@ workflow_ttest(
 \item{log_before_test}{If \code{TRUE}, the data will be log-transformed.}
 
 \item{delog_for_FC}{If \code{TRUE}, the fold change will be calculated without the log-transformation.}
+
+\item{max_valid_values_off}{A numeric of the maximum number of valid values to be an off protein}
+
+\item{min_valid_values_on}{A numeric of the minimum number of valid values to be an on protein}
 
 \item{suffix}{A character if the filenames should contain a suffix.}
 
