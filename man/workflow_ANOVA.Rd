@@ -11,7 +11,8 @@ workflow_ANOVA(
   paired = FALSE,
   var.equal = FALSE,
   log_before_test = TRUE,
-  delog_for_FC = TRUE
+  delog_for_FC = TRUE,
+  suffix = ""
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ workflow_ANOVA(
 \item{log_before_test}{If \code{TRUE}, the data will be log-transformed.}
 
 \item{delog_for_FC}{If \code{TRUE}, the fold change will be calculated without the log-transformation.}
+
+\item{suffix}{A character if the filenames should contain a suffix.}
 }
 \value{
 Message log of the workflow

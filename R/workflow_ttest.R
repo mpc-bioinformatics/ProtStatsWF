@@ -1,39 +1,3 @@
-#' Prepare data from an xlsx sheet
-#'
-#'
-#' @param data_path              A character containing the path to an .xlsx file.
-#' @param intensity_columns      An integer vector containing the intensity columns of the table.
-#' 
-#' @return A list containing an intensity data.frame, an IDs data frame and a factor of the sample groups
-#'
-#' @examples
-#' \dontrun{
-#' in_path <- "/Users/thisuser/Documents/dataFolder/data.xlsx"
-#' int_cols <- 3:8
-#'
-#' result <- workflow_ttest(data_path = in_path, intensity_columns = int_cols)
-#'}
-
-prepareTtestData <- function(data_path,
-                             intensity_columns
-){
-  
-  D <- openxlsx::read.xlsx(data_path)
-  
-  id <- D[, -intensity_columns]
-  D <- D[, intensity_columns]
-  
-  group <- factor(limma::strsplit2(colnames(D), "_")[,1])
-  number_of_groups <- length(levels(group))
-  
-  sample <- factor(limma::strsplit2(colnames(D), "_")[,2])
-  
-  return(list("D" = D, "ID" = id, "group" = group, "number_of_groups" = number_of_groups, "sample" = sample))
-}
-
-
-
-
 #' The workflow for t-test of quantitative proteomics data
 #'
 #'
@@ -72,6 +36,9 @@ workflow_ttest <- function(data_path,
                            var.equal = FALSE,
                            log_before_test = TRUE, 
                            delog_for_FC = TRUE,
+                           
+                           max_valid_values_off = NULL,
+                           min_valid_values_on = NULL,
                            
                            suffix = "",
                            plot_device = "pdf",
@@ -202,6 +169,7 @@ workflow_ttest <- function(data_path,
 #' @param log_before_test        If \code{TRUE}, the data will be log-transformed.
 #' @param delog_for_FC           If \code{TRUE}, the fold change will be calculated without the log-transformation.
 #' 
+#' @param suffix                 A character if the filenames should contain a suffix.
 #' 
 #' @return Message log of the workflow
 #' @export
@@ -222,7 +190,9 @@ workflow_ANOVA <- function(data_path,
                            paired = FALSE,
                            var.equal = FALSE,
                            log_before_test = TRUE, 
-                           delog_for_FC = TRUE
+                           delog_for_FC = TRUE,
+                           
+                           suffix = ""
 ){
   
   mess = ""
@@ -243,7 +213,7 @@ workflow_ANOVA <- function(data_path,
                          paired = paired, var.equal = var.equal,
                          log_before_test = log_before_test, delog_for_FC = delog_for_FC, log_base = 2,
                          min_obs_per_group = 3, min_perc_per_group = NULL,
-                         filename = paste0(output_path, "results_ANOVA.xlsx"))
+                         filename = paste0("results_ANOVA.xlsx", suffix))
   
   
   #### Create Volcano Plot ####
