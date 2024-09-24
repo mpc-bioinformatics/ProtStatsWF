@@ -227,9 +227,9 @@ VolcanoPlot_ttest <- function(RES,
 
 
   #openxlsx::write.xlsx(x = RES, file=paste0(output_path,"transformedData", suffix, ".xlsx"), overwrite = TRUE,keepNA = TRUE)
-  ggplot2::ggsave(paste0(output_path,"Volcano_Plot", suffix, ".",plot_device),
-         plot = plot, device = plot_device,
-         height = plot_height, width = plot_width, dpi = plot_dpi, units = "cm")
+  #ggplot2::ggsave(paste0(output_path,"Volcano_Plot", suffix, ".",plot_device),
+  #       plot = plot, device = plot_device,
+  #       height = plot_height, width = plot_width, dpi = plot_dpi, units = "cm")
   return(plot = plot) # its not necessary to return the data also, they are already present in the plot object
 }
 

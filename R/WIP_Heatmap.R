@@ -148,7 +148,7 @@ Heatmap_with_groups <- function(D, id, protein_names_col = NULL,
 
 
   ### export data used in heatmap
-  openxlsx::write.xlsx(cbind(id, zscore = data.asmatrix), paste0(output_path,"Heatmap_data_", suffix, ".xlsx"), overwrite = TRUE, keepNA = TRUE)
+  # openxlsx::write.xlsx(cbind(id, zscore = data.asmatrix), paste0(output_path,"Heatmap_data_", suffix, ".xlsx"), overwrite = TRUE, keepNA = TRUE)
 
   if (symmetric_legend) {
   minmax <- max(abs(c(min(data.asmatrix, na.rm = TRUE), max(data.asmatrix, na.rm = TRUE))))
@@ -194,11 +194,11 @@ Heatmap_with_groups <- function(D, id, protein_names_col = NULL,
                 column_title_gp = grid::gpar(fontsize = textsize),
                 ...)
 
-  png(paste0(output_path,"Heatmap_", suffix, ".png"), width = plot_width, height = plot_height, units = "cm", res = plot_dpi)
-  ComplexHeatmap::draw(ht, annotation_legend_side = "right", heatmap_legend_side = "right", merge_legend = TRUE)
-  dev.off()
+  #png(paste0(output_path,"Heatmap_", suffix, ".png"), width = plot_width, height = plot_height, units = "cm", res = plot_dpi)
+  #ComplexHeatmap::draw(ht, annotation_legend_side = "right", heatmap_legend_side = "right", merge_legend = TRUE)
+  #dev.off()
 
-  return(ht)
+  return(list("heatmap" = ht, "data_as_matrix" = data.asmatrix))
 }
 
 
