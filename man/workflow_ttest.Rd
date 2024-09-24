@@ -12,6 +12,7 @@ workflow_ttest(
   var.equal = FALSE,
   log_before_test = TRUE,
   delog_for_FC = TRUE,
+  significant_after_FDR = TRUE,
   max_valid_values_off = 0,
   min_valid_values_on = NULL,
   suffix = "",
@@ -36,11 +37,13 @@ workflow_ttest(
 
 \item{delog_for_FC}{If \code{TRUE}, the fold change will be calculated without the log-transformation.}
 
+\item{significant_after_FDR}{If \code{TRUE}, candidates for the boxplots and heatmap need to be significant after FDR correction, otherwise all significant candidates will be used.}
+
 \item{max_valid_values_off}{A numeric of the maximum number of valid values to be an off protein}
 
 \item{min_valid_values_on}{A numeric of the minimum number of valid values to be an on protein}
 
-\item{suffix}{A character if the filenames should contain a suffix.}
+\item{suffix}{A character if the file names should contain a suffix.}
 
 \item{plot_device}{A character containing the type of the output file, e.g. "pdf" or "png".}
 

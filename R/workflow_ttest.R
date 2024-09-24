@@ -9,10 +9,11 @@
 #' @param log_before_test        If \code{TRUE}, the data will be log-transformed.
 #' @param delog_for_FC           If \code{TRUE}, the fold change will be calculated without the log-transformation.
 #' 
+#' @param significant_after_FDR  If \code{TRUE}, candidates for the boxplots and heatmap need to be significant after FDR correction, otherwise all significant candidates will be used.
 #' @param max_valid_values_off   A numeric of the maximum number of valid values to be an off protein
 #' @param min_valid_values_on    A numeric of the minimum number of valid values to be an on protein
 #' 
-#' @param suffix                 A character if the filenames should contain a suffix.
+#' @param suffix                 A character if the file names should contain a suffix.
 #' @param plot_device            A character containing the type of the output file, e.g. "pdf" or "png".
 #' @param plot_height            A numeric of the plot height in cm.
 #' @param plot_width             A numeric of the plot width in cm.
@@ -37,9 +38,10 @@ workflow_ttest <- function(data_path,
                            
                            paired = FALSE,
                            var.equal = FALSE,
-                           log_before_test = TRUE, 
+                           log_before_test = TRUE,
                            delog_for_FC = TRUE,
                            
+                           significant_after_FDR = TRUE,
                            max_valid_values_off = 0,
                            min_valid_values_on = NULL,
                            
@@ -113,13 +115,21 @@ workflow_ttest <- function(data_path,
   
   #### Get significant candidates ####
   
-  candidates <- as.character(calculate_significance_categories_ttest(p = test_results[["p"]], 
-                                                        p_adj = test_results[["p.fdr"]],
-                                                        fc = test_results[["FC_state1_divided_by_state2"]]))
-
-  candidates <- which(candidates == "significant after FDR correction")
+  significance <- calculate_significance_categories_ttest(p = test_results[["p"]], 
+                                                          p_adj = test_results[["p.fdr"]],
+                                                          fc = test_results[["FC_state1_divided_by_state2"]])
   
-  mess <- paste0(mess, "There are ", length(candidates), " candidates, which were significant after FDR correction. \n")
+  candidates <- as.character(significance)
+  
+  if(significant_after_FDR){
+    candidates <- which(candidates == "significant after FDR correction")
+  }else{
+    candidates <- which(candidates != "not significant")
+  }
+  
+  mess <- paste0(mess, "There are ", length(candidates), " candidates, which were significant", 
+                 ifelse(significant_after_FDR, " after FDR correction. \n", ". \n"))
+  
   
   
   #### Create Boxplots of Biomarker Candidates ####
@@ -169,6 +179,10 @@ workflow_ttest <- function(data_path,
   
   
   
+  #### Save message log ####
+  
+  cat(mess, file = paste0(output_path, "/message_log", suffix, ".txt"))
+
   return(list("message" = mess))
 }
 
