@@ -230,7 +230,7 @@ workflow_ANOVA <- function(data_path,
                            intensity_columns,
                            
                            paired = FALSE,
-                           var.equal = FALSE,
+                           var.equal = TRUE,
                            log_before_test = TRUE,
                            delog_for_FC = TRUE,
                            
@@ -250,8 +250,9 @@ workflow_ANOVA <- function(data_path,
   
   #### Prepare Data ####
   
-  # data <- prepareTtestData(data_path = "C:/Users/kalar/Documents/0_Studium/WHK/Testdata/ANOVA/preprocessed_peptide_data_D1.xlsx" , intensity_columns = 3:17)
+  # data_path = "C:/Users/kalar/Documents/0_Studium/WHK/Testdata/ANOVA/preprocessed_peptide_data_D1.xlsx"
   # output_path = "C:/Users/kalar/Documents/0_Studium/WHK/Testdata/ANOVA/results/"
+  # intensity_columns = 3:17
   data <- prepareTtestData(data_path = data_path , intensity_columns = intensity_columns)
   
   
@@ -263,7 +264,7 @@ workflow_ANOVA <- function(data_path,
                          paired = paired, var.equal = var.equal,
                          log_before_test = log_before_test, delog_for_FC = delog_for_FC, log_base = 2,
                          min_obs_per_group = 3, min_perc_per_group = NULL,
-                         filename = paste0("results_ANOVA.xlsx", suffix))
+                         filename = paste0("results_ANOVA", suffix, ".xlsx"))
   
   
   #### Create Volcano Plot ####

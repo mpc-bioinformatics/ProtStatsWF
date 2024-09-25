@@ -18,10 +18,12 @@ prepareTtestData <- function(data_path,
                              intensity_columns
 ){
   
-  D <- openxlsx::read.xlsx(data_path)
+  D <- openxlsx::read.xlsx(data_path, na.strings = c("NA", "NaN", "Filtered","#NV"))
   
   id <- D[, -intensity_columns]
   D <- D[, intensity_columns]
+  
+  D[D == 0] <- NA
   
   group <- factor(limma::strsplit2(colnames(D), "_")[,1])
   number_of_groups <- length(levels(group))
