@@ -12,7 +12,14 @@ workflow_ANOVA(
   var.equal = FALSE,
   log_before_test = TRUE,
   delog_for_FC = TRUE,
-  suffix = ""
+  significant_after_FDR = TRUE,
+  max_valid_values_off = 0,
+  min_valid_values_on = NULL,
+  suffix = "",
+  plot_device = "pdf",
+  plot_height = 15,
+  plot_width = 15,
+  plot_dpi = 300
 )
 }
 \arguments{
@@ -30,7 +37,21 @@ workflow_ANOVA(
 
 \item{delog_for_FC}{If \code{TRUE}, the fold change will be calculated without the log-transformation.}
 
-\item{suffix}{A character if the filenames should contain a suffix.}
+\item{significant_after_FDR}{If \code{TRUE}, candidates for the boxplots and heatmap need to be significant after FDR correction, otherwise all significant candidates will be used.}
+
+\item{max_valid_values_off}{A numeric of the maximum number of valid values to be an off protein}
+
+\item{min_valid_values_on}{A numeric of the minimum number of valid values to be an on protein}
+
+\item{suffix}{A character if the file names should contain a suffix.}
+
+\item{plot_device}{A character containing the type of the output file, e.g. "pdf" or "png".}
+
+\item{plot_height}{A numeric of the plot height in cm.}
+
+\item{plot_width}{A numeric of the plot width in cm.}
+
+\item{plot_dpi}{A numeric of the "dots per inch" of the plot aka. the plot resolution.}
 }
 \value{
 Message log of the workflow
@@ -40,10 +61,8 @@ The workflow for ANOVA of quantitative proteomics data
 }
 \examples{
 \dontrun{
-in_path <- "/Users/thisuser/Documents/dataFolder/data.xlsx"
-out_path <- "/Users/thisuser/Documents/resultsFolder/"
-
-result <- workflow_ANOVA(data_path = in_path,
-                      output_path = out_path)
+result <- workflow_ANOVA(data_path = "/Users/thisuser/Documents/dataFolder/data.xlsx",
+                         output_path = "/Users/thisuser/Documents/resultsFolder/",
+                         intensity_columns = 3:17)
 }
 }

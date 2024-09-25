@@ -1,9 +1,9 @@
 #' The workflow for t-test of quantitative proteomics data
 #'
-#'
 #' @param data_path              A character containing the path to an .xlsx file.
 #' @param output_path            A character containing the path to an output folder.
 #' @param intensity_columns      An integer vector containing the intensity columns of the table.
+#' 
 #' @param paired                 If \code{TRUE}, a paired test will be done, otherwise an unpaired test.
 #' @param var.equal              If \code{TRUE}, the variances are assumed to be equal.
 #' @param log_before_test        If \code{TRUE}, the data will be log-transformed.
@@ -25,11 +25,9 @@
 #'
 #' @examples
 #' \dontrun{
-#' in_path <- "/Users/thisuser/Documents/dataFolder/data.xlsx"
-#' out_path <- "/Users/thisuser/Documents/resultsFolder/"
-#'
-#' result <- workflow_ttest(data_path = in_path,
-#'                       output_path = out_path)
+#' result <- workflow_ttest(data_path = "/Users/thisuser/Documents/dataFolder/data.xlsx",
+#'                          output_path = "/Users/thisuser/Documents/resultsFolder/",
+#'                          intensity_columns = 3:8)
 #'}
 
 workflow_ttest <- function(data_path,
@@ -197,27 +195,34 @@ workflow_ttest <- function(data_path,
 
 #' The workflow for ANOVA of quantitative proteomics data
 #'
-#'
 #' @param data_path              A character containing the path to an .xlsx file.
 #' @param output_path            A character containing the path to an output folder.
 #' @param intensity_columns      An integer vector containing the intensity columns of the table.
+#' 
 #' @param paired                 If \code{TRUE}, a paired test will be done, otherwise an unpaired test.
 #' @param var.equal              If \code{TRUE}, the variances are assumed to be equal.
 #' @param log_before_test        If \code{TRUE}, the data will be log-transformed.
 #' @param delog_for_FC           If \code{TRUE}, the fold change will be calculated without the log-transformation.
 #' 
-#' @param suffix                 A character if the filenames should contain a suffix.
+#' @param significant_after_FDR  If \code{TRUE}, candidates for the boxplots and heatmap need to be significant after FDR correction, otherwise all significant candidates will be used.
+#' @param max_valid_values_off   A numeric of the maximum number of valid values to be an off protein
+#' @param min_valid_values_on    A numeric of the minimum number of valid values to be an on protein
+#' 
+#' @param suffix                 A character if the file names should contain a suffix.
+#' @param plot_device            A character containing the type of the output file, e.g. "pdf" or "png".
+#' @param plot_height            A numeric of the plot height in cm.
+#' @param plot_width             A numeric of the plot width in cm.
+#' @param plot_dpi               A numeric of the "dots per inch" of the plot aka. the plot resolution.
+#' 
 #' 
 #' @return Message log of the workflow
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' in_path <- "/Users/thisuser/Documents/dataFolder/data.xlsx"
-#' out_path <- "/Users/thisuser/Documents/resultsFolder/"
-#'
-#' result <- workflow_ANOVA(data_path = in_path,
-#'                       output_path = out_path)
+#' result <- workflow_ANOVA(data_path = "/Users/thisuser/Documents/dataFolder/data.xlsx",
+#'                          output_path = "/Users/thisuser/Documents/resultsFolder/",
+#'                          intensity_columns = 3:17)
 #'}
 
 workflow_ANOVA <- function(data_path,
@@ -226,11 +231,19 @@ workflow_ANOVA <- function(data_path,
                            
                            paired = FALSE,
                            var.equal = FALSE,
-                           log_before_test = TRUE, 
+                           log_before_test = TRUE,
                            delog_for_FC = TRUE,
                            
-                           suffix = ""
-){
+                           significant_after_FDR = TRUE,
+                           max_valid_values_off = 0,
+                           min_valid_values_on = NULL,
+                           
+                           suffix = "",
+                           plot_device = "pdf",
+                           plot_height = 15,
+                           plot_width = 15,
+                           plot_dpi = 300
+                           ){
   
   mess = ""
   

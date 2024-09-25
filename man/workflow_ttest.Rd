@@ -61,10 +61,8 @@ The workflow for t-test of quantitative proteomics data
 }
 \examples{
 \dontrun{
-in_path <- "/Users/thisuser/Documents/dataFolder/data.xlsx"
-out_path <- "/Users/thisuser/Documents/resultsFolder/"
-
-result <- workflow_ttest(data_path = in_path,
-                      output_path = out_path)
+result <- workflow_ttest(data_path = "/Users/thisuser/Documents/dataFolder/data.xlsx",
+                         output_path = "/Users/thisuser/Documents/resultsFolder/",
+                         intensity_columns = 3:8)
 }
 }
