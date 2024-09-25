@@ -291,8 +291,8 @@ VolcanoPlot_ANOVA <- function(RES,
   #nr_groups <- length(columns_p_posthoc)
   #if (length(columns_FC) != nr_groups) stop("columns_FC and columns_p_posthoc must have the same length!")
 
-  p_anova <- RES_ANOVA[, columnname_p_ANOVA]
-  p_anova_adj <- RES_ANOVA[, columnname_p_ANOVA_adj]
+  p_anova <- RES[, columnname_p_ANOVA]
+  p_anova_adj <- RES[, columnname_p_ANOVA_adj]
   #nr_comparisons <- choose(n = nr_groups, k = 2) # pairwise comparisons between two groups
 
   # names of the comparisons
@@ -303,8 +303,8 @@ VolcanoPlot_ANOVA <- function(RES,
   Volcano_plots <- list()
   for (i in 1:nr_comparisons) {
 
-    p_posthoc <- RES_ANOVA[, columns_p_posthoc[i]]
-    fc <- RES_ANOVA[, columns_FC[i]]
+    p_posthoc <- RES[, columns_p_posthoc[i]]
+    fc <- RES[, columns_FC[i]]
 
     X <- cbind(p_anova, p_anova_adj, p_posthoc, fc)
 

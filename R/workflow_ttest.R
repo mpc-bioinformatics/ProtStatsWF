@@ -148,7 +148,7 @@ workflow_ttest <- function(data_path,
                                    id = data[["ID"]][candidates, ],
                                    groups = data[["group"]])
   
-  grDevices::pdf(paste0(output_path, "/heatmap", suffix, ".pdf"), height = plot_height, width = plot_width)
+  grDevices::pdf(paste0(output_path, "heatmap", suffix, ".pdf"), height = plot_height, width = plot_width)
   graphics::plot(t_heatmap[["heatmap"]])
   grDevices::dev.off()
   
@@ -171,7 +171,7 @@ workflow_ttest <- function(data_path,
                                       min_vv_on = min_valid_values_on,
                                       protein_id_col = 1)
   
-  grDevices::pdf(paste0(output_path, "/on_off_heatmap", suffix, ".pdf"), height = plot_height, width = plot_width)
+  grDevices::pdf(paste0(output_path, "on_off_heatmap", suffix, ".pdf"), height = plot_height, width = plot_width)
   graphics::plot(t_on_off_heatmap)
   grDevices::dev.off()
   
@@ -181,7 +181,7 @@ workflow_ttest <- function(data_path,
   
   #### Save message log ####
   
-  cat(mess, file = paste0(output_path, "/message_log", suffix, ".txt"))
+  cat(mess, file = paste0(output_path, "message_log", suffix, ".txt"))
 
   return(list("message" = mess))
 }
@@ -269,14 +269,29 @@ workflow_ANOVA <- function(data_path,
   
   #### Create Volcano Plot ####
   
-  # volcano_plot <- VolcanoPlot_ANOVA(RES = test_results, columnname_p = , columnname_padj = , columnname_FC = )
+  p_posthoc_columns <- grep("p.posthoc.state", colnames(ANOVA_results))
+  fc_columns <- grep("FC_state", colnames(ANOVA_results))
   
-  # mess <- paste0(mess, "Volcano plot calculated. \n")
+  # filter FC columns because FC is calculated "twice" e.g. for state1_divided_state2 and state1_divided_state2
+  if(fc_columns[[1]]%%2 == 0){
+    fc_columns <- fc_columns[fc_columns %% 2 == 0]
+  }else{
+    fc_columns <- fc_columns[fc_columns %% 2 != 0]
+  }
   
-  # ggplot2::ggsave(paste0(output_path, "volcano_plot", ".", plot_device), plot = volcano_plot,
-  #                        device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi)
+  volcano_plots <- VolcanoPlot_ANOVA(RES = ANOVA_results, 
+                                    columnname_p_ANOVA = "p.anova",
+                                    columnname_p_ANOVA_adj = "p.anova.fdr",
+                                    columns_FC = fc_columns,
+                                    columns_p_posthoc = p_posthoc_columns )
   
+  mess <- paste0(mess, "Volcano plots calculated. \n")
   
+  grDevices::pdf(paste0(output_path, "volcano_plot", suffix ,".pdf"), height = plot_height, width = plot_width)
+  for (v_plot in volcano_plots) {
+    graphics::plot(x = v_plot)
+  }
+  grDevices::dev.off()
   
   
   
