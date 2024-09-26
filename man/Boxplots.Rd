@@ -33,7 +33,7 @@ Boxplots(
 \item{base_size}{A numeric containing the base size of the font.}
 }
 \value{
-a tibble and a ggplot of the valid values
+boxplots and messages
 }
 \description{
 Barplots showing the percentage of valid values for each sample

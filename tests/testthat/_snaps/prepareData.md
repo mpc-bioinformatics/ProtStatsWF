@@ -109,16 +109,16 @@
     Output
       # A tibble: 81 x 4
          name     value group sample
-         <chr>    <dbl> <lgl> <chr> 
-       1 state1_1  26.1 NA    1     
-       2 state1_2  26.1 NA    2     
-       3 state1_3  26.4 NA    3     
-       4 state2_1  26.2 NA    1     
-       5 state2_2  26.3 NA    2     
-       6 state2_3  NA   NA    3     
-       7 state3_1  26.2 NA    1     
-       8 state3_2  NA   NA    2     
-       9 state3_3  26.3 NA    3     
-      10 state1_1  22.4 NA    1     
+         <chr>    <dbl> <lgl> <lgl> 
+       1 state1_1  26.1 NA    NA    
+       2 state1_2  26.1 NA    NA    
+       3 state1_3  26.4 NA    NA    
+       4 state2_1  26.2 NA    NA    
+       5 state2_2  26.3 NA    NA    
+       6 state2_3  NA   NA    NA    
+       7 state3_1  26.2 NA    NA    
+       8 state3_2  NA   NA    NA    
+       9 state3_3  26.3 NA    NA    
+      10 state1_1  22.4 NA    NA    
       # i 71 more rows
 

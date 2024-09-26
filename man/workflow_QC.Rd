@@ -9,6 +9,7 @@ workflow_QC(
   output_path,
   intensity_columns,
   normalization_method = "loess",
+  lts_quantile = 0.8,
   use_groups = TRUE,
   na_strings = c("NA", "NaN", "Filtered", "#NV"),
   zero_to_NA = TRUE,
@@ -23,8 +24,10 @@ workflow_QC(
   plot_dpi = 300,
   suffix = "_",
   boxplot_method = "boxplot",
+  generate_MAplots = TRUE,
   MA_maxPlots = 5000,
   MA_alpha = FALSE,
+  MA_sampling = 1,
   PCA_impute = FALSE,
   PCA_impute_method = "mean",
   PCA_propNA = 0,
@@ -49,6 +52,8 @@ workflow_QC(
 \item{intensity_columns}{An integer vector containing the intensity columns of the table.}
 
 \item{normalization_method}{A character containing the method of normalization. The possible methods are no normalization "nonorm" or "median", "loess", "quantile" or "lts" normalization.}
+
+\item{lts_quantile}{A numeric containing the quantile for the lts normalization if \code{normalization = "lts"}, default is 0.8.}
 
 \item{use_groups}{If \code{TRUE}, group information encoded in the column names are used. Default is \code{TRUE}.}
 

@@ -5,6 +5,7 @@
 #' @param output_path       A character containing the path to an output folder.
 #' @param intensity_columns An integer vector containing the intensity columns of the table.
 #' @param normalization_method A character containing the method of normalization. The possible methods are no normalization "nonorm" or "median", "loess", "quantile" or "lts" normalization.
+#' @param lts_quantile          A numeric containing the quantile for the lts normalization if \code{normalization = "lts"}, default is 0.8.
 #' @param use_groups    If \code{TRUE}, group information encoded in the column names are used. Default is \code{TRUE}.
 #' @param na_strings A character vector containing symbols to be recognized as missing values (with the exception of 0).
 #' @param zero_to_NA If \code{TRUE}, 0 will be treated as missing value.
@@ -51,7 +52,6 @@
 #'}
 #'
 
-
 # TODO: MA-Plot separate height and width
 
 workflow_QC <- function(data_path,
@@ -59,6 +59,7 @@ workflow_QC <- function(data_path,
 
                         intensity_columns,
                         normalization_method = "loess",
+                        lts_quantile = 0.8,
                         use_groups = TRUE,
 
                         na_strings = c("NA", "NaN", "Filtered","#NV"),
@@ -80,8 +81,10 @@ workflow_QC <- function(data_path,
 
                         boxplot_method = "boxplot",
 
+                        generate_MAplots = TRUE,
                         MA_maxPlots = 5000,
                         MA_alpha = FALSE,
+                        MA_sampling = 1,
 
                         #PCA_groupvar1 = "group",
                         #PCA_groupvar2 = NULL,
@@ -105,7 +108,7 @@ workflow_QC <- function(data_path,
                                na_strings = na_strings, zero_to_NA = zero_to_NA,
                                do_log_transformation = do_log_transformation, log_base = log_base,
                                use_groups = use_groups, group_colours = group_colours,
-                               normalization = normalization_method)
+                               normalization = normalization_method, lts_quantile = lts_quantile)
 
 
   mess <- paste0(mess, prepared_data[["message"]])#
@@ -116,12 +119,19 @@ workflow_QC <- function(data_path,
   utils::write.csv(x = prepared_data$D, file = paste0(output_path, "/D_norm_wide", suffix, ".csv"), row.names = FALSE)
   utils::write.csv(x = prepared_data$D_long, file = paste0(output_path, "/D_norm_long", suffix, ".csv"), row.names = FALSE)
 
+  openxlsx::write.xlsx(x = cbind(prepared_data$ID, prepared_data$D), file = paste0(output_path, "/D_norm_ID", suffix, ".xlsx"),
+                       rowNames = FALSE, overwrite = TRUE, keepNA = TRUE)
+
 
   #### Calculate Valid Value Plot ####
 
   vv_plot_data <- ValidValuePlot(D_long = prepared_data[["D_long"]],
                                           use_groups = use_groups, groupvar_name = groupvar_name, group_colours = group_colours,
                                           base_size = base_size)
+  #### reorder valid values table to stay in the same order as the original data ####
+  cnames <- colnames(prepared_data$D)
+  vv_plot_data$table$name <- factor(vv_plot_data$table$name, levels = cnames)
+  vv_plot_data$table <- vv_plot_data$table[order(vv_plot_data$table$name),]
 
   mess <- paste0(mess, vv_plot_data[["message"]])
 
@@ -135,7 +145,7 @@ workflow_QC <- function(data_path,
   #### Calculate Valid Value Plot ####
 
   boxplot_data <- Boxplots(D_long = prepared_data[["D_long"]],
-                           do_log_transformation = !do_log_transformation, log_base = log_base,
+                           do_log_transformation = FALSE, log_base = log_base,
                            use_groups = use_groups, groupvar_name = groupvar_name, group_colours = group_colours,
 
                            base_size = base_size, method = boxplot_method)
@@ -149,14 +159,16 @@ workflow_QC <- function(data_path,
 
   #### Calculate MA Plot ####
 
+  if (generate_MAplots) {
   ma_data <- MA_Plots(D = prepared_data[["D"]],
-                      do_log_transformation = !do_log_transformation,
+                      do_log_transformation = FALSE,
                       output_path = output_path, suffix = suffix,
                       labels = 1:ncol(prepared_data[["D"]]), labels2 = colnames(prepared_data[["D"]]),
                       maxPlots = MA_maxPlots, alpha = MA_alpha,
-                      plot_height = plot_height, plot_width = plot_width)
+                      plot_height = plot_height, plot_width = plot_width, sampling = MA_sampling)
 
   mess <- paste0(mess, ma_data)
+  }
 
 
   #### Calculate PCA Plot ####
