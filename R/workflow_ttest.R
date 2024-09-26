@@ -80,13 +80,15 @@ workflow_ttest <- function(data_path,
                  ifelse(delog_for_FC, "", "not"),
                  "de-log-transformed for the fold change. \n")
   
+  fc_col_name <- paste0("FC_", levels(data[["group"]])[[1]], "_divided_by_", levels(data[["group"]])[[2]])
+  
   
   
   #### Create Volcano Plot ####
   
   volcano_plot <- VolcanoPlot_ttest(RES = test_results, 
                                     columnname_p = "p", columnname_padj = "p.fdr", 
-                                    columnname_FC = "FC_state1_divided_by_state2")
+                                    columnname_FC = fc_col_name)
   
   ggplot2::ggsave(paste0(output_path, "volcano_plot", suffix, ".", plot_device), plot = volcano_plot,
                   device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi)
@@ -99,7 +101,7 @@ workflow_ttest <- function(data_path,
   
   histograms <- pvalue_foldchange_histogram(RES = test_results, 
                                             columnname_p = "p", columnname_padj = "p.fdr", 
-                                            columnname_FC = "FC_state1_divided_by_state2")
+                                            columnname_FC = fc_col_name)
   
   ggplot2::ggsave(paste0(output_path, "histogram_p_value", suffix, ".", plot_device), plot = histograms[["histogram_p_value"]],
                   device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi)
@@ -115,7 +117,7 @@ workflow_ttest <- function(data_path,
   
   significance <- calculate_significance_categories_ttest(p = test_results[["p"]], 
                                                           p_adj = test_results[["p.fdr"]],
-                                                          fc = test_results[["FC_state1_divided_by_state2"]])
+                                                          fc = test_results[[fc_col_name]])
   
   candidates <- as.character(significance)
   
@@ -274,8 +276,8 @@ workflow_ANOVA <- function(data_path,
   
   #### Create Volcano Plot ####
   
-  p_posthoc_columns <- grep("p.posthoc.state", colnames(ANOVA_results))
-  fc_columns <- grep("FC_state", colnames(ANOVA_results))
+  p_posthoc_columns <- grep("p.posthoc.", colnames(ANOVA_results))
+  fc_columns <- grep("FC_", colnames(ANOVA_results))
   
   # filter FC columns because FC is calculated "twice" e.g. for state1_divided_state2 and state1_divided_state2
   if(fc_columns[[1]]%%2 == 0){
@@ -304,7 +306,7 @@ workflow_ANOVA <- function(data_path,
   
   histograms <- pvalue_foldchange_histogram(RES = ANOVA_results, 
                                             columnname_p = "p.anova", columnname_padj = "p.anova.fdr", 
-                                            columnname_FC = "FC_state1_divided_by_state2")
+                                            columnname_FC = colnames(ANOVA_results)[[fc_columns[[1]]]])
   
   ggplot2::ggsave(paste0(output_path, "histogram_p_value", suffix, ".", plot_device), plot = histograms[["histogram_p_value"]],
                   device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi)
