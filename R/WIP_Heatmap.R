@@ -162,7 +162,7 @@ Heatmap_with_groups <- function(D, id, protein_names_col = NULL,
   ComplexHeatmap::draw(ht, annotation_legend_side = "right", heatmap_legend_side = "right", merge_legend = TRUE)
   grDevices::dev.off()
 
-  return(Heatmap = ht, data_wo_imputation = data_wo_imputation, data_heatmap = cbind(id, zscore = data.asmatrix))
+  return(list(Heatmap = ht, data_wo_imputation = data_wo_imputation, data_heatmap = cbind(id, zscore = data.asmatrix)))
 }
 
 
