@@ -122,7 +122,7 @@ workflow_ttest <- function(data_path,
   if(significant_after_FDR){
     candidates <- which(candidates == "significant after FDR correction")
   }else{
-    candidates <- which(candidates != "not significant")
+    candidates <- which(candidates == "significant" | candidates == "significant after FDR correction")
   }
   
   mess <- paste0(mess, "There are ", length(candidates), " candidates, which were significant", 
@@ -181,7 +181,7 @@ workflow_ttest <- function(data_path,
   
   #### Save message log ####
   
-  cat(mess, file = paste0(output_path, "message_log", suffix, ".txt"))
+  cat(mess, file = paste0(output_path, "message_log_ttest", suffix, ".txt"))
 
   return(list("message" = mess))
 }
@@ -255,6 +255,8 @@ workflow_ANOVA <- function(data_path,
   # intensity_columns = 3:17
   data <- prepareTtestData(data_path = data_path , intensity_columns = intensity_columns)
   
+  mess <- paste0(mess, "Data file contained ", length(levels(data[["group"]])), " groups with ", length(levels(data[["sample"]])), " samples. \n")
+  
   
   
   #### Calculate ANOVA ####
@@ -264,7 +266,10 @@ workflow_ANOVA <- function(data_path,
                          paired = paired, var.equal = var.equal,
                          log_before_test = log_before_test, delog_for_FC = delog_for_FC, log_base = 2,
                          min_obs_per_group = 3, min_perc_per_group = NULL,
-                         filename = paste0("results_ANOVA", suffix, ".xlsx"))
+                         filename = paste0(output_path, "results_ANOVA", suffix, ".xlsx"))
+  
+  mess <- paste0(mess, "ANOVA calculated. \n")
+  
   
   
   #### Create Volcano Plot ####
@@ -285,9 +290,9 @@ workflow_ANOVA <- function(data_path,
                                     columns_FC = fc_columns,
                                     columns_p_posthoc = p_posthoc_columns )
   
-  mess <- paste0(mess, "Volcano plots calculated. \n")
+  mess <- paste0(mess, length(volcano_plots), " volcano plots calculated. \n")
   
-  grDevices::pdf(paste0(output_path, "volcano_plot", suffix ,".pdf"), height = plot_height, width = plot_width)
+  grDevices::pdf(paste0(output_path, "volcano_plots", suffix ,".pdf"), height = plot_height, width = plot_width)
   for (v_plot in volcano_plots) {
     graphics::plot(x = v_plot)
   }
@@ -295,12 +300,55 @@ workflow_ANOVA <- function(data_path,
   
   
   
+  #### Create Histogram for p-values and fold changes ####
+  
+  histograms <- pvalue_foldchange_histogram(RES = ANOVA_results, 
+                                            columnname_p = "p.anova", columnname_padj = "p.anova.fdr", 
+                                            columnname_FC = "FC_state1_divided_by_state2")
+  
+  ggplot2::ggsave(paste0(output_path, "histogram_p_value", suffix, ".", plot_device), plot = histograms[["histogram_p_value"]],
+                  device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi)
+  ggplot2::ggsave(paste0(output_path, "histogram_adjusted_p_value", suffix, ".", plot_device), plot = histograms[["histogram_adjusted_p_value"]],
+                  device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi)
+  
+  mess <- paste0(mess, "p-value and adjusted p-value histograms calculated. \n")
+  
+  
+  
+  
+  #### Get significant candidates ####
+  
+  significance <- list()
+  candidates <- list()
+  
+  for (i in 1:length(p_posthoc_columns)) {
+    significance[[paste0("sig_", i)]] <- factor(calculate_significance_categories_ANOVA(p_anova = ANOVA_results[["p.anova"]],
+                                                                                        p_anova_adj = ANOVA_results[["p.anova.fdr"]],
+                                                                                        p_posthoc = ANOVA_results[[p_posthoc_columns[[i]]]],
+                                                                                        fc = ANOVA_results[[fc_columns[[i]]]]))
+    
+    candidates[[paste0("candidates_", i)]] <- as.character(significance[[paste0("sig_", i)]])
+    
+    if(significant_after_FDR){
+      candidates[[paste0("candidates_", i)]] <- which(candidates[[paste0("candidates_", i)]] == "significant after FDR correction")
+    }else{
+      candidates[[paste0("candidates_", i)]] <- which(candidates[[paste0("candidates_", i)]] == "significant" | candidates[[paste0("candidates_", i)]] == "significant after FDR correction")
+    }
+    
+    #mess <- paste0(mess, "There are ", length(candidates), " candidates, which were significant", 
+    #               ifelse(significant_after_FDR, " after FDR correction. \n", ". \n"))
+  }
+  
+  
   
   #### Create Boxplots of Biomarker Candidates ####
   #### Create Heatmap ####
   #### Create On-Off Heatmap ####
   
+  #### Save message log ####
   
-  return(ANOVA_results)
-  # return(list("message" = mess))
+  cat(mess, file = paste0(output_path, "message_log_anova", suffix, ".txt"))
+  
+  # return(ANOVA_results)
+  return(list("message" = mess))
 }
