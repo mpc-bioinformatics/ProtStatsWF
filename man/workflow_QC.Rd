@@ -83,13 +83,9 @@ workflow_QC(
 
 \item{boxplot_method}{A character containing the method used. Possible are "boxplot" and "violinplot". Default is "boxplot".}
 
-\item{generate_MAplots}{If \code{TRUE}, MA plots will be generated, if \code{FALSE} they will not be generated (mostly for debugging purposes).}
-
 \item{MA_maxPlots}{A numeric containing the maximum number of MA plots that should be generated. Defaults is 5000.}
 
 \item{MA_alpha}{If \code{TRUE}, the data points of the MA plots will be transparent.}
-
-\item{MA_sampling}{A numeric containing the sampling rate for MA-Plots. Useful to sample part of the data set for data sets on peptide/feature level with many data points.}
 
 \item{PCA_impute}{If \code{TRUE}, missing values will be imputed.}
 
@@ -120,7 +116,7 @@ workflow_QC(
 \item{PCA_point.size}{The size of the data points.}
 }
 \value{
-saves several plots and excel files
+List with the messages. Different csv and plot files are saved.
 }
 \description{
 The main workflow for quality control of quantitative proteomics data
