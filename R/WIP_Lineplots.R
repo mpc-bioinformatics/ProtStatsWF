@@ -14,7 +14,7 @@ lineplots_of_clusters <- function(D, clustering, group = NULL) {
   ### TODO: einbauen, dass Daten hier noch ge-z-scored werden können, falls nötig
 
   nr_clusters <- length(unique(clustering))
-  cluster_names <- unique(clustering)
+  cluster_names <- sort(unique(clustering))
 
   cluster_colours <- scales::hue_pal()(nr_clusters)
   ### TODO: map cluster colours to colours in heatmap???
@@ -70,7 +70,7 @@ lineplots_of_clusters <- function(D, clustering, group = NULL) {
       ggplot2::ggtitle(paste0("Cluster ", cluster_names[i], " (", nrow(X), " proteins)")) +
       ggplot2::theme_bw(base_size = 20) +
       ggplot2::theme(legend.key.width = ggplot2::unit(1.5,"cm"), axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5, hjust=1)) +
-      ggplot2::guides(linetype = ggplot2::guide_legend(override.aes = list(linewidth = 1.3)))+
+      ggplot2::guides(linetype = ggplot2::guide_legend(override.aes = list(linewidth = 1.3), order = 1))+
       #guides(fill=guide_legend("Cluster center", override.aes=list(fill="black"))) +
       ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5, colour = cluster_colours[i]), legend.position = "bottom")
     pl
