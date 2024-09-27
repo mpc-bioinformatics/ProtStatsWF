@@ -300,6 +300,8 @@ workflow_ANOVA <- function(data_path,
   }
   grDevices::dev.off()
   
+  rm(volcano_plots, v_plot)
+  
   
   
   #### Create Histogram for p-values and fold changes ####
@@ -315,6 +317,7 @@ workflow_ANOVA <- function(data_path,
   
   mess <- paste0(mess, "p-value and adjusted p-value histograms calculated. \n")
   
+  rm(histograms)
   
   
   
@@ -359,16 +362,19 @@ workflow_ANOVA <- function(data_path,
                           suffix = boxplot_suffix,
                           output_path = paste0(output_path, "boxplots/"))
       
-      mess <- paste0(mess, "Boxplots made from the candidates for ", levels(data[["group"]])[i], " vs ", levels(data[["group"]])[j],". \n")
+      mess <- paste0(mess, "Boxplots made from the ", length(current_candidates)," candidates of ", levels(data[["group"]])[i], " vs ", levels(data[["group"]])[j],". \n")
     }
   }
   
-  
-  
-  
-  
+  rm(i, j, current_candidates, counter, boxplot_suffix)
   
   #### Create Heatmap ####
+  
+  
+  
+  
+  
+  
   #### Create On-Off Heatmap ####
   
   #### Save message log ####
