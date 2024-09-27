@@ -320,21 +320,20 @@ workflow_ANOVA <- function(data_path,
   
   #### Get significant candidates ####
   
-  significance <- list()
   candidates <- list()
   
   for (i in 1:length(p_posthoc_columns)) {
-    significance[[paste0("sig_", i)]] <- factor(calculate_significance_categories_ANOVA(p_anova = ANOVA_results[["p.anova"]],
+    significance <- factor(calculate_significance_categories_ANOVA(p_anova = ANOVA_results[["p.anova"]],
                                                                                         p_anova_adj = ANOVA_results[["p.anova.fdr"]],
                                                                                         p_posthoc = ANOVA_results[[p_posthoc_columns[[i]]]],
                                                                                         fc = ANOVA_results[[fc_columns[[i]]]]))
     
-    candidates[[paste0("candidates_", i)]] <- as.character(significance[[paste0("sig_", i)]])
+    candidates[[i]] <- as.character(significance)
     
     if(significant_after_FDR){
-      candidates[[paste0("candidates_", i)]] <- which(candidates[[paste0("candidates_", i)]] == "significant after FDR correction")
+      candidates[[i]] <- which(candidates[[i]] == "significant after FDR correction")
     }else{
-      candidates[[paste0("candidates_", i)]] <- which(candidates[[paste0("candidates_", i)]] == "significant" | candidates[[paste0("candidates_", i)]] == "significant after FDR correction")
+      candidates[[i]] <- which(candidates[[i]] == "significant" | candidates[[i]] == "significant after FDR correction")
     }
     
     #mess <- paste0(mess, "There are ", length(candidates), " candidates, which were significant", 
@@ -344,6 +343,31 @@ workflow_ANOVA <- function(data_path,
   
   
   #### Create Boxplots of Biomarker Candidates ####
+  
+  counter <- 1
+  dir.create(paste0(output_path, "boxplots/"))
+  
+  for (i in 1:(length(levels(data[["group"]]))-1)) {
+    for (j in (i+1):length(levels(data[["group"]]))) {
+      current_candidates <- candidates[[counter]]
+      counter <- counter+1
+      boxplot_suffix <- paste0(suffix, "_", levels(data[["group"]])[i], "_vs_", levels(data[["group"]])[j])
+      
+      Boxplots_candidates(D = data[["D"]][current_candidates, ], 
+                          protein.names = data[["ID"]][current_candidates, "protein"],
+                          group = data[["group"]],
+                          suffix = boxplot_suffix,
+                          output_path = paste0(output_path, "boxplots/"))
+      
+      mess <- paste0(mess, "Boxplots made from the candidates for ", levels(data[["group"]])[i], " vs ", levels(data[["group"]])[j],". \n")
+    }
+  }
+  
+  
+  
+  
+  
+  
   #### Create Heatmap ####
   #### Create On-Off Heatmap ####
   
