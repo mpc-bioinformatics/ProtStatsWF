@@ -2,7 +2,7 @@
 
 #' Calculate on/off proteins
 #'
-#' @param D data set containg only protein intensities
+#' @param D data set containing only protein intensities
 #' @param id data frame containing ID columns
 #' @param group factor containing the groups
 #' @param max_vv_off off: < max_vv_off valid values

@@ -347,6 +347,7 @@ workflow_ANOVA <- function(data_path,
   
   #### Create Boxplots of Biomarker Candidates ####
   
+  # separate variant
   counter <- 1
   dir.create(paste0(output_path, "boxplots/"))
   
@@ -368,19 +369,67 @@ workflow_ANOVA <- function(data_path,
   
   rm(i, j, current_candidates, counter, boxplot_suffix)
   
+  
+  # union variant
+  union_candidates <- unique(unlist(candidates))
+  
+  Boxplots_candidates(D = data[["D"]][union_candidates, ], 
+                      protein.names = data[["ID"]][union_candidates, "protein"],
+                      group = data[["group"]],
+                      suffix = suffix,
+                      output_path = paste0(output_path))
+  
+  mess <- paste0(mess, "Boxplots made for the ", length(union_candidates) ," candidates. \n")
+  
+  
+  
   #### Create Heatmap ####
   
+  t_heatmap <- Heatmap_with_groups(D = data[["D"]][union_candidates, ], 
+                                   id = data[["ID"]][union_candidates, ],
+                                   groups = data[["group"]])
   
+  grDevices::pdf(paste0(output_path, "heatmap", suffix, ".pdf"), height = plot_height, width = plot_width)
+  graphics::plot(t_heatmap[["heatmap"]])
+  grDevices::dev.off()
   
+  remaining_candidates <- as.integer(row.names(t_heatmap[["data_as_matrix"]]))
+  openxlsx::write.xlsx(cbind(data[["ID"]][remaining_candidates, ], zscore = t_heatmap[["data_as_matrix"]]), paste0(output_path, "heatmap_data", suffix, ".xlsx"), overwrite = TRUE, keepNA = TRUE)
+  
+  mess <- paste0(mess, "Heatmap made for the union of all candidates. \n")
+  
+  rm(t_heatmap, remaining_candidates)
   
   
   
   #### Create On-Off Heatmap ####
   
+  if(is.null(min_valid_values_on)){
+    min_valid_values_on <- length(intensity_columns)
+  }
+  
+  t_on_off_heatmap <- calculate_onoff(D = data[["D"]], 
+                                      id = data[["ID"]],
+                                      group = data[["group"]],
+                                      max_vv_off = max_valid_values_off,
+                                      min_vv_on = min_valid_values_on,
+                                      protein_id_col = 1)
+  
+  grDevices::pdf(paste0(output_path, "on_off_heatmap", suffix, ".pdf"), height = plot_height, width = plot_width)
+  graphics::plot(t_on_off_heatmap)
+  grDevices::dev.off()
+  
+  mess <- paste0(mess, "On-Off-Heatmap made. \n", "There were ", sum(t_on_off_heatmap[["isonoff"]]), " on/off proteins.")
+  
+  rm(t_on_off_heatmap)
+  
+  
+  
   #### Save message log ####
   
   cat(mess, file = paste0(output_path, "message_log_anova", suffix, ".txt"))
   
-  # return(ANOVA_results)
+  
+  
   return(list("message" = mess))
 }
