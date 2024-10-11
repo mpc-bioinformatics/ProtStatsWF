@@ -71,9 +71,9 @@ calculate_significance_categories_ttest <- function(p, p_adj, fc, thres_fc=2, th
 
 #' Calculate significance categories for ANOVA
 #'
-#' @param p_posthoc
-#' @param p_anova_adj
-#' @param p_anova
+#' @param p_posthoc vector of posthoc p-values 
+#' @param p_anova_adj vector of p-values after FDR-correction
+#' @param p_anova vector of p-values before FDR-correction
 #' @param fc vector of fold changes
 #' @param thres_fc threshold for the fold changes
 #' @param thres_p threshold for the p-values

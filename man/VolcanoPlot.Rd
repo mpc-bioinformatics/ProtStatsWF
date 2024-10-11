@@ -27,7 +27,7 @@ VolcanoPlot(
 
 \item{FC}{Vector containing the fold changes}
 
-\item{significance_category}{}
+\item{significance_category}{Vector containing the significance category.}
 
 \item{log_base_fc}{Numeric of the base for the fold changes log-transformation}
 

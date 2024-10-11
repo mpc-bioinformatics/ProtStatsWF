@@ -55,8 +55,6 @@ workflow_ttest <- function(data_path,
   
   #### Prepare Data ####
   
-  # data <- prepareTtestData(data_path = "C:/Users/kalar/Documents/0_Studium/WHK/Testdata/ttest/preprocessed_peptide_data_D3.xlsx" , intensity_columns = 3:8)
-  # output_path = "C:/Users/kalar/Documents/0_Studium/WHK/Testdata/ttest/results/"
   data <- prepareTtestData(data_path = data_path , intensity_columns = intensity_columns)
   
   
@@ -252,9 +250,6 @@ workflow_ANOVA <- function(data_path,
   
   #### Prepare Data ####
   
-  # data_path = "C:/Users/kalar/Documents/0_Studium/WHK/Testdata/ANOVA/preprocessed_peptide_data_D1.xlsx"
-  # output_path = "C:/Users/kalar/Documents/0_Studium/WHK/Testdata/ANOVA/results/"
-  # intensity_columns = 3:17
   data <- prepareTtestData(data_path = data_path , intensity_columns = intensity_columns)
   
   mess <- paste0(mess, "Data file contained ", length(levels(data[["group"]])), " groups with ", length(levels(data[["sample"]])), " samples. \n")
@@ -339,39 +334,17 @@ workflow_ANOVA <- function(data_path,
       candidates[[i]] <- which(candidates[[i]] == "significant" | candidates[[i]] == "significant after FDR correction")
     }
     
-    #mess <- paste0(mess, "There are ", length(candidates), " candidates, which were significant", 
-    #               ifelse(significant_after_FDR, " after FDR correction. \n", ". \n"))
+    
   }
+  
+  union_candidates <- unique(unlist(candidates))
+  
+  mess <- paste0(mess, "There are ", length(union_candidates), " in the union of candidates, which were significant", 
+                 ifelse(significant_after_FDR, " after FDR correction. \n", ". \n"))
   
   
   
   #### Create Boxplots of Biomarker Candidates ####
-  
-  # separate variant
-  counter <- 1
-  dir.create(paste0(output_path, "boxplots/"))
-  
-  for (i in 1:(length(levels(data[["group"]]))-1)) {
-    for (j in (i+1):length(levels(data[["group"]]))) {
-      current_candidates <- candidates[[counter]]
-      counter <- counter+1
-      boxplot_suffix <- paste0(suffix, "_", levels(data[["group"]])[i], "_vs_", levels(data[["group"]])[j])
-      
-      Boxplots_candidates(D = data[["D"]][current_candidates, ], 
-                          protein.names = data[["ID"]][current_candidates, "protein"],
-                          group = data[["group"]],
-                          suffix = boxplot_suffix,
-                          output_path = paste0(output_path, "boxplots/"))
-      
-      mess <- paste0(mess, "Boxplots made from the ", length(current_candidates)," candidates of ", levels(data[["group"]])[i], " vs ", levels(data[["group"]])[j],". \n")
-    }
-  }
-  
-  rm(i, j, current_candidates, counter, boxplot_suffix)
-  
-  
-  # union variant
-  union_candidates <- unique(unlist(candidates))
   
   Boxplots_candidates(D = data[["D"]][union_candidates, ], 
                       protein.names = data[["ID"]][union_candidates, "protein"],

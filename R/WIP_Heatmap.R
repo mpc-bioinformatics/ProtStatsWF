@@ -65,13 +65,13 @@
 #' @param legend_name name for legend
 #' @param title title
 #' @param legend_colours colours for colour gradient
-#' @param plot_height
-#' @param plot_width
-#' @param plot_dpi
-#' @param log_data
-#' @param log_base
-#' @param colour_scale_max
-#' @param textsize
+#' @param plot_height the plot height
+#' @param plot_width the plot width
+#' @param plot_dpi the "dots per inch" for the image resolution
+#' @param log_data If \code{TRUE}, the data will be log-transformed.
+#' @param log_base The base in which the log-transformation is done.
+#' @param colour_scale_max the cap value for which all greater values will receive the same color
+#' @param textsize the size of text in the plot
 #' @param ... further arguments to Heatmap
 #'
 #' @return heatmap

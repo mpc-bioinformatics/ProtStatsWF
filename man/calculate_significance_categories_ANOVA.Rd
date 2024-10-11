@@ -14,6 +14,12 @@ calculate_significance_categories_ANOVA(
 )
 }
 \arguments{
+\item{p_posthoc}{vector of posthoc p-values}
+
+\item{p_anova_adj}{vector of p-values after FDR-correction}
+
+\item{p_anova}{vector of p-values before FDR-correction}
+
 \item{fc}{vector of fold changes}
 
 \item{thres_fc}{threshold for the fold changes}

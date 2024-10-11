@@ -77,6 +77,20 @@ note that clustering may not work when too many missing values are present}
 
 \item{legend_colours}{colours for colour gradient}
 
+\item{plot_height}{the plot height}
+
+\item{plot_width}{the plot width}
+
+\item{plot_dpi}{the "dots per inch" for the image resolution}
+
+\item{log_data}{If \code{TRUE}, the data will be log-transformed.}
+
+\item{log_base}{The base in which the log-transformation is done.}
+
+\item{colour_scale_max}{the cap value for which all greater values will receive the same color}
+
+\item{textsize}{the size of text in the plot}
+
 \item{...}{further arguments to Heatmap}
 }
 \value{

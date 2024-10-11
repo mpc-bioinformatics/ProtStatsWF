@@ -36,61 +36,61 @@ VolcanoPlot_ttest(
 )
 }
 \arguments{
-\item{RES}{result table from t-test}
+\item{RES}{A data.frame of the result table from t-test}
 
-\item{columnname_p}{column name for p-value}
+\item{columnname_p}{The column name for p-value}
 
-\item{columnname_padj}{columns name for adjusted p-value}
+\item{columnname_padj}{The columns name for adjusted p-value}
 
-\item{columnname_FC}{column name for fold change}
+\item{columnname_FC}{The column name for fold change}
 
-\item{log_base_fc}{base for log transformation of fold change}
+\item{log_base_fc}{The base for log transformation of fold change}
 
-\item{log_base_p}{base for log transformation of p-value}
+\item{log_base_p}{The base for log transformation of p-value}
 
-\item{is_FC_log}{TRUE if fold change is already log-transformed}
+\item{is_FC_log}{If \code{TRUE}, fold change is already log-transformed}
 
-\item{is_p_log}{FALSE if p-value is already log-transformed}
+\item{is_p_log}{If \code{TRUE}, p-value is already log-transformed}
 
-\item{thres_fc}{threshold for fold change}
+\item{thres_fc}{The threshold for fold change}
 
-\item{thres_p}{threshold for p-value}
+\item{thres_p}{The threshold for p-value}
 
-\item{show_thres_line}{TRUE if threshold lines should be shown}
+\item{show_thres_line}{If \code{TRUE}, threshold lines will be shown}
 
-\item{colour1}{colour for not significant proteins}
+\item{colour1}{The colour for not significant proteins}
 
-\item{colour2}{colour for significant proteins}
+\item{colour2}{The colour for significant proteins}
 
-\item{colour3}{colour for significant proteins after FDR correction}
+\item{colour3}{The colour for significant proteins after FDR correction}
 
-\item{groupname1}{name of first group}
+\item{groupname1}{The name of first group}
 
-\item{groupname2}{name of second group}
+\item{groupname2}{The name of second group}
 
-\item{xlim}{limits for x-axis}
+\item{xlim}{The limits for x-axis}
 
-\item{ylim}{limits for y-axis}
+\item{ylim}{The limits for y-axis}
 
-\item{symmetric_x}{if TRUE, x-axis limits will be made symmetric (not used if xlim is defined)}
+\item{symmetric_x}{If \code{TRUE}, x-axis limits will be made symmetric (not used if xlim is defined)}
 
-\item{legend_position}{position of the legend (e.g., "bottom" or "right")}
+\item{legend_position}{The position of the legend (e.g., "bottom" or "right")}
 
-\item{plot_height}{height of plot}
+\item{plot_height}{The height of plot}
 
-\item{plot_width}{width of plot}
+\item{plot_width}{The width of plot}
 
-\item{plot_dpi}{resolution of plot}
+\item{plot_dpi}{The resolution of plot}
 
-\item{plot_device}{plot device}
+\item{plot_device}{The plot device that is used for the resulting plot.}
 
-\item{output_path}{path for output}
+\item{output_path}{The path for output file}
 
-\item{suffix}{suffix for output file}
+\item{suffix}{The suffix for output file}
 
-\item{base_size}{base size for theme}
+\item{base_size}{The base size for theme}
 
-\item{add_annotation}{TRUE if annotation should be added}
+\item{add_annotation}{If \code{TRUE}, annotation should be added}
 }
 \value{
 ggplot object

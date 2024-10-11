@@ -2,7 +2,7 @@
 #'
 #' @param p                     Vector containing the p-values
 #' @param FC                    Vector containing the fold changes
-#' @param significance_category 
+#' @param significance_category Vector containing the significance category. 
 #' @param log_base_fc           Numeric of the base for the fold changes log-transformation
 #' @param log_base_p            Numeric of the base for the p-values log-transformation
 #' @param thres_p               Numeric of the threshold for the p-values
@@ -100,34 +100,34 @@ VolcanoPlot <- function(p,
 
 #' Volcano plot for a t-test result
 #'
-#' @param RES result table from t-test
-#' @param columnname_p column name for p-value
-#' @param columnname_padj columns name for adjusted p-value
-#' @param columnname_FC column name for fold change
-#' @param log_base_fc base for log transformation of fold change
-#' @param log_base_p base for log transformation of p-value
-#' @param is_FC_log TRUE if fold change is already log-transformed
-#' @param is_p_log FALSE if p-value is already log-transformed
-#' @param thres_fc threshold for fold change
-#' @param thres_p threshold for p-value
-#' @param show_thres_line TRUE if threshold lines should be shown
-#' @param colour1 colour for not significant proteins
-#' @param colour2 colour for significant proteins
-#' @param colour3 colour for significant proteins after FDR correction
-#' @param groupname1 name of first group
-#' @param groupname2 name of second group
-#' @param xlim limits for x-axis
-#' @param ylim limits for y-axis
-#' @param symmetric_x if TRUE, x-axis limits will be made symmetric (not used if xlim is defined)
-#' @param legend_position position of the legend (e.g., "bottom" or "right")
-#' @param plot_height height of plot
-#' @param plot_width width of plot
-#' @param plot_dpi resolution of plot
-#' @param plot_device plot device
-#' @param output_path path for output
-#' @param suffix suffix for output file
-#' @param base_size base size for theme
-#' @param add_annotation TRUE if annotation should be added
+#' @param RES             A data.frame of the result table from t-test
+#' @param columnname_p    The column name for p-value
+#' @param columnname_padj The columns name for adjusted p-value
+#' @param columnname_FC   The column name for fold change
+#' @param log_base_fc     The base for log transformation of fold change
+#' @param log_base_p      The base for log transformation of p-value
+#' @param is_FC_log       If \code{TRUE}, fold change is already log-transformed
+#' @param is_p_log        If \code{TRUE}, p-value is already log-transformed
+#' @param thres_fc        The threshold for fold change
+#' @param thres_p         The threshold for p-value
+#' @param show_thres_line If \code{TRUE}, threshold lines will be shown
+#' @param colour1         The colour for not significant proteins
+#' @param colour2         The colour for significant proteins
+#' @param colour3         The colour for significant proteins after FDR correction
+#' @param groupname1      The name of first group
+#' @param groupname2      The name of second group
+#' @param xlim            The limits for x-axis
+#' @param ylim            The limits for y-axis
+#' @param symmetric_x     If \code{TRUE}, x-axis limits will be made symmetric (not used if xlim is defined)
+#' @param legend_position The position of the legend (e.g., "bottom" or "right")
+#' @param plot_height     The height of plot
+#' @param plot_width      The width of plot
+#' @param plot_dpi        The resolution of plot
+#' @param plot_device     The plot device that is used for the resulting plot.
+#' @param output_path     The path for output file
+#' @param suffix          The suffix for output file
+#' @param base_size       The base size for theme
+#' @param add_annotation  If \code{TRUE}, annotation should be added
 #'
 #' @return ggplot object
 #' @export
@@ -247,7 +247,7 @@ VolcanoPlot_ttest <- function(RES,
 #' @param columnname_p_ANOVA     Column names for the p-values.
 #' @param columnname_p_ANOVA_adj Column names for the adjusted p-values.
 #' @param columns_FC             Vector containing the indices of the fold change columns.
-#' @param columns_p_posthoc
+#' @param columns_p_posthoc      Column names for the posthoc p-values.
 #' @param log_base_fc            Numeric of the base for the fold changes log-transformation
 #' @param log_base_p             Numeric of the base for the p-values log-transformation
 #' @param thres_p                Numeric of the threshold for the p-values

@@ -7,7 +7,7 @@
 calculate_onoff(D, id, group, max_vv_off, min_vv_on, protein_id_col = 1)
 }
 \arguments{
-\item{D}{data set containg only protein intensities}
+\item{D}{data set containing only protein intensities}
 
 \item{id}{data frame containing ID columns}
 

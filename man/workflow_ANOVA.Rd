@@ -9,7 +9,7 @@ workflow_ANOVA(
   output_path,
   intensity_columns,
   paired = FALSE,
-  var.equal = FALSE,
+  var.equal = TRUE,
   log_before_test = TRUE,
   delog_for_FC = TRUE,
   significant_after_FDR = TRUE,

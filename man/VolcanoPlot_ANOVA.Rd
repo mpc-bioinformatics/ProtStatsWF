@@ -34,6 +34,8 @@ VolcanoPlot_ANOVA(
 
 \item{columns_FC}{Vector containing the indices of the fold change columns.}
 
+\item{columns_p_posthoc}{Column names for the posthoc p-values.}
+
 \item{log_base_fc}{Numeric of the base for the fold changes log-transformation}
 
 \item{log_base_p}{Numeric of the base for the p-values log-transformation}
