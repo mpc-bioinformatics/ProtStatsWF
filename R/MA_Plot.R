@@ -90,7 +90,7 @@ MA_Plot_single <- function(sample_1, sample_2,
 
 MA_Plots <- function(D,
                     do_log_transformation = FALSE,
-                    output_path = "", suffix = "_",
+                    output_path = "", suffix = "",
                     labels = 1:ncol(D), labels2 = colnames(D),
                     maxPlots = 5000,
                     alpha = FALSE,
