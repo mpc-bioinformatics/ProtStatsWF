@@ -1,6 +1,6 @@
 test_that("Calculate ttest ", {
   
-  data <- prepareTtestData(data_path = test_path("testdata", "test_file_1.xlsx"), intensity_columns = 3:8)
+  data <- prepareTtestData(data_path = test_path("testdata", "test_file_2.xlsx"), intensity_columns = 3:8)
   
   data[["ID"]] = data[["ID"]][,1:2]
   

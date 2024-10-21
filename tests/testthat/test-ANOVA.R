@@ -1,6 +1,6 @@
 test_that("Calculate ANOVA ", {
   
-  data <- prepareTtestData(data_path = test_path("testdata", "test_file_1.xlsx"), intensity_columns = 3:11)
+  data <- prepareTtestData(data_path = test_path("testdata", "test_file_2.xlsx"), intensity_columns = 3:11)
   
   expect_snapshot(data[["D"]])
   expect_snapshot(data[["ID"]])
