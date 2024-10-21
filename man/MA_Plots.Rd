@@ -8,7 +8,7 @@ MA_Plots(
   D,
   do_log_transformation = FALSE,
   output_path = "",
-  suffix = "_",
+  suffix = "",
   labels = 1:ncol(D),
   labels2 = colnames(D),
   maxPlots = 5000,
