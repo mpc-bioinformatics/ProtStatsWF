@@ -6,7 +6,7 @@ test_that("Calculate Volcano plot for a ttest ", {
                                     columnname_p = "p", columnname_padj = "p.fdr", 
                                     columnname_FC = "FC_state1_divided_by_state2")
   
-  # suppressWarnings because rows with NA values are removed, which creates a warning
+  # Warning: "Removed 5 rows containing missing values or values outside the scale range (`geom_point()`)."
   # TODO: change volcano plot so missing values are not plotted
   suppressWarnings(vdiffr::expect_doppelganger("volcano_plot_ttest_file_2", volcano_plot))
 })
