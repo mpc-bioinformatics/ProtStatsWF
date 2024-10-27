@@ -11,6 +11,8 @@ test_that("Calculate histograms for a ttest ", {
   suppressWarnings(vdiffr::expect_doppelganger("histogram_FC_ttest_file_2", histograms[2]))
 })
 
+
+
 test_that("Calculate histograms for an ANOVA ", {
   
   pData <- openxlsx::read.xlsx(xlsxFile = test_path("testdata", "result_ANOVA.xlsx"), na.strings = c("NA", "NaN", "Filtered","#NV"))
