@@ -260,6 +260,7 @@ VolcanoPlot_ttest <- function(RES,
 #' @param base_size              Numeric containing the base size of the font
 #' @param xlim                   The limits for x-axis. Default is NULL
 #' @param ylim                   The limits for y-axis. Default is NULL
+#' @param add_labels             If TRUE, labels are added to the plot. 
 #'
 #' @return A list of ggplots
 #' @export
@@ -369,6 +370,8 @@ VolcanoPlot_ANOVA <- function(RES,
 #' @param RES_Volcano  result from volcanoPlot(): a list containing the data frame with the transformed data and the ggplot object
 #' @param label_type "FDR" (significant after correction) or "noFDR" (significant without correction) or "index" -> define indizes to label
 #' @param protein_name_column column name of the protein names in the RES data frame
+#' @param ind The index if the label_type is "index"
+#' @param protein_names The names of the proteins
 #'
 #' @return ggplot object with labels
 #' @export

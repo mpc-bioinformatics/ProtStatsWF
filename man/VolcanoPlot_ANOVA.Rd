@@ -59,6 +59,8 @@ VolcanoPlot_ANOVA(
 \item{xlim}{The limits for x-axis. Default is NULL}
 
 \item{ylim}{The limits for y-axis. Default is NULL}
+
+\item{add_labels}{If TRUE, labels are added to the plot.}
 }
 \value{
 A list of ggplots
