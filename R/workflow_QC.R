@@ -132,6 +132,7 @@ workflow_QC <- function(data_path,
                                use_groups = use_groups, group_colours = group_colours,
                                normalization = normalization_method, lts_quantile = lts_quantile)
 
+  
   mess <- paste0(mess, prepared_data[["message"]])#
   
   group <- prepared_data$group
@@ -139,7 +140,10 @@ workflow_QC <- function(data_path,
   write.csv(x = prepared_data$ID, file = paste0(output_path, "/ID", suffix, ".csv"), row.names = FALSE)
   write.csv(x = prepared_data$D, file = paste0(output_path, "/D_norm_wide", suffix, ".csv"), row.names = FALSE)
   write.csv(x = prepared_data$D_long, file = paste0(output_path, "/D_norm_long", suffix, ".csv"), row.names = FALSE)
-  
+
+  openxlsx::write.xlsx(x = cbind(prepared_data$ID, prepared_data$D), file = paste0(output_path, "/D_norm_ID", suffix, ".xlsx"),
+                       rowNames = FALSE, overwrite = TRUE, keepNA = TRUE)
+
   
   #### Calculate Valid Value Plot ####
   
