@@ -80,7 +80,8 @@ Boxplots_candidates <- function(D,
 
 
     if (plot_device == "png") {
-      grDevices::png(paste0(output_path, "/boxplots_candidates", "_", protein.names[i], suffix, ".png"),
+      protein_names <- gsub("/", "_", protein.names[i])
+      grDevices::png(paste0(output_path, "/boxplots_candidates", "_", protein_names, suffix, ".png"),
                      height = plot_height, width = plot_width, units = "cm", res = 300)
     }
     plot(plot)
