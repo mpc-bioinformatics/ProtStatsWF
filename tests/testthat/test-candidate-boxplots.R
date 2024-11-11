@@ -44,6 +44,8 @@ test_that("Calculate candidate boxplots for an ANOVA ", {
   
   
   expect_snapshot_file(path = test_path("testdata", "boxplots_candidates_Q61586.png"), name = "candidate_boxplots_3" )
-  expect_snapshot_file(path = test_path("testdata", "boxplots_candidates_A0A087WPR7_A0A087WSP0_E9Q9X1_Q91ZU6_S4R1P5.png"), name = "candidate_boxplots_4" )
+  
+  # Gives NOTE bc name is too long for a "portable file name"
+  #expect_snapshot_file(path = test_path("testdata", "boxplots_candidates_A0A087WPR7_A0A087WSP0_E9Q9X1_Q91ZU6_S4R1P5.png"), name = "candidate_boxplots_4" )
   
 })
