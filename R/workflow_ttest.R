@@ -144,6 +144,8 @@ workflow_ttest <- function(data_path,
   
   #### Create Heatmap ####
   
+  set.seed(14) 
+  
   t_heatmap <- Heatmap_with_groups(D = data[["D"]][candidates, ], 
                                    id = data[["ID"]][candidates, ],
                                    groups = data[["group"]])
@@ -357,6 +359,8 @@ workflow_ANOVA <- function(data_path,
   
   
   #### Create Heatmap ####
+  
+  set.seed(27) #set seed so colors can be differentiated well: 14, 27, 101
   
   t_heatmap <- Heatmap_with_groups(D = data[["D"]][union_candidates, ], 
                                    id = data[["ID"]][union_candidates, ],
