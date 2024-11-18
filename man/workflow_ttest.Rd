@@ -2,7 +2,7 @@
 % Please edit documentation in R/workflow_ttest.R
 \name{workflow_ttest}
 \alias{workflow_ttest}
-\title{The workflow for t-test of quantitative proteomics data}
+\title{The workflow for t-test of quantitative proteomics data.}
 \usage{
 workflow_ttest(
   data_path,
@@ -23,41 +23,56 @@ workflow_ttest(
 )
 }
 \arguments{
-\item{data_path}{A character containing the path to an .xlsx file.}
+\item{data_path}{\strong{character} \cr
+The path to an .xlsx file containing the input data.}
 
-\item{output_path}{A character containing the path to an output folder.}
+\item{output_path}{\strong{character} \cr
+The path to the output folder.}
 
-\item{intensity_columns}{An integer vector containing the intensity columns of the table.}
+\item{intensity_columns}{\strong{integer} \cr
+A vector containing the numbers of the intensity columns in the table.}
 
-\item{paired}{If \code{TRUE}, a paired test will be done, otherwise an unpaired test.}
+\item{paired}{\strong{logical} \cr
+If \code{TRUE}, a paired test will be done, otherwise an unpaired test.}
 
-\item{var.equal}{If \code{TRUE}, the variances are assumed to be equal.}
+\item{var.equal}{\strong{logical} \cr
+If \code{TRUE}, the variances are assumed to be equal.}
 
-\item{log_before_test}{If \code{TRUE}, the data will be log-transformed.}
+\item{log_before_test}{\strong{logical} \cr
+If \code{TRUE}, the data will be log-transformed.}
 
-\item{delog_for_FC}{If \code{TRUE}, the fold change will be calculated without the log-transformation.}
+\item{delog_for_FC}{\strong{logical} \cr
+If \code{TRUE}, the fold change will be calculated without the log-transformation.}
 
-\item{significant_after_FDR}{If \code{TRUE}, candidates for the boxplots and heatmap need to be significant after FDR correction, otherwise all significant candidates will be used.}
+\item{significant_after_FDR}{\strong{logical} \cr
+If \code{TRUE}, candidates for the boxplots and heatmap need to be significant after FDR correction, otherwise all significant candidates will be used.}
 
-\item{max_valid_values_off}{A numeric of the maximum number of valid values to be an off protein}
+\item{max_valid_values_off}{\strong{integer} \cr
+The maximum number of valid values to be an off protein.}
 
-\item{min_valid_values_on}{A numeric of the minimum number of valid values to be an on protein}
+\item{min_valid_values_on}{\strong{integer} \cr
+The minimum number of valid values to be an on protein.}
 
-\item{suffix}{A character if the file names should contain a suffix.}
+\item{suffix}{\strong{character} \cr
+The suffix of the file names should have one.}
 
-\item{plot_device}{A character containing the type of the output file, e.g. "pdf" or "png".}
+\item{plot_device}{\strong{character} \cr
+The type of the output file, e.g. "pdf" or "png".}
 
-\item{plot_height}{A numeric of the plot height in cm.}
+\item{plot_height}{\strong{numeric} \cr
+The plot height in cm.}
 
-\item{plot_width}{A numeric of the plot width in cm.}
+\item{plot_width}{\strong{numeric} \cr
+The plot width in cm.}
 
-\item{plot_dpi}{A numeric of the "dots per inch" of the plot aka. the plot resolution.}
+\item{plot_dpi}{\strong{integer} \cr
+The "dots per inch" of the plot aka. the plot resolution.}
 }
 \value{
-Message log of the workflow
+Message log of the workflow. It contains an overview of the settings and gives some information like the number of significant candidates or on-off-proteins.
 }
 \description{
-The workflow for t-test of quantitative proteomics data
+The workflow for t-test of quantitative proteomics data.
 }
 \examples{
 \dontrun{

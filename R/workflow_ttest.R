@@ -1,26 +1,41 @@
-#' The workflow for t-test of quantitative proteomics data
+#' The workflow for t-test of quantitative proteomics data.
 #'
-#' @param data_path              A character containing the path to an .xlsx file.
-#' @param output_path            A character containing the path to an output folder.
-#' @param intensity_columns      An integer vector containing the intensity columns of the table.
+#' @param data_path              \strong{character} \cr
+#'                               The path to an .xlsx file containing the input data.
+#' @param output_path            \strong{character} \cr
+#'                               The path to the output folder.
+#' @param intensity_columns      \strong{integer} \cr
+#'                               A vector containing the numbers of the intensity columns in the table.
 #' 
-#' @param paired                 If \code{TRUE}, a paired test will be done, otherwise an unpaired test.
-#' @param var.equal              If \code{TRUE}, the variances are assumed to be equal.
-#' @param log_before_test        If \code{TRUE}, the data will be log-transformed.
-#' @param delog_for_FC           If \code{TRUE}, the fold change will be calculated without the log-transformation.
+#' @param paired                 \strong{logical} \cr
+#'                               If \code{TRUE}, a paired test will be done, otherwise an unpaired test.
+#' @param var.equal              \strong{logical} \cr
+#'                               If \code{TRUE}, the variances are assumed to be equal.
+#' @param log_before_test        \strong{logical} \cr
+#'                               If \code{TRUE}, the data will be log-transformed.
+#' @param delog_for_FC           \strong{logical} \cr
+#'                               If \code{TRUE}, the fold change will be calculated without the log-transformation.
 #' 
-#' @param significant_after_FDR  If \code{TRUE}, candidates for the boxplots and heatmap need to be significant after FDR correction, otherwise all significant candidates will be used.
-#' @param max_valid_values_off   A numeric of the maximum number of valid values to be an off protein
-#' @param min_valid_values_on    A numeric of the minimum number of valid values to be an on protein
+#' @param significant_after_FDR  \strong{logical} \cr
+#'                               If \code{TRUE}, candidates for the boxplots and heatmap need to be significant after FDR correction, otherwise all significant candidates will be used.
+#' @param max_valid_values_off   \strong{integer} \cr
+#'                               The maximum number of valid values to be an off protein.
+#' @param min_valid_values_on    \strong{integer} \cr
+#'                               The minimum number of valid values to be an on protein.
 #' 
-#' @param suffix                 A character if the file names should contain a suffix.
-#' @param plot_device            A character containing the type of the output file, e.g. "pdf" or "png".
-#' @param plot_height            A numeric of the plot height in cm.
-#' @param plot_width             A numeric of the plot width in cm.
-#' @param plot_dpi               A numeric of the "dots per inch" of the plot aka. the plot resolution.
+#' @param suffix                 \strong{character} \cr
+#'                               The suffix of the file names should have one.
+#' @param plot_device            \strong{character} \cr
+#'                               The type of the output file, e.g. "pdf" or "png".
+#' @param plot_height            \strong{numeric} \cr
+#'                               The plot height in cm.
+#' @param plot_width             \strong{numeric} \cr
+#'                               The plot width in cm.
+#' @param plot_dpi               \strong{integer} \cr
+#'                               The "dots per inch" of the plot aka. the plot resolution.
 #' 
 #' 
-#' @return Message log of the workflow
+#' @return Message log of the workflow. It contains an overview of the settings and gives some information like the number of significant candidates or on-off-proteins.
 #' @export
 #'
 #' @examples
