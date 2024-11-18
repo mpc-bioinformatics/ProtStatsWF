@@ -43,80 +43,80 @@
     Code
       data[["ID"]]
     Output
-                      peptide                                    protein
-      1          AALNALQPPEFR                                     Q78T54
-      2       ESSSHHPGIAEFPSR                                     P02671
-      3  FEAHPNDLYVEGLPENIPFR                G3UYD0/G3UYJ6/Q3UHU8/Q9ESZ8
-      4              LPNSVLGR                                     Q8BH64
-      5             LQQDIEAVK                                     Q99M74
-      6         MELERPGGNEITR                                     P02671
-      7     MQEVVANLQYDDGSGMK                                     Q3U1J4
-      8     NNKDSHSLTTNIMEILR                                     P02671
-      9           NVVIAADGVLK                                     Q9ESL4
-      10           QGQDGLLSVK                                     P57759
-      11              QHIEKAK A0A087WPR7/A0A087WSP0/E9Q9X1/Q91ZU6/S4R1P5
-      12           RLDETPDGRK                                     Q61586
-      13      VEADIAGHGQEVLIR               contaminant_MYG_HORSE/P68082
-      14 VGVTVAQTTMEPHLLEACVR                   A0A0A6YY08/D3Z158/Q8BML9
-      15         VVAGVANALAHK        contaminant_HBB_HUMAN/P02042/P68871
-      16             YTPLYPFR                                     Q9DCU6
+                      peptide                      protein
+      1          AALNALQPPEFR                       Q78T54
+      2       ESSSHHPGIAEFPSR                       P02671
+      3  FEAHPNDLYVEGLPENIPFR         G3UYD0/G3UYJ6/Q3UHU8
+      4              LPNSVLGR                       Q8BH64
+      5             LQQDIEAVK                       Q99M74
+      6         MELERPGGNEITR                       P02671
+      7     MQEVVANLQYDDGSGMK                       Q3U1J4
+      8     NNKDSHSLTTNIMEILR                       P02671
+      9           NVVIAADGVLK                       Q9ESL4
+      10           QGQDGLLSVK                       P57759
+      11              QHIEKAK A0A087WPR7/A0A087WSP0/E9Q9X1
+      12           RLDETPDGRK                       Q61586
+      13      VEADIAGHGQEVLIR contaminant_MYG_HORSE/P68082
+      14 VGVTVAQTTMEPHLLEACVR     A0A0A6YY08/D3Z158/Q8BML9
+      15         VVAGVANALAHK contaminant_HBB_HUMAN/P02042
+      16             YTPLYPFR                       Q9DCU6
 
 ---
 
     Code
       pData
     Output
-                      peptide                                    protein   state1_1
-      1          AALNALQPPEFR                                     Q78T54   82163720
-      2       ESSSHHPGIAEFPSR                                     P02671 3066240866
-      3  FEAHPNDLYVEGLPENIPFR                G3UYD0/G3UYJ6/Q3UHU8/Q9ESZ8         NA
-      4              LPNSVLGR                                     Q8BH64   30212320
-      5             LQQDIEAVK                                     Q99M74  481943616
-      6         MELERPGGNEITR                                     P02671 7278700264
-      7     MQEVVANLQYDDGSGMK                                     Q3U1J4    4588955
-      8     NNKDSHSLTTNIMEILR                                     P02671  547595080
-      9           NVVIAADGVLK                                     Q9ESL4   28040580
-      10           QGQDGLLSVK                                     P57759   32303910
-      11              QHIEKAK A0A087WPR7/A0A087WSP0/E9Q9X1/Q91ZU6/S4R1P5   18786430
-      12           RLDETPDGRK                                     Q61586    9321790
-      13      VEADIAGHGQEVLIR               contaminant_MYG_HORSE/P68082  300837422
-      14 VGVTVAQTTMEPHLLEACVR                   A0A0A6YY08/D3Z158/Q8BML9   17041190
-      15         VVAGVANALAHK        contaminant_HBB_HUMAN/P02042/P68871  188298915
-      16             YTPLYPFR                                     Q9DCU6    6602400
-           state1_2   state1_3   state2_1   state2_2   state2_3   state3_1   state3_2
-      1    81341984   68332368   80992784   76432360   68052232   83962920   73156544
-      2  3523696082 3536983698 1129097258 1275470530 1287385068  269974430  275690698
-      3          NA   18573680   14150710         NA   13375460    5482574   21029880
-      4    28272400   30878930   29156000   30156110   27431330   32019650   26907300
-      5   421780896  462450400  469830208  428080992  444448608  495238112  492429696
-      6  7485191088 7681951140 2792816656 2748498968 2506603733  584325716  607947752
-      7     5071469         NA         NA    5065608    6596751    4729147         NA
-      8   631643705  587369272   85853120  276854236  250760174   21164574   49103103
-      9          NA         NA   27419040   25857140   28986300         NA         NA
-      10   34463860   26115270   33808552   33915592   32038310   37660152   32213920
-      11   30472710   25962860    5528899    9171085   11303680         NA         NA
-      12   14572240   17078710    2652279    4551373    4976687         NA         NA
-      13  314460372  303712450   49711832   50550568   50666080  892094496  946487880
-      14   20160540         NA   19386160   20495910   19678080   18992590         NA
-      15  160929378  158430322 2202540366 2367397848 2279021515 5044071125 4960067196
-      16    8191120    6974100   19808180   20498483   12605540   21869897   14850900
-           state3_3      p.anova  p.anova.fdr p.posthoc.state1_vs_state2
-      1    66191032 8.993546e-01 8.993546e-01               9.472883e-01
-      2   307915444 4.847845e-08 1.454353e-07               7.571071e-06
-      3    22224090           NA           NA                         NA
-      4    32356150 7.164690e-01 7.816025e-01               8.674336e-01
-      5   443624992 4.499202e-01 5.399043e-01               9.374414e-01
-      6   526558895 7.028348e-09 2.811339e-08               1.407124e-06
-      7     4608781           NA           NA                         NA
-      8    38820223 7.639941e-04 1.833586e-03               4.354077e-02
-      9          NA           NA           NA                         NA
-      10   38106072 2.533073e-01 3.377431e-01               6.365830e-01
-      11         NA 1.319695e-02 1.979543e-02               1.319695e-02
-      12         NA 1.038147e-02 1.779681e-02               1.038147e-02
-      13  911313768 1.390772e-11 1.668927e-10               6.417089e-14
-      14   18714460           NA           NA                         NA
-      15 5332594348 1.920140e-09 1.152084e-08               3.289655e-09
-      16   12191280 8.272527e-03 1.654505e-02               1.068482e-02
+                      peptide                      protein   state1_1   state1_2
+      1          AALNALQPPEFR                       Q78T54   82163720   81341984
+      2       ESSSHHPGIAEFPSR                       P02671 3066240866 3523696082
+      3  FEAHPNDLYVEGLPENIPFR         G3UYD0/G3UYJ6/Q3UHU8         NA         NA
+      4              LPNSVLGR                       Q8BH64   30212320   28272400
+      5             LQQDIEAVK                       Q99M74  481943616  421780896
+      6         MELERPGGNEITR                       P02671 7278700264 7485191088
+      7     MQEVVANLQYDDGSGMK                       Q3U1J4    4588955    5071469
+      8     NNKDSHSLTTNIMEILR                       P02671  547595080  631643705
+      9           NVVIAADGVLK                       Q9ESL4   28040580         NA
+      10           QGQDGLLSVK                       P57759   32303910   34463860
+      11              QHIEKAK A0A087WPR7/A0A087WSP0/E9Q9X1   18786430   30472710
+      12           RLDETPDGRK                       Q61586    9321790   14572240
+      13      VEADIAGHGQEVLIR contaminant_MYG_HORSE/P68082  300837422  314460372
+      14 VGVTVAQTTMEPHLLEACVR     A0A0A6YY08/D3Z158/Q8BML9   17041190   20160540
+      15         VVAGVANALAHK contaminant_HBB_HUMAN/P02042  188298915  160929378
+      16             YTPLYPFR                       Q9DCU6    6602400    8191120
+           state1_3   state2_1   state2_2   state2_3   state3_1   state3_2   state3_3
+      1    68332368   80992784   76432360   68052232   83962920   73156544   66191032
+      2  3536983698 1129097258 1275470530 1287385068  269974430  275690698  307915444
+      3    18573680   14150710         NA   13375460    5482574   21029880   22224090
+      4    30878930   29156000   30156110   27431330   32019650   26907300   32356150
+      5   462450400  469830208  428080992  444448608  495238112  492429696  443624992
+      6  7681951140 2792816656 2748498968 2506603733  584325716  607947752  526558895
+      7          NA         NA    5065608    6596751    4729147         NA    4608781
+      8   587369272   85853120  276854236  250760174   21164574   49103103   38820223
+      9          NA   27419040   25857140   28986300         NA         NA         NA
+      10   26115270   33808552   33915592   32038310   37660152   32213920   38106072
+      11   25962860    5528899    9171085   11303680         NA         NA         NA
+      12   17078710    2652279    4551373    4976687         NA         NA         NA
+      13  303712450   49711832   50550568   50666080  892094496  946487880  911313768
+      14         NA   19386160   20495910   19678080   18992590         NA   18714460
+      15  158430322 2202540366 2367397848 2279021515 5044071125 4960067196 5332594348
+      16    6974100   19808180   20498483   12605540   21869897   14850900   12191280
+              p.anova  p.anova.fdr p.posthoc.state1_vs_state2
+      1  8.993546e-01 8.993546e-01               9.472883e-01
+      2  4.847845e-08 1.454353e-07               7.571071e-06
+      3            NA           NA                         NA
+      4  7.164690e-01 7.816025e-01               8.674336e-01
+      5  4.499202e-01 5.399043e-01               9.374414e-01
+      6  7.028348e-09 2.811339e-08               1.407124e-06
+      7            NA           NA                         NA
+      8  7.639941e-04 1.833586e-03               4.354077e-02
+      9            NA           NA                         NA
+      10 2.533073e-01 3.377431e-01               6.365830e-01
+      11 1.319695e-02 1.979543e-02               1.319695e-02
+      12 1.038147e-02 1.779681e-02               1.038147e-02
+      13 1.390772e-11 1.668927e-10               6.417089e-14
+      14           NA           NA                         NA
+      15 1.920140e-09 1.152084e-08               3.289655e-09
+      16 8.272527e-03 1.654505e-02               1.068482e-02
          p.posthoc.state1_vs_state3 p.posthoc.state2_vs_state3
       1                8.947616e-01               9.894905e-01
       2                4.794878e-08               1.035565e-06
