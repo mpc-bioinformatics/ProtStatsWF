@@ -1,4 +1,4 @@
-#' The workflow for t-test of quantitative proteomics data.
+#' The workflow for a t-test of quantitative proteomics data.
 #'
 #' @param data_path              \strong{character} \cr
 #'                               The path to an .xlsx file containing the input data.
@@ -35,11 +35,17 @@
 #'                               The "dots per inch" of the plot aka. the plot resolution.
 #' 
 #' 
-#' @return Message log of the workflow. It contains an overview of the settings and gives some information like the number of significant candidates or on-off-proteins.
+#' @return Returns a message log of the workflow. The log contains an overview of the settings and gives some information e.g number of significant candidates or on-off-proteins.
 #' @export
+#' 
+#' @seealso [workflow_ANOVA()] in case of more than two groups in the sample.\cr
+#'          Functions used in this workflow: 
+#'          [prepareTtestData()], [ttest()], [VolcanoPlot_ttest()], [pvalue_foldchange_histogram()], 
+#'          [calculate_significance_categories_ttest()], [Boxplots_candidates()], 
+#'          [Heatmap_with_groups()], [calculate_onoff()]
 #'
 #' @examples
-#' \dontrun{
+#'\dontrun{ 
 #' result <- workflow_ttest(data_path = "/Users/thisuser/Documents/dataFolder/data.xlsx",
 #'                          output_path = "/Users/thisuser/Documents/resultsFolder/",
 #'                          intensity_columns = 3:8)

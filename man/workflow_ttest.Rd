@@ -2,7 +2,7 @@
 % Please edit documentation in R/workflow_ttest.R
 \name{workflow_ttest}
 \alias{workflow_ttest}
-\title{The workflow for t-test of quantitative proteomics data.}
+\title{The workflow for a t-test of quantitative proteomics data.}
 \usage{
 workflow_ttest(
   data_path,
@@ -69,15 +69,22 @@ The plot width in cm.}
 The "dots per inch" of the plot aka. the plot resolution.}
 }
 \value{
-Message log of the workflow. It contains an overview of the settings and gives some information like the number of significant candidates or on-off-proteins.
+Returns a message log of the workflow. The log contains an overview of the settings and gives some information e.g number of significant candidates or on-off-proteins.
 }
 \description{
-The workflow for t-test of quantitative proteomics data.
+The workflow for a t-test of quantitative proteomics data.
 }
 \examples{
-\dontrun{
+\dontrun{ 
 result <- workflow_ttest(data_path = "/Users/thisuser/Documents/dataFolder/data.xlsx",
                          output_path = "/Users/thisuser/Documents/resultsFolder/",
                          intensity_columns = 3:8)
 }
+}
+\seealso{
+\code{\link[=workflow_ANOVA]{workflow_ANOVA()}} in case of more than two groups in the sample.\cr
+Functions used in this workflow:
+\code{\link[=prepareTtestData]{prepareTtestData()}}, \code{\link[=ttest]{ttest()}}, \code{\link[=VolcanoPlot_ttest]{VolcanoPlot_ttest()}}, \code{\link[=pvalue_foldchange_histogram]{pvalue_foldchange_histogram()}},
+\code{\link[=calculate_significance_categories_ttest]{calculate_significance_categories_ttest()}}, \code{\link[=Boxplots_candidates]{Boxplots_candidates()}},
+\code{\link[=Heatmap_with_groups]{Heatmap_with_groups()}}, \code{\link[=calculate_onoff]{calculate_onoff()}}
 }
