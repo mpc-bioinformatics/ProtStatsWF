@@ -45,10 +45,30 @@
 #'          [Heatmap_with_groups()], [calculate_onoff()]
 #'
 #' @examples
-#'\dontrun{ 
-#' result <- workflow_ttest(data_path = "/Users/thisuser/Documents/dataFolder/data.xlsx",
-#'                          output_path = "/Users/thisuser/Documents/resultsFolder/",
-#'                          intensity_columns = 3:8)
+#' 
+#' \dontrun{
+#' # First: the path to the data you want to input.
+#' # For a normal user, the path should look something like this:
+#' # data_path <- "C:/Users/thisuser/Documents/dataFolder/data.xlsx"
+#' # For this example, we instead borrow the data from a dataset used in the testing of this package. 
+#' 
+#' data_path <- system.file(c("tests/testthat/testdata/test_file_2.xlsx"), package = "ProtStatsWF")
+#' 
+#' 
+#' # Second: the columns containing the peptide intensities of your data sheet
+#' intensity_columns <- 3:8
+#' 
+#' # Third: The path to a folder, where you want your results to be.
+#' # For a normal user, the path should look something like this:
+#' # output_path <- "/Users/thisuser/Documents/resultsFolder/"
+#' # For this example, we put the results in the package folder examples/workflow_ttest/
+#' 
+#' output_path <- paste0(system.file(c("examples/workflow_ttest/"), package = "ProtStatsWF"), "/")
+#' 
+#' # Lastly: Run the workflow
+#' result <- workflow_ttest(data_path = data_path,
+#'                          intensity_columns = intensity_columns,
+#'                          output_path = output_path)
 #'}
 
 workflow_ttest <- function(data_path,
