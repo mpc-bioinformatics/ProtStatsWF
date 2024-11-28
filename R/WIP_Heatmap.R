@@ -119,7 +119,7 @@ Heatmap_with_groups <- function(D, id, protein_names_col = NULL,
   if(na_method == "na.omit") {
     data.asmatrix_tmp <- data.asmatrix
     rownames(data.asmatrix_tmp) <- 1:nrow(data.asmatrix_tmp)
-    data.asmatrix_tmp <- na.omit(data.asmatrix_tmp)
+    data.asmatrix_tmp <- stats::na.omit(data.asmatrix_tmp)
     ind <- as.numeric(rownames(data.asmatrix_tmp))
 
     id <- id[ind,, drop = FALSE]

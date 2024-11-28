@@ -301,13 +301,13 @@ ANOVA_repeatedMeasurements_single_row <- function(x,
   }
 
 
-  Lme.mod <- try({nlme::lme(intensity ~ group, random = ~1 | sample, data = D_tmp_naomit, na.action = na.omit)})
+  Lme.mod <- try({nlme::lme(intensity ~ group, random = ~1 | sample, data = D_tmp_naomit, na.action = stats::na.omit)})
   if ("try-error" %in% class(Lme.mod)) {
     res <- rep(NA, 3 * nr_comparisons + 2)
     names(res) <- cnames
     return(res)
     }  # Modellberechnung fehlgeschlagen
-  lme.aov <- anova(Lme.mod)  # Wald test
+  lme.aov <- stats::anova(Lme.mod)  # Wald test
   p.anova <- lme.aov$`p-value`[2]  # p-Wert der ANOVA fuer den Faktor group
   if (is.nan(p.anova)) {
     z <- rep(NA, h)
