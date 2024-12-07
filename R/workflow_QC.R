@@ -186,7 +186,6 @@ workflow_QC <- function(data_path,
   utils::write.csv(x = prepared_data$D, file = paste0(output_path, "/D_norm_wide", suffix, ".csv"), row.names = FALSE)
   utils::write.csv(x = prepared_data$D_long, file = paste0(output_path, "/D_norm_long", suffix, ".csv"), row.names = FALSE)
 
-<<<<<<< HEAD
   write.csv(x = prepared_data$ID, file = paste0(output_path, "/ID", suffix, ".csv"), row.names = FALSE)
   write.csv(x = prepared_data$D, file = paste0(output_path, "/D_norm_wide", suffix, ".csv"), row.names = FALSE)
   write.csv(x = prepared_data$D_long, file = paste0(output_path, "/D_norm_long", suffix, ".csv"), row.names = FALSE)
@@ -194,11 +193,7 @@ workflow_QC <- function(data_path,
   openxlsx::write.xlsx(x = cbind(prepared_data$ID, prepared_data$D), file = paste0(output_path, "/D_norm_ID", suffix, ".xlsx"),
                        rowNames = FALSE, overwrite = TRUE, keepNA = TRUE)
 
-=======
-  openxlsx::write.xlsx(x = cbind(prepared_data$ID, prepared_data$D), file = paste0(output_path, "/D_norm_ID", suffix, ".xlsx"),
-                       rowNames = FALSE, overwrite = TRUE, keepNA = TRUE)
->>>>>>> workflow-ttest
-
+  
   
   #### Calculate Valid Value Plot ####
   
