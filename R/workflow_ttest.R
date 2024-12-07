@@ -55,7 +55,7 @@
 #' # 3. Set the character of the output path, leading to a folder for the results.
 #' out_path <- "C:/Users/thisuser/Documents/resultsFolder/"
 #' 
-#' # 4. Run the ANOVA with the parameters you set.
+#' # 4. Run the ttest with the parameters you set.
 #' \dontrun{
 #' result <- workflow_ttest(data_path = in_path,
 #'                          output_path = out_path,
