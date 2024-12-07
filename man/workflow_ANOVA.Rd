@@ -93,3 +93,10 @@ result <- workflow_ANOVA(data_path = in_path,
                          intensity_columns = int_col) }
 
 }
+\seealso{
+\code{\link[=workflow_ttest]{workflow_ttest()}} in case of more than two groups in the sample.\cr
+Functions used in this workflow:
+\code{\link[=prepareTtestData]{prepareTtestData()}}, \code{\link[=ttest]{ttest()}}, \code{\link[=VolcanoPlot_ttest]{VolcanoPlot_ttest()}}, \code{\link[=pvalue_foldchange_histogram]{pvalue_foldchange_histogram()}},
+\code{\link[=calculate_significance_categories_ttest]{calculate_significance_categories_ttest()}}, \code{\link[=Boxplots_candidates]{Boxplots_candidates()}},
+\code{\link[=Heatmap_with_groups]{Heatmap_with_groups()}}, \code{\link[=calculate_onoff]{calculate_onoff()}}
+}
