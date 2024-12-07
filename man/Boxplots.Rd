@@ -12,7 +12,9 @@ Boxplots(
   use_groups = NULL,
   groupvar_name = "Group",
   group_colours = NULL,
-  base_size = 15
+  base_size = 15,
+  lwd = 1,
+  outlier_size = 1
 )
 }
 \arguments{
@@ -31,6 +33,10 @@ Boxplots(
 \item{group_colours}{A character vector of hex codes for the group colors.}
 
 \item{base_size}{A numeric containing the base size of the font.}
+
+\item{lwd}{A numeric containing the line width of the boxplot.}
+
+\item{outlier_size}{A numeric containing the size of the outliers.}
 }
 \value{
 a tibble and a ggplot of the valid values
