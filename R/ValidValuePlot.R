@@ -10,11 +10,16 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' prepared_data <- prepareData(data_path = path, intensity_columns = intensity_cols)
-#'
+#' 
+#' path <- system.file("extdata", "exampleQC.xlsx", package = "ProtStatsWF")
+#' columns <- 3:11
+#' 
+#' prepared_data <- prepareData(data_path = path, intensity_columns = columns)
+#' 
 #' vvplot <- ValidValuePlot(D_long = prepared_data[["D_long"]])
-#' }
+#' 
+#' plot(vvplot[["plot"]])
+#' 
 #'
 #' @importFrom magrittr %>%
 #'
