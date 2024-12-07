@@ -20,8 +20,8 @@ pvalue_foldchange_histogram <- function(RES,
   D <- data.frame(p = RES[[columnname_p]],
                   padj = RES[[columnname_padj]],
                   FC = RES[[columnname_FC]])
-
-  pl_hist_p <- ggplot2::ggplot(D, ggplot2::aes(x = p)) +
+  
+  pl_hist_p <- ggplot2::ggplot(D, ggplot2::aes(x = D[["p"]])) +
     ggplot2::geom_histogram(breaks = seq(0,1, 0.05)) +
     ggplot2::theme_bw() +
     ggplot2::labs(title = "Histogram of p-values",
@@ -29,7 +29,7 @@ pvalue_foldchange_histogram <- function(RES,
          y = "Frequency") +
     ggplot2::xlim(0,1)
 
-  pl_hist_padj <- ggplot2::ggplot(D, ggplot2::aes(x = padj)) +
+  pl_hist_padj <- ggplot2::ggplot(D, ggplot2::aes(x = D[["padj"]])) +
     ggplot2::geom_histogram(breaks = seq(0,1, 0.05)) +
     ggplot2::theme_bw() +
     ggplot2::labs(title = "Histogram of p-values",
@@ -37,7 +37,7 @@ pvalue_foldchange_histogram <- function(RES,
          y = "Frequency") +
     ggplot2::xlim(0,1)
 
-  pl_hist_FC <- ggplot2::ggplot(D, ggplot2::aes(x = log2(FC))) +
+  pl_hist_FC <- ggplot2::ggplot(D, ggplot2::aes(x = log2(D[["FC"]]))) +
     ggplot2::geom_histogram() +
     ggplot2::theme_bw() +
     ggplot2::labs(title = "Histogram of p-values",
