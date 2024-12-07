@@ -46,30 +46,21 @@
 #'
 #' @examples
 #' 
+#' # 1. Set the character of your data path, leading to an .xlsx file.
+#' in_path <- "C:/Users/thisuser/Documents/dataFolder/data.xlsx"
+#' 
+#' # 2. Set the integer vector of the columns, which contain the intensities.
+#' int_col <- 3:8
+#' 
+#' # 3. Set the character of the output path, leading to a folder for the results.
+#' out_path <- "C:/Users/thisuser/Documents/resultsFolder/"
+#' 
+#' # 4. Run the ANOVA with the parameters you set.
 #' \dontrun{
-#' # First: the path to the data you want to input.
-#' # For a normal user, the path should look something like this:
-#' # data_path <- "C:/Users/thisuser/Documents/dataFolder/data.xlsx"
-#' # For this example, we instead borrow the data from a dataset used in the testing of this package. 
-#' 
-#' data_path <- system.file(c("tests/testthat/testdata/test_file_2.xlsx"), package = "ProtStatsWF")
-#' 
-#' 
-#' # Second: the columns containing the peptide intensities of your data sheet
-#' intensity_columns <- 3:8
-#' 
-#' # Third: The path to a folder, where you want your results to be.
-#' # For a normal user, the path should look something like this:
-#' # output_path <- "/Users/thisuser/Documents/resultsFolder/"
-#' # For this example, we put the results in the package folder examples/workflow_ttest/
-#' 
-#' output_path <- paste0(system.file(c("examples/workflow_ttest/"), package = "ProtStatsWF"), "/")
-#' 
-#' # Lastly: Run the workflow
-#' result <- workflow_ttest(data_path = data_path,
-#'                          intensity_columns = intensity_columns,
-#'                          output_path = output_path)
-#'}
+#' result <- workflow_ttest(data_path = in_path,
+#'                          output_path = out_path,
+#'                          intensity_columns = int_col) }
+#'                          
 
 workflow_ttest <- function(data_path,
                            output_path,
@@ -238,35 +229,62 @@ workflow_ttest <- function(data_path,
 
 #' The workflow for ANOVA of quantitative proteomics data
 #'
-#' @param data_path              A character containing the path to an .xlsx file.
-#' @param output_path            A character containing the path to an output folder.
-#' @param intensity_columns      An integer vector containing the intensity columns of the table.
+#' @param data_path              \strong{character} \cr
+#'                               The path to an .xlsx file containing the input data.
+#' @param output_path            \strong{character} \cr
+#'                               The path to the output folder.
+#' @param intensity_columns      \strong{integer} \cr
+#'                               A vector containing the numbers of the intensity columns in the table.
 #' 
-#' @param paired                 If \code{TRUE}, a paired test will be done, otherwise an unpaired test.
-#' @param var.equal              If \code{TRUE}, the variances are assumed to be equal.
-#' @param log_before_test        If \code{TRUE}, the data will be log-transformed.
-#' @param delog_for_FC           If \code{TRUE}, the fold change will be calculated without the log-transformation.
+#' @param paired                 \strong{logical} \cr
+#'                               If \code{TRUE}, a paired test will be done, otherwise an unpaired test.
+#' @param var.equal              \strong{logical} \cr
+#'                               If \code{TRUE}, the variances are assumed to be equal.
+#' @param log_before_test        \strong{logical} \cr
+#'                               If \code{TRUE}, the data will be log-transformed.
+#' @param delog_for_FC           \strong{logical} \cr
+#'                               If \code{TRUE}, the fold change will be calculated without the log-transformation.
 #' 
-#' @param significant_after_FDR  If \code{TRUE}, candidates for the boxplots and heatmap need to be significant after FDR correction, otherwise all significant candidates will be used.
-#' @param max_valid_values_off   A numeric of the maximum number of valid values to be an off protein
-#' @param min_valid_values_on    A numeric of the minimum number of valid values to be an on protein
+#' @param significant_after_FDR  \strong{logical} \cr
+#'                               If \code{TRUE}, candidates for the boxplots and heatmap need to be significant after FDR correction, otherwise all significant candidates will be used.
+#' @param max_valid_values_off   \strong{integer} \cr
+#'                               The maximum number of valid values to be an off protein.
+#' @param min_valid_values_on    \strong{integer} \cr
+#'                               The minimum number of valid values to be an on protein.
 #' 
-#' @param suffix                 A character if the file names should contain a suffix.
-#' @param plot_device            A character containing the type of the output file, e.g. "pdf" or "png".
-#' @param plot_height            A numeric of the plot height in cm.
-#' @param plot_width             A numeric of the plot width in cm.
-#' @param plot_dpi               A numeric of the "dots per inch" of the plot aka. the plot resolution.
+#' @param suffix                 \strong{character} \cr
+#'                               The suffix of the file names should have one.
+#' @param plot_device            \strong{character} \cr
+#'                               The type of the output file, e.g. "pdf" or "png".
+#' @param plot_height            \strong{numeric} \cr
+#'                               The plot height in cm.
+#' @param plot_width             \strong{numeric} \cr
+#'                               The plot width in cm.
+#' @param plot_dpi               \strong{integer} \cr
+#'                               The "dots per inch" of the plot aka. the plot resolution.
 #' 
 #' 
 #' @return Message log of the workflow
 #' @export
 #'
 #' @examples
+#' 
+#' 
+#' # 1. Set the character of your data path, leading to an .xlsx file.
+#' in_path <- "C:/Users/thisuser/Documents/dataFolder/data.xlsx"
+#' 
+#' # 2. Set the integer vector of the columns, which contain the intensities.
+#' int_col <- 3:17
+#' 
+#' # 3. Set the character of the output path, leading to a folder for the results.
+#' out_path <- "C:/Users/thisuser/Documents/resultsFolder/"
+#' 
+#' # 4. Run the ANOVA with the parameters you set.
 #' \dontrun{
-#' result <- workflow_ANOVA(data_path = "/Users/thisuser/Documents/dataFolder/data.xlsx",
-#'                          output_path = "/Users/thisuser/Documents/resultsFolder/",
-#'                          intensity_columns = 3:17)
-#'}
+#' result <- workflow_ANOVA(data_path = in_path,
+#'                          output_path = out_path,
+#'                          intensity_columns = int_col) }
+#'
 
 workflow_ANOVA <- function(data_path,
                            output_path,
