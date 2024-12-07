@@ -45,95 +45,142 @@ workflow_QC(
 )
 }
 \arguments{
-\item{data_path}{A character containing the path to an .xlsx file.}
+\item{data_path}{\strong{character} \cr
+The path to an .xlsx file containing the input data.}
 
-\item{output_path}{A character containing the path to an output folder.}
+\item{output_path}{\strong{character} \cr
+The path to the output folder.}
 
-\item{intensity_columns}{An integer vector containing the intensity columns of the table.}
+\item{intensity_columns}{\strong{integer} \cr
+A vector containing the numbers of the intensity columns in the table.}
 
-\item{normalization_method}{A character containing the method of normalization. The possible methods are no normalization "nonorm" or "median", "loess", "quantile" or "lts" normalization.}
+\item{normalization_method}{\strong{character} \cr
+The method of normalization. Options are "nonorm" (no normalization), "median", "loess", "quantile" or "lts" normalization.}
 
-\item{lts_quantile}{A numeric containing the quantile for the lts normalization if \code{normalization = "lts"}, default is 0.8.}
+\item{lts_quantile}{\strong{numeric} \cr
+The quantile for the lts normalization if \code{normalization = "lts"}.}
 
-\item{use_groups}{If \code{TRUE}, group information encoded in the column names are used. Default is \code{TRUE}.}
+\item{use_groups}{\strong{logical} \cr
+If \code{TRUE}, group information encoded in the column names is used.}
 
-\item{na_strings}{A character vector containing symbols to be recognized as missing values (with the exception of 0).}
+\item{na_strings}{\strong{character} \cr
+A vector containing the symbols to be recognized as missing values (with the exception of 0).}
 
-\item{zero_to_NA}{If \code{TRUE}, 0 will be treated as missing value.}
+\item{zero_to_NA}{\strong{logical} \cr
+If \code{TRUE}, 0 will be treated as missing value.}
 
-\item{do_log_transformation}{If \code{TRUE}, the data will be log-transformed.}
+\item{do_log_transformation}{\strong{logical} \cr
+If \code{TRUE}, the data will be log-transformed.}
 
-\item{log_base}{A numeric containing the base used, if data is log-transformed.}
+\item{log_base}{\strong{numeric} \cr
+The base used, if \code{do_log_transformation = TRUE}.}
 
-\item{groupvar_name}{A character containing the name for the group variable.}
+\item{groupvar_name}{\strong{character} \cr
+The name for the group variable.}
 
-\item{group_colours}{A character vector of hex codes for the group colors, if the data has groups. If \code{NULL}, a default color scale will be used.}
+\item{group_colours}{\strong{character} \cr
+A vector of hex codes for the group colors, if the data has groups. If \code{NULL}, a default color scale will be used.}
 
-\item{base_size}{A numeric containing the base size of the font.}
+\item{base_size}{\strong{numeric} \cr
+The base size of the font.}
 
-\item{plot_device}{A character containing the type of the output file, e.g. "pdf" or "png".}
+\item{plot_device}{\strong{character} \cr
+The type of the output file. Options are "pdf" or "png".}
 
-\item{plot_height}{A numeric of the plot height in cm.}
+\item{plot_height}{\strong{numeric} \cr
+The plot height in cm.}
 
-\item{plot_width}{A numeric of the plot width in cm.}
+\item{plot_width}{\strong{numeric} \cr
+The plot width in cm.}
 
-\item{plot_dpi}{A numeric of the "dots per inch" of the plot aka. the plot resolution.}
+\item{plot_dpi}{\strong{numeric} \cr
+The "dots per inch" of the plot aka. the plot resolution.}
 
-\item{suffix}{A character containing the suffix for the output files. Needs to start with an underscore.}
+\item{suffix}{\strong{character} \cr
+The suffix for the output files. It needs to start with an underscore.}
 
-\item{boxplot_method}{A character containing the method used. Possible are "boxplot" and "violinplot". Default is "boxplot".}
+\item{boxplot_method}{\strong{character} \cr
+The method used. Options are "boxplot" and "violinplot".}
 
-\item{generate_MAplots}{If \code{TRUE}, MA plots will be generated, if \code{FALSE} they will not be generated (mostly for debugging purposes).}
+\item{generate_MAplots}{\strong{logical} \cr
+If \code{TRUE}, MA plots will be generated, if \code{FALSE} they will not be generated (mostly for debugging purposes).}
 
-\item{MA_maxPlots}{A numeric containing the maximum number of MA plots that should be generated. Defaults is 5000.}
+\item{MA_maxPlots}{\strong{integer} \cr
+The maximum number of MA plots that should be generated.}
 
-\item{MA_alpha}{If \code{TRUE}, the data points of the MA plots will be transparent.}
+\item{MA_alpha}{\strong{logical} \cr
+If \code{TRUE}, the data points of the MA plots will be transparent.}
 
-\item{MA_sampling}{A numeric containing the sampling rate for MA-Plots. Useful to sample part of the data set for data sets on peptide/feature level with many data points.}
+\item{MA_sampling}{\strong{numeric} \cr
+The sampling rate for MA-Plots. Useful to sample part of the data set for data sets on peptide/feature level with many data points.}
 
-\item{PCA_impute}{If \code{TRUE}, missing values will be imputed.}
+\item{PCA_impute}{\strong{logical} \cr
+If \code{TRUE}, missing values will be imputed for the PCA.}
 
-\item{PCA_impute_method}{A character containing the imputation method ("mean" or "median")}
+\item{PCA_impute_method}{\strong{character} \cr
+The imputation method. Options are "mean" or "median".}
 
-\item{PCA_propNA}{A numeric of the proportion of allowed missing NAs for a protein, before it is discarded.}
+\item{PCA_propNA}{\strong{numeric} \cr
+The proportion of allowed missing NAs for a protein, before it is discarded.}
 
-\item{PCA_scale.}{If \code{TRUE}, the data will be scaled before computing the PCA.}
+\item{PCA_scale.}{\strong{logical} \cr
+If \code{TRUE}, the data will be scaled before computing the PCA.}
 
-\item{PCA_PCx}{The principle component for the x-axis (default: 1).}
+\item{PCA_PCx}{\strong{numeric} \cr
+The principle component for the x-axis.}
 
-\item{PCA_PCy}{The principle component for the y-axis (default: 2).}
+\item{PCA_PCy}{\strong{numeric} \cr
+The principle component for the y-axis.}
 
-\item{PCA_groupvar1_name}{Titles of legends for colour.}
+\item{PCA_groupvar1_name}{\strong{character} \cr
+The titles of legends for colour.}
 
-\item{PCA_alpha}{If \code{TRUE}, the data points of the PCA plot will be transparent.}
+\item{PCA_alpha}{\strong{logical} \cr
+If \code{TRUE}, the data points of the PCA plot will be transparent.}
 
-\item{PCA_label}{If \code{TRUE}, the samples will be labeled.}
+\item{PCA_label}{\strong{logical} \cr
+If \code{TRUE}, the samples will be labeled.}
 
-\item{PCA_label_seed}{A numeric, which sets the seed for the label.}
+\item{PCA_label_seed}{\strong{numeric} \cr
+The seed for the label.}
 
-\item{PCA_label_size}{A numeric containing the size of the sample labels.}
+\item{PCA_label_size}{\strong{numeric} \cr
+The size of the sample labels.}
 
-\item{PCA_xlim}{Limit of the x-axis.}
+\item{PCA_xlim}{\strong{numeric} \cr
+The limit of the x-axis.}
 
-\item{PCA_ylim}{Limit of the y-axis.}
+\item{PCA_ylim}{\strong{numeric} \cr
+The limit of the y-axis.}
 
-\item{PCA_point.size}{The size of the data points.}
+\item{PCA_point.size}{\strong{numeric} \cr
+The size of the data points.}
 }
 \value{
-saves several plots and excel files
+The workflow saves several plots and excel files and returns a message log of the workflow.
 }
 \description{
 The main workflow for quality control of quantitative proteomics data
 }
 \examples{
+
+# 1. Set the character of your data path, leading to an .xlsx file.
+in_path <- "C:/Users/thisuser/Documents/dataFolder/data.xlsx"
+
+# 2. Set the integer vector of the columns, which contain the intensities.
+int_col <- 3:17
+
+# 3. Set the character of the output path, leading to a folder for the results.
+out_path <- "C:/Users/thisuser/Documents/resultsFolder/"
+
+# 4. Run the QC workflow with the parameters you set.
 \dontrun{
-in_path <- "/Users/thisuser/Documents/dataFolder/data.xlsx"
-intensity_cols <- 3:17
-out_path <- "/Users/thisuser/Documents/resultsFolder/"
-
 result <- workflow_QC(data_path = in_path,
-                      intensity_columns = intensity_cols,
-                      output_path = out_path)
-}
+                         output_path = out_path,
+                         intensity_columns = int_col) }
 
+}
+\seealso{
+Functions used in this workflow:
+\code{\link[=prepareData]{prepareData()}}, \code{\link[=ValidValuePlot]{ValidValuePlot()}}, \code{\link[=Boxplots]{Boxplots()}}, \code{\link[=MA_Plots]{MA_Plots()}}, \code{\link[=PCA_Plot]{PCA_Plot()}}
 }
