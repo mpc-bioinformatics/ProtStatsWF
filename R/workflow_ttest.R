@@ -15,6 +15,8 @@
 #'                               If \code{TRUE}, the data will be log-transformed.
 #' @param delog_for_FC           \strong{logical} \cr
 #'                               If \code{TRUE}, the fold change will be calculated without the log-transformation.
+#' @param p_value_zeros_to_min   \strong{logical} \cr
+#'                               If \code{TRUE}, then \code{p_values == 0} will be set to the next smallest value of the p-values.
 #' 
 #' @param significant_after_FDR  \strong{logical} \cr
 #'                               If \code{TRUE}, candidates for the boxplots and heatmap need to be significant after FDR correction, otherwise all significant candidates will be used.
@@ -70,6 +72,7 @@ workflow_ttest <- function(data_path,
                            var.equal = FALSE,
                            log_before_test = TRUE,
                            delog_for_FC = TRUE,
+                           p_value_zeros_to_min = TRUE,
                            
                            significant_after_FDR = TRUE,
                            max_valid_values_off = 0,
@@ -109,6 +112,22 @@ workflow_ttest <- function(data_path,
                  "log-transformed before the t-test and ", 
                  ifelse(delog_for_FC, "", "not"),
                  "de-log-transformed for the fold change. \n")
+  
+  
+  if(p_value_zeros_to_min){
+    
+    p_value_zero <- which(test_results$p == 0)
+    
+    if(length(p_value_zero) > 0){
+      next_smallest_value <- sort(unique(test_results$p))[2]
+      
+      test_results$p[test_results$p == 0] <- next_smallest_value
+      
+      mess <- paste0(mess, "There were ", length(p_value_zero), " p_values, which were 0. ",
+                     "They were set to the next smallest occuring value ", next_smallest_value, ". \n")
+    }
+  }
+  
   
   fc_col_name <- paste0("FC_", levels(data[["group"]])[[1]], "_divided_by_", levels(data[["group"]])[[2]])
   
@@ -244,6 +263,8 @@ workflow_ttest <- function(data_path,
 #'                               If \code{TRUE}, the data will be log-transformed.
 #' @param delog_for_FC           \strong{logical} \cr
 #'                               If \code{TRUE}, the fold change will be calculated without the log-transformation.
+#' @param p_value_zeros_to_min   \strong{logical} \cr
+#'                               If \code{TRUE}, then \code{p_values == 0} will be set to the next smallest value of the p-values.
 #' 
 #' @param significant_after_FDR  \strong{logical} \cr
 #'                               If \code{TRUE}, candidates for the boxplots and heatmap need to be significant after FDR correction, otherwise all significant candidates will be used.
@@ -301,6 +322,7 @@ workflow_ANOVA <- function(data_path,
                            var.equal = TRUE,
                            log_before_test = TRUE,
                            delog_for_FC = TRUE,
+                           p_value_zeros_to_min = TRUE,
                            
                            significant_after_FDR = TRUE,
                            max_valid_values_off = 0,
@@ -334,6 +356,21 @@ workflow_ANOVA <- function(data_path,
                          filename = paste0(output_path, "results_ANOVA", suffix, ".xlsx"))
   
   mess <- paste0(mess, "ANOVA calculated. \n")
+  
+  
+  if(p_value_zeros_to_min){
+    
+    p_value_zero <- which(ANOVA_results$p.anova == 0)
+    
+    if(length(p_value_zero) > 0){
+      next_smallest_value <- sort(unique(ANOVA_results$p.anova))[2]
+      
+      ANOVA_results$p.anova[ANOVA_results$p.anova == 0] <- next_smallest_value
+      
+      mess <- paste0(mess, "There were ", length(p_value_zero), " p_values, which were 0. ",
+                     "They were set to the next smallest occuring value ", next_smallest_value, ". \n")
+    }
+  }
   
   
   

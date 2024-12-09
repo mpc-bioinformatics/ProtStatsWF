@@ -12,6 +12,7 @@ workflow_ttest(
   var.equal = FALSE,
   log_before_test = TRUE,
   delog_for_FC = TRUE,
+  p_value_zeros_to_min = TRUE,
   significant_after_FDR = TRUE,
   max_valid_values_off = 0,
   min_valid_values_on = NULL,
@@ -43,6 +44,9 @@ If \code{TRUE}, the data will be log-transformed.}
 
 \item{delog_for_FC}{\strong{logical} \cr
 If \code{TRUE}, the fold change will be calculated without the log-transformation.}
+
+\item{p_value_zeros_to_min}{\strong{logical} \cr
+If \code{TRUE}, then \code{p_values == 0} will be set to the next smallest value of the p-values.}
 
 \item{significant_after_FDR}{\strong{logical} \cr
 If \code{TRUE}, candidates for the boxplots and heatmap need to be significant after FDR correction, otherwise all significant candidates will be used.}
