@@ -50,7 +50,8 @@ VolcanoPlot <- function(p,
                     significance = significance_category)
 
 
-
+  significance <- RES$significance
+  
   plot <- ggplot2::ggplot(data = RES, ggplot2::aes(x = transformed_FC, y = transformed_p, colour = significance)) +
     ggplot2::geom_point(alpha = 5/10) +
     ggplot2::scale_colour_manual(values = c("not significant" = colour1, "significant" = colour2, "significant after FDR correction" = colour3), drop = FALSE) +
