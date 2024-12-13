@@ -7,24 +7,27 @@
 calculate_onoff(D, id, group, max_vv_off, min_vv_on, protein_id_col = 1)
 }
 \arguments{
-\item{D}{data set containing only protein intensities}
+\item{D}{\strong{data.frame} \cr
+The data set containing only protein intensities of the sample.}
 
-\item{id}{data frame containing ID columns}
+\item{id}{\strong{data.frame} \cr
+The corresponding ID columns for the parameter D.}
 
-\item{group}{factor containing the groups}
+\item{group}{\strong{integer} \cr
+A factor containing the groups.}
 
-\item{max_vv_off}{off: < max_vv_off valid values}
+\item{max_vv_off}{\strong{integer} \cr
+The proteins below the threshold of the maximum number of valid values are considered off proteins.}
 
-\item{min_vv_on}{on: > min_vv_on valid values}
+\item{min_vv_on}{\strong{integer} \cr
+The proteins above the threshold of the minimum number of valid values are considered on proteins.}
 
-\item{protein_id_col}{column on id containing the protein IDs used for mapping}
+\item{protein_id_col}{\strong{integer} \cr
+The column in id parameter containing the protein IDs used for mapping.}
 }
 \value{
-data frame with number of valid values per group (absolute and relative) and on/off status
+A data.frame with the number of valid values per group (absolute and relative) and on/off status
 }
 \description{
 Calculate on/off proteins
-}
-\examples{
-# TODO
 }

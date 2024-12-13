@@ -2,17 +2,27 @@
 
 #' Calculate on/off proteins
 #'
-#' @param D data set containing only protein intensities
-#' @param id data frame containing ID columns
-#' @param group factor containing the groups
-#' @param max_vv_off off: < max_vv_off valid values
-#' @param min_vv_on on: > min_vv_on valid values
-#' @param protein_id_col column on id containing the protein IDs used for mapping
+#' @param D                \strong{data.frame} \cr
+#'                         The data set containing only protein intensities of the sample.
+#' @param id               \strong{data.frame} \cr
+#'                         The corresponding ID columns for the parameter D.
+#' @param group            \strong{integer} \cr
+#'                         A factor containing the groups.
+#' @param max_vv_off       \strong{integer} \cr
+#'                         The proteins below the threshold of the maximum number of valid values are considered off proteins.
+#' @param min_vv_on        \strong{integer} \cr
+#'                         The proteins above the threshold of the minimum number of valid values are considered on proteins.
+#' @param protein_id_col   \strong{integer} \cr
+#'                         The column in id parameter containing the protein IDs used for mapping.
 #'
-#' @return data frame with number of valid values per group (absolute and relative) and on/off status
+#' @return A data.frame with the number of valid values per group (absolute and relative) and on/off status
 #' @export
+#' 
+# @seealso [Onoff_plus_heatmap()]
 #'
-#' @examples # TODO
+#' @examples 
+#' 
+
 calculate_onoff <- function(D, id, group, max_vv_off, min_vv_on, protein_id_col = 1) {
 
   ### TODO: check that protein_id_col has only unique entries, otherwise the on/off calculation will fail
@@ -29,7 +39,7 @@ calculate_onoff <- function(D, id, group, max_vv_off, min_vv_on, protein_id_col 
 
   ## calculate on/off values
   D_onoff <- D_long %>% dplyr::group_by(group, Protein.IDs) %>%
-    dplyr::summarise(valid_values = sum(!is.na(D_long$value)), valid_values_rel = mean(!is.na(D_long$value)))
+    dplyr::summarise(valid_values = sum(!is.na(value)), valid_values_rel = mean(!is.na(value)))
 
   ## convert to wide format again
   D_onoff_wide <- tidyr::pivot_wider(D_onoff,
@@ -62,6 +72,23 @@ calculate_onoff <- function(D, id, group, max_vv_off, min_vv_on, protein_id_col 
 ################################################################################
 ################################################################################
 #
+
+# Calculate on/off proteins
+#
+# @param RES_onoff             \strong{?} \cr
+#                              ?
+# @param protein_name_column   \strong{character} \cr
+#                              The column name of the proteins.
+# @param relative              \strong{logical} \cr
+#                              If \code{TRUE}, ?
+#                         
+# @return A data.frame with the number of valid values per group (absolute and relative) and on/off status
+# @export
+# 
+# @seealso [calculate_onoff()]
+#
+# @examples 
+# 
 
 Onoff_plus_heatmap <- function(RES_onoff,
                                protein_name_column = "Gene.names",
