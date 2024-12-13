@@ -58,7 +58,8 @@ Note that rows with only 1 or 2 valid values may cause problems with clustering.
 \item{groups}{\strong{integer} \cr
 ? A factor of group or data.frame with two or more grouping variables.}
 
-\item{group_colours}{named list of group colours (discrete vars) or colour functions (continuous vars)}
+\item{group_colours}{\strong{character} \cr
+? A named list of group colours (discrete vars) or colour functions (continuous vars)}
 
 \item{column_split}{\strong{character} \cr
 ? The name of the column in groups, if the columns should be split.}

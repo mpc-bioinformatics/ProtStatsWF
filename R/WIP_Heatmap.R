@@ -1,43 +1,3 @@
-################################################################################
-#### Heatmap script using the ComplexHeatmap R package
-
-
-### TODO: einbauen, dass er die Gruppenfarben richtig macht! (evtl. in getrennter Funktion?)
-
-
-
-# D: data set with only intensities (should be log-transformed if necessary)
-# id: data set with further columns, e.g. protein or gene names
-# protein_names_col: column with protein or gene names (NULL if no protein names should be plotted)
-# na.method: "na.omit" -> proteins with any missing values will be removed
-#            "impute" -> imputation of missing values
-#            "keep" -> keep missing values
-# filtermissings: filter out proteins with more than X missing values
-#                 (rows with only 1 or 2 valid values may cause problems with clustering)
-
-# groups: data.frame with one or more grouping variables
-# group_colours: named list of group colours (discrete vars) or colour functions (continuous vars)
-# column_split = should columns be split? NULL if not, name of column in groups if yes
-# cluster_column_slices: cluster the column slices?
-
-# cluster_rows, cluster_columns: if TRUE, rows/columns will be clustered
-# dist_method: distance metric for clustering, e.g. "pearson", "spearman", "euclidean"
-# clust_method: linkage method for clustering, e.g. "complete", "single", "average"
-
-# symmetric_legend: should colour code be made symmetric? (only make sense for z-scored data)
-# scale_data: should data be scaled ( = z-scored)?
-# output_path: path for exporting the plot
-# suffix: suffix for file name
-
-# legend_name: name for legend
-# title: title
-# legend_colours
-# plot_height, plot_width, plot_dpi: setting for plot output (height/width in cm)
-# ... further arguments to Heatmap
-
-
-
-
 
 
 #' Create a Heatmap.
@@ -58,7 +18,8 @@
 #'                                Note that rows with only 1 or 2 valid values may cause problems with clustering.
 #' @param groups                  \strong{integer} \cr
 #'                                ? A factor of group or data.frame with two or more grouping variables.
-#' @param group_colours           named list of group colours (discrete vars) or colour functions (continuous vars)
+#' @param group_colours           \strong{character} \cr
+#'                                ? A named list of group colours (discrete vars) or colour functions (continuous vars)
 #' @param column_split            \strong{character} \cr
 #'                                ? The name of the column in groups, if the columns should be split.
 #' @param cluster_column_slices   \strong{logical} \cr
