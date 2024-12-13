@@ -2,7 +2,7 @@
 % Please edit documentation in R/WIP_Heatmap.R
 \name{Heatmap_with_groups}
 \alias{Heatmap_with_groups}
-\title{Heatmap}
+\title{Create a Heatmap.}
 \usage{
 Heatmap_with_groups(
   D,
@@ -36,69 +36,96 @@ Heatmap_with_groups(
 )
 }
 \arguments{
-\item{D}{data set containing only protein intensities, already filtered for interesting candidates}
+\item{D}{\strong{data.frame} \cr
+The data set containing only protein intensities, already filtered for interesting candidates.}
 
-\item{id}{data set containing further columns, e.g. protein or gene names}
+\item{id}{\strong{data.frame} \cr
+The corresponding ID columns for the parameter D e.g. containing further columns like protein or gene names}
 
-\item{protein_names_col}{column with protein or gene names (NULL if no protein names should be plotted)}
+\item{protein_names_col}{\strong{integer} \cr
+The column with protein or gene names, if the names should be plotted.}
 
-\item{na_method}{"na.omit" -> proteins with any missing values will be removed
-note that clustering may not work when too many missing values are present}
+\item{na_method}{\strong{character} \cr
+The method with which missing values are handeled.
+Options are "na.omit" (proteins with any missing values will be removed), "impute" (missing values will be imputed) and "keep" (missing values will be kept).
+Note that clustering may not work when too many missing values are present.}
 
-\item{filtermissings}{filter out proteins with more than X missing values (rows with only 1 or 2 valid values may cause problems with clustering)}
+\item{filtermissings}{\strong{integer} \cr
+The threshold for missing values.
+If a protein has more missing values, it will be filtered out.
+Note that rows with only 1 or 2 valid values may cause problems with clustering.}
 
-\item{groups}{factor of group or data.frame with two or more grouping variables}
+\item{groups}{\strong{integer} \cr
+? A factor of group or data.frame with two or more grouping variables.}
 
 \item{group_colours}{named list of group colours (discrete vars) or colour functions (continuous vars)}
 
-\item{column_split}{should columns be split? NULL if not, name of column in groups if yes}
+\item{column_split}{\strong{character} \cr
+? The name of the column in groups, if the columns should be split.}
 
-\item{cluster_column_slices}{cluster the column slices?}
+\item{cluster_column_slices}{\strong{logical} \cr
+? If \code{TRUE}, column slices will be clustered.}
 
-\item{cluster_rows}{if TRUE, rows will be clustered}
+\item{cluster_rows}{\strong{logical} \cr
+If \code{TRUE}, the rows will be clustered.}
 
-\item{cluster_columns}{if TRUE, columns will be clustered}
+\item{cluster_columns}{\strong{logical} \cr
+If \code{TRUE}, the columns will be clustered.}
 
-\item{dist_method}{distance metric for clustering, e.g. "pearson", "spearman", "euclidean"}
+\item{dist_method}{\strong{character} \cr
+The distance metric for clustering. Options are "pearson", "spearman" and "euclidean".}
 
-\item{clust_method}{linkage method for clustering, e.g. "complete", "single", "average"}
+\item{clust_method}{\strong{character} \cr
+The linkage method for clustering. Options are "complete", "single" and "average".}
 
-\item{symmetric_legend}{should colour code be made symmetric? (only make sense for z-scored data)}
+\item{symmetric_legend}{\strong{logical} \cr
+If \code{TRUE}, the colour code will be  symmetric.
+Note that it only make sense for z-scored data.}
 
-\item{scale_data}{should data be scaled ( = z-scored)?}
+\item{scale_data}{\strong{logical} \cr
+If \code{TRUE}, the data will be scaled ( = z-scored).}
 
-\item{output_path}{path for exporting the plot}
+\item{output_path}{\strong{character} \cr
+The path to the output folder.}
 
-\item{suffix}{suffix for file name}
+\item{suffix}{\strong{character} \cr
+The suffix of the file names should have one.}
 
-\item{legend_name}{name for legend}
+\item{legend_name}{\strong{character} \cr
+The name for legend.}
 
-\item{title}{title}
+\item{title}{\strong{character} \cr
+The title of the plot.}
 
-\item{legend_colours}{colours for colour gradient}
+\item{legend_colours}{\strong{character} \cr
+A vector of colours for colour gradient.}
 
-\item{plot_height}{the plot height}
+\item{plot_height}{\strong{numeric} \cr
+The plot height in cm.}
 
-\item{plot_width}{the plot width}
+\item{plot_width}{\strong{numeric} \cr
+The plot width in cm.}
 
-\item{plot_dpi}{the "dots per inch" for the image resolution}
+\item{plot_dpi}{\strong{integer} \cr
+The "dots per inch" of the plot aka. the plot resolution.}
 
-\item{log_data}{If \code{TRUE}, the data will be log-transformed.}
+\item{log_data}{\strong{logical} \cr
+If \code{TRUE}, the data will be log-transformed.}
 
-\item{log_base}{The base in which the log-transformation is done.}
+\item{log_base}{\strong{integer} \cr
+The base for the log-transformation, if \code{log_data = TRUE}.}
 
-\item{colour_scale_max}{the cap value for which all greater values will receive the same color}
+\item{colour_scale_max}{\strong{numeric} \cr
+The cap value for which all greater values will receive the same color.}
 
-\item{textsize}{the size of text in the plot}
+\item{textsize}{\strong{integer} \cr
+The size of text in the plot.}
 
-\item{...}{further arguments to Heatmap}
+\item{...}{Further arguments to Heatmap}
 }
 \value{
-heatmap
+A heatmap of the given data.
 }
 \description{
-Heatmap
-}
-\examples{
-# TODO
+Create a Heatmap.
 }
