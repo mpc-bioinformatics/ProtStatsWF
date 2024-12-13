@@ -1,32 +1,38 @@
 
 
-# library(nlme)
-# library(multcomp)
-# library(limma)
-# library(car)
-
-
-
-
 #' ANOVA to compare three or more experimental groups
 #'
-#' @param D data frame containing only protein or peptide intensities
-#' @param id data frame containing id columns like protein accessions of gene names
-#' @param group factor vector indicating the group membership
-#' @param sample factor vector indicating the sample membership
-#' @param paired logical indicating whether the test should be paired or unpaired (default is FALSE)
-#' @param var.equal logical indicating whether the variances of the two groups are assumed to be equal (default is FALSE)
-#' @param log_before_test logical indicating whether the data should be log-transformed before the test (default is TRUE)
-#' @param delog_for_FC logical indicating whether the fold change should be calculated on the original scale (default is TRUE)
-#' @param log_base numeric indicating the base of the logarithm (default is 2)
-#' @param min_obs_per_group integer indicating the minimum number of observations per group (default is 3)
-#' @param min_perc_per_group numeric indicating the minimum ratio of observations per group as an alternative to min_obs_per_group
-#' @param filename character string indicating the name of the output file (default is "results_ANOVA.xlsx")
+#' @param D                    \strong{data.frame} \cr
+#'                             The data set containing only protein intensities of the sample.
+#' @param id                   \strong{data.frame} \cr
+#'                             The corresponding ID columns for the parameter D.
+#' @param group                \strong{factor} \cr
+#'                             The groups of the data.
+#' @param sample               \strong{factor} \cr
+#'                             The sample membership in the data.
+#' @param paired               \strong{logical} \cr
+#'                             If \code{TRUE}, a paired test will be done, otherwise an unpaired test.
+#' @param var.equal            \strong{logical} \cr
+#'                             If \code{TRUE}, the variances are assumed to be equal.
+#' @param log_before_test      \strong{logical} \cr
+#'                             If \code{TRUE}, the data will be log-transformed.
+#' @param delog_for_FC         \strong{logical} \cr
+#'                             If \code{TRUE}, the fold change will be calculated without the log-transformation.
+#' @param log_base             \strong{integer} \cr
+#'                             The base for the log-transformation, if \code{log_before_test = TRUE}.
+#' @param min_obs_per_group    \strong{integer} \cr
+#'                             The minimum number of observations per group.
+#' @param min_perc_per_group   \strong{integer} \cr
+#'                             The minimum ratio of observations per group as an alternative to min_obs_per_group.
+#' @param filename             \strong{character} \cr
+#'                             The name of the output file.
 #'
-#' @return data frame with p-values and fold changes
+#' @return A data.frame with p-values and fold changes
 #' @export
 #'
-#' @examples # TODO
+#' @examples
+#' 
+
 ANOVA <- function(D,
                   id = NULL,
                   group,

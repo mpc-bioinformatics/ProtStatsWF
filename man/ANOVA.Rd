@@ -20,36 +20,45 @@ ANOVA(
 )
 }
 \arguments{
-\item{D}{data frame containing only protein or peptide intensities}
+\item{D}{\strong{data.frame} \cr
+The data set containing only protein intensities of the sample.}
 
-\item{id}{data frame containing id columns like protein accessions of gene names}
+\item{id}{\strong{data.frame} \cr
+The corresponding ID columns for the parameter D.}
 
-\item{group}{factor vector indicating the group membership}
+\item{group}{\strong{factor} \cr
+The groups of the data.}
 
-\item{sample}{factor vector indicating the sample membership}
+\item{sample}{\strong{factor} \cr
+The sample membership in the data.}
 
-\item{paired}{logical indicating whether the test should be paired or unpaired (default is FALSE)}
+\item{paired}{\strong{logical} \cr
+If \code{TRUE}, a paired test will be done, otherwise an unpaired test.}
 
-\item{var.equal}{logical indicating whether the variances of the two groups are assumed to be equal (default is FALSE)}
+\item{var.equal}{\strong{logical} \cr
+If \code{TRUE}, the variances are assumed to be equal.}
 
-\item{log_before_test}{logical indicating whether the data should be log-transformed before the test (default is TRUE)}
+\item{log_before_test}{\strong{logical} \cr
+If \code{TRUE}, the data will be log-transformed.}
 
-\item{delog_for_FC}{logical indicating whether the fold change should be calculated on the original scale (default is TRUE)}
+\item{delog_for_FC}{\strong{logical} \cr
+If \code{TRUE}, the fold change will be calculated without the log-transformation.}
 
-\item{log_base}{numeric indicating the base of the logarithm (default is 2)}
+\item{log_base}{\strong{integer} \cr
+The base for the log-transformation, if \code{log_before_test = TRUE}.}
 
-\item{min_obs_per_group}{integer indicating the minimum number of observations per group (default is 3)}
+\item{min_obs_per_group}{\strong{integer} \cr
+The minimum number of observations per group.}
 
-\item{min_perc_per_group}{numeric indicating the minimum ratio of observations per group as an alternative to min_obs_per_group}
+\item{min_perc_per_group}{\strong{integer} \cr
+The minimum ratio of observations per group as an alternative to min_obs_per_group.}
 
-\item{filename}{character string indicating the name of the output file (default is "results_ANOVA.xlsx")}
+\item{filename}{\strong{character} \cr
+The name of the output file.}
 }
 \value{
-data frame with p-values and fold changes
+A data.frame with p-values and fold changes
 }
 \description{
 ANOVA to compare three or more experimental groups
-}
-\examples{
-# TODO
 }
