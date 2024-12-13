@@ -288,7 +288,7 @@ workflow_ttest <- function(data_path,
 #' @return Message log of the workflow
 #' @export
 #'
-#' @seealso [workflow_ttest()] in case of more than two groups in the sample.\cr
+#' @seealso [workflow_ttest()] in case of only two groups in the sample.\cr
 #'          Functions used in this workflow: 
 #'          [prepareTtestData()], [ttest()], [VolcanoPlot_ttest()], [pvalue_foldchange_histogram()], 
 #'          [calculate_significance_categories_ttest()], [Boxplots_candidates()], 
