@@ -1,25 +1,46 @@
 #' Simple volcano plot from p-value, fold change and significance category
 #'
-#' @param p                     Vector containing the p-values
-#' @param FC                    Vector containing the fold changes
-#' @param significance_category Vector containing the significance category. 
-#' @param log_base_fc           Numeric of the base for the fold changes log-transformation
-#' @param log_base_p            Numeric of the base for the p-values log-transformation
-#' @param thres_p               Numeric of the threshold for the p-values
-#' @param thres_fc              Numeric of the threshold for the fold changes
-#' @param colour1               Character of the color for not significant proteins
-#' @param colour2               Character of the color for significant proteins
-#' @param colour3               Character of the color for significant proteins after FDR correction
-#' @param symmetric_x           If TRUE, x-axis limits will be made symmetric (not used if xlim is defined)
-#' @param legend_position       Character of the positioning of the legend, e.g. "bottom" or "right"
-#' @param base_size             Numeric containing the base size of the font
-#' @param xlim                  The limits for x-axis. Default is NULL
-#' @param ylim                  The limits for y-axis. Default is NULL
+#' @param p                       \strong{numeric factor} \cr
+#'                                The values for the p-values.
+#' @param FC                      \strong{numeric factor} \cr
+#'                                The values for the fold changes.
+#' @param significance_category   \strong{character factor} \cr
+#'                                The significance categories for the volcano plot. 
+#'                                
+#' @param log_base_fc             \strong{numeric} \cr
+#'                                The base for the fold changes log-transformation.
+#' @param log_base_p              \strong{numeric} \cr
+#'                                The base for the p-values log-transformation.
+#' @param thres_p                 \strong{numeric} \cr
+#'                                The threshold for the p-values.
+#' @param thres_fc                \strong{numeric} \cr
+#'                                The threshold for the fold changes.
+#' @param colour1                 \strong{character} \cr
+#'                                The color for not significant proteins.
+#' @param colour2                 \strong{character} \cr
+#'                                The color for significant proteins.
+#' @param colour3                 \strong{character} \cr
+#'                                The color for significant proteins after FDR correction.
+#' @param symmetric_x             \strong{logical} \cr
+#'                                If \code{TRUE}, x-axis limits will be made symmetric (not used if xlim is defined).
+#' @param legend_position         \strong{character} \cr
+#'                                The positioning of the legend. 
+#'                                Options are "none", "left", "right", "bottom", "top" and "inside".
+#' @param base_size               \strong{numeric} \cr
+#'                                The base size of the font.
+#' @param xlim                    \strong{numeric} \cr
+#'                                The limits for x-axis. 
+#' @param ylim                    \strong{numeric} \cr
+#'                                The limits for y-axis. 
 #'
-#' @return A ggplot
+#' @return A ggplot showing the volcano plot.
 #' @export
+#' 
+#' @seealso [VolcanoPlot_ttest()], [VolcanoPlot_ANOVA()]] 
 #'
 #' @examples
+#' 
+
 VolcanoPlot <- function(p,
                         FC,
                         significance_category,
@@ -99,41 +120,75 @@ VolcanoPlot <- function(p,
 
 
 
-#' Volcano plot for a t-test result
+#' Volcano plot for a t-test result.
 #'
-#' @param RES             A data.frame of the result table from t-test
-#' @param columnname_p    The column name for p-value
-#' @param columnname_padj The columns name for adjusted p-value
-#' @param columnname_FC   The column name for fold change
-#' @param log_base_fc     The base for log transformation of fold change
-#' @param log_base_p      The base for log transformation of p-value
-#' @param is_FC_log       If \code{TRUE}, fold change is already log-transformed
-#' @param is_p_log        If \code{TRUE}, p-value is already log-transformed
-#' @param thres_fc        The threshold for fold change
-#' @param thres_p         The threshold for p-value
-#' @param show_thres_line If \code{TRUE}, threshold lines will be shown
-#' @param colour1         The colour for not significant proteins
-#' @param colour2         The colour for significant proteins
-#' @param colour3         The colour for significant proteins after FDR correction
-#' @param groupname1      The name of first group
-#' @param groupname2      The name of second group
-#' @param xlim            The limits for x-axis
-#' @param ylim            The limits for y-axis
-#' @param symmetric_x     If \code{TRUE}, x-axis limits will be made symmetric (not used if xlim is defined)
-#' @param legend_position The position of the legend (e.g., "bottom" or "right")
-#' @param plot_height     The height of plot
-#' @param plot_width      The width of plot
-#' @param plot_dpi        The resolution of plot
-#' @param plot_device     The plot device that is used for the resulting plot.
-#' @param output_path     The path for output file
-#' @param suffix          The suffix for output file
-#' @param base_size       The base size for theme
-#' @param add_annotation  If \code{TRUE}, annotation should be added
+#' @param RES               \strong{data.frame} \cr
+#'                          The results from a t-test.
+#' @param columnname_p      \strong{character} \cr
+#'                          The column name for p-value.
+#' @param columnname_padj   \strong{character} \cr
+#'                          The columns name for adjusted p-value.
+#' @param columnname_FC     \strong{character} \cr
+#'                          The column name for fold change.
+#' @param log_base_fc       \strong{numeric} \cr
+#'                          The base for the fold changes log-transformation.
+#' @param log_base_p        \strong{numeric} \cr
+#'                          The base for the p-values log-transformation.
+#' @param is_FC_log         \strong{logical} \cr
+#'                          If \code{TRUE}, fold change is already log-transformed.
+#' @param is_p_log          \strong{logical} \cr
+#'                          If \code{TRUE}, p-value is already log-transformed.
+#' @param thres_fc          \strong{numeric} \cr
+#'                          The threshold for fold change.
+#' @param thres_p           \strong{numeric} \cr
+#'                          The threshold for p-value.
+#' @param show_thres_line   \strong{logical} \cr
+#'                          If \code{TRUE}, threshold lines will be shown.
+#' @param colour1           \strong{character} \cr
+#'                          The color for not significant proteins.
+#' @param colour2           \strong{character} \cr
+#'                          The color for significant proteins.
+#' @param colour3           \strong{character} \cr
+#'                          The color for significant proteins after FDR correction.
+#' @param groupname1        \strong{character} \cr
+#'                          The name of first group.
+#' @param groupname2        \strong{character} \cr
+#'                          The name of second group.
+#' @param xlim              \strong{numeric} \cr
+#'                          The limits for x-axis.
+#' @param ylim              \strong{numeric} \cr
+#'                          The limits for y-axis.
+#' @param symmetric_x       \strong{logical} \cr
+#'                          If \code{TRUE}, x-axis limits will be made symmetric (not used if xlim is defined).
+#' @param legend_position   \strong{character} \cr
+#'                          The positioning of the legend. 
+#'                          Options are "none", "left", "right", "bottom", "top" and "inside".
+#' @param plot_height       \strong{numeric} \cr
+#'                          The height of plot.
+#' @param plot_width        \strong{numeric} \cr
+#'                          The width of plot.
+#' @param plot_dpi          \strong{integer} \cr
+#'                          The resolution of plot.
+#' @param plot_device       \strong{character} \cr
+#'                          The plot device that is used for the resulting plot. 
+#'                          Options are "pdf" and "png".
+#' @param output_path       \strong{character} \cr
+#'                          The path for output file.
+#' @param suffix            \strong{character} \cr
+#'                          The suffix for output file.
+#' @param base_size         \strong{numeric} \cr
+#'                          The base size for theme.
+#' @param add_annotation    \strong{logical} \cr
+#'                          If \code{TRUE}, annotation will be added.
 #'
-#' @return ggplot object
+#' @return A ggplot object of the volcano plot from a ttest result.
 #' @export
+#' 
+#' @seealso [VolcanoPlot()], [VolcanoPlot_ANOVA()]] 
 #'
-#' @examples # TODO
+#' @examples 
+#' 
+
 VolcanoPlot_ttest <- function(RES,
                         columnname_p = "p",
                         columnname_padj = "padj",
@@ -242,29 +297,50 @@ VolcanoPlot_ttest <- function(RES,
 
 
 
-#' Volcano Plots for ANOVA
+#' Volcano Plots for an ANOVA result.
 #'
-#' @param RES                    Results table from ANOVA
-#' @param columnname_p_ANOVA     Column names for the p-values.
-#' @param columnname_p_ANOVA_adj Column names for the adjusted p-values.
-#' @param columns_FC             Vector containing the indices of the fold change columns.
-#' @param columns_p_posthoc      Column names for the posthoc p-values.
-#' @param log_base_fc            Numeric of the base for the fold changes log-transformation
-#' @param log_base_p             Numeric of the base for the p-values log-transformation
-#' @param thres_p                Numeric of the threshold for the p-values
-#' @param thres_fc               Numeric of the threshold for the fold changes
-#' @param colour1                Character of the color for not significant proteins
-#' @param colour2                Character of the color for significant proteins
-#' @param colour3                Character of the color for significant proteins after FDR correction
-#' @param symmetric_x            If TRUE, x-axis limits will be made symmetric (not used if xlim is defined)
-#' @param legend_position        Character of the positioning of the legend, e.g. "bottom" or "right"
-#' @param base_size              Numeric containing the base size of the font
-#' @param xlim                   The limits for x-axis. Default is NULL
-#' @param ylim                   The limits for y-axis. Default is NULL
-#' @param add_labels             If TRUE, labels are added to the plot. 
+#' @param RES                    \strong{data.frame} \cr
+#'                               The results from an ANOVA.
+#' @param columnname_p_ANOVA     \strong{character} \cr
+#'                               The column name for the p-values.
+#' @param columnname_p_ANOVA_adj \strong{character} \cr
+#'                               The column name for the adjusted p-values.
+#' @param columns_FC             \strong{integer vector} \cr
+#'                               The column indices of the fold changes.
+#' @param columns_p_posthoc      \strong{integer vector} \cr
+#'                               The column indices for the posthoc p-values.
+#' @param log_base_fc            \strong{numeric} \cr
+#'                               The base for the fold changes log-transformation.
+#' @param log_base_p             \strong{numeric} \cr
+#'                               The base for the p-values log-transformation.
+#' @param thres_p                \strong{numeric} \cr
+#'                               The threshold for p-value.
+#' @param thres_fc               \strong{numeric} \cr
+#'                               The threshold for fold change.
+#' @param colour1                \strong{character} \cr
+#'                               The color for not significant proteins.
+#' @param colour2                \strong{character} \cr
+#'                               The color for significant proteins.
+#' @param colour3                \strong{character} \cr
+#'                               The color for significant proteins after FDR correction.
+#' @param symmetric_x            \strong{logical} \cr
+#'                               If \code{TRUE}, x-axis limits will be made symmetric (not used if xlim is defined).
+#' @param legend_position        \strong{character} \cr
+#'                               The positioning of the legend. 
+#'                               Options are "none", "left", "right", "bottom", "top" and "inside".
+#' @param base_size              \strong{numeric} \cr
+#'                               The base size for theme.
+#' @param xlim                   \strong{numeric} \cr
+#'                               The limits for x-axis.
+#' @param ylim                   \strong{numeric} \cr
+#'                               The limits for y-axis.
+#' @param add_labels             \strong{logical} \cr
+#'                               If \code{TRUE}, labels will be added. 
 #'
-#' @return A list of ggplots
+#' @return A list of ggplots of the volcano plot from an ANOVA result.
 #' @export
+#' 
+#' @seealso [VolcanoPlot()], [VolcanoPlot_ttest()]] 
 #'
 #' @examples
 VolcanoPlot_ANOVA <- function(RES,
