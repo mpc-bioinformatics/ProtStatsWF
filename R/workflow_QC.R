@@ -6,8 +6,8 @@
 #'                               The path to the output folder.
 #'
 # mandatory parameters
-#' @param intensity_columns      \strong{integer} \cr
-#'                               A vector containing the numbers of the intensity columns in the table.
+#' @param intensity_columns      \strong{integer vector} \cr
+#'                               The numbers of the intensity columns in the table.
 #' @param normalization_method   \strong{character} \cr
 #'                               The method of normalization. Options are "nonorm" (no normalization), "median", "loess", "quantile" or "lts" normalization.
 #' @param lts_quantile           \strong{numeric} \cr

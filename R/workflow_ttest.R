@@ -4,8 +4,8 @@
 #'                               The path to an .xlsx file containing the input data.
 #' @param output_path            \strong{character} \cr
 #'                               The path to the output folder.
-#' @param intensity_columns      \strong{integer} \cr
-#'                               A vector containing the numbers of the intensity columns in the table.
+#' @param intensity_columns      \strong{integer vector} \cr
+#'                               The numbers of the intensity columns in the table.
 #' 
 #' @param paired                 \strong{logical} \cr
 #'                               If \code{TRUE}, a paired test will be done, otherwise an unpaired test.
@@ -252,8 +252,8 @@ workflow_ttest <- function(data_path,
 #'                               The path to an .xlsx file containing the input data.
 #' @param output_path            \strong{character} \cr
 #'                               The path to the output folder.
-#' @param intensity_columns      \strong{integer} \cr
-#'                               A vector containing the numbers of the intensity columns in the table.
+#' @param intensity_columns      \strong{integer vector} \cr
+#'                               The numbers of the intensity columns in the table.
 #' 
 #' @param paired                 \strong{logical} \cr
 #'                               If \code{TRUE}, a paired test will be done, otherwise an unpaired test.

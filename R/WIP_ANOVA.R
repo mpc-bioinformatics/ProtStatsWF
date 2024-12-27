@@ -6,9 +6,9 @@
 #'                             The data set containing only protein intensities of the sample.
 #' @param id                   \strong{data.frame} \cr
 #'                             The corresponding ID columns for the parameter D.
-#' @param group                \strong{factor} \cr
+#' @param group                \strong{character factor} \cr
 #'                             The groups of the data.
-#' @param sample               \strong{factor} \cr
+#' @param sample               \strong{character factor} \cr
 #'                             The sample membership in the data.
 #' @param paired               \strong{logical} \cr
 #'                             If \code{TRUE}, a paired test will be done, otherwise an unpaired test.
