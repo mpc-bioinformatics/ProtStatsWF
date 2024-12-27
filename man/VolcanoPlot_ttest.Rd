@@ -2,7 +2,7 @@
 % Please edit documentation in R/volcanoPlots.R
 \name{VolcanoPlot_ttest}
 \alias{VolcanoPlot_ttest}
-\title{Volcano plot for a t-test result}
+\title{Volcano plot for a t-test result.}
 \usage{
 VolcanoPlot_ttest(
   RES,
@@ -36,68 +36,98 @@ VolcanoPlot_ttest(
 )
 }
 \arguments{
-\item{RES}{A data.frame of the result table from t-test}
+\item{RES}{\strong{data.frame} \cr
+The results from a t-test.}
 
-\item{columnname_p}{The column name for p-value}
+\item{columnname_p}{\strong{character} \cr
+The column name for p-value.}
 
-\item{columnname_padj}{The columns name for adjusted p-value}
+\item{columnname_padj}{\strong{character} \cr
+The columns name for adjusted p-value.}
 
-\item{columnname_FC}{The column name for fold change}
+\item{columnname_FC}{\strong{character} \cr
+The column name for fold change.}
 
-\item{log_base_fc}{The base for log transformation of fold change}
+\item{log_base_fc}{\strong{numeric} \cr
+The base for the fold changes log-transformation.}
 
-\item{log_base_p}{The base for log transformation of p-value}
+\item{log_base_p}{\strong{numeric} \cr
+The base for the p-values log-transformation.}
 
-\item{is_FC_log}{If \code{TRUE}, fold change is already log-transformed}
+\item{is_FC_log}{\strong{logical} \cr
+If \code{TRUE}, fold change is already log-transformed.}
 
-\item{is_p_log}{If \code{TRUE}, p-value is already log-transformed}
+\item{is_p_log}{\strong{logical} \cr
+If \code{TRUE}, p-value is already log-transformed.}
 
-\item{thres_fc}{The threshold for fold change}
+\item{thres_fc}{\strong{numeric} \cr
+The threshold for fold change.}
 
-\item{thres_p}{The threshold for p-value}
+\item{thres_p}{\strong{numeric} \cr
+The threshold for p-value.}
 
-\item{show_thres_line}{If \code{TRUE}, threshold lines will be shown}
+\item{show_thres_line}{\strong{logical} \cr
+If \code{TRUE}, threshold lines will be shown.}
 
-\item{colour1}{The colour for not significant proteins}
+\item{colour1}{\strong{character} \cr
+The color for not significant proteins.}
 
-\item{colour2}{The colour for significant proteins}
+\item{colour2}{\strong{character} \cr
+The color for significant proteins.}
 
-\item{colour3}{The colour for significant proteins after FDR correction}
+\item{colour3}{\strong{character} \cr
+The color for significant proteins after FDR correction.}
 
-\item{groupname1}{The name of first group}
+\item{groupname1}{\strong{character} \cr
+The name of first group.}
 
-\item{groupname2}{The name of second group}
+\item{groupname2}{\strong{character} \cr
+The name of second group.}
 
-\item{xlim}{The limits for x-axis}
+\item{xlim}{\strong{numeric} \cr
+The limits for x-axis.}
 
-\item{ylim}{The limits for y-axis}
+\item{ylim}{\strong{numeric} \cr
+The limits for y-axis.}
 
-\item{symmetric_x}{If \code{TRUE}, x-axis limits will be made symmetric (not used if xlim is defined)}
+\item{symmetric_x}{\strong{logical} \cr
+If \code{TRUE}, x-axis limits will be made symmetric (not used if xlim is defined).}
 
-\item{legend_position}{The position of the legend (e.g., "bottom" or "right")}
+\item{legend_position}{\strong{character} \cr
+The positioning of the legend.
+Options are "none", "left", "right", "bottom", "top" and "inside".}
 
-\item{plot_height}{The height of plot}
+\item{plot_height}{\strong{numeric} \cr
+The height of plot.}
 
-\item{plot_width}{The width of plot}
+\item{plot_width}{\strong{numeric} \cr
+The width of plot.}
 
-\item{plot_dpi}{The resolution of plot}
+\item{plot_dpi}{\strong{integer} \cr
+The resolution of plot.}
 
-\item{plot_device}{The plot device that is used for the resulting plot.}
+\item{plot_device}{\strong{character} \cr
+The plot device that is used for the resulting plot.
+Options are "pdf" and "png".}
 
-\item{output_path}{The path for output file}
+\item{output_path}{\strong{character} \cr
+The path for output file.}
 
-\item{suffix}{The suffix for output file}
+\item{suffix}{\strong{character} \cr
+The suffix for output file.}
 
-\item{base_size}{The base size for theme}
+\item{base_size}{\strong{numeric} \cr
+The base size for theme.}
 
-\item{add_annotation}{If \code{TRUE}, annotation should be added}
+\item{add_annotation}{\strong{logical} \cr
+If \code{TRUE}, annotation will be added.}
 }
 \value{
-ggplot object
+A ggplot object of the volcano plot from a ttest result.
 }
 \description{
-Volcano plot for a t-test result
+Volcano plot for a t-test result.
 }
-\examples{
-# TODO
+\seealso{
+\code{\link[=VolcanoPlot]{VolcanoPlot()}}, \code{\link[=VolcanoPlot_ANOVA]{VolcanoPlot_ANOVA()}}]
 }

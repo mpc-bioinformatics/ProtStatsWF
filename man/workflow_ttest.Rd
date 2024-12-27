@@ -30,8 +30,8 @@ The path to an .xlsx file containing the input data.}
 \item{output_path}{\strong{character} \cr
 The path to the output folder.}
 
-\item{intensity_columns}{\strong{integer} \cr
-A vector containing the numbers of the intensity columns in the table.}
+\item{intensity_columns}{\strong{integer vector} \cr
+The numbers of the intensity columns in the table.}
 
 \item{paired}{\strong{logical} \cr
 If \code{TRUE}, a paired test will be done, otherwise an unpaired test.}

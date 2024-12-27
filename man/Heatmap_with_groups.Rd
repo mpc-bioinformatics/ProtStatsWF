@@ -55,8 +55,8 @@ The threshold for missing values.
 If a protein has more missing values, it will be filtered out.
 Note that rows with only 1 or 2 valid values may cause problems with clustering.}
 
-\item{groups}{\strong{factor} \cr
-The group or data.frame with two or more grouping variables.}
+\item{groups}{\strong{character factor} \cr
+The group of the data with two or more grouping variables.}
 
 \item{group_colours}{\strong{character} \cr
 ? A named list of group colours (discrete vars) or colour functions (continuous vars)}

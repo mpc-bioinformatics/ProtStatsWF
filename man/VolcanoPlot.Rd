@@ -23,39 +23,58 @@ VolcanoPlot(
 )
 }
 \arguments{
-\item{p}{Vector containing the p-values}
+\item{p}{\strong{numeric factor} \cr
+The values for the p-values.}
 
-\item{FC}{Vector containing the fold changes}
+\item{FC}{\strong{numeric factor} \cr
+The values for the fold changes.}
 
-\item{significance_category}{Vector containing the significance category.}
+\item{significance_category}{\strong{character factor} \cr
+The significance categories for the volcano plot.}
 
-\item{log_base_fc}{Numeric of the base for the fold changes log-transformation}
+\item{log_base_fc}{\strong{numeric} \cr
+The base for the fold changes log-transformation.}
 
-\item{log_base_p}{Numeric of the base for the p-values log-transformation}
+\item{log_base_p}{\strong{numeric} \cr
+The base for the p-values log-transformation.}
 
-\item{thres_p}{Numeric of the threshold for the p-values}
+\item{thres_p}{\strong{numeric} \cr
+The threshold for the p-values.}
 
-\item{thres_fc}{Numeric of the threshold for the fold changes}
+\item{thres_fc}{\strong{numeric} \cr
+The threshold for the fold changes.}
 
-\item{colour1}{Character of the color for not significant proteins}
+\item{colour1}{\strong{character} \cr
+The color for not significant proteins.}
 
-\item{colour2}{Character of the color for significant proteins}
+\item{colour2}{\strong{character} \cr
+The color for significant proteins.}
 
-\item{colour3}{Character of the color for significant proteins after FDR correction}
+\item{colour3}{\strong{character} \cr
+The color for significant proteins after FDR correction.}
 
-\item{symmetric_x}{If TRUE, x-axis limits will be made symmetric (not used if xlim is defined)}
+\item{symmetric_x}{\strong{logical} \cr
+If \code{TRUE}, x-axis limits will be made symmetric (not used if xlim is defined).}
 
-\item{legend_position}{Character of the positioning of the legend, e.g. "bottom" or "right"}
+\item{legend_position}{\strong{character} \cr
+The positioning of the legend.
+Options are "none", "left", "right", "bottom", "top" and "inside".}
 
-\item{base_size}{Numeric containing the base size of the font}
+\item{base_size}{\strong{numeric} \cr
+The base size of the font.}
 
-\item{xlim}{The limits for x-axis. Default is NULL}
+\item{xlim}{\strong{numeric} \cr
+The limits for x-axis.}
 
-\item{ylim}{The limits for y-axis. Default is NULL}
+\item{ylim}{\strong{numeric} \cr
+The limits for y-axis.}
 }
 \value{
-A ggplot
+A ggplot showing the volcano plot.
 }
 \description{
 Simple volcano plot from p-value, fold change and significance category
+}
+\seealso{
+\code{\link[=VolcanoPlot_ttest]{VolcanoPlot_ttest()}}, \code{\link[=VolcanoPlot_ANOVA]{VolcanoPlot_ANOVA()}}]
 }

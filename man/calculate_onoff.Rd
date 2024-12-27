@@ -13,8 +13,8 @@ The data set containing only protein intensities of the sample.}
 \item{id}{\strong{data.frame} \cr
 The corresponding ID columns for the parameter D.}
 
-\item{group}{\strong{factor} \cr
-The containing the groups.}
+\item{group}{\strong{character factor} \cr
+The groups of the data.}
 
 \item{max_vv_off}{\strong{integer} \cr
 The proteins below the threshold of the maximum number of valid values are considered off proteins.}

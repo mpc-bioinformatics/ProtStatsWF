@@ -51,8 +51,8 @@ The path to an .xlsx file containing the input data.}
 \item{output_path}{\strong{character} \cr
 The path to the output folder.}
 
-\item{intensity_columns}{\strong{integer} \cr
-A vector containing the numbers of the intensity columns in the table.}
+\item{intensity_columns}{\strong{integer vector} \cr
+The numbers of the intensity columns in the table.}
 
 \item{normalization_method}{\strong{character} \cr
 The method of normalization. Options are "nonorm" (no normalization), "median", "loess", "quantile" or "lts" normalization.}

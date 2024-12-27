@@ -26,10 +26,10 @@ The data set containing only protein intensities of the sample.}
 \item{id}{\strong{data.frame} \cr
 The corresponding ID columns for the parameter D.}
 
-\item{group}{\strong{factor} \cr
+\item{group}{\strong{character factor} \cr
 The groups of the data.}
 
-\item{sample}{\strong{factor} \cr
+\item{sample}{\strong{character factor} \cr
 The sample membership in the data.}
 
 \item{paired}{\strong{logical} \cr
