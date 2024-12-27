@@ -88,5 +88,5 @@ A list of ggplots of the volcano plot from an ANOVA result.
 Volcano Plots for an ANOVA result.
 }
 \seealso{
-\code{\link[=VolcanoPlot]{VolcanoPlot()}}, \code{\link[=VolcanoPlot_ttest]{VolcanoPlot_ttest()}}]
+\code{\link[=VolcanoPlot]{VolcanoPlot()}}, \code{\link[=VolcanoPlot_ttest]{VolcanoPlot_ttest()}}, \code{\link[=add_labels]{add_labels()}}
 }

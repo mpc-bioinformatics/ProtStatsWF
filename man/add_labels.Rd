@@ -2,7 +2,7 @@
 % Please edit documentation in R/volcanoPlots.R
 \name{add_labels}
 \alias{add_labels}
-\title{Add labels to a volcano plot}
+\title{Add labels to a volcano plot.}
 \usage{
 add_labels(
   RES_Volcano,
@@ -13,22 +13,28 @@ add_labels(
 )
 }
 \arguments{
-\item{RES_Volcano}{result from volcanoPlot(): a list containing the data frame with the transformed data and the ggplot object}
+\item{RES_Volcano}{\strong{result from \code{\link[=VolcanoPlot]{VolcanoPlot()}}} \cr
+A list containing the data.frame with the transformed data and the ggplot object.}
 
-\item{label_type}{"FDR" (significant after correction) or "noFDR" (significant without correction) or "index" -> define indizes to label}
+\item{label_type}{\strong{character} \cr
+The label type.
+Options are "FDR" (significant after correction) or "noFDR" (significant without correction) or "index" -> define indices to label}
 
-\item{ind}{The index if the label_type is "index"}
+\item{ind}{\strong{integer} \cr
+The index if the label_type is "index".}
 
-\item{protein_name_column}{column name of the protein names in the RES data frame}
+\item{protein_name_column}{\strong{character} \cr
+The column name of the protein names in the RES data.frame.}
 
-\item{protein_names}{The names of the proteins}
+\item{protein_names}{\strong{character vector} \cr
+The names of the proteins.}
 }
 \value{
-ggplot object with labels
+A ggplot object with labels.
 }
 \description{
-Add labels to a volcano plot
+Add labels to a volcano plot.
 }
-\examples{
-# TODO
+\seealso{
+\code{\link[=VolcanoPlot]{VolcanoPlot()}}, \code{\link[=VolcanoPlot_ttest]{VolcanoPlot_ttest()}}, \code{\link[=VolcanoPlot_ANOVA]{VolcanoPlot_ANOVA()}}
 }

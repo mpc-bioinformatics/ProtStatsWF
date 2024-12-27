@@ -36,7 +36,7 @@
 #' @return A ggplot showing the volcano plot.
 #' @export
 #' 
-#' @seealso [VolcanoPlot_ttest()], [VolcanoPlot_ANOVA()]] 
+#' @seealso [VolcanoPlot_ttest()], [VolcanoPlot_ANOVA()]
 #'
 #' @examples
 #' 
@@ -184,7 +184,7 @@ VolcanoPlot <- function(p,
 #' @return A ggplot object of the volcano plot from a ttest result.
 #' @export
 #' 
-#' @seealso [VolcanoPlot()], [VolcanoPlot_ANOVA()]] 
+#' @seealso [VolcanoPlot()], [VolcanoPlot_ANOVA()], [add_labels()]
 #'
 #' @examples 
 #' 
@@ -340,9 +340,11 @@ VolcanoPlot_ttest <- function(RES,
 #' @return A list of ggplots of the volcano plot from an ANOVA result.
 #' @export
 #' 
-#' @seealso [VolcanoPlot()], [VolcanoPlot_ttest()]] 
+#' @seealso [VolcanoPlot()], [VolcanoPlot_ttest()], [add_labels()]
 #'
 #' @examples
+#' 
+
 VolcanoPlot_ANOVA <- function(RES,
                               columnname_p_ANOVA = "p.anova",
                               columnname_p_ANOVA_adj = "p.anova.fdr",
@@ -442,18 +444,28 @@ VolcanoPlot_ANOVA <- function(RES,
 
 
 
-#' Add labels to a volcano plot
+#' Add labels to a volcano plot.
 #'
-#' @param RES_Volcano  result from volcanoPlot(): a list containing the data frame with the transformed data and the ggplot object
-#' @param label_type "FDR" (significant after correction) or "noFDR" (significant without correction) or "index" -> define indizes to label
-#' @param protein_name_column column name of the protein names in the RES data frame
-#' @param ind The index if the label_type is "index"
-#' @param protein_names The names of the proteins
+#' @param RES_Volcano           \strong{result from [VolcanoPlot()]} \cr
+#'                              A list containing the data.frame with the transformed data and the ggplot object.
+#' @param label_type            \strong{character} \cr
+#'                              The label type.
+#'                              Options are "FDR" (significant after correction) or "noFDR" (significant without correction) or "index" -> define indices to label
+#' @param protein_name_column   \strong{character} \cr
+#'                              The column name of the protein names in the RES data.frame.
+#' @param ind                   \strong{integer} \cr
+#'                              The index if the label_type is "index".
+#' @param protein_names         \strong{character vector} \cr
+#'                              The names of the proteins.
 #'
-#' @return ggplot object with labels
+#' @return A ggplot object with labels.
 #' @export
+#' 
+#' @seealso [VolcanoPlot()], [VolcanoPlot_ttest()], [VolcanoPlot_ANOVA()]
 #'
-#' @examples # TODO
+#' @examples 
+#' 
+
 add_labels <- function(RES_Volcano,
                        label_type = "FDR",
                        ind = NULL,

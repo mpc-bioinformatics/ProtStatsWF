@@ -76,5 +76,5 @@ A ggplot showing the volcano plot.
 Simple volcano plot from p-value, fold change and significance category
 }
 \seealso{
-\code{\link[=VolcanoPlot_ttest]{VolcanoPlot_ttest()}}, \code{\link[=VolcanoPlot_ANOVA]{VolcanoPlot_ANOVA()}}]
+\code{\link[=VolcanoPlot_ttest]{VolcanoPlot_ttest()}}, \code{\link[=VolcanoPlot_ANOVA]{VolcanoPlot_ANOVA()}}
 }

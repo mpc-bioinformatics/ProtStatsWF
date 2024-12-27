@@ -129,5 +129,5 @@ A ggplot object of the volcano plot from a ttest result.
 Volcano plot for a t-test result.
 }
 \seealso{
-\code{\link[=VolcanoPlot]{VolcanoPlot()}}, \code{\link[=VolcanoPlot_ANOVA]{VolcanoPlot_ANOVA()}}]
+\code{\link[=VolcanoPlot]{VolcanoPlot()}}, \code{\link[=VolcanoPlot_ANOVA]{VolcanoPlot_ANOVA()}}, \code{\link[=add_labels]{add_labels()}}
 }
