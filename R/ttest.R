@@ -1,22 +1,35 @@
 
 
 
-#' Unpaired t-test for a single row of a data set
+#' Unpaired t-test for a single row of a data set.
 #'
-#' @param x                       A numeric vector of abundances.
-#' @param group                   A factor vector of group membership.
-#' @param log_before_test         A logical indicating whether the data should be log-transformed before the test.
-#' @param delog_for_FC            A logical indicating whether the fold change should be calculated on the original scale.
-#' @param min_obs_per_group       An integer indicating the minimum number of observations per group.
-#' @param min_obs_per_group_ratio A numeric indicating the minimum number of observations per group as a ratio (e.g, 0.8 = 80% valid values in each group needed).
-#' @param log_base                A numeric indicating the base of the logarithm.
-#' @param row                     A numeric indicating the row number.
-#' @param var.equal               A logical indicating whether the variances of the groups are expected to be equal.
+#' @param x                         \strong{numeric vector} \cr
+#'                                  The abundances of the data.
+#' @param group                     \strong{character factor} \cr
+#'                                  The group membership of the data.
+#' @param log_before_test           \strong{logical} \cr
+#'                                  If \code{TRUE}, the data will be log-transformed before the test.
+#' @param delog_for_FC              \strong{logical} \cr
+#'                                  If \code{TRUE}, the fold change will be calculated on the original scale.
+#' @param min_obs_per_group         \strong{integer} \cr
+#'                                  The minimum number of observations per group.
+#' @param min_obs_per_group_ratio   \strong{numeric} \cr
+#'                                  The minimum number of observations per group as a ratio (e.g, 0.8 = 80% valid values in each group needed).
+#' @param log_base                  \strong{numeric} \cr
+#'                                  The base of the logarithm for the log-transformation.
+#' @param row                       \strong{integer} \cr
+#'                                  The row number of the data for the function call.
+#' @param var.equal                 \strong{logical} \cr
+#'                                  If \code{TRUE}, the variances of the groups are expected to be equal.
 #'
 #' @return A vector with the following components: mean group 1, mean group 2, test statistics, p-value, free space fpr corrected p-value, fold changes (both directions), lower and upper limit of confidence interval, number of valid values per group.
 #' @export
+#' 
+#' @seealso [ttest()], [ttest_single_row_paired()]
 #'
-#' @examples # TODO
+#' @examples 
+#' 
+
 ttest_single_row <- function(x, group, log_before_test = TRUE, delog_for_FC = TRUE,
                              min_obs_per_group = NULL, min_obs_per_group_ratio = NULL,
                              log_base = 2, row = NULL, var.equal = FALSE) {
@@ -113,21 +126,33 @@ ttest_single_row <- function(x, group, log_before_test = TRUE, delog_for_FC = TR
 ### TODO: add possibility to set min_nr_pairs as a ratio!
 ### TODO: add error codes
 
-#' Paired T-test for a single row of a data set
+#' Paired T-test for a single row of a data set.
 #'
-#' @param x                       A numeric vector of abundances.
-#' @param group                   A factor vector of group membership.
-#' @param sample                  A vector indicating sample pairs.
-#' @param log_before_test         A logical indicating whether the data should be log-transformed before the test.
-#' @param delog_for_FC            A logical indicating whether the fold change should be calculated on the original scale.
-#' @param min_nr_pairs            An integer indicating the minimum number of complete sample pairs.
-#' @param log_base                A numeric indicating the base of the logarithm.
-#' @param row                     A numeric indicating the row number.
+#' @param x                         \strong{numeric vector} \cr
+#'                                  The abundances of the data.
+#' @param group                     \strong{character factor} \cr
+#'                                  The group membership of the data.
+#' @param sample                    \strong{character factor} \cr
+#'                                  The sample membership of the data.
+#' @param log_before_test           \strong{logical} \cr
+#'                                  If \code{TRUE}, the data will be log-transformed before the test.
+#' @param delog_for_FC              \strong{logical} \cr
+#'                                  If \code{TRUE}, the fold change will be calculated on the original scale.
+#' @param min_nr_pairs              \strong{integer} \cr
+#'                                  The minimum number of complete sample pairs.
+#' @param log_base                  \strong{numeric} \cr
+#'                                  The base of the logarithm for the log-transformation.
+#' @param row                       \strong{integer} \cr
+#'                                  The row number of the data for the function call.
 #'
 #' @return A vector with the following components: mean difference between groups, test statistics, p-value, free space fpr corrected p-value, fold changes (both directions), lower and upper limit of confidence interval, number of valid values per group.
 #' @export
+#' 
+#' @seealso [ttest()], [ttest_single_row()]
 #'
-#' @examples # TODO
+#' @examples 
+#' 
+
 ttest_single_row_paired <- function(x, group, sample, log_before_test = TRUE, delog_for_FC = TRUE,
                              min_nr_pairs = NULL,
                              log_base = 2, row = NULL) {
@@ -219,23 +244,39 @@ ttest_single_row_paired <- function(x, group, sample, log_before_test = TRUE, de
 
 
 #' Function to compute t-test (paired or unpaired)
-#' @param D data frame containing only protein or peptide intensities
-#' @param id data frame containing id columns like protein accessions of gene names
-#' @param group factor vector indicating the group membership
-#' @param sample factor vector indicating the sample membership
-#' @param paired logical indicating whether the test should be paired or unpaired (default is FALSE)
-#' @param var.equal logical indicating whether the variances of the two groups are assumed to be equal (default is FALSE)
-#' @param log_before_test logical indicating whether the data should be log-transformed before the test (default is TRUE)
-#' @param delog_for_FC logical indicating whether the fold change should be calculated on the original scale (default is TRUE)
-#' @param log_base numeric indicating the base of the logarithm (default is 2)
-#' @param min_obs_per_group integer indicating the minimum number of observations per group (for unpaired test) or minimum number of samples pairs (for paored test) (default is 3)
-#' @param filename character string indicating the name of the output file (default is "results_ttest.xlsx")
-#' @param min_obs_per_group_ratio numeric indicating the minimum ratio of observations per group (for unpaired test) as an alternative to min_obs_per_group
+#' @param D                         \strong{data.frame} \cr
+#'                                  The data set containing only protein intensities, already filtered for interesting candidates.
+#' @param id                        \strong{data.frame} \cr
+#'                                  The corresponding ID columns for the parameter D e.g. containing further columns like protein or gene names.
+#' @param group                     \strong{character factor} \cr
+#'                                  The group membership of the data.
+#' @param sample                    \strong{character factor} \cr
+#'                                  The sample membership of the data.
+#' @param paired                    \strong{logical} \cr
+#'                                  If \code{TRUE}, the test will be paired, otherwise it will be unpaired.
+#' @param var.equal                 \strong{logical} \cr
+#'                                  If \code{TRUE}, the variances of the groups are expected to be equal.
+#' @param log_before_test           \strong{logical} \cr
+#'                                  If \code{TRUE}, the data will be log-transformed before the test.
+#' @param delog_for_FC              \strong{logical} \cr
+#'                                  If \code{TRUE}, the fold change will be calculated on the original scale.
+#' @param log_base                  \strong{numeric} \cr
+#'                                  The base of the logarithm for the log-transformation.
+#' @param min_obs_per_group         \strong{integer} \cr
+#'                                  The minimum number of observations per group.
+#' @param filename                  \strong{characte} \cr
+#'                                  The name of the output file.
+#' @param min_obs_per_group_ratio   \strong{numeric} \cr
+#'                                  The minimum number of observations per group as a ratio (e.g, 0.8 = 80% valid values in each group needed).
 #'
-#' @return a data frame containing the results of the t-test
+#' @return A data frame containing the results of the t-test.
 #' @export
+#' 
+#' @seealso [ttest_single_row()], [ttest_single_row_paired()]
 #'
-#' @examples # TODO
+#' @examples 
+#' 
+
 ttest <- function(D, id = NULL, group, sample = NULL, paired = FALSE, var.equal = FALSE,
                   log_before_test = TRUE, delog_for_FC = TRUE, log_base = 2,
                   min_obs_per_group = 3,

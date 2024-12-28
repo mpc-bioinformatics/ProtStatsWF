@@ -20,36 +20,48 @@ ttest(
 )
 }
 \arguments{
-\item{D}{data frame containing only protein or peptide intensities}
+\item{D}{\strong{data.frame} \cr
+The data set containing only protein intensities, already filtered for interesting candidates.}
 
-\item{id}{data frame containing id columns like protein accessions of gene names}
+\item{id}{\strong{data.frame} \cr
+The corresponding ID columns for the parameter D e.g. containing further columns like protein or gene names.}
 
-\item{group}{factor vector indicating the group membership}
+\item{group}{\strong{character factor} \cr
+The group membership of the data.}
 
-\item{sample}{factor vector indicating the sample membership}
+\item{sample}{\strong{character factor} \cr
+The sample membership of the data.}
 
-\item{paired}{logical indicating whether the test should be paired or unpaired (default is FALSE)}
+\item{paired}{\strong{logical} \cr
+If \code{TRUE}, the test will be paired, otherwise it will be unpaired.}
 
-\item{var.equal}{logical indicating whether the variances of the two groups are assumed to be equal (default is FALSE)}
+\item{var.equal}{\strong{logical} \cr
+If \code{TRUE}, the variances of the groups are expected to be equal.}
 
-\item{log_before_test}{logical indicating whether the data should be log-transformed before the test (default is TRUE)}
+\item{log_before_test}{\strong{logical} \cr
+If \code{TRUE}, the data will be log-transformed before the test.}
 
-\item{delog_for_FC}{logical indicating whether the fold change should be calculated on the original scale (default is TRUE)}
+\item{delog_for_FC}{\strong{logical} \cr
+If \code{TRUE}, the fold change will be calculated on the original scale.}
 
-\item{log_base}{numeric indicating the base of the logarithm (default is 2)}
+\item{log_base}{\strong{numeric} \cr
+The base of the logarithm for the log-transformation.}
 
-\item{min_obs_per_group}{integer indicating the minimum number of observations per group (for unpaired test) or minimum number of samples pairs (for paored test) (default is 3)}
+\item{min_obs_per_group}{\strong{integer} \cr
+The minimum number of observations per group.}
 
-\item{filename}{character string indicating the name of the output file (default is "results_ttest.xlsx")}
+\item{filename}{\strong{characte} \cr
+The name of the output file.}
 
-\item{min_obs_per_group_ratio}{numeric indicating the minimum ratio of observations per group (for unpaired test) as an alternative to min_obs_per_group}
+\item{min_obs_per_group_ratio}{\strong{numeric} \cr
+The minimum number of observations per group as a ratio (e.g, 0.8 = 80\% valid values in each group needed).}
 }
 \value{
-a data frame containing the results of the t-test
+A data frame containing the results of the t-test.
 }
 \description{
 Function to compute t-test (paired or unpaired)
 }
-\examples{
-# TODO
+\seealso{
+\code{\link[=ttest_single_row]{ttest_single_row()}}, \code{\link[=ttest_single_row_paired]{ttest_single_row_paired()}}
 }

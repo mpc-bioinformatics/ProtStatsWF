@@ -2,7 +2,7 @@
 % Please edit documentation in R/ttest.R
 \name{ttest_single_row}
 \alias{ttest_single_row}
-\title{Unpaired t-test for a single row of a data set}
+\title{Unpaired t-test for a single row of a data set.}
 \usage{
 ttest_single_row(
   x,
@@ -17,30 +17,39 @@ ttest_single_row(
 )
 }
 \arguments{
-\item{x}{A numeric vector of abundances.}
+\item{x}{\strong{numeric vector} \cr
+The abundances of the data.}
 
-\item{group}{A factor vector of group membership.}
+\item{group}{\strong{character factor} \cr
+The group membership of the data.}
 
-\item{log_before_test}{A logical indicating whether the data should be log-transformed before the test.}
+\item{log_before_test}{\strong{logical} \cr
+If \code{TRUE}, the data will be log-transformed before the test.}
 
-\item{delog_for_FC}{A logical indicating whether the fold change should be calculated on the original scale.}
+\item{delog_for_FC}{\strong{logical} \cr
+If \code{TRUE}, the fold change will be calculated on the original scale.}
 
-\item{min_obs_per_group}{An integer indicating the minimum number of observations per group.}
+\item{min_obs_per_group}{\strong{integer} \cr
+The minimum number of observations per group.}
 
-\item{min_obs_per_group_ratio}{A numeric indicating the minimum number of observations per group as a ratio (e.g, 0.8 = 80\% valid values in each group needed).}
+\item{min_obs_per_group_ratio}{\strong{numeric} \cr
+The minimum number of observations per group as a ratio (e.g, 0.8 = 80\% valid values in each group needed).}
 
-\item{log_base}{A numeric indicating the base of the logarithm.}
+\item{log_base}{\strong{numeric} \cr
+The base of the logarithm for the log-transformation.}
 
-\item{row}{A numeric indicating the row number.}
+\item{row}{\strong{integer} \cr
+The row number of the data for the function call.}
 
-\item{var.equal}{A logical indicating whether the variances of the groups are expected to be equal.}
+\item{var.equal}{\strong{logical} \cr
+If \code{TRUE}, the variances of the groups are expected to be equal.}
 }
 \value{
 A vector with the following components: mean group 1, mean group 2, test statistics, p-value, free space fpr corrected p-value, fold changes (both directions), lower and upper limit of confidence interval, number of valid values per group.
 }
 \description{
-Unpaired t-test for a single row of a data set
+Unpaired t-test for a single row of a data set.
 }
-\examples{
-# TODO
+\seealso{
+\code{\link[=ttest]{ttest()}}, \code{\link[=ttest_single_row_paired]{ttest_single_row_paired()}}
 }

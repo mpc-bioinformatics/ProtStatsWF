@@ -2,7 +2,7 @@
 % Please edit documentation in R/ttest.R
 \name{ttest_single_row_paired}
 \alias{ttest_single_row_paired}
-\title{Paired T-test for a single row of a data set}
+\title{Paired T-test for a single row of a data set.}
 \usage{
 ttest_single_row_paired(
   x,
@@ -16,28 +16,36 @@ ttest_single_row_paired(
 )
 }
 \arguments{
-\item{x}{A numeric vector of abundances.}
+\item{x}{\strong{numeric vector} \cr
+The abundances of the data.}
 
-\item{group}{A factor vector of group membership.}
+\item{group}{\strong{character factor} \cr
+The group membership of the data.}
 
-\item{sample}{A vector indicating sample pairs.}
+\item{sample}{\strong{character factor} \cr
+The sample membership of the data.}
 
-\item{log_before_test}{A logical indicating whether the data should be log-transformed before the test.}
+\item{log_before_test}{\strong{logical} \cr
+If \code{TRUE}, the data will be log-transformed before the test.}
 
-\item{delog_for_FC}{A logical indicating whether the fold change should be calculated on the original scale.}
+\item{delog_for_FC}{\strong{logical} \cr
+If \code{TRUE}, the fold change will be calculated on the original scale.}
 
-\item{min_nr_pairs}{An integer indicating the minimum number of complete sample pairs.}
+\item{min_nr_pairs}{\strong{integer} \cr
+The minimum number of complete sample pairs.}
 
-\item{log_base}{A numeric indicating the base of the logarithm.}
+\item{log_base}{\strong{numeric} \cr
+The base of the logarithm for the log-transformation.}
 
-\item{row}{A numeric indicating the row number.}
+\item{row}{\strong{integer} \cr
+The row number of the data for the function call.}
 }
 \value{
 A vector with the following components: mean difference between groups, test statistics, p-value, free space fpr corrected p-value, fold changes (both directions), lower and upper limit of confidence interval, number of valid values per group.
 }
 \description{
-Paired T-test for a single row of a data set
+Paired T-test for a single row of a data set.
 }
-\examples{
-# TODO
+\seealso{
+\code{\link[=ttest]{ttest()}}, \code{\link[=ttest_single_row]{ttest_single_row()}}
 }
