@@ -2,7 +2,7 @@
 % Please edit documentation in R/pvalue_FC_histogram.R
 \name{pvalue_foldchange_histogram}
 \alias{pvalue_foldchange_histogram}
-\title{Generates histograms for p-values, adjusted p-values and fold changes}
+\title{Generates histograms for p-values, adjusted p-values and fold changes.}
 \usage{
 pvalue_foldchange_histogram(
   RES,
@@ -12,20 +12,21 @@ pvalue_foldchange_histogram(
 )
 }
 \arguments{
-\item{RES}{result table from t-test}
+\item{RES}{\strong{data.frame} \cr
+The results from a t-test.}
 
-\item{columnname_p}{column name for p-value}
+\item{columnname_p}{\strong{characte} \cr
+The column name for p-value.}
 
-\item{columnname_padj}{columns name for adjusted p-value}
+\item{columnname_padj}{\strong{characte} \cr
+The columns name for adjusted p-value.}
 
-\item{columnname_FC}{column name for fold change}
+\item{columnname_FC}{\strong{characte} \cr
+The column name for fold change.}
 }
 \value{
-list of 3 ggplot objects
+A list of 3 ggplot objects with a histogram for p-values, adjusted p-values and fold changes each.
 }
 \description{
-Generates histograms for p-values, adjusted p-values and fold changes
-}
-\examples{
-# TODO
+Generates histograms for p-values, adjusted p-values and fold changes.
 }

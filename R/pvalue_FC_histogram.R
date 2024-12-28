@@ -1,17 +1,23 @@
 
 
 
-#' Generates histograms for p-values, adjusted p-values and fold changes
+#' Generates histograms for p-values, adjusted p-values and fold changes.
 #'
-#' @param RES result table from t-test
-#' @param columnname_p column name for p-value
-#' @param columnname_padj columns name for adjusted p-value
-#' @param columnname_FC column name for fold change
+#' @param RES               \strong{data.frame} \cr
+#'                          The results from a t-test.
+#' @param columnname_p      \strong{characte} \cr
+#'                          The column name for p-value.
+#' @param columnname_padj   \strong{characte} \cr
+#'                          The columns name for adjusted p-value.
+#' @param columnname_FC     \strong{characte} \cr
+#'                          The column name for fold change.
 #'
-#' @return list of 3 ggplot objects
+#' @return A list of 3 ggplot objects with a histogram for p-values, adjusted p-values and fold changes each.
 #' @export
 #'
-#' @examples # TODO
+#' @examples 
+#' 
+
 pvalue_foldchange_histogram <- function(RES,
                              columnname_p = "p",
                              columnname_padj = "padj",
