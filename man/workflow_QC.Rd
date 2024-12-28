@@ -78,8 +78,8 @@ The base used, if \code{do_log_transformation = TRUE}.}
 \item{groupvar_name}{\strong{character} \cr
 The name for the group variable.}
 
-\item{group_colours}{\strong{character} \cr
-A vector of hex codes for the group colors, if the data has groups. If \code{NULL}, a default color scale will be used.}
+\item{group_colours}{\strong{character vector} \cr
+The hex codes for the group colors, if the data has groups. If \code{NULL}, a default color scale will be used.}
 
 \item{base_size}{\strong{numeric} \cr
 The base size of the font.}

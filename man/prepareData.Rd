@@ -2,7 +2,7 @@
 % Please edit documentation in R/prepareData.R
 \name{prepareData}
 \alias{prepareData}
-\title{Prepare proteomics data for analysis}
+\title{Prepare proteomics data for analysis.}
 \usage{
 prepareData(
   data_path,
@@ -18,38 +18,39 @@ prepareData(
 )
 }
 \arguments{
-\item{data_path}{A character containing the path to an .xlsx file.}
+\item{data_path}{\strong{character} \cr
+The path to an .xlsx file containing the input data.}
 
-\item{intensity_columns}{An integer vector containing the intensity columns of the table.}
+\item{intensity_columns}{\strong{integer vector} \cr
+The numbers of the intensity columns in the table.}
 
-\item{na_strings}{A character vector containing symbols to be recognized as missing values (with the exception of 0).}
+\item{na_strings}{\strong{character} \cr
+A vector containing the symbols to be recognized as missing values (with the exception of 0).}
 
-\item{zero_to_NA}{If \code{TRUE}, 0 will be treated as missing value.}
+\item{zero_to_NA}{\strong{logical} \cr
+If \code{TRUE}, 0 will be treated as missing value.}
 
-\item{do_log_transformation}{If \code{TRUE}, the data will be log-transformed.}
+\item{do_log_transformation}{\strong{logical} \cr
+If \code{TRUE}, the data will be log-transformed.}
 
-\item{log_base}{A numeric containing the base used, if data is log-transformed.}
+\item{log_base}{\strong{numeric} \cr
+The base used, if \code{do_log_transformation = TRUE}.}
 
-\item{use_groups}{If \code{TRUE}, the data contains groups.}
+\item{use_groups}{\strong{logical} \cr
+If \code{TRUE}, group information encoded in the column names is used.}
 
-\item{group_colours}{A character vector of hex codes for the group colors, if the data has groups. If \code{NULL}, a default color scale will be used.}
+\item{group_colours}{\strong{character vector} \cr
+The hex codes for the group colors, if the data has groups. If \code{NULL}, a default color scale will be used.}
 
-\item{normalization}{A character containing the method of normalization. The possible methods are no normalization "nonorm" or "median", "loess", "quantile" or "lts" normalization.}
+\item{normalization}{\strong{character} \cr
+The method of normalization. Options are "nonorm" (no normalization), "median", "loess", "quantile" or "lts" normalization.}
 
-\item{lts_quantile}{A numeric containing the quantile for the lts normalization if \code{normalization = "lts"}, default is 0.8.}
+\item{lts_quantile}{\strong{numeric} \cr
+The quantile for the lts normalization if \code{normalization = "lts"}.}
 }
 \value{
-A list containing the prepared data and the ids of the data as data.frames as well as the groups, number of groups and group colors
+A list containing the prepared data and the ids of the data as data.frames as well as the groups, number of groups and group colors.
 }
 \description{
-Prepare proteomics data for analysis
-}
-\examples{
-\dontrun{
-path <- "/Users/thisuser/Documents/dataFolder/data.xlsx"
-intensity_cols <- 3:17
-
-prepared_data <- prepareData(data_path = path, intensity_columns = intensity_cols)
-}
-
+Prepare proteomics data for analysis.
 }

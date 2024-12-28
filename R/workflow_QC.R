@@ -26,8 +26,8 @@
 #'                               The base used, if \code{do_log_transformation = TRUE}.
 #' @param groupvar_name          \strong{character} \cr
 #'                               The name for the group variable.
-#' @param group_colours          \strong{character} \cr
-#'                               A vector of hex codes for the group colors, if the data has groups. If \code{NULL}, a default color scale will be used.
+#' @param group_colours          \strong{character vector} \cr
+#'                               The hex codes for the group colors, if the data has groups. If \code{NULL}, a default color scale will be used.
 ### TODO: ideally, group_colours would be a named vector!
 #'
 #' @param suffix                 \strong{character} \cr
