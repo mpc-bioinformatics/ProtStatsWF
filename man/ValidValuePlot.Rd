@@ -2,7 +2,7 @@
 % Please edit documentation in R/ValidValuePlot.R
 \name{ValidValuePlot}
 \alias{ValidValuePlot}
-\title{Barplots showing the percentage of valid values for each sample}
+\title{Barplots showing the percentage of valid values for each sample.}
 \usage{
 ValidValuePlot(
   D_long,
@@ -13,21 +13,26 @@ ValidValuePlot(
 )
 }
 \arguments{
-\item{D_long}{A data.frame of the data set given in long format.}
+\item{D_long}{\strong{data.frame} \cr
+The data set given in long format.}
 
-\item{use_groups}{If \code{TRUE} data will be plotted in groups.}
+\item{use_groups}{\strong{logical} \cr
+If \code{TRUE} data will be plotted in groups.}
 
-\item{groupvar_name}{A character containing the name for the group variable.}
+\item{groupvar_name}{\strong{character} \cr
+The name for the group variable.}
 
-\item{group_colours}{A character vector of hex codes for the group colors.}
+\item{group_colours}{\strong{character vector} \cr
+The hex codes for the group colors.}
 
-\item{base_size}{A numeric containing the base size of the font.}
+\item{base_size}{\strong{numeric} \cr
+The base size of the font.}
 }
 \value{
-a tibble and a ggplot of the valid values
+A tibble and a ggplot of the valid values.
 }
 \description{
-Barplots showing the percentage of valid values for each sample
+Barplots showing the percentage of valid values for each sample.
 }
 \examples{
 
