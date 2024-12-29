@@ -1,36 +1,51 @@
-#' Calculate a PCA plot for proteomics data
+#' Calculate a PCA plot for proteomics data.
 #'
-#' @param D              A data.frame of the data set.
-#' @param groupvar1      A variable used for colors.
-#' @param groupvar2      A variable used for shapes.
-#' @param impute         If \code{TRUE}, missing values will be imputed.
-#' @param impute_method  A character containing the imputation method ("mean" or "median")
-#' @param propNA         A numeric of the proportion of allowed missing NAs for a protein, before it is discarded.
-#' @param scale.         If \code{TRUE}, the data will be scaled before computing the PCA.
-#' @param PCx            The principle component for the x-axis (default: 1).
-#' @param PCy            The principle component for the y-axis (default: 2).
-#' @param groupvar1_name Titles of legends for colour and shape.
-#' @param groupvar2_name Titles of legends for colour and shape.
-#' @param group_colours  The colors for the groups.
-#' @param alpha          If \code{TRUE}, the data points will be transparent.
-#' @param label          If \code{TRUE}, the samples will be labeled.
-#' @param label_seed     A numeric, which sets the seed for the label.
-#' @param label_size     A numeric containing the size of the sample labels.
-#' @param xlim           Limit of the x-axis.
-#' @param ylim           Limit of the y-axis.
-#' @param point.size     The size of the data points.
-#' @param base_size      The base size for the plot.
-#' @param ...            Additional arguments for ggplot2::plot.
+#' @param D                \strong{data.frame} \cr
+#'                         The data set containing intensities of the sample.
+#' @param groupvar1        \strong{character vector} \cr
+#'                         The variable used for colors.
+#' @param groupvar2        \strong{character vector} \cr
+#'                         The variable used for shapes.
+#' @param impute           \strong{logical} \cr
+#'                         If \code{TRUE}, missing values will be imputed.
+#' @param impute_method    \strong{character} \cr
+#'                         The imputation method. Options are "mean" or "median".
+#' @param propNA           \strong{numeric} \cr
+#'                         The proportion of allowed missing NAs for a protein, before it is discarded.
+#' @param scale.           \strong{logical} \cr
+#'                         If \code{TRUE}, the data will be scaled before computing the PCA.
+#' @param PCx              \strong{integer} \cr
+#'                         The principle component for the x-axis.
+#' @param PCy              \strong{integer} \cr
+#'                         The principle component for the y-axis.
+#' @param groupvar1_name   \strong{character} \cr
+#'                         The titles of legends for colour.
+#' @param groupvar2_name   \strong{character} \cr
+#'                         The titles of legends for shape.
+#' @param group_colours    \strong{character vector} \cr
+#'                         The colors for the groups.
+#' @param alpha            \strong{logical} \cr
+#'                         If \code{TRUE}, the data points will be transparent.
+#' @param label            \strong{logical} \cr
+#'                         If \code{TRUE}, the samples will be labeled.
+#' @param label_seed       \strong{numeric} \cr
+#'                         A numeric, which sets the seed for the label.
+#' @param label_size       \strong{numeric} \cr
+#'                         A numeric containing the size of the sample labels.
+#' @param xlim             \strong{numeric} \cr
+#'                         The limit of the x-axis.
+#' @param ylim             \strong{numeric} \cr
+#'                         The limit of the y-axis.
+#' @param point.size       \strong{numeric} \cr
+#'                         The size of the data points.
+#' @param base_size        \strong{numeric} \cr
+#'                         The base size for the plot.
+#' @param ...              Additional arguments for ggplot2::plot.
 #'
-#' @return The PCA plot for a proteomics sample
+#' @return The PCA plot for a proteomics sample.
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' prepared_data <- prepareData(...)
-#'
-#' pca <- PCA_Plot(D = prepared_data[["D"]])
-#'}
 #'
 
 PCA_Plot <- function(D,
