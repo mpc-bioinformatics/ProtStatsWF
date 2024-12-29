@@ -1,15 +1,19 @@
-#' Automated normalization of proteomics data
+#' Automated normalization of proteomics data.
 #'
-#' @param DATA A data.frame containing the data.
-#' @param method A character containing the method of normalization. The possible methods are no normalization "nonorm" or "median", "loess", "quantile" or "lts" normalization.
-#' @param is_log_transformed If \code{TRUE}, the data is log-transformed.
-#' @param log_base A numeric containing the base, in case the data was log-transformed.
-#' @param lts.quantile A numeric containing the quantile for the lts normalization.
+#' @param DATA                 \strong{data.frame} \cr
+#'                             The data set containing intensities of the sample.
+#' @param method               \strong{character} \cr
+#'                             The method of normalization. Options are "nonorm" (no normalization), "median", "loess", "quantile" or "lts" normalization.
+#' @param is_log_transformed   \strong{logical} \cr
+#'                             If \code{TRUE}, the data is log-transformed.
+#' @param log_base             \strong{numeric} \cr
+#'                             The base, in case the data was log-transformed.
+#' @param lts.quantile         \strong{numeric} \cr
+#'                             The quantile for the lts normalization.
 #'
 #' @return The normalized data as well as a message.
 #' @export
 #'
-#' 
 
 automatedNormalization <- function(DATA, 
                                    method = "median", 
