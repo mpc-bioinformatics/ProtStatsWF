@@ -2,7 +2,7 @@
 % Please edit documentation in R/MA_Plot.R
 \name{MA_Plots}
 \alias{MA_Plots}
-\title{Calculate MA plots for proteomics data set}
+\title{Calculate MA plots for proteomics data set.}
 \usage{
 MA_Plots(
   D,
@@ -20,27 +20,38 @@ MA_Plots(
 )
 }
 \arguments{
-\item{D}{A data.frame of the data set.}
+\item{D}{\strong{data.frame} \cr
+The data set containing intensities of the sample.}
 
-\item{do_log_transformation}{If \code{TRUE}, the data will be log-transformed.}
+\item{do_log_transformation}{\strong{logical} \cr
+If \code{TRUE}, the data will be log-transformed.}
 
-\item{output_path}{A character containing the path to a folder.}
+\item{output_path}{\strong{character} \cr
+The path to a folder for the output.}
 
-\item{suffix}{A character containing the suffix, with which the output file will be named. Should start with an underscore.}
+\item{suffix}{\strong{character} \cr
+The suffix, with which the output file will be named. Should start with an underscore.}
 
-\item{labels}{The sample labels for the title of the MA-Plot.}
+\item{labels}{\strong{character} \cr
+The sample labels for the title of the MA-Plot.}
 
-\item{labels2}{The second line in sample title (e.g. group membership).}
+\item{labels2}{\strong{character} \cr
+The second line in sample title (e.g. group membership).}
 
-\item{maxPlots}{A numeric containing the maximum number of MA plots that should be generated.}
+\item{maxPlots}{\strong{integer} \cr
+The maximum number of MA plots that should be generated.}
 
-\item{alpha}{If \code{TRUE}, the data points will be transparent.}
+\item{alpha}{\strong{logical} \cr
+If \code{TRUE}, the data points will be transparent.}
 
-\item{plot_height}{The height of the resulting MA plots.}
+\item{plot_height}{\strong{numeric} \cr
+The height of the resulting MA plots.}
 
-\item{plot_width}{The width of the resulting MA plots.}
+\item{plot_width}{\strong{numeric} \cr
+The width of the resulting MA plots.}
 
-\item{sampling}{A numeric containing the sampling rate. Useful to sample part of the data set for data sets on peptide/feature level with many data points.}
+\item{sampling}{\strong{numeric} \cr
+The sampling rate. Useful to sample part of the data set for data sets on peptide/feature level with many data points.}
 
 \item{...}{Additional arguments for affy::ma.plot.}
 }
@@ -48,7 +59,7 @@ MA_Plots(
 A pdf file containing the MA plots for all sample combinations.
 }
 \description{
-Calculate MA plots for proteomics data set
+Calculate MA plots for proteomics data set.
 }
 \examples{
 \dontrun{
@@ -58,4 +69,7 @@ out_path <- "/Users/thisuser/Documents/resultsFolder/"
 return_message <- MA_Plots(D = prepared_data[["D"]], output_path = out_path)
 }
 
+}
+\seealso{
+\code{\link[=MA_Plot_single]{MA_Plot_single()}}
 }
