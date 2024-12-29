@@ -1,10 +1,12 @@
-#' Prepare data from an xlsx sheet
+#' Prepare data from an .xlsx sheet.
 #'
 #'
-#' @param data_path              A character containing the path to an .xlsx file.
-#' @param intensity_columns      An integer vector containing the intensity columns of the table.
+#' @param data_path           \strong{character} \cr
+#'                            The path to an .xlsx file containing the input data.
+#' @param intensity_columns   \strong{integer vector} \cr
+#'                            The intensity columns of the table.
 #' 
-#' @return A list containing an intensity data.frame, an IDs data frame and a factor of the sample groups
+#' @return A list containing an intensity data.frame, an IDs data frame and a factor of the sample groups.
 #'
 #' @examples
 #' \dontrun{
@@ -35,7 +37,7 @@ prepareTtestData <- function(data_path,
 
 
 
-#' Calculation of significance categories for a volcano plot for the t-test
+#' Calculation of significance categories for a volcano plot for the t-test.
 #'
 #' This function groups all proteins into the following three catrgories based
 #' on the p-values (with and without FDR correction) and fold changes:
@@ -43,16 +45,23 @@ prepareTtestData <- function(data_path,
 #' 2) significant (p < thres_p and fc > thres_fc, but p_adj > thres_p)
 #' 3) significant after FDR-correction (p_adj < thres_p and fc > thres_fc)
 #'
-#' @param p vector of p-values before FDR-correction
-#' @param p_adj vector of p-values after FDR-correction
-#' @param fc vector of fold changes
-#' @param thres_fc threshold for the fold changes
-#' @param thres_p threshold for the p-values
+#' @param p          \strong{numeric vector} \cr
+#'                   The p-values before FDR-correction.
+#' @param p_adj      \strong{numeric vector} \cr
+#'                   The p-values after FDR-correction.
+#' @param fc         \strong{numeric vector} \cr
+#'                   The values of the fold changes.
+#' @param thres_fc   \strong{numeric} \cr
+#'                   The threshold for the fold changes.
+#' @param thres_p    \strong{numeric} \cr
+#'                   The threshold for the p-values.
 #'
-#' @return a factor with the three significance categories
+#' @return A factor with the three significance categories.
 #' @export
 #'
-#' @examples # TODO
+#' @examples 
+#' 
+
 calculate_significance_categories_ttest <- function(p, p_adj, fc, thres_fc=2, thres_p=0.05) {
   
   significance <- dplyr::case_when(
@@ -69,19 +78,27 @@ calculate_significance_categories_ttest <- function(p, p_adj, fc, thres_fc=2, th
 
 
 
-#' Calculate significance categories for ANOVA
+#' Calculate significance categories for ANOVA.
 #'
-#' @param p_posthoc vector of posthoc p-values 
-#' @param p_anova_adj vector of p-values after FDR-correction
-#' @param p_anova vector of p-values before FDR-correction
-#' @param fc vector of fold changes
-#' @param thres_fc threshold for the fold changes
-#' @param thres_p threshold for the p-values
+#' @param p_posthoc     \strong{numeric vector} \cr
+#'                      The posthoc p-values .
+#' @param p_anova_adj   \strong{numeric vector} \cr
+#'                      The p-values after FDR-correction.
+#' @param p_anova       \strong{numeric vector} \cr
+#'                      The p-values before FDR-correction
+#' @param fc            \strong{numeric vector} \cr
+#'                      The values of the fold changes.
+#' @param thres_fc      \strong{numeric} \cr
+#'                      The threshold for the fold changes.
+#' @param thres_p       \strong{numeric} \cr
+#'                      The threshold for the p-values.
 #'
-#' @return A factor containing the significances
+#' @return A factor containing the significances.
 #' @export
 #'
 #' @examples
+#' 
+
 calculate_significance_categories_ANOVA <- function(p_posthoc, p_anova_adj, p_anova, fc, thres_fc=2, thres_p=0.05) {
   
   significance <- dplyr::case_when(

@@ -2,7 +2,7 @@
 % Please edit documentation in R/helper_ttest.R
 \name{calculate_significance_categories_ANOVA}
 \alias{calculate_significance_categories_ANOVA}
-\title{Calculate significance categories for ANOVA}
+\title{Calculate significance categories for ANOVA.}
 \usage{
 calculate_significance_categories_ANOVA(
   p_posthoc,
@@ -14,21 +14,27 @@ calculate_significance_categories_ANOVA(
 )
 }
 \arguments{
-\item{p_posthoc}{vector of posthoc p-values}
+\item{p_posthoc}{\strong{numeric vector} \cr
+The posthoc p-values .}
 
-\item{p_anova_adj}{vector of p-values after FDR-correction}
+\item{p_anova_adj}{\strong{numeric vector} \cr
+The p-values after FDR-correction.}
 
-\item{p_anova}{vector of p-values before FDR-correction}
+\item{p_anova}{\strong{numeric vector} \cr
+The p-values before FDR-correction}
 
-\item{fc}{vector of fold changes}
+\item{fc}{\strong{numeric vector} \cr
+The values of the fold changes.}
 
-\item{thres_fc}{threshold for the fold changes}
+\item{thres_fc}{\strong{numeric} \cr
+The threshold for the fold changes.}
 
-\item{thres_p}{threshold for the p-values}
+\item{thres_p}{\strong{numeric} \cr
+The threshold for the p-values.}
 }
 \value{
-A factor containing the significances
+A factor containing the significances.
 }
 \description{
-Calculate significance categories for ANOVA
+Calculate significance categories for ANOVA.
 }

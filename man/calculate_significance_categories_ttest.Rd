@@ -2,7 +2,7 @@
 % Please edit documentation in R/helper_ttest.R
 \name{calculate_significance_categories_ttest}
 \alias{calculate_significance_categories_ttest}
-\title{Calculation of significance categories for a volcano plot for the t-test}
+\title{Calculation of significance categories for a volcano plot for the t-test.}
 \usage{
 calculate_significance_categories_ttest(
   p,
@@ -13,18 +13,23 @@ calculate_significance_categories_ttest(
 )
 }
 \arguments{
-\item{p}{vector of p-values before FDR-correction}
+\item{p}{\strong{numeric vector} \cr
+The p-values before FDR-correction.}
 
-\item{p_adj}{vector of p-values after FDR-correction}
+\item{p_adj}{\strong{numeric vector} \cr
+The p-values after FDR-correction.}
 
-\item{fc}{vector of fold changes}
+\item{fc}{\strong{numeric vector} \cr
+The values of the fold changes.}
 
-\item{thres_fc}{threshold for the fold changes}
+\item{thres_fc}{\strong{numeric} \cr
+The threshold for the fold changes.}
 
-\item{thres_p}{threshold for the p-values}
+\item{thres_p}{\strong{numeric} \cr
+The threshold for the p-values.}
 }
 \value{
-a factor with the three significance categories
+A factor with the three significance categories.
 }
 \description{
 This function groups all proteins into the following three catrgories based
@@ -34,7 +39,4 @@ on the p-values (with and without FDR correction) and fold changes:
 \item significant (p < thres_p and fc > thres_fc, but p_adj > thres_p)
 \item significant after FDR-correction (p_adj < thres_p and fc > thres_fc)
 }
-}
-\examples{
-# TODO
 }

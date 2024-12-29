@@ -2,20 +2,22 @@
 % Please edit documentation in R/helper_ttest.R
 \name{prepareTtestData}
 \alias{prepareTtestData}
-\title{Prepare data from an xlsx sheet}
+\title{Prepare data from an .xlsx sheet.}
 \usage{
 prepareTtestData(data_path, intensity_columns)
 }
 \arguments{
-\item{data_path}{A character containing the path to an .xlsx file.}
+\item{data_path}{\strong{character} \cr
+The path to an .xlsx file containing the input data.}
 
-\item{intensity_columns}{An integer vector containing the intensity columns of the table.}
+\item{intensity_columns}{\strong{integer vector} \cr
+The intensity columns of the table.}
 }
 \value{
-A list containing an intensity data.frame, an IDs data frame and a factor of the sample groups
+A list containing an intensity data.frame, an IDs data frame and a factor of the sample groups.
 }
 \description{
-Prepare data from an xlsx sheet
+Prepare data from an .xlsx sheet.
 }
 \examples{
 \dontrun{
