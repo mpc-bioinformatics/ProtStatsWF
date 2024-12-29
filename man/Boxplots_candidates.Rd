@@ -2,7 +2,7 @@
 % Please edit documentation in R/Boxplots_biomarker_candidates.R
 \name{Boxplots_candidates}
 \alias{Boxplots_candidates}
-\title{Boxplots for biomarker candidates including the data point (jitter)}
+\title{Boxplots for biomarker candidates including the data point (jitter).}
 \usage{
 Boxplots_candidates(
   D,
@@ -22,40 +22,51 @@ Boxplots_candidates(
 )
 }
 \arguments{
-\item{D}{data set containing only protein intensities, already filtered for interesting candidates}
+\item{D}{\strong{data.frame} \cr
+The data set containing only protein intensities, already filtered for interesting candidates.}
 
-\item{protein.names}{character vector containing protein names}
+\item{protein.names}{\strong{character vector} \cr
+The protein names.}
 
-\item{group}{factor containing the groups}
+\item{group}{\strong{character factor} \cr
+The group membership of the data.}
 
-\item{group_colours}{character vector of hex codes or colours names for the group colors}
+\item{group_colours}{\strong{character vector} \cr
+The hex codes or colours names for the group colors.}
 
-\item{log_data}{TRUE, if the data should be log-transformed}
+\item{log_data}{\strong{logical} \cr
+If \code{TRUE}, the data will be log-transformed.}
 
-\item{log_base}{base for log-transformation}
+\item{log_base}{\strong{numeric} \cr
+The base used, if \code{log_data = TRUE}.}
 
-\item{plot_device}{plot device, "pdf" or "png}
+\item{plot_device}{\strong{character} \cr
+The plot device. Options are "pdf" or "png.}
 
-\item{plot_height}{height if plot in cm}
+\item{plot_height}{\strong{numeric} \cr
+The height if plot in cm.}
 
-\item{plot_width}{width of plot in cm}
+\item{plot_width}{\strong{numeric} \cr
+The width of plot in cm.}
 
-\item{plot_dpi}{plot resolution (only for png)}
+\item{plot_dpi}{\strong{numeric} \cr
+The plot resolution (only for png).}
 
-\item{groupvar_name}{name of the group variable (displayed in legend)}
+\item{groupvar_name}{\strong{character} \cr
+The name of the group variable (displayed in legend).}
 
-\item{output_path}{output path}
+\item{output_path}{\strong{character} \cr
+The path to a folder for the output.}
 
-\item{suffix}{suffix for the output file}
+\item{suffix}{\strong{character} \cr
+The suffix for the output file.}
 
-\item{plot_NA_level}{TRUE, if data points should be plotted if they are NA}
+\item{plot_NA_level}{\strong{logical} \cr
+If \code{TRUE}, data points will be plotted if they are NA.}
 }
 \value{
-nothing, saves pdf or png files with boxplots
+Nothing, saves pdf or png files with boxplots to the output folder.
 }
 \description{
-Boxplots for biomarker candidates including the data point (jitter)
-}
-\examples{
-# TODO
+Boxplots for biomarker candidates including the data point (jitter).
 }

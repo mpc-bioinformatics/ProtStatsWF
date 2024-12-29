@@ -1,25 +1,41 @@
 
-#' Boxplots for biomarker candidates including the data point (jitter)
+#' Boxplots for biomarker candidates including the data point (jitter).
 #'
-#' @param D data set containing only protein intensities, already filtered for interesting candidates
-#' @param protein.names character vector containing protein names
-#' @param group factor containing the groups
-#' @param group_colours character vector of hex codes or colours names for the group colors
-#' @param log_data TRUE, if the data should be log-transformed
-#' @param log_base base for log-transformation
-#' @param plot_device plot device, "pdf" or "png
-#' @param plot_height height if plot in cm
-#' @param plot_width width of plot in cm
-#' @param plot_dpi plot resolution (only for png)
-#' @param groupvar_name name of the group variable (displayed in legend)
-#' @param output_path output path
-#' @param suffix suffix for the output file
-#' @param plot_NA_level TRUE, if data points should be plotted if they are NA
+#' @param D               \strong{data.frame} \cr
+#'                        The data set containing only protein intensities, already filtered for interesting candidates.
+#' @param protein.names   \strong{character vector} \cr
+#'                        The protein names.
+#' @param group           \strong{character factor} \cr
+#'                        The group membership of the data.
+#' @param group_colours   \strong{character vector} \cr
+#'                        The hex codes or colours names for the group colors.
+#' @param log_data        \strong{logical} \cr
+#'                        If \code{TRUE}, the data will be log-transformed.
+#' @param log_base        \strong{numeric} \cr
+#'                        The base used, if \code{log_data = TRUE}.
+#' @param plot_device     \strong{character} \cr
+#'                        The plot device. Options are "pdf" or "png.
+#' @param plot_height     \strong{numeric} \cr
+#'                        The height if plot in cm.
+#' @param plot_width      \strong{numeric} \cr
+#'                        The width of plot in cm.
+#' @param plot_dpi        \strong{numeric} \cr
+#'                        The plot resolution (only for png).
+#' @param groupvar_name   \strong{character} \cr
+#'                        The name of the group variable (displayed in legend).
+#' @param output_path     \strong{character} \cr
+#'                        The path to a folder for the output.
+#' @param suffix          \strong{character} \cr
+#'                        The suffix for the output file.
+#' @param plot_NA_level   \strong{logical} \cr
+#'                        If \code{TRUE}, data points will be plotted if they are NA.
 #'
-#' @return nothing, saves pdf or png files with boxplots
+#' @return Nothing, saves pdf or png files with boxplots to the output folder.
 #' @export
 #'
-#' @examples # TODO
+#' @examples 
+#' 
+
 Boxplots_candidates <- function(D,
                                 protein.names,
                                 group = NULL,
