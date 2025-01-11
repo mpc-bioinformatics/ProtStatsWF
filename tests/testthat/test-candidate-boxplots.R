@@ -1,5 +1,10 @@
 test_that("Calculate candidate boxplots for a ttest ", {
   
+  # Skip this test on continuous integration systems like GitHub Actions
+  # The function expect_snapshot_file is otherwise too strict 
+  # and there is no way to get a few pixel of tolerance
+  testthat::skip_on_ci()
+  
   pData <- openxlsx::read.xlsx(xlsxFile = test_path("testdata", "result_ttest.xlsx"), na.strings = c("NA", "NaN", "Filtered","#NV"))
   
   candidates <- c(2:3)
@@ -17,14 +22,19 @@ test_that("Calculate candidate boxplots for a ttest ", {
   
   
 
-  #expect_snapshot_file(path = test_path("testdata", "boxplots_candidates_P02671.png"), name = "candidate_boxplots_1" )
-  #expect_snapshot_file(path = test_path("testdata", "boxplots_candidates_G3UYD0_G3UYJ6_Q3UHU8.png"), name = "candidate_boxplots_2" )
+  expect_snapshot_file(path = test_path("testdata", "boxplots_candidates_P02671.png"), name = "candidate_boxplots_1" )
+  expect_snapshot_file(path = test_path("testdata", "boxplots_candidates_G3UYD0_G3UYJ6_Q3UHU8.png"), name = "candidate_boxplots_2" )
 
   })
 
 
 
 test_that("Calculate candidate boxplots for an ANOVA ", {
+  
+  # Skip this test on continuous integration systems like GitHub Actions
+  # The function expect_snapshot_file is otherwise too strict 
+  # and there is no way to get a few pixel of tolerance
+  testthat::skip_on_ci()
   
   pData <- openxlsx::read.xlsx(xlsxFile = test_path("testdata", "result_ANOVA.xlsx"), na.strings = c("NA", "NaN", "Filtered","#NV"))
   
@@ -43,7 +53,7 @@ test_that("Calculate candidate boxplots for an ANOVA ", {
   
   
   
-  #expect_snapshot_file(path = test_path("testdata", "boxplots_candidates_Q61586.png"), name = "candidate_boxplots_3" )
-  #expect_snapshot_file(path = test_path("testdata", "boxplots_candidates_A0A087WPR7_A0A087WSP0_E9Q9X1.png"), name = "candidate_boxplots_4" )
+  expect_snapshot_file(path = test_path("testdata", "boxplots_candidates_Q61586.png"), name = "candidate_boxplots_3" )
+  expect_snapshot_file(path = test_path("testdata", "boxplots_candidates_A0A087WPR7_A0A087WSP0_E9Q9X1.png"), name = "candidate_boxplots_4" )
   
 })
