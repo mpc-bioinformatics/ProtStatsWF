@@ -27,11 +27,15 @@ test_that("Single MA plot", {
 
 
 test_that("plot", {
+  
+  temp_dir <- tempfile(pattern = "test_dir")
+  dir.create(temp_dir)
+  on.exit(unlink(temp_dir, recursive = TRUE)) 
 
   pData <- prepareData(data_path = test_path("testdata", "test_file_MA_plots.xlsx"), intensity_columns = 3:6)
   D = pData[["D"]]
 
-  pResult <- MA_Plots(D = D, do_log_transformation = FALSE, output_path = test_path("testdata"), suffix = "_result")
+  pResult <- MA_Plots(D = D, do_log_transformation = FALSE, output_path = temp_dir, suffix = "_result")
 
   expect_snapshot(pResult)
 })
