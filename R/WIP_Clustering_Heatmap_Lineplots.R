@@ -1,3 +1,4 @@
+
 #' Clustering, Heatmap and Lineplots
 #'
 #' @param D dataframe with log-transformed protein intensities, e.g. filtered for significant proteins form the ANOVA or t-test results
@@ -13,7 +14,7 @@
 Clustering_heatmap_lineplots <- function(D, id, output_path, suffix = "", nr_clusters = NULL) {
 
   rownames(D) <- 1:nrow(D)  # reset rownames (important to match cluster information later)
-  row_dend = stats::as.dendrogram(stats::hclust(amap::Dist(D, method = "pearson"))) # cluster the proteins
+  row_dend = stats::as.dendrogram(stats::hclust(amap::Dist(D, method = "correlation"))) # cluster the proteins with centered Pearson correlation as distance function
 
   if (is.null(nr_clusters)) {
   # find optimal number of clusters based on silhouette values
