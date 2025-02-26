@@ -1,33 +1,55 @@
 #' Heatmap
 #'
-#' @param D data set containing only protein intensities, already filtered for interesting candidates
-#' @param id data set containing further columns, e.g. protein or gene names
+#' @description
+#' This function produces a heatmap based on the Heatmap()-function from the ComplexHeatmap package.
+#' Use cases may be to get an overview over the whole proteomics data set or parts of it
+#' (e.g. interesting candidate proteins that were significant in prior analysis).
+#'
+#' @details
+#' Missing values
+#'
+#' Clustering, Optionen an Methoden (all based on hclust function)
+#'
+#' Einfärben weiterer Variablen
+#'
+#' weitere Einstelloptionen
+#'
+#'
+#' @param D dataframe containing only protein intensities (if applicable, already filtered for interesting candidate proteins)
+#' @param id dataframe containing further columns, e.g. protein or gene names
 #' @param protein_names_col column with protein or gene names (NULL if no protein names should be plotted)
-#' @param na_method "na.omit" -> proteins with any missing values will be removed
-#                   "impute" -> imputation of missing values
-#                   "keep" -> keep missing values
-#'                  note that clustering may not work when too many missing values are present
-#' @param filtermissings filter out proteins with more than X missing values (rows with only 1 or 2 valid values may cause problems with clustering)
-#' @param groups factor of group or data.frame with two or more grouping variables
-#' @param group_colours named list of group colours (discrete vars) or colour functions (continuous vars)
-#' @param column_split should columns be split? NULL if not, name of column in groups if yes
-#' @param cluster_column_slices cluster the column slices?
-#' @param cluster_rows if TRUE, rows will be clustered
-#' @param cluster_columns if TRUE, columns will be clustered
-#' @param dist_method distance metric for clustering, e.g. "pearson", "spearman", "euclidean"
-#' @param clust_method linkage method for clustering, e.g. "complete", "single", "average"
-#' @param symmetric_legend should colour code be made symmetric? (only make sense for z-scored data)
-#' @param scale_data should data be scaled ( = z-scored)?
+#'
 #' @param output_path path for exporting the plot
 #' @param suffix suffix for file name
+#'
+#' @param na_method "na.omit" -> proteins with any missing values will be removed
+#                   "impute" -> imputation of missing values (TODO: which method?)
+#                   "keep" -> keep missing values
+#'                  Please note that clustering may not work when too many missing values are present.
+#' @param filtermissings filter out proteins with more than X missing values (rows with only 1 or 2 valid values may cause problems with clustering)
+#' @param log_data if TRUE, intensities will be log-transformed
+#' @param log_base base for log-transformation
+#' @param scale_data should intensities be scaled ( = z-scored per row/protein)? Usually recommended for better visualization of the heatmap.
+#'
+#' @param groups factor of group or data.frame with two or more grouping variables
+#' @param group_colours named list of group colours (discrete vars) or colour functions (continuous vars)
+#'
+#' @param cluster_rows logical determining if rows will be clustered. Alternatively a dendrogram can be provided (potentially coloured using the dendextend package).
+#' @param cluster_columns logical determining if columns will be clustered. Alternatively a dendrogram can be provided (potentially coloured using the dendextend package).
+#' @param dist_method distance metric for clustering, e.g. "pearson", "spearman", "euclidean"
+#' @param clust_method linkage method for clustering, e.g. "complete", "single", "average"
+#'
+#' @param column_split should columns be split? NULL if not, name of column in groups if yes
+#' @param cluster_column_slices cluster the column slices?
+#'
+#' @param symmetric_legend should colour code be made symmetric? (only makes sense for z-scored data)
 #' @param legend_name name for legend
-#' @param title title
-#' @param legend_colours colours for colour gradient
+#' @param title title of the heatmap plot
+#' @param legend_colours colours for colour gradient (vector of 3 color names of hex codes for low-middle-high intensities)
 #' @param plot_height plot height
 #' @param plot_width plot width
 #' @param plot_dpi plot resolution in DPI
-#' @param log_data if TRUE, data will be log-transformed
-#' @param log_base base for log-transformation
+
 #' @param colour_scale_max maximum value for colour scale (useful if data contains strong outliers)
 #' @param textsize test size for labels
 #' @param ... further arguments to Heatmap
@@ -36,20 +58,34 @@
 #' @export
 #'
 #' @examples # TODO
-Heatmap_with_groups <- function(D, id, protein_names_col = NULL,
-                           na_method = "na.omit", filtermissings = 2,
-                           groups = NULL, group_colours = NULL,
-                           column_split = NULL, cluster_column_slices = FALSE,
-                           cluster_rows = TRUE, cluster_columns = TRUE,
-                           dist_method = "pearson", clust_method = "complete",
-                           symmetric_legend = TRUE, scale_data = TRUE,
-                           output_path = paste0(getwd(), "//"), suffix = NULL,
-                           legend_name = "Legend", title = "Heatmap",
-                           legend_colours = c("blue", "white", "red"),
-                           plot_height = 20, plot_width = 20, plot_dpi = 300,
-                           log_data = TRUE, log_base = 2,
-                           colour_scale_max = NULL, textsize = 15,
-                           ...){
+Heatmap_with_groups <- function(D,
+                                id,
+                                protein_names_col = NULL,
+                                na_method = "na.omit",
+                                filtermissings = 2,
+                                groups = NULL,
+                                group_colours = NULL,
+                                column_split = NULL,
+                                cluster_column_slices = FALSE,
+                                cluster_rows = TRUE,
+                                cluster_columns = TRUE,
+                                dist_method = "pearson",
+                                clust_method = "complete",
+                                symmetric_legend = TRUE,
+                                scale_data = TRUE,
+                                output_path = paste0(getwd(), "//"),
+                                suffix = NULL,
+                                legend_name = "Legend",
+                                title = "Heatmap",
+                                legend_colours = c("blue", "white", "red"),
+                                plot_height = 20,
+                                plot_width = 20,
+                                plot_dpi = 300,
+                                log_data = TRUE,
+                                log_base = 2,
+                                colour_scale_max = NULL,
+                                textsize = 15,
+                                ...){
 
   data.asmatrix <- as.matrix(D)
 
@@ -142,11 +178,14 @@ Heatmap_with_groups <- function(D, id, protein_names_col = NULL,
 
 
   ht <- ComplexHeatmap::Heatmap(data.asmatrix,
-                column_title = title , name = legend_name,
+                column_title = title,
+                name = legend_name,
                 cluster_rows = cluster_rows,
-                clustering_distance_rows = dist_method, clustering_method_rows = clust_method,
+                clustering_distance_rows = dist_method,
+                clustering_method_rows = clust_method,
                 cluster_columns = cluster_columns,
-                clustering_distance_columns = dist_method, clustering_method_columns = clust_method,
+                clustering_distance_columns = dist_method,
+                clustering_method_columns = clust_method,
                 cluster_column_slices = cluster_column_slices,
                 top_annotation = top_annotation,
                 column_split = column_split,
@@ -167,6 +206,29 @@ Heatmap_with_groups <- function(D, id, protein_names_col = NULL,
 
 
 
+### TODO: Funktion, die ein dendrogram erstellt, was die Distanzen aus dem amap Package verwendet und
+###       das Dendrogram ggfls einfärbt mittels dextend R package
+
+# ind_signi <- which(RES_ANOVA$p.anova.fdr <= 0.05 & !is.na(RES_ANOVA$p.anova.fdr))
+# D_norm_tmp_signi <- D_norm_tmp[ind_signi,]
+# rownames(D_norm_tmp_signi) <- 1:nrow(D_norm_tmp_signi)  # reset rownames (important to match cluster information later)
+# row_dend = as.dendrogram(hclust(Dist(D_norm_tmp_signi, method = "correlation"), method = "complete"))
+#
+#
+# ## optimal number of clusters
+# nr_clusters_opt <- dendextend::find_k(row_dend, krange = 2:15)$k
+#
+#
+# ### iterate over different number of clusters:
+# for (i in 2:15) {
+#
+#   nr_clusters <- i
+#   cluster_colours <- scales::hue_pal()(nr_clusters)
+#
+#   row_dend_color = color_branches(row_dend, k = nr_clusters, col = cluster_colours)
+#
 
 
+
+#### TODO: Funktion die die Daten vorher pro Gruppe mittelt
 

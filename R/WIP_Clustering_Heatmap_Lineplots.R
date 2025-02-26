@@ -11,7 +11,7 @@
 #' @export
 #'
 #' @examples # TODO
-Clustering_heatmap_lineplots <- function(D, id, output_path, suffix = "", nr_clusters = NULL) {
+Clustering_heatmap_lineplots2 <- function(D, id, output_path, suffix = "", nr_clusters = NULL) {
 
   rownames(D) <- 1:nrow(D)  # reset rownames (important to match cluster information later)
   row_dend = stats::as.dendrogram(stats::hclust(amap::Dist(D, method = "correlation"))) # cluster the proteins with centered Pearson correlation as distance function
@@ -26,7 +26,7 @@ Clustering_heatmap_lineplots <- function(D, id, output_path, suffix = "", nr_clu
   ## colour branches of the dendrogram to plot next to the heatmap
   row_dend_color = dendextend::color_branches(row_dend, k = nr_clusters, col = cluster_colours)
 
-  ht <- ProtStatsWF::Heatmap_with_groups(D = D,
+  ht <<- ProtStatsWF::Heatmap_with_groups(D = D,
                                          id = id,
                                          # TODO: no filtering at the moment but it may be necessary/useful depending on the data
                                          filtermissings = ncol(D)+1,
@@ -40,11 +40,11 @@ Clustering_heatmap_lineplots <- function(D, id, output_path, suffix = "", nr_clu
                                          row_gap = grid::unit(5, "mm"))
 
   ### get cluster for each protein (cluster number from heatmap doesn't correspond to apply cutree() on the dendrogram. This is why we need to get the cluster number from the heatmap directly).
-  ht = ComplexHeatmap::draw(ht$Heatmap)
-  x <- ComplexHeatmap::row_dend(ht)
+  ht_draw <<- ComplexHeatmap::draw(ht$Heatmap)
+  x <- ComplexHeatmap::row_dend(ht_draw)
   cluster <- integer(nrow(D))
   for (j in 1:nr_clusters) {
-    cluster_members <- as.integer(names(stats::cutree(x[[j]],1))) ### get cluster members
+    cluster_members <- as.integer(names(dendextend::cutree(x[[j]],1))) ### get cluster members
     cluster[cluster_members] <- j
   }
 
