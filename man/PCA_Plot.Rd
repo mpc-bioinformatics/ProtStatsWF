@@ -2,7 +2,7 @@
 % Please edit documentation in R/PCA_Plot.R
 \name{PCA_Plot}
 \alias{PCA_Plot}
-\title{Calculate a PCA plot for proteomics data}
+\title{Calculate a PCA plot for proteomics data.}
 \usage{
 PCA_Plot(
   D,
@@ -29,59 +29,71 @@ PCA_Plot(
 )
 }
 \arguments{
-\item{D}{A data.frame of the data set.}
+\item{D}{\strong{data.frame} \cr
+The data set containing intensities of the sample.}
 
-\item{groupvar1}{A variable used for colors.}
+\item{groupvar1}{\strong{character vector} \cr
+The variable used for colors.}
 
-\item{groupvar2}{A variable used for shapes.}
+\item{groupvar2}{\strong{character vector} \cr
+The variable used for shapes.}
 
-\item{impute}{If \code{TRUE}, missing values will be imputed.}
+\item{impute}{\strong{logical} \cr
+If \code{TRUE}, missing values will be imputed.}
 
-\item{impute_method}{A character containing the imputation method ("mean" or "median")}
+\item{impute_method}{\strong{character} \cr
+The imputation method. Options are "mean" or "median".}
 
-\item{propNA}{A numeric of the proportion of allowed missing NAs for a protein, before it is discarded.}
+\item{propNA}{\strong{numeric} \cr
+The proportion of allowed missing NAs for a protein, before it is discarded.}
 
-\item{scale.}{If \code{TRUE}, the data will be scaled before computing the PCA.}
+\item{scale.}{\strong{logical} \cr
+If \code{TRUE}, the data will be scaled before computing the PCA.}
 
-\item{PCx}{The principle component for the x-axis (default: 1).}
+\item{PCx}{\strong{integer} \cr
+The principle component for the x-axis.}
 
-\item{PCy}{The principle component for the y-axis (default: 2).}
+\item{PCy}{\strong{integer} \cr
+The principle component for the y-axis.}
 
-\item{groupvar1_name}{Titles of legends for colour and shape.}
+\item{groupvar1_name}{\strong{character} \cr
+The titles of legends for colour.}
 
-\item{groupvar2_name}{Titles of legends for colour and shape.}
+\item{groupvar2_name}{\strong{character} \cr
+The titles of legends for shape.}
 
-\item{group_colours}{The colors for the groups.}
+\item{group_colours}{\strong{character vector} \cr
+The colors for the groups.}
 
-\item{alpha}{If \code{TRUE}, the data points will be transparent.}
+\item{alpha}{\strong{logical} \cr
+If \code{TRUE}, the data points will be transparent.}
 
-\item{label}{If \code{TRUE}, the samples will be labeled.}
+\item{label}{\strong{logical} \cr
+If \code{TRUE}, the samples will be labeled.}
 
-\item{label_seed}{A numeric, which sets the seed for the label.}
+\item{label_seed}{\strong{numeric} \cr
+A numeric, which sets the seed for the label.}
 
-\item{label_size}{A numeric containing the size of the sample labels.}
+\item{label_size}{\strong{numeric} \cr
+A numeric containing the size of the sample labels.}
 
-\item{xlim}{Limit of the x-axis.}
+\item{xlim}{\strong{numeric} \cr
+The limit of the x-axis.}
 
-\item{ylim}{Limit of the y-axis.}
+\item{ylim}{\strong{numeric} \cr
+The limit of the y-axis.}
 
-\item{point.size}{The size of the data points.}
+\item{point.size}{\strong{numeric} \cr
+The size of the data points.}
 
-\item{base_size}{The base size for the plot.}
+\item{base_size}{\strong{numeric} \cr
+The base size for the plot.}
 
 \item{...}{Additional arguments for ggplot2::plot.}
 }
 \value{
-The PCA plot for a proteomics sample
+The PCA plot for a proteomics sample.
 }
 \description{
-Calculate a PCA plot for proteomics data
-}
-\examples{
-\dontrun{
-prepared_data <- prepareData(...)
-
-pca <- PCA_Plot(D = prepared_data[["D"]])
-}
-
+Calculate a PCA plot for proteomics data.
 }

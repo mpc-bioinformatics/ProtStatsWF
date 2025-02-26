@@ -1,15 +1,23 @@
-#' Calculate one MA plot for proteomics data
+#' Calculate one MA plot for proteomics data.
 #'
-#' @param sample_1              A numeric vector containing data of the first sample.
-#' @param sample_2              A numeric vector containing data of the second sample.
-#' @param do_log_transformation If \code{TRUE}, the data will be log-transformed.
-#' @param alpha                 If \code{TRUE}, the data points will be transparent.
-#' @param point_color           A character containing the colors of the data points.
-#' @param sampling              A numeric containing the sampling rate. Useful to sample part of the data set for data sets on peptide/feature level with many data points.
-#' @param ...                   Additional arguments for affy::ma.plot.
+#' @param sample_1                \strong{numeric vector} \cr
+#'                                The data of the first sample.
+#' @param sample_2                \strong{numeric vector} \cr
+#'                                The data of the second sample.
+#' @param do_log_transformation   \strong{logical} \cr
+#'                                If \code{TRUE}, the data will be log-transformed.
+#' @param alpha                   \strong{logical} \cr
+#'                                If \code{TRUE}, the data points will be transparent.
+#' @param point_color             \strong{character} \cr
+#'                                The color of the data points.
+#' @param sampling                \strong{numeric} \cr
+#'                                The sampling rate. Useful to sample part of the data set for data sets on peptide/feature level with many data points.
+#' @param ...                     Additional arguments for affy::ma.plot.
 #'
 #' @return Generates the MA plot for two samples.
 #' @export
+#' 
+#' @seealso [MA_Plots()]
 #'
 #' @examples
 #' \dontrun{
@@ -61,23 +69,36 @@ MA_Plot_single <- function(sample_1, sample_2,
 
 
 
-#' Calculate MA plots for proteomics data set
+#' Calculate MA plots for proteomics data set.
 #'
-#' @param D           A data.frame of the data set.
-#' @param do_log_transformation If \code{TRUE}, the data will be log-transformed.
-#' @param output_path A character containing the path to a folder.
-#' @param suffix      A character containing the suffix, with which the output file will be named. Should start with an underscore.
-#' @param labels      The sample labels for the title of the MA-Plot.
-#' @param labels2     The second line in sample title (e.g. group membership).
-#' @param maxPlots    A numeric containing the maximum number of MA plots that should be generated.
-#' @param alpha       If \code{TRUE}, the data points will be transparent.
-#' @param plot_height The height of the resulting MA plots.
-#' @param plot_width  The width of the resulting MA plots.
-#' @param sampling    A numeric containing the sampling rate. Useful to sample part of the data set for data sets on peptide/feature level with many data points.
-#' @param ...         Additional arguments for affy::ma.plot.
-#'
+#' @param D                       \strong{data.frame} \cr
+#'                                The data set containing intensities of the sample.
+#' @param do_log_transformation   \strong{logical} \cr
+#'                                If \code{TRUE}, the data will be log-transformed.
+#' @param output_path             \strong{character} \cr
+#'                                The path to a folder for the output.
+#' @param suffix                  \strong{character} \cr
+#'                                The suffix, with which the output file will be named. Should start with an underscore.
+#' @param labels                  \strong{character} \cr
+#'                                The sample labels for the title of the MA-Plot.
+#' @param labels2                 \strong{character} \cr
+#'                                The second line in sample title (e.g. group membership).
+#' @param maxPlots                \strong{integer} \cr
+#'                                The maximum number of MA plots that should be generated.
+#' @param alpha                   \strong{logical} \cr
+#'                                If \code{TRUE}, the data points will be transparent.
+#' @param plot_height             \strong{numeric} \cr
+#'                                The height of the resulting MA plots.
+#' @param plot_width              \strong{numeric} \cr
+#'                                The width of the resulting MA plots.
+#' @param sampling                \strong{numeric} \cr
+#'                                The sampling rate. Useful to sample part of the data set for data sets on peptide/feature level with many data points.
+#' @param ...                     Additional arguments for affy::ma.plot.
+#' 
 #' @return A pdf file containing the MA plots for all sample combinations.
 #' @export
+#' 
+#' @seealso [MA_Plot_single()]
 #'
 #' @examples
 #' \dontrun{
@@ -90,7 +111,7 @@ MA_Plot_single <- function(sample_1, sample_2,
 
 MA_Plots <- function(D,
                     do_log_transformation = FALSE,
-                    output_path = "", suffix = "_",
+                    output_path = "", suffix = "",
                     labels = 1:ncol(D), labels2 = colnames(D),
                     maxPlots = 5000,
                     alpha = FALSE,

@@ -1,3 +1,19 @@
+#' A method for filtering the data for PCA.
+#' 
+#' 
+#' @param D                \strong{data.frame} \cr
+#'                         The data set containing intensities of the sample.
+#' @param impute           \strong{logical} \cr
+#'                         If \code{TRUE}, missing values will be imputed.
+#' @param impute_method    \strong{character} \cr
+#'                         The imputation method. Options are "mean" or "median".
+#' @param propNA           \strong{numeric} \cr
+#'                         The proportion of allowed missing NAs for a protein, before it is discarded.
+#' 
+#' 
+#' @return The filtered data.
+#' 
+
 filter_PCA_data <- function(D, impute = FALSE, impute_method = "mean", propNA = 0){
   
   # proportion if missing values per protein

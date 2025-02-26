@@ -1,17 +1,27 @@
-#' Barplots showing the percentage of valid values for each sample
+#' Barplots showing the percentage of valid values for each sample.
 #'
-#' @param D_long                A data.frame of the data set given in long format.
-#' @param do_log_transformation If \code{TRUE}, the data is log-transformed
-#' @param log_base              A numeric containing the base used, if data is log-transformed.
-#' @param method                A character containing the method used. Possible are "boxplot" and "violinplot".
-#' @param use_groups            If \code{TRUE} data will be plotted in groups.
-#' @param groupvar_name         A character containing the name for the group variable.
-#' @param group_colours         A character vector of hex codes for the group colors.
-#' @param base_size             A numeric containing the base size of the font.
-#' @param lwd                   A numeric containing the line width of the boxplot.
-#' @param outlier_size          A numeric containing the size of the outliers.
+#' @param D_long                  \strong{data.frame} \cr
+#'                                The data set given in long format.
+#' @param do_log_transformation   \strong{logical} \cr
+#'                                If \code{TRUE}, the data is log-transformed
+#' @param log_base                \strong{numeric} \cr
+#'                                The base used, if data is log-transformed.
+#' @param method                  \strong{character} \cr
+#'                                The method used. Options are "boxplot" and "violinplot".
+#' @param use_groups              \strong{logical} \cr
+#'                                If \code{TRUE} data will be plotted in groups.
+#' @param groupvar_name           \strong{character} \cr
+#'                                The name for the group variable.
+#' @param group_colours           \strong{character vector} \cr
+#'                                The hex codes for the group colors.
+#' @param base_size               \strong{numeric} \cr
+#'                                The base size of the font.
+#' @param lwd                     \strong{numeric} \cr
+#'                                The line width of the boxplot.
+#' @param outlier_size            \strong{numeric} \cr
+#'                                The size of the outliers.
 #'
-#' @return a tibble and a ggplot of the valid values
+#' @return A tibble and a ggplot of the valid values.
 #' @export
 #'
 #' @examples

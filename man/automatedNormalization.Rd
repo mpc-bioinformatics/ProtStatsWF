@@ -2,7 +2,7 @@
 % Please edit documentation in R/automatedNormalization.R
 \name{automatedNormalization}
 \alias{automatedNormalization}
-\title{Automated normalization of proteomics data}
+\title{Automated normalization of proteomics data.}
 \usage{
 automatedNormalization(
   DATA,
@@ -13,19 +13,24 @@ automatedNormalization(
 )
 }
 \arguments{
-\item{DATA}{A data.frame containing the data.}
+\item{DATA}{\strong{data.frame} \cr
+The data set containing intensities of the sample.}
 
-\item{method}{A character containing the method of normalization. The possible methods are no normalization "nonorm" or "median", "loess", "quantile" or "lts" normalization.}
+\item{method}{\strong{character} \cr
+The method of normalization. Options are "nonorm" (no normalization), "median", "loess", "quantile" or "lts" normalization.}
 
-\item{is_log_transformed}{If \code{TRUE}, the data is log-transformed.}
+\item{is_log_transformed}{\strong{logical} \cr
+If \code{TRUE}, the data is log-transformed.}
 
-\item{log_base}{A numeric containing the base, in case the data was log-transformed.}
+\item{log_base}{\strong{numeric} \cr
+The base, in case the data was log-transformed.}
 
-\item{lts.quantile}{A numeric containing the quantile for the lts normalization.}
+\item{lts.quantile}{\strong{numeric} \cr
+The quantile for the lts normalization.}
 }
 \value{
 The normalized data as well as a message.
 }
 \description{
-Automated normalization of proteomics data
+Automated normalization of proteomics data.
 }

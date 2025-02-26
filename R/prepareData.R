@@ -1,26 +1,30 @@
-#' Prepare proteomics data for analysis
+#' Prepare proteomics data for analysis.
 #'
-#' @param data_path             A character containing the path to an .xlsx file.
-#' @param intensity_columns     An integer vector containing the intensity columns of the table.
-#' @param na_strings            A character vector containing symbols to be recognized as missing values (with the exception of 0).
-#' @param zero_to_NA            If \code{TRUE}, 0 will be treated as missing value.
-#' @param do_log_transformation If \code{TRUE}, the data will be log-transformed.
-#' @param log_base              A numeric containing the base used, if data is log-transformed.
-#' @param use_groups            If \code{TRUE}, the data contains groups.
-#' @param group_colours         A character vector of hex codes for the group colors, if the data has groups. If \code{NULL}, a default color scale will be used.
-#' @param normalization         A character containing the method of normalization. The possible methods are no normalization "nonorm" or "median", "loess", "quantile" or "lts" normalization.
-#' @param lts_quantile          A numeric containing the quantile for the lts normalization if \code{normalization = "lts"}, default is 0.8.
+#' @param data_path               \strong{character} \cr
+#'                                The path to an .xlsx file containing the input data.
+#' @param intensity_columns       \strong{integer vector} \cr
+#'                                The numbers of the intensity columns in the table.
+#' @param na_strings              \strong{character} \cr
+#'                                A vector containing the symbols to be recognized as missing values (with the exception of 0).
+#' @param zero_to_NA              \strong{logical} \cr
+#'                                If \code{TRUE}, 0 will be treated as missing value.
+#' @param do_log_transformation   \strong{logical} \cr
+#'                                If \code{TRUE}, the data will be log-transformed.
+#' @param log_base                \strong{numeric} \cr
+#'                                The base used, if \code{do_log_transformation = TRUE}.
+#' @param use_groups              \strong{logical} \cr
+#'                                If \code{TRUE}, group information encoded in the column names is used.
+#' @param group_colours           \strong{character vector} \cr
+#'                                The hex codes for the group colors, if the data has groups. If \code{NULL}, a default color scale will be used.
+#' @param normalization           \strong{character} \cr
+#'                                The method of normalization. Options are "nonorm" (no normalization), "median", "loess", "quantile" or "lts" normalization.
+#' @param lts_quantile            \strong{numeric} \cr
+#'                                The quantile for the lts normalization if \code{normalization = "lts"}.
 #'
-#' @return A list containing the prepared data and the ids of the data as data.frames as well as the groups, number of groups and group colors
+#' @return A list containing the prepared data and the ids of the data as data.frames as well as the groups, number of groups and group colors.
 #' @export
 #'
 #' @examples
-#'\dontrun{
-#' path <- "/Users/thisuser/Documents/dataFolder/data.xlsx"
-#' intensity_cols <- 3:17
-#'
-#' prepared_data <- prepareData(data_path = path, intensity_columns = intensity_cols)
-#'}
 #'
 
 prepareData <- function (data_path,
