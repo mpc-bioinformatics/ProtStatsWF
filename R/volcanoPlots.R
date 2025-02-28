@@ -376,9 +376,12 @@ VolcanoPlot_ANOVA <- function(RES,
   #nr_comparisons <- choose(n = nr_groups, k = 2) # pairwise comparisons between two groups
 
   # names of the comparisons
-  comp_names <- colnames(RES)[columns_p_posthoc]
-  comp_names <- stringr::str_replace_all(comp_names, "p.posthoc.", "")
-  comp_names <- stringr::str_replace_all(comp_names, "_", " ")
+  comp_names <- colnames(RES)[columns_FC]
+  comp_names <- substring(comp_names, 4) # remove "FC_" at beginning
+  comp_names <- stringr::str_replace_all(comp_names, "devided_by_", "vs")
+
+  #comp_names <- stringr::str_replace_all(comp_names, "FC_", "")
+  #comp_names <- stringr::str_replace_all(comp_names, "_", " ")
 
   Volcano_plots <- list()
   for (i in 1:nr_comparisons) {
