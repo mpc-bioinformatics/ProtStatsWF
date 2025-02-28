@@ -82,7 +82,9 @@ workflow_ttest <- function(data_path,
                            plot_device = "pdf",
                            plot_height = 15,
                            plot_width = 15,
-                           plot_dpi = 300
+                           plot_dpi = 300,
+
+                           column_name_protein = "Protein"
                            ){
 
   mess = ""
@@ -184,7 +186,7 @@ workflow_ttest <- function(data_path,
   #### Create Boxplots of Biomarker Candidates ####
 
   Boxplots_candidates(D = data[["D"]][candidates, ],
-                      protein.names = data[["ID"]][candidates, "protein"],
+                      protein.names = data[["ID"]][candidates, column_name_protein],
                       group = data[["group"]],
                       suffix = suffix,
                       output_path = paste0(output_path),
