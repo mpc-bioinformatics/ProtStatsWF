@@ -20,7 +20,8 @@ workflow_ttest(
   plot_device = "pdf",
   plot_height = 15,
   plot_width = 15,
-  plot_dpi = 300
+  plot_dpi = 300,
+  column_name_protein = "Protein"
 )
 }
 \arguments{
@@ -94,7 +95,7 @@ out_path <- "C:/Users/thisuser/Documents/resultsFolder/"
 result <- workflow_ttest(data_path = in_path,
                          output_path = out_path,
                          intensity_columns = int_col) }
-                         
+
 }
 \seealso{
 \code{\link[=workflow_ANOVA]{workflow_ANOVA()}} in case of more than two groups in the sample.\cr
