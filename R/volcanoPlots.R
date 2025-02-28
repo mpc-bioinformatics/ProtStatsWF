@@ -5,8 +5,8 @@
 #' @param FC                      \strong{numeric factor} \cr
 #'                                The values for the fold changes.
 #' @param significance_category   \strong{character factor} \cr
-#'                                The significance categories for the volcano plot. 
-#'                                
+#'                                The significance categories for the volcano plot.
+#'
 #' @param log_base_fc             \strong{numeric} \cr
 #'                                The base for the fold changes log-transformation.
 #' @param log_base_p              \strong{numeric} \cr
@@ -24,22 +24,22 @@
 #' @param symmetric_x             \strong{logical} \cr
 #'                                If \code{TRUE}, x-axis limits will be made symmetric (not used if xlim is defined).
 #' @param legend_position         \strong{character} \cr
-#'                                The positioning of the legend. 
+#'                                The positioning of the legend.
 #'                                Options are "none", "left", "right", "bottom", "top" and "inside".
 #' @param base_size               \strong{numeric} \cr
 #'                                The base size of the font.
 #' @param xlim                    \strong{numeric} \cr
-#'                                The limits for x-axis. 
+#'                                The limits for x-axis.
 #' @param ylim                    \strong{numeric} \cr
-#'                                The limits for y-axis. 
+#'                                The limits for y-axis.
 #'
 #' @return A ggplot showing the volcano plot.
 #' @export
-#' 
+#'
 #' @seealso [VolcanoPlot_ttest()], [VolcanoPlot_ANOVA()]
 #'
 #' @examples
-#' 
+#'
 
 VolcanoPlot <- function(p,
                         FC,
@@ -72,7 +72,7 @@ VolcanoPlot <- function(p,
 
 
   significance <- RES$significance
-  
+
   plot <- ggplot2::ggplot(data = RES, ggplot2::aes(x = transformed_FC, y = transformed_p, colour = significance)) +
     ggplot2::geom_point(alpha = 5/10) +
     ggplot2::scale_colour_manual(values = c("not significant" = colour1, "significant" = colour2, "significant after FDR correction" = colour3), drop = FALSE) +
@@ -161,7 +161,7 @@ VolcanoPlot <- function(p,
 #' @param symmetric_x       \strong{logical} \cr
 #'                          If \code{TRUE}, x-axis limits will be made symmetric (not used if xlim is defined).
 #' @param legend_position   \strong{character} \cr
-#'                          The positioning of the legend. 
+#'                          The positioning of the legend.
 #'                          Options are "none", "left", "right", "bottom", "top" and "inside".
 #' @param plot_height       \strong{numeric} \cr
 #'                          The height of plot.
@@ -170,7 +170,7 @@ VolcanoPlot <- function(p,
 #' @param plot_dpi          \strong{integer} \cr
 #'                          The resolution of plot.
 #' @param plot_device       \strong{character} \cr
-#'                          The plot device that is used for the resulting plot. 
+#'                          The plot device that is used for the resulting plot.
 #'                          Options are "pdf" and "png".
 #' @param output_path       \strong{character} \cr
 #'                          The path for output file.
@@ -183,11 +183,11 @@ VolcanoPlot <- function(p,
 #'
 #' @return A ggplot object of the volcano plot from a ttest result.
 #' @export
-#' 
+#'
 #' @seealso [VolcanoPlot()], [VolcanoPlot_ANOVA()], [add_labels()]
 #'
-#' @examples 
-#' 
+#' @examples
+#'
 
 VolcanoPlot_ttest <- function(RES,
                         columnname_p = "p",
@@ -326,7 +326,7 @@ VolcanoPlot_ttest <- function(RES,
 #' @param symmetric_x            \strong{logical} \cr
 #'                               If \code{TRUE}, x-axis limits will be made symmetric (not used if xlim is defined).
 #' @param legend_position        \strong{character} \cr
-#'                               The positioning of the legend. 
+#'                               The positioning of the legend.
 #'                               Options are "none", "left", "right", "bottom", "top" and "inside".
 #' @param base_size              \strong{numeric} \cr
 #'                               The base size for theme.
@@ -335,15 +335,15 @@ VolcanoPlot_ttest <- function(RES,
 #' @param ylim                   \strong{numeric} \cr
 #'                               The limits for y-axis.
 #' @param add_labels             \strong{logical} \cr
-#'                               If \code{TRUE}, labels will be added. 
+#'                               If \code{TRUE}, labels will be added.
 #'
 #' @return A list of ggplots of the volcano plot from an ANOVA result.
 #' @export
-#' 
+#'
 #' @seealso [VolcanoPlot()], [VolcanoPlot_ttest()], [add_labels()]
 #'
 #' @examples
-#' 
+#'
 
 VolcanoPlot_ANOVA <- function(RES,
                               columnname_p_ANOVA = "p.anova",
@@ -460,11 +460,11 @@ VolcanoPlot_ANOVA <- function(RES,
 #'
 #' @return A ggplot object with labels.
 #' @export
-#' 
+#'
 #' @seealso [VolcanoPlot()], [VolcanoPlot_ttest()], [VolcanoPlot_ANOVA()]
 #'
-#' @examples 
-#' 
+#' @examples
+#'
 
 add_labels <- function(RES_Volcano,
                        label_type = "FDR",
@@ -511,10 +511,6 @@ add_labels <- function(RES_Volcano,
     labels_up[ind_label_up] <- protein_names[ind_label_up]
     labels_down[ind_label_down] <- protein_names[ind_label_down]
   }
-
-  ### TODO: what if genenames are too long?
-  ### TODO: what if genenames are not unique?
-  ### TODO: what if genenames are not available?
 
   nudge_x = 0.2
   nudge_y = 0.2
