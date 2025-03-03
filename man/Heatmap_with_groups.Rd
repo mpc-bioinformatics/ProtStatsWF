@@ -36,14 +36,14 @@ Heatmap_with_groups(
 )
 }
 \arguments{
-\item{D}{data set containing only protein intensities, already filtered for interesting candidates}
+\item{D}{dataframe containing only protein intensities (if applicable, already filtered for interesting candidate proteins)}
 
-\item{id}{data set containing further columns, e.g. protein or gene names}
+\item{id}{dataframe containing further columns, e.g. protein or gene names}
 
 \item{protein_names_col}{column with protein or gene names (NULL if no protein names should be plotted)}
 
 \item{na_method}{"na.omit" -> proteins with any missing values will be removed
-note that clustering may not work when too many missing values are present}
+Please note that clustering may not work when too many missing values are present.}
 
 \item{filtermissings}{filter out proteins with more than X missing values (rows with only 1 or 2 valid values may cause problems with clustering)}
 
@@ -55,17 +55,17 @@ note that clustering may not work when too many missing values are present}
 
 \item{cluster_column_slices}{cluster the column slices?}
 
-\item{cluster_rows}{if TRUE, rows will be clustered}
+\item{cluster_rows}{logical determining if rows will be clustered. Alternatively a dendrogram can be provided (potentially coloured using the dendextend package).}
 
-\item{cluster_columns}{if TRUE, columns will be clustered}
+\item{cluster_columns}{logical determining if columns will be clustered. Alternatively a dendrogram can be provided (potentially coloured using the dendextend package).}
 
 \item{dist_method}{distance metric for clustering, e.g. "pearson", "spearman", "euclidean"}
 
 \item{clust_method}{linkage method for clustering, e.g. "complete", "single", "average"}
 
-\item{symmetric_legend}{should colour code be made symmetric? (only make sense for z-scored data)}
+\item{symmetric_legend}{should colour code be made symmetric? (only makes sense for z-scored data)}
 
-\item{scale_data}{should data be scaled ( = z-scored)?}
+\item{scale_data}{should intensities be scaled ( = z-scored per row/protein)? Usually recommended for better visualization of the heatmap.}
 
 \item{output_path}{path for exporting the plot}
 
@@ -73,9 +73,9 @@ note that clustering may not work when too many missing values are present}
 
 \item{legend_name}{name for legend}
 
-\item{title}{title}
+\item{title}{title of the heatmap plot}
 
-\item{legend_colours}{colours for colour gradient}
+\item{legend_colours}{colours for colour gradient (vector of 3 color names of hex codes for low-middle-high intensities)}
 
 \item{plot_height}{plot height}
 
@@ -83,7 +83,7 @@ note that clustering may not work when too many missing values are present}
 
 \item{plot_dpi}{plot resolution in DPI}
 
-\item{log_data}{if TRUE, data will be log-transformed}
+\item{log_data}{if TRUE, intensities will be log-transformed}
 
 \item{log_base}{base for log-transformation}
 
@@ -97,7 +97,18 @@ note that clustering may not work when too many missing values are present}
 heatmap + data used for the heatmap before and after imputation
 }
 \description{
-Heatmap
+This function produces a heatmap based on the Heatmap()-function from the ComplexHeatmap package.
+Use cases may be to get an overview over the whole proteomics data set or parts of it
+(e.g. interesting candidate proteins that were significant in prior analysis).
+}
+\details{
+Missing values
+
+Clustering, Optionen an Methoden (all based on hclust function)
+
+Einfärben weiterer Variablen
+
+weitere Einstelloptionen
 }
 \examples{
 # TODO
