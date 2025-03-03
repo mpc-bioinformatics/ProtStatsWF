@@ -2,7 +2,7 @@
 % Please edit documentation in R/workflow_ttest.R
 \name{workflow_ttest}
 \alias{workflow_ttest}
-\title{The workflow for a t-test of quantitative proteomics data.}
+\title{t-test workflow}
 \usage{
 workflow_ttest(
   data_path,
@@ -77,7 +77,12 @@ The "dots per inch" of the plot aka. the plot resolution.}
 Returns a message log of the workflow. The log contains an overview of the settings and gives some information e.g number of significant candidates or on-off-proteins.
 }
 \description{
-The workflow for a t-test of quantitative proteomics data.
+#' @description
+Workflow for t-test analysis of quantitative proteomics data.
+}
+\details{
+This function performs a t-test to compare two experimental groups in a quantitative proteomics dataset.
+Ideally, the data should be already normalized before performing the t-test (e.g. by using the \code{\link[=workflow_QC]{workflow_QC()}} function).
 }
 \examples{
 

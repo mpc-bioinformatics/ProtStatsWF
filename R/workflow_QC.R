@@ -38,7 +38,6 @@
 #'                               The name for the group variable.
 #' @param group_colours          \strong{character vector} \cr
 #'                               The hex codes for the group colors, if the data has groups. If \code{NULL}, a default color scale will be used.
-### TODO: ideally, group_colours would be a named vector!
 #'
 #' @param suffix                 \strong{character} \cr
 #'                               The suffix for the output files. It needs to start with an underscore.
@@ -280,6 +279,7 @@ workflow_QC <- function(data_path,
   ggplot2::ggsave(paste0(output_path, "/PCA_plot", suffix, ".", plot_device), plot = pca_data[["plot"]],
                   device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi, units = "cm")
   utils::write.csv(x = pca_data$D_PCA_plot, file = paste0(output_path, "/D_PCA", suffix, ".csv"), row.names = FALSE)
+  utils::write.csv(x = pca_data$filtered_D, file = paste0(output_path, "/PCA_data_after_imputation", suffix, ".csv"), row.names = FALSE)
 
 
   return(list("message" = mess))

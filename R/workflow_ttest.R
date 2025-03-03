@@ -1,4 +1,17 @@
-#' The workflow for a t-test of quantitative proteomics data.
+#' t-test workflow
+#'
+#' @description
+#' Workflow for t-test analysis of quantitative proteomics data.
+#'
+#' @details
+#' This function performs a t-test to compare two experimental groups in a quantitative proteomics dataset.
+#' Ideally, the data should be already normalized before performing the t-test (e.g. by using the [workflow_QC()] function).
+#' It is recommended to log-transform the data before the t-test (either use already log-transformed data and \code{log_before_test = FALSE}
+#' or log-transform the data on the fly with \code{log_before_test = TRUE}).
+#' The function generates a volcano plot, a histogram of p-values and fold changes,
+#' boxplots of the significant candidates, and a heatmap of the significant candidates.
+#'
+#'
 #'
 #' @param data_path              \strong{character} \cr
 #'                               The path to an .xlsx file containing the input data.
@@ -289,7 +302,7 @@ workflow_ttest <- function(data_path,
 #'
 #'
 #' @return Message log of the workflow
-#' @export
+#'
 #'
 #' @seealso [workflow_ttest()] in case of only two groups in the sample.\cr
 #'          Functions used in this workflow:
@@ -316,6 +329,10 @@ workflow_ttest <- function(data_path,
 #'                          output_path = out_path,
 #'                          intensity_columns = int_col) }
 #'
+
+
+
+
 
 workflow_ANOVA <- function(data_path,
                            output_path,
