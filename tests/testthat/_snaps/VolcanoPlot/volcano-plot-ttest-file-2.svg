@@ -40,18 +40,18 @@
 <polyline points='231.25,505.91 231.25,22.78 ' style='stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;' />
 <polyline points='427.53,505.91 427.53,22.78 ' style='stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;' />
 <polyline points='623.82,505.91 623.82,22.78 ' style='stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;' />
-<circle cx='431.47' cy='483.95' r='1.95' style='stroke-width: 0.71; stroke: #BEBEBE; stroke-opacity: 0.50; fill: #BEBEBE; fill-opacity: 0.50;' />
-<circle cx='570.40' cy='167.37' r='1.95' style='stroke-width: 0.71; stroke: #FFA500; stroke-opacity: 0.50; fill: #FFA500; fill-opacity: 0.50;' />
-<circle cx='431.74' cy='468.19' r='1.95' style='stroke-width: 0.71; stroke: #BEBEBE; stroke-opacity: 0.50; fill: #BEBEBE; fill-opacity: 0.50;' />
-<circle cx='430.02' cy='483.73' r='1.95' style='stroke-width: 0.71; stroke: #BEBEBE; stroke-opacity: 0.50; fill: #BEBEBE; fill-opacity: 0.50;' />
-<circle cx='572.76' cy='185.44' r='1.95' style='stroke-width: 0.71; stroke: #FFA500; stroke-opacity: 0.50; fill: #FFA500; fill-opacity: 0.50;' />
-<circle cx='577.29' cy='407.59' r='1.95' style='stroke-width: 0.71; stroke: #BEBEBE; stroke-opacity: 0.50; fill: #BEBEBE; fill-opacity: 0.50;' />
-<circle cx='417.41' cy='466.04' r='1.95' style='stroke-width: 0.71; stroke: #BEBEBE; stroke-opacity: 0.50; fill: #BEBEBE; fill-opacity: 0.50;' />
-<circle cx='577.93' cy='351.11' r='1.95' style='stroke-width: 0.71; stroke: #FFA500; stroke-opacity: 0.50; fill: #FFA500; fill-opacity: 0.50;' />
-<circle cx='599.29' cy='333.12' r='1.95' style='stroke-width: 0.71; stroke: #FFA500; stroke-opacity: 0.50; fill: #FFA500; fill-opacity: 0.50;' />
-<circle cx='683.31' cy='44.74' r='1.95' style='stroke-width: 0.71; stroke: #FFA500; stroke-opacity: 0.50; fill: #FFA500; fill-opacity: 0.50;' />
-<circle cx='59.11' cy='165.65' r='1.95' style='stroke-width: 0.71; stroke: #FFA500; stroke-opacity: 0.50; fill: #FFA500; fill-opacity: 0.50;' />
-<circle cx='301.77' cy='354.14' r='1.95' style='stroke-width: 0.71; stroke: #FFA500; stroke-opacity: 0.50; fill: #FFA500; fill-opacity: 0.50;' />
+<circle cx='431.47' cy='483.95' r='3.56' style='stroke-width: 0.71; stroke: #BEBEBE; stroke-opacity: 0.50; fill: #BEBEBE; fill-opacity: 0.50;' />
+<circle cx='570.40' cy='167.37' r='3.56' style='stroke-width: 0.71; stroke: #FFA500; stroke-opacity: 0.50; fill: #FFA500; fill-opacity: 0.50;' />
+<circle cx='431.74' cy='468.19' r='3.56' style='stroke-width: 0.71; stroke: #BEBEBE; stroke-opacity: 0.50; fill: #BEBEBE; fill-opacity: 0.50;' />
+<circle cx='430.02' cy='483.73' r='3.56' style='stroke-width: 0.71; stroke: #BEBEBE; stroke-opacity: 0.50; fill: #BEBEBE; fill-opacity: 0.50;' />
+<circle cx='572.76' cy='185.44' r='3.56' style='stroke-width: 0.71; stroke: #FFA500; stroke-opacity: 0.50; fill: #FFA500; fill-opacity: 0.50;' />
+<circle cx='577.29' cy='407.59' r='3.56' style='stroke-width: 0.71; stroke: #BEBEBE; stroke-opacity: 0.50; fill: #BEBEBE; fill-opacity: 0.50;' />
+<circle cx='417.41' cy='466.04' r='3.56' style='stroke-width: 0.71; stroke: #BEBEBE; stroke-opacity: 0.50; fill: #BEBEBE; fill-opacity: 0.50;' />
+<circle cx='577.93' cy='351.11' r='3.56' style='stroke-width: 0.71; stroke: #FFA500; stroke-opacity: 0.50; fill: #FFA500; fill-opacity: 0.50;' />
+<circle cx='599.29' cy='333.12' r='3.56' style='stroke-width: 0.71; stroke: #FFA500; stroke-opacity: 0.50; fill: #FFA500; fill-opacity: 0.50;' />
+<circle cx='683.31' cy='44.74' r='3.56' style='stroke-width: 0.71; stroke: #FFA500; stroke-opacity: 0.50; fill: #FFA500; fill-opacity: 0.50;' />
+<circle cx='59.11' cy='165.65' r='3.56' style='stroke-width: 0.71; stroke: #FFA500; stroke-opacity: 0.50; fill: #FFA500; fill-opacity: 0.50;' />
+<circle cx='301.77' cy='354.14' r='3.56' style='stroke-width: 0.71; stroke: #FFA500; stroke-opacity: 0.50; fill: #FFA500; fill-opacity: 0.50;' />
 <line x1='27.90' y1='388.17' x2='714.52' y2='388.17' style='stroke-width: 1.07; stroke-dasharray: 1.42,4.27; stroke-linecap: butt;' />
 <line x1='525.67' y1='505.91' x2='525.67' y2='22.78' style='stroke-width: 1.07; stroke-dasharray: 1.42,4.27; stroke-linecap: butt;' />
 <line x1='329.39' y1='505.91' x2='329.39' y2='22.78' style='stroke-width: 1.07; stroke-dasharray: 1.42,4.27; stroke-linecap: butt;' />
@@ -74,19 +74,17 @@
 <text x='623.82' y='516.90' text-anchor='middle' style='font-size: 8.80px; fill: #4D4D4D; font-family: sans;' textLength='4.89px' lengthAdjust='spacingAndGlyphs'>2</text>
 <text x='371.21' y='529.04' text-anchor='middle' style='font-size: 11.00px; font-family: sans;' textLength='42.79px' lengthAdjust='spacingAndGlyphs'>log2(FC)</text>
 <text transform='translate(13.05,264.35) rotate(-90)' text-anchor='middle' style='font-size: 11.00px; font-family: sans;' textLength='44.02px' lengthAdjust='spacingAndGlyphs'>-log10(p)</text>
-<rect x='167.51' y='542.28' width='407.39' height='28.24' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
-<text x='172.99' y='560.19' style='font-size: 11.00px; font-family: sans;' textLength='57.49px' lengthAdjust='spacingAndGlyphs'>significance</text>
-<rect x='235.96' y='547.76' width='17.28' height='17.28' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
-<circle cx='244.60' cy='556.40' r='1.95' style='stroke-width: 0.71; stroke: #BEBEBE; stroke-opacity: 0.50; fill: #BEBEBE; fill-opacity: 0.50;' />
-<rect x='318.01' y='547.76' width='17.28' height='17.28' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
-<rect x='385.39' y='547.76' width='17.28' height='17.28' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
-<circle cx='394.03' cy='556.40' r='1.95' style='stroke-width: 0.71; stroke: #FFA500; stroke-opacity: 0.50; fill: #FFA500; fill-opacity: 0.50;' />
-<rect x='534.44' y='547.76' width='17.28' height='17.28' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
-<circle cx='543.08' cy='556.40' r='1.95' style='stroke-width: 0.71; stroke: #7F7F7F; stroke-opacity: 0.50; fill: #7F7F7F; fill-opacity: 0.50;' />
-<text x='258.72' y='559.43' style='font-size: 8.80px; font-family: sans;' textLength='53.81px' lengthAdjust='spacingAndGlyphs'>not significant</text>
-<text x='340.77' y='559.43' style='font-size: 8.80px; font-family: sans;' textLength='39.14px' lengthAdjust='spacingAndGlyphs'>significant</text>
-<text x='408.15' y='559.43' style='font-size: 8.80px; font-family: sans;' textLength='120.81px' lengthAdjust='spacingAndGlyphs'>significant after FDR correction</text>
-<text x='557.20' y='559.43' style='font-size: 8.80px; font-family: sans;' textLength='12.23px' lengthAdjust='spacingAndGlyphs'>NA</text>
+<rect x='187.75' y='542.28' width='366.92' height='28.24' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
+<text x='193.23' y='560.19' style='font-size: 11.00px; font-family: sans;' textLength='57.49px' lengthAdjust='spacingAndGlyphs'>significance</text>
+<rect x='256.19' y='547.76' width='17.28' height='17.28' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
+<circle cx='264.83' cy='556.40' r='5.16' style='stroke-width: 0.71; stroke: #BEBEBE; stroke-opacity: 0.50; fill: #BEBEBE; fill-opacity: 0.50;' />
+<rect x='338.25' y='547.76' width='17.28' height='17.28' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
+<circle cx='346.89' cy='556.40' r='5.16' style='stroke-width: 0.71; stroke: #000000; stroke-opacity: 0.50; fill: #000000; fill-opacity: 0.50;' />
+<rect x='405.62' y='547.76' width='17.28' height='17.28' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
+<circle cx='414.26' cy='556.40' r='5.16' style='stroke-width: 0.71; stroke: #FFA500; stroke-opacity: 0.50; fill: #FFA500; fill-opacity: 0.50;' />
+<text x='278.95' y='559.43' style='font-size: 8.80px; font-family: sans;' textLength='53.81px' lengthAdjust='spacingAndGlyphs'>not significant</text>
+<text x='361.01' y='559.43' style='font-size: 8.80px; font-family: sans;' textLength='39.14px' lengthAdjust='spacingAndGlyphs'>significant</text>
+<text x='428.38' y='559.43' style='font-size: 8.80px; font-family: sans;' textLength='120.81px' lengthAdjust='spacingAndGlyphs'>significant after FDR correction</text>
 <text x='27.90' y='14.56' style='font-size: 13.20px; font-family: sans;' textLength='145.32px' lengthAdjust='spacingAndGlyphs'>volcano_plot_ttest_file_2</text>
 </g>
 </svg>

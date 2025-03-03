@@ -55,7 +55,8 @@ VolcanoPlot <- function(p,
                         legend_position = "bottom",
                         base_size = NULL,
                         xlim = NULL,
-                        ylim = NULL) {
+                        ylim = NULL, alpha = 0.5,
+                        point_size = 3) {
 
 
   ### transform p-values and fold changes and thresholds
@@ -66,7 +67,7 @@ VolcanoPlot <- function(p,
   log_thres_p <- -log(thres_p, base = log_base_p)
   log_thres_fc <- log(thres_fc, base = log_base_fc)
 
-  RES <- data.frame(transformed_FC = transformed_FC,
+  RES <<- data.frame(transformed_FC = transformed_FC,
                     transformed_p = transformed_p,
                     significance = significance_category)
 
@@ -74,12 +75,16 @@ VolcanoPlot <- function(p,
   significance <- RES$significance
 
   plot <- ggplot2::ggplot(data = RES, ggplot2::aes(x = transformed_FC, y = transformed_p, colour = significance)) +
-    ggplot2::geom_point(alpha = 5/10) +
-    ggplot2::scale_colour_manual(values = c("not significant" = colour1, "significant" = colour2, "significant after FDR correction" = colour3), drop = FALSE) +
-    ### TODO: axis labels with expressions
-    ### TODO: what if I do not have these categories?
+    ggplot2::geom_point(alpha = alpha, show.legend = TRUE, size = point_size) +
+    ggplot2::scale_colour_manual(values = c("not significant" = colour1,
+                                            "significant" = colour2,
+                                            "significant after FDR correction" = colour3),
+                                 drop = FALSE,
+                                 na.translate = FALSE) +
+
     ggplot2::xlab(paste0("log",log_base_fc,"(FC)")) +
-    ggplot2::ylab(paste0("-log",log_base_p,"(p)"))
+    ggplot2::ylab(paste0("-log",log_base_p,"(p)")) +
+    ggplot2::guides(colour = ggplot2::guide_legend(override.aes = list(size = point_size*1.5)))
 
 
   if (!is.null(base_size)) {
@@ -88,7 +93,6 @@ VolcanoPlot <- function(p,
     plot <- plot + ggplot2::theme_bw()
   }
 
-  # TODO: legend_position einstellbar machen
   plot <- plot + ggplot2::theme(legend.position = legend_position)
 
   ### if xlim is not set, use max/min FC and make it symmetric
@@ -193,30 +197,23 @@ VolcanoPlot_ttest <- function(RES,
                         columnname_p = "p",
                         columnname_padj = "padj",
                         columnname_FC = "FC",
+                        thres_p = 0.05,
+                        thres_fc = 2,
                         log_base_fc = 2,
                         log_base_p = 10,
                         is_FC_log = FALSE,
                         is_p_log = FALSE,
-                        thres_fc = 2,
-                        thres_p = 0.05,
                         show_thres_line = TRUE,
-                        colour1 = "grey",
-                        colour2 = "black",
-                        colour3 = "orange",
                         groupname1 = "group1",
                         groupname2 = "group2",
-                        xlim = NULL,
-                        ylim = NULL,
-                        symmetric_x = FALSE,
-                        legend_position = "bottom",
                         plot_height = 15,
                         plot_width = 15,
                         plot_dpi = 300,
                         plot_device="pdf",
                         output_path = NULL,
                         suffix = NULL,
-                        base_size = NULL,
-                        add_annotation = TRUE){
+                        add_annotation = TRUE,
+                        ...) {
 
 
   # make check work
@@ -247,18 +244,7 @@ VolcanoPlot_ttest <- function(RES,
   plot <- VolcanoPlot(p = p,
                       FC = FC,
                       significance_category = RES$significance,
-                      log_base_fc = log_base_fc,
-                      log_base_p = log_base_p,
-                      thres_p = thres_p,
-                      thres_fc = thres_fc,
-                      colour1 = colour1,
-                      colour2 = colour2,
-                      colour3 = colour3,
-                      symmetric_x = symmetric_x,
-                      legend_position = legend_position,
-                      base_size = base_size,
-                      xlim = xlim,
-                      ylim = ylim)
+                      ...)
 
 
   ## TODO: annotation of number of significant proteins

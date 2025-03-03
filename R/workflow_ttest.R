@@ -87,6 +87,8 @@ workflow_ttest <- function(data_path,
                            delog_for_FC = TRUE,
                            p_value_zeros_to_min = TRUE,
 
+                           volcano_base_size = 25,
+
                            significant_after_FDR = TRUE,
                            max_valid_values_off = 0,
                            min_valid_values_on = NULL,
@@ -98,7 +100,7 @@ workflow_ttest <- function(data_path,
                            plot_dpi = 300,
 
                            column_name_protein = "Protein"
-                           ){
+                           ) {
 
   mess = ""
 
@@ -111,7 +113,7 @@ workflow_ttest <- function(data_path,
 
   #### Calculate ttest ####
 
-  test_results <- ttest(D = data[["D"]], id = data[["ID"]],
+  test_results <<- ttest(D = data[["D"]], id = data[["ID"]],
                         group = data[["group"]],  sample = data[["sample"]],
                         paired = paired, var.equal = var.equal,
                         log_before_test = log_before_test, delog_for_FC = delog_for_FC, log_base = 2,
@@ -152,7 +154,7 @@ workflow_ttest <- function(data_path,
 
   volcano_plot <- VolcanoPlot_ttest(RES = test_results,
                                     columnname_p = "p", columnname_padj = "p.fdr",
-                                    columnname_FC = fc_col_name)
+                                    columnname_FC = fc_col_name, base_size = volcano_base_size)
 
   ggplot2::ggsave(paste0(output_path, "volcano_plot", suffix, ".", plot_device), plot = volcano_plot,
                   device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi)
@@ -163,7 +165,7 @@ workflow_ttest <- function(data_path,
 
   #### Create Histogram for p-values and fold changes ####
 
-  histograms <- pvalue_foldchange_histogram(RES = test_results,
+  histograms <- ProtStatsWF::pvalue_foldchange_histogram(RES = test_results,
                                             columnname_p = "p", columnname_padj = "p.fdr",
                                             columnname_FC = fc_col_name)
 
@@ -179,7 +181,7 @@ workflow_ttest <- function(data_path,
 
   #### Get significant candidates ####
 
-  significance <- calculate_significance_categories_ttest(p = test_results[["p"]],
+  significance <- ProtStatsWF::calculate_significance_categories_ttest(p = test_results[["p"]],
                                                           p_adj = test_results[["p.fdr"]],
                                                           fc = test_results[[fc_col_name]])
 
@@ -198,7 +200,7 @@ workflow_ttest <- function(data_path,
 
   #### Create Boxplots of Biomarker Candidates ####
 
-  Boxplots_candidates(D = data[["D"]][candidates, ],
+  ProtStatsWF::Boxplots_candidates(D = data[["D"]][candidates, ],
                       protein.names = data[["ID"]][candidates, column_name_protein],
                       group = data[["group"]],
                       suffix = suffix,
