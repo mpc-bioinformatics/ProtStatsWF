@@ -9,11 +9,11 @@
 #' @param protein_names_col       \strong{integer} \cr
 #'                                The column with protein or gene names, if the names should be plotted.
 #' @param na_method               \strong{character} \cr
-#'                                The method with which missing values are handeled. 
+#'                                The method with which missing values are handeled.
 #'                                Options are "na.omit" (proteins with any missing values will be removed), "impute" (missing values will be imputed) and "keep" (missing values will be kept).
 #'                                Note that clustering may not work when too many missing values are present.
 #' @param filtermissings          \strong{integer} \cr
-#'                                The threshold for missing values. 
+#'                                The threshold for missing values.
 #'                                If a protein has more missing values, it will be filtered out.
 #'                                Note that rows with only 1 or 2 valid values may cause problems with clustering.
 #' @param groups                  \strong{character factor} \cr
@@ -64,10 +64,10 @@
 #' @param ...                     Further arguments to Heatmap
 #'
 #' @return A heatmap of the given data.
-#' @export
 #'
-#' @examples 
-#' 
+#'
+#' @examples
+#'
 
 Heatmap_with_groups <- function(D, id, protein_names_col = NULL,
                            na_method = "na.omit", filtermissings = 2,
