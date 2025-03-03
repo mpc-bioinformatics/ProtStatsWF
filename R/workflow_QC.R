@@ -1,4 +1,14 @@
-#' The main workflow for quality control of quantitative proteomics data
+#' QC Workflow (QCQuant)
+#'
+#' @description
+#' Workflow for quality control of quantitative proteomics data
+#'
+#' @details
+#' This function performs quality control of quantitative proteomics data.
+#' As a first step, the data can be normalized.
+#' Then the following plots are generated: a valid value plot, boxplots, MA-plots and a PCA plot.
+#'
+#'
 #'
 #' @param data_path              \strong{character} \cr
 #'                               The path to an .xlsx file containing the input data.
@@ -34,7 +44,7 @@
 #'                               The suffix for the output files. It needs to start with an underscore.
 #'
 # general plot parameters
-#' @param base_size              \strong{numeric} \cr 
+#' @param base_size              \strong{numeric} \cr
 #'                               The base size of the font.
 #' @param plot_device            \strong{character} \cr
 #'                               The type of the output file. Options are "pdf" or "png".
@@ -54,7 +64,7 @@
 #' @param generate_MAplots       \strong{logical} \cr
 #'                               If \code{TRUE}, MA plots will be generated, if \code{FALSE} they will not be generated (mostly for debugging purposes).
 #' @param MA_maxPlots            \strong{integer} \cr
-#'                               The maximum number of MA plots that should be generated. 
+#'                               The maximum number of MA plots that should be generated.
 #' @param MA_alpha               \strong{logical} \cr
 #'                               If \code{TRUE}, the data points of the MA plots will be transparent.
 #' @param MA_sampling            \strong{numeric} \cr
@@ -97,21 +107,21 @@
 #'
 #' @return The workflow saves several plots and excel files and returns a message log of the workflow.
 #' @export
-#' 
-#' @seealso Functions used in this workflow: 
-#'          [prepareData()], [ValidValuePlot()], [Boxplots()], [MA_Plots()], [PCA_Plot()] 
+#'
+#' @seealso Functions used in this workflow:
+#'          [prepareData()], [ValidValuePlot()], [Boxplots()], [MA_Plots()], [PCA_Plot()]
 #'
 #' @examples
 #'
 #' # 1. Set the character of your data path, leading to an .xlsx file.
 #' in_path <- "C:/Users/thisuser/Documents/dataFolder/data.xlsx"
-#' 
+#'
 #' # 2. Set the integer vector of the columns, which contain the intensities.
 #' int_col <- 3:17
-#' 
+#'
 #' # 3. Set the character of the output path, leading to a folder for the results.
 #' out_path <- "C:/Users/thisuser/Documents/resultsFolder/"
-#' 
+#'
 #' # 4. Run the QC workflow with the parameters you set.
 #' \dontrun{
 #' result <- workflow_QC(data_path = in_path,
@@ -123,29 +133,29 @@
 
 workflow_QC <- function(data_path,
                         output_path,
-                        
+
                         intensity_columns,
                         normalization_method = "loess",
                         lts_quantile = 0.8,
                         use_groups = TRUE,
-                        
+
                         na_strings = c("NA", "NaN", "Filtered","#NV"),
                         zero_to_NA = TRUE,
                         do_log_transformation = TRUE,
                         log_base = 2,
-                        
+
                         groupvar_name = "Group",
                         group_colours = NULL,
-                        
+
                         base_size = 15,
                         plot_device = "pdf",
                         plot_height = 10,
                         plot_width = 15,
                         plot_dpi = 300,
-                        
+
                         suffix = "_",
-                        
-                        
+
+
                         boxplot_method = "boxplot",
 
                         generate_MAplots = TRUE,
@@ -155,7 +165,7 @@ workflow_QC <- function(data_path,
 
                         #PCA_groupvar1 = "group",
                         #PCA_groupvar2 = NULL,
-                        
+
                         PCA_impute = FALSE, PCA_impute_method = "mean", PCA_propNA = 0,
                         PCA_scale. = TRUE,
                         PCA_PCx = 1, PCA_PCy = 2,
@@ -163,25 +173,25 @@ workflow_QC <- function(data_path,
                         #PCA_groupvar2_name = NULL,
                         PCA_alpha = 1, PCA_label = FALSE, PCA_label_seed = NA, PCA_label_size = 4,
                         PCA_xlim = NULL, PCA_ylim = NULL, PCA_point.size = 4
-                        
+
 ){
-  
+
   mess = ""
-  
-  
+
+
   #### Prepare Data ####
-  
+
   prepared_data <- prepareData(data_path = data_path, intensity_columns = intensity_columns,
                                na_strings = na_strings, zero_to_NA = zero_to_NA,
                                do_log_transformation = do_log_transformation, log_base = log_base,
                                use_groups = use_groups, group_colours = group_colours,
                                normalization = normalization_method, lts_quantile = lts_quantile)
 
-  
+
   mess <- paste0(mess, prepared_data[["message"]])
-  
+
   group <- prepared_data$group
-  
+
   utils::write.csv(x = prepared_data$ID, file = paste0(output_path, "/ID", suffix, ".csv"), row.names = FALSE)
   utils::write.csv(x = prepared_data$D, file = paste0(output_path, "/D_norm_wide", suffix, ".csv"), row.names = FALSE)
   utils::write.csv(x = prepared_data$D_long, file = paste0(output_path, "/D_norm_long", suffix, ".csv"), row.names = FALSE)
@@ -189,10 +199,10 @@ workflow_QC <- function(data_path,
   openxlsx::write.xlsx(x = cbind(prepared_data$ID, prepared_data$D), file = paste0(output_path, "/D_norm_ID", suffix, ".xlsx"),
                        rowNames = FALSE, overwrite = TRUE, keepNA = TRUE)
 
-  
-  
+
+
   #### Calculate Valid Value Plot ####
-  
+
   vv_plot_data <- ValidValuePlot(D_long = prepared_data[["D_long"]],
                                  use_groups = use_groups, groupvar_name = groupvar_name, group_colours = group_colours,
                                  base_size = base_size)
@@ -203,29 +213,29 @@ workflow_QC <- function(data_path,
   vv_plot_data$table <- vv_plot_data$table[order(vv_plot_data$table$name),]
 
   mess <- paste0(mess, vv_plot_data[["message"]])
-  
-  
+
+
   ggplot2::ggsave(paste0(output_path, "/valid_value_plot", suffix, ".", plot_device), plot = vv_plot_data[["plot"]],
                   device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi, units = "cm")
   utils::write.csv(x = vv_plot_data$table, file = paste0(output_path, "/D_validvalues", suffix, ".csv"), row.names = FALSE)
-  
-  
-  
+
+
+
   #### Calculate Boxlots ####
-  
+
   boxplot_data <- Boxplots(D_long = prepared_data[["D_long"]],
                            do_log_transformation = FALSE, log_base = log_base,
                            use_groups = use_groups, groupvar_name = groupvar_name, group_colours = group_colours,
-                           
+
                            base_size = base_size, method = boxplot_method)
-  
+
   mess <- paste0(mess, boxplot_data[["message"]])
-  
+
   ggplot2::ggsave(paste0(output_path, "/boxplot", suffix, ".", plot_device), plot = boxplot_data[["plot"]],
-                  
+
                   device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi, units = "cm")
-  
-  
+
+
   #### Calculate MA Plot ####
 
   if (generate_MAplots) {
@@ -241,16 +251,16 @@ workflow_QC <- function(data_path,
 
 
   #### Calculate PCA Plot ####
-  
-  
+
+
   ### depending of groups should be used or not, the group variable is used in the PCA function
   if (use_groups) {
     PCA_groupvar1 <- group
   } else {
     PCA_groupvar1 <- NULL
   }
-  
-  
+
+
   pca_data <- PCA_Plot(D = prepared_data[["D"]],
                        groupvar1 = group,
                        groupvar2 = NULL,
@@ -263,14 +273,14 @@ workflow_QC <- function(data_path,
                        label = PCA_label, PCA_label_seed = NA, PCA_label_size = 4,
                        xlim = PCA_xlim, ylim = PCA_ylim,
                        point.size = PCA_point.size, base_size = base_size)
-  
+
   mess <- paste0(mess, pca_data[["message"]])
-  
-  
+
+
   ggplot2::ggsave(paste0(output_path, "/PCA_plot", suffix, ".", plot_device), plot = pca_data[["plot"]],
                   device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi, units = "cm")
   utils::write.csv(x = pca_data$D_PCA_plot, file = paste0(output_path, "/D_PCA", suffix, ".csv"), row.names = FALSE)
-  
-  
-  return (list("message" = mess))
+
+
+  return(list("message" = mess))
 }
