@@ -6,15 +6,17 @@
 #' @param output_path path to save results
 #' @param suffix suffix for file name
 #' @param nr_clusters number of clusters. Default is NULL, meaning that the optimal number of clusters will be determined by dendextend::find_k().
+#' @param row_split if TRUE, heatmap is split into row clusters
+#' @param dist_method distance method for clustering, default is "correlation"
 #'
 #' @return save heatmap and data frame with cluster information, as well as line plots
 #' @export
 #'
 #' @examples # TODO
-Clustering_heatmap_lineplots2 <- function(D, id, output_path, suffix = "", nr_clusters = NULL) {
+Clustering_heatmap_lineplots2 <- function(D, id, output_path, suffix = "", nr_clusters = NULL, row_split = TRUE, dist_method = "correlation") {
 
   rownames(D) <- 1:nrow(D)  # reset rownames (important to match cluster information later)
-  row_dend = stats::as.dendrogram(stats::hclust(amap::Dist(D, method = "correlation"))) # cluster the proteins with centered Pearson correlation as distance function
+  row_dend = stats::as.dendrogram(stats::hclust(amap::Dist(D, method = dist_method))) # cluster the proteins with centered Pearson correlation as distance function
 
   if (is.null(nr_clusters)) {
   # find optimal number of clusters based on silhouette values
@@ -25,6 +27,13 @@ Clustering_heatmap_lineplots2 <- function(D, id, output_path, suffix = "", nr_cl
   cluster_colours <- scales::hue_pal()(nr_clusters)
   ## colour branches of the dendrogram to plot next to the heatmap
   row_dend_color = dendextend::color_branches(row_dend, k = nr_clusters, col = cluster_colours)
+
+  if (row_split) {
+    row_split = nr_clusters
+  } else {
+    row_split = NULL
+  }
+
 
   ht <<- ProtStatsWF::Heatmap_with_groups(D = D,
                                          id = id,

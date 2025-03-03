@@ -9,7 +9,9 @@ Clustering_heatmap_lineplots2(
   id,
   output_path,
   suffix = "",
-  nr_clusters = NULL
+  nr_clusters = NULL,
+  row_split = TRUE,
+  dist_method = "correlation"
 )
 }
 \arguments{
@@ -22,6 +24,10 @@ Clustering_heatmap_lineplots2(
 \item{suffix}{suffix for file name}
 
 \item{nr_clusters}{number of clusters. Default is NULL, meaning that the optimal number of clusters will be determined by dendextend::find_k().}
+
+\item{row_split}{if TRUE, heatmap is split into row clusters}
+
+\item{dist_method}{distance method for clustering, default is "correlation"}
 }
 \value{
 save heatmap and data frame with cluster information, as well as line plots
