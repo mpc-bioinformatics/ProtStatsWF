@@ -9,30 +9,23 @@ VolcanoPlot_ttest(
   columnname_p = "p",
   columnname_padj = "padj",
   columnname_FC = "FC",
+  thres_fc = 2,
+  thres_p = 0.05,
   log_base_fc = 2,
   log_base_p = 10,
   is_FC_log = FALSE,
   is_p_log = FALSE,
-  thres_fc = 2,
-  thres_p = 0.05,
   show_thres_line = TRUE,
-  colour1 = "grey",
-  colour2 = "black",
-  colour3 = "orange",
   groupname1 = "group1",
   groupname2 = "group2",
-  xlim = NULL,
-  ylim = NULL,
-  symmetric_x = FALSE,
-  legend_position = "bottom",
   plot_height = 15,
   plot_width = 15,
   plot_dpi = 300,
   plot_device = "pdf",
   output_path = NULL,
   suffix = NULL,
-  base_size = NULL,
-  add_annotation = TRUE
+  add_annotation = TRUE,
+  ...
 )
 }
 \arguments{
@@ -48,6 +41,12 @@ The columns name for adjusted p-value.}
 \item{columnname_FC}{\strong{character} \cr
 The column name for fold change.}
 
+\item{thres_fc}{\strong{numeric} \cr
+The threshold for fold change.}
+
+\item{thres_p}{\strong{numeric} \cr
+The threshold for p-value.}
+
 \item{log_base_fc}{\strong{numeric} \cr
 The base for the fold changes log-transformation.}
 
@@ -60,42 +59,14 @@ If \code{TRUE}, fold change is already log-transformed.}
 \item{is_p_log}{\strong{logical} \cr
 If \code{TRUE}, p-value is already log-transformed.}
 
-\item{thres_fc}{\strong{numeric} \cr
-The threshold for fold change.}
-
-\item{thres_p}{\strong{numeric} \cr
-The threshold for p-value.}
-
 \item{show_thres_line}{\strong{logical} \cr
 If \code{TRUE}, threshold lines will be shown.}
-
-\item{colour1}{\strong{character} \cr
-The color for not significant proteins.}
-
-\item{colour2}{\strong{character} \cr
-The color for significant proteins.}
-
-\item{colour3}{\strong{character} \cr
-The color for significant proteins after FDR correction.}
 
 \item{groupname1}{\strong{character} \cr
 The name of first group.}
 
 \item{groupname2}{\strong{character} \cr
 The name of second group.}
-
-\item{xlim}{\strong{numeric} \cr
-The limits for x-axis.}
-
-\item{ylim}{\strong{numeric} \cr
-The limits for y-axis.}
-
-\item{symmetric_x}{\strong{logical} \cr
-If \code{TRUE}, x-axis limits will be made symmetric (not used if xlim is defined).}
-
-\item{legend_position}{\strong{character} \cr
-The positioning of the legend.
-Options are "none", "left", "right", "bottom", "top" and "inside".}
 
 \item{plot_height}{\strong{numeric} \cr
 The height of plot.}
@@ -116,11 +87,10 @@ The path for output file.}
 \item{suffix}{\strong{character} \cr
 The suffix for output file.}
 
-\item{base_size}{\strong{numeric} \cr
-The base size for theme.}
-
 \item{add_annotation}{\strong{logical} \cr
 If \code{TRUE}, annotation will be added.}
+
+\item{...}{Additional arguments for the plot.}
 }
 \value{
 A ggplot object of the volcano plot from a ttest result.

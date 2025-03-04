@@ -13,6 +13,7 @@ workflow_ttest(
   log_before_test = TRUE,
   delog_for_FC = TRUE,
   p_value_zeros_to_min = TRUE,
+  volcano_base_size = 25,
   significant_after_FDR = TRUE,
   max_valid_values_off = 0,
   min_valid_values_on = NULL,
@@ -49,6 +50,9 @@ If \code{TRUE}, the fold change will be calculated without the log-transformatio
 \item{p_value_zeros_to_min}{\strong{logical} \cr
 If \code{TRUE}, then \code{p_values == 0} will be set to the next smallest value of the p-values.}
 
+\item{volcano_base_size}{\strong{numeric} \cr
+The base size of the volcano plot.}
+
 \item{significant_after_FDR}{\strong{logical} \cr
 If \code{TRUE}, candidates for the boxplots and heatmap need to be significant after FDR correction, otherwise all significant candidates will be used.}
 
@@ -72,17 +76,23 @@ The plot width in cm.}
 
 \item{plot_dpi}{\strong{integer} \cr
 The "dots per inch" of the plot aka. the plot resolution.}
+
+\item{column_name_protein}{\strong{character} \cr
+The column name containing the proteins.}
 }
 \value{
 Returns a message log of the workflow. The log contains an overview of the settings and gives some information e.g number of significant candidates or on-off-proteins.
 }
 \description{
-#' @description
 Workflow for t-test analysis of quantitative proteomics data.
 }
 \details{
 This function performs a t-test to compare two experimental groups in a quantitative proteomics dataset.
 Ideally, the data should be already normalized before performing the t-test (e.g. by using the \code{\link[=workflow_QC]{workflow_QC()}} function).
+It is recommended to log-transform the data before the t-test (either use already log-transformed data and \code{log_before_test = FALSE}
+or log-transform the data on the fly with \code{log_before_test = TRUE}).
+The function generates a volcano plot, a histogram of p-values and fold changes,
+boxplots of the significant candidates, and a heatmap of the significant candidates.
 }
 \examples{
 

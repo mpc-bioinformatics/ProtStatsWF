@@ -31,6 +31,10 @@
 #' @param p_value_zeros_to_min   \strong{logical} \cr
 #'                               If \code{TRUE}, then \code{p_values == 0} will be set to the next smallest value of the p-values.
 #'
+#' @param volcano_base_size      \strong{numeric} \cr
+#'                               The base size of the volcano plot.
+#'
+#'
 #' @param significant_after_FDR  \strong{logical} \cr
 #'                               If \code{TRUE}, candidates for the boxplots and heatmap need to be significant after FDR correction, otherwise all significant candidates will be used.
 #' @param max_valid_values_off   \strong{integer} \cr
@@ -48,6 +52,9 @@
 #'                               The plot width in cm.
 #' @param plot_dpi               \strong{integer} \cr
 #'                               The "dots per inch" of the plot aka. the plot resolution.
+#'                               
+#' @param column_name_protein    \strong{character} \cr
+#'                               The column name containing the proteins.
 #'
 #'
 #' @return Returns a message log of the workflow. The log contains an overview of the settings and gives some information e.g number of significant candidates or on-off-proteins.
