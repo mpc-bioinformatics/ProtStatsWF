@@ -10,7 +10,7 @@ test_that("Calculate candidate boxplots for a ttest ", {
   dir.create(temp_dir)
   on.exit(unlink(temp_dir, recursive = TRUE)) 
   
-  pData <- openxlsx::read.xlsx(xlsxFile = test_path("testdata", "result_ttest.xlsx"), na.strings = c("NA", "NaN", "Filtered","#NV"))
+  pData <- openxlsx::read.xlsx(xlsxFile = system.file("extdata", "result_ttest.xlsx", package = "ProtStatsWF"), na.strings = c("NA", "NaN", "Filtered","#NV"))
   
   candidates <- c(2:3)
   
@@ -46,7 +46,7 @@ test_that("Calculate candidate boxplots for an ANOVA ", {
   dir.create(temp_dir)
   on.exit(unlink(temp_dir, recursive = TRUE)) 
   
-  pData <- openxlsx::read.xlsx(xlsxFile = test_path("testdata", "result_ANOVA.xlsx"), na.strings = c("NA", "NaN", "Filtered","#NV"))
+  pData <- openxlsx::read.xlsx(xlsxFile = system.file("extdata", "result_ANOVA.xlsx", package = "ProtStatsWF"), na.strings = c("NA", "NaN", "Filtered","#NV"))
   
   candidates <- 11:12
 

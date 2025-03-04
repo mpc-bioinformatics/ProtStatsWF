@@ -1,6 +1,6 @@
 test_that("Calculate Volcano plot for a ttest ", {
   
-  pData <- openxlsx::read.xlsx(xlsxFile = test_path("testdata", "result_ttest.xlsx"), na.strings = c("NA", "NaN", "Filtered","#NV"))
+  pData <- openxlsx::read.xlsx(xlsxFile = system.file("extdata", "result_ttest.xlsx", package = "ProtStatsWF"), na.strings = c("NA", "NaN", "Filtered","#NV"))
   
   volcano_plot <- VolcanoPlot_ttest(RES = pData, 
                                     columnname_p = "p", columnname_padj = "p.fdr", 
@@ -15,7 +15,7 @@ test_that("Calculate Volcano plot for a ttest ", {
 
 test_that("Calculate Volcano plot for an ANOVA ", {
   
-  pData <- openxlsx::read.xlsx(xlsxFile = test_path("testdata", "result_ANOVA.xlsx"), na.strings = c("NA", "NaN", "Filtered","#NV"))
+  pData <- openxlsx::read.xlsx(xlsxFile = system.file("extdata", "result_ANOVA.xlsx", package = "ProtStatsWF"), na.strings = c("NA", "NaN", "Filtered","#NV"))
   
   p_posthoc_columns <- grep("p.posthoc.", colnames(pData))
   fc_columns <- grep("FC_", colnames(pData))

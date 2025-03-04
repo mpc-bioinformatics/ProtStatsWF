@@ -1,6 +1,6 @@
 test_that("Calculate on-off-heatmap for a ttest ", {
   
-  pData <- openxlsx::read.xlsx(xlsxFile = test_path("testdata", "result_ttest.xlsx"), na.strings = c("NA", "NaN", "Filtered","#NV"))
+  pData <- openxlsx::read.xlsx(xlsxFile = system.file("extdata", "result_ttest.xlsx", package = "ProtStatsWF"), na.strings = c("NA", "NaN", "Filtered","#NV"))
   
   data <- list("D" = pData[,3:8], "ID" = pData[,1:2], 
                "group" = factor(c("state1", "state1", "state1", "state2", "state2", "state2")))
@@ -23,7 +23,7 @@ test_that("Calculate on-off-heatmap for a ttest ", {
 
 test_that("Calculate on-off-heatmap for an ANOVA ", {
   
-  pData <- openxlsx::read.xlsx(xlsxFile = test_path("testdata", "result_ANOVA.xlsx"), na.strings = c("NA", "NaN", "Filtered","#NV"))
+  pData <- openxlsx::read.xlsx(xlsxFile = system.file("extdata", "result_ANOVA.xlsx", package = "ProtStatsWF"), na.strings = c("NA", "NaN", "Filtered","#NV"))
   
   data <- list("D" = pData[,3:11], "ID" = pData[,1:2], 
                "group" = factor(c("state1", "state1", "state1", "state2", "state2", "state2", "state3", "state3", "state3")))

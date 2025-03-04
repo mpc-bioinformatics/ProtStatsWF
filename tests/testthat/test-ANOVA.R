@@ -5,7 +5,7 @@ test_that("Calculate ANOVA ", {
   dir.create(temp_dir)
   on.exit(unlink(temp_dir, recursive = TRUE))
 
-  data <- prepareTtestData(data_path = test_path("testdata", "test_file_2.xlsx"), intensity_columns = 3:11)
+  data <- prepareTtestData(data_path = system.file("extdata", "test_file_2.xlsx", package = "ProtStatsWF"), intensity_columns = 3:11)
 
   expect_snapshot(data[["D"]])
   expect_snapshot(data[["ID"]])
