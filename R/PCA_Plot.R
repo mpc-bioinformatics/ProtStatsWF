@@ -143,6 +143,7 @@ PCA_Plot <- function(D,
   message(mess)
 
   return(list("plot" = pl, "D_PCA_plot" = cbind(D_PCA, "Sample" = colnames(D)),
+              "filtered_D" = filtered_D,
               "pca" = pca, "message" = mess))
 }
 

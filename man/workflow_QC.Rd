@@ -2,7 +2,7 @@
 % Please edit documentation in R/workflow_QC.R
 \name{workflow_QC}
 \alias{workflow_QC}
-\title{The main workflow for quality control of quantitative proteomics data}
+\title{QC Workflow (QCQuant)}
 \usage{
 workflow_QC(
   data_path,
@@ -160,7 +160,12 @@ The size of the data points.}
 The workflow saves several plots and excel files and returns a message log of the workflow.
 }
 \description{
-The main workflow for quality control of quantitative proteomics data
+Workflow for quality control of quantitative proteomics data
+}
+\details{
+This function performs quality control of quantitative proteomics data.
+As a first step, the data can be normalized.
+Then the following plots are generated: a valid value plot, boxplots, MA-plots and a PCA plot.
 }
 \examples{
 

@@ -16,12 +16,12 @@
 #'                         The column in id parameter containing the protein IDs used for mapping.
 #'
 #' @return A data.frame with the number of valid values per group (absolute and relative) and on/off status
-#' @export
-#' 
+#'
+#'
 # @seealso [Onoff_plus_heatmap()]
 #'
-#' @examples 
-#' 
+#' @examples
+#'
 
 calculate_onoff <- function(D, id, group, max_vv_off, min_vv_on, protein_id_col = 1) {
 
@@ -81,14 +81,14 @@ calculate_onoff <- function(D, id, group, max_vv_off, min_vv_on, protein_id_col 
 #                              The column name of the proteins.
 # @param relative              \strong{logical} \cr
 #                              If \code{TRUE}, ?
-#                         
+#
 # @return A data.frame with the number of valid values per group (absolute and relative) and on/off status
 # @export
-# 
+#
 # @seealso [calculate_onoff()]
 #
-# @examples 
-# 
+# @examples
+#
 
 Onoff_plus_heatmap <- function(RES_onoff,
                                protein_name_column = "Gene.names",

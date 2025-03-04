@@ -2,7 +2,7 @@
 % Please edit documentation in R/workflow_ttest.R
 \name{workflow_ttest}
 \alias{workflow_ttest}
-\title{The workflow for a t-test of quantitative proteomics data.}
+\title{t-test workflow}
 \usage{
 workflow_ttest(
   data_path,
@@ -20,7 +20,8 @@ workflow_ttest(
   plot_device = "pdf",
   plot_height = 15,
   plot_width = 15,
-  plot_dpi = 300
+  plot_dpi = 300,
+  column_name_protein = "Protein"
 )
 }
 \arguments{
@@ -76,7 +77,12 @@ The "dots per inch" of the plot aka. the plot resolution.}
 Returns a message log of the workflow. The log contains an overview of the settings and gives some information e.g number of significant candidates or on-off-proteins.
 }
 \description{
-The workflow for a t-test of quantitative proteomics data.
+#' @description
+Workflow for t-test analysis of quantitative proteomics data.
+}
+\details{
+This function performs a t-test to compare two experimental groups in a quantitative proteomics dataset.
+Ideally, the data should be already normalized before performing the t-test (e.g. by using the \code{\link[=workflow_QC]{workflow_QC()}} function).
 }
 \examples{
 
@@ -94,7 +100,7 @@ out_path <- "C:/Users/thisuser/Documents/resultsFolder/"
 result <- workflow_ttest(data_path = in_path,
                          output_path = out_path,
                          intensity_columns = int_col) }
-                         
+
 }
 \seealso{
 \code{\link[=workflow_ANOVA]{workflow_ANOVA()}} in case of more than two groups in the sample.\cr

@@ -5,8 +5,8 @@
 #' @param FC                      \strong{numeric factor} \cr
 #'                                The values for the fold changes.
 #' @param significance_category   \strong{character factor} \cr
-#'                                The significance categories for the volcano plot. 
-#'                                
+#'                                The significance categories for the volcano plot.
+#'
 #' @param log_base_fc             \strong{numeric} \cr
 #'                                The base for the fold changes log-transformation.
 #' @param log_base_p              \strong{numeric} \cr
@@ -24,22 +24,22 @@
 #' @param symmetric_x             \strong{logical} \cr
 #'                                If \code{TRUE}, x-axis limits will be made symmetric (not used if xlim is defined).
 #' @param legend_position         \strong{character} \cr
-#'                                The positioning of the legend. 
+#'                                The positioning of the legend.
 #'                                Options are "none", "left", "right", "bottom", "top" and "inside".
 #' @param base_size               \strong{numeric} \cr
 #'                                The base size of the font.
 #' @param xlim                    \strong{numeric} \cr
-#'                                The limits for x-axis. 
+#'                                The limits for x-axis.
 #' @param ylim                    \strong{numeric} \cr
-#'                                The limits for y-axis. 
+#'                                The limits for y-axis.
 #'
 #' @return A ggplot showing the volcano plot.
 #' @export
-#' 
+#'
 #' @seealso [VolcanoPlot_ttest()], [VolcanoPlot_ANOVA()]
 #'
 #' @examples
-#' 
+#'
 
 VolcanoPlot <- function(p,
                         FC,
@@ -55,7 +55,8 @@ VolcanoPlot <- function(p,
                         legend_position = "bottom",
                         base_size = NULL,
                         xlim = NULL,
-                        ylim = NULL) {
+                        ylim = NULL, alpha = 0.5,
+                        point_size = 3) {
 
 
   ### transform p-values and fold changes and thresholds
@@ -66,20 +67,24 @@ VolcanoPlot <- function(p,
   log_thres_p <- -log(thres_p, base = log_base_p)
   log_thres_fc <- log(thres_fc, base = log_base_fc)
 
-  RES <- data.frame(transformed_FC = transformed_FC,
+  RES <<- data.frame(transformed_FC = transformed_FC,
                     transformed_p = transformed_p,
                     significance = significance_category)
 
 
   significance <- RES$significance
-  
+
   plot <- ggplot2::ggplot(data = RES, ggplot2::aes(x = transformed_FC, y = transformed_p, colour = significance)) +
-    ggplot2::geom_point(alpha = 5/10) +
-    ggplot2::scale_colour_manual(values = c("not significant" = colour1, "significant" = colour2, "significant after FDR correction" = colour3), drop = FALSE) +
-    ### TODO: axis labels with expressions
-    ### TODO: what if I do not have these categories?
+    ggplot2::geom_point(alpha = alpha, show.legend = TRUE, size = point_size) +
+    ggplot2::scale_colour_manual(values = c("not significant" = colour1,
+                                            "significant" = colour2,
+                                            "significant after FDR correction" = colour3),
+                                 drop = FALSE,
+                                 na.translate = FALSE) +
+
     ggplot2::xlab(paste0("log",log_base_fc,"(FC)")) +
-    ggplot2::ylab(paste0("-log",log_base_p,"(p)"))
+    ggplot2::ylab(paste0("-log",log_base_p,"(p)")) +
+    ggplot2::guides(colour = ggplot2::guide_legend(override.aes = list(size = point_size*1.5)))
 
 
   if (!is.null(base_size)) {
@@ -88,7 +93,6 @@ VolcanoPlot <- function(p,
     plot <- plot + ggplot2::theme_bw()
   }
 
-  # TODO: legend_position einstellbar machen
   plot <- plot + ggplot2::theme(legend.position = legend_position)
 
   ### if xlim is not set, use max/min FC and make it symmetric
@@ -161,7 +165,7 @@ VolcanoPlot <- function(p,
 #' @param symmetric_x       \strong{logical} \cr
 #'                          If \code{TRUE}, x-axis limits will be made symmetric (not used if xlim is defined).
 #' @param legend_position   \strong{character} \cr
-#'                          The positioning of the legend. 
+#'                          The positioning of the legend.
 #'                          Options are "none", "left", "right", "bottom", "top" and "inside".
 #' @param plot_height       \strong{numeric} \cr
 #'                          The height of plot.
@@ -170,7 +174,7 @@ VolcanoPlot <- function(p,
 #' @param plot_dpi          \strong{integer} \cr
 #'                          The resolution of plot.
 #' @param plot_device       \strong{character} \cr
-#'                          The plot device that is used for the resulting plot. 
+#'                          The plot device that is used for the resulting plot.
 #'                          Options are "pdf" and "png".
 #' @param output_path       \strong{character} \cr
 #'                          The path for output file.
@@ -183,40 +187,33 @@ VolcanoPlot <- function(p,
 #'
 #' @return A ggplot object of the volcano plot from a ttest result.
 #' @export
-#' 
+#'
 #' @seealso [VolcanoPlot()], [VolcanoPlot_ANOVA()], [add_labels()]
 #'
-#' @examples 
-#' 
+#' @examples
+#'
 
 VolcanoPlot_ttest <- function(RES,
                         columnname_p = "p",
                         columnname_padj = "padj",
                         columnname_FC = "FC",
+                        thres_p = 0.05,
+                        thres_fc = 2,
                         log_base_fc = 2,
                         log_base_p = 10,
                         is_FC_log = FALSE,
                         is_p_log = FALSE,
-                        thres_fc = 2,
-                        thres_p = 0.05,
                         show_thres_line = TRUE,
-                        colour1 = "grey",
-                        colour2 = "black",
-                        colour3 = "orange",
                         groupname1 = "group1",
                         groupname2 = "group2",
-                        xlim = NULL,
-                        ylim = NULL,
-                        symmetric_x = FALSE,
-                        legend_position = "bottom",
                         plot_height = 15,
                         plot_width = 15,
                         plot_dpi = 300,
                         plot_device="pdf",
                         output_path = NULL,
                         suffix = NULL,
-                        base_size = NULL,
-                        add_annotation = TRUE){
+                        add_annotation = TRUE,
+                        ...) {
 
 
   # make check work
@@ -247,18 +244,7 @@ VolcanoPlot_ttest <- function(RES,
   plot <- VolcanoPlot(p = p,
                       FC = FC,
                       significance_category = RES$significance,
-                      log_base_fc = log_base_fc,
-                      log_base_p = log_base_p,
-                      thres_p = thres_p,
-                      thres_fc = thres_fc,
-                      colour1 = colour1,
-                      colour2 = colour2,
-                      colour3 = colour3,
-                      symmetric_x = symmetric_x,
-                      legend_position = legend_position,
-                      base_size = base_size,
-                      xlim = xlim,
-                      ylim = ylim)
+                      ...)
 
 
   ## TODO: annotation of number of significant proteins
@@ -326,7 +312,7 @@ VolcanoPlot_ttest <- function(RES,
 #' @param symmetric_x            \strong{logical} \cr
 #'                               If \code{TRUE}, x-axis limits will be made symmetric (not used if xlim is defined).
 #' @param legend_position        \strong{character} \cr
-#'                               The positioning of the legend. 
+#'                               The positioning of the legend.
 #'                               Options are "none", "left", "right", "bottom", "top" and "inside".
 #' @param base_size              \strong{numeric} \cr
 #'                               The base size for theme.
@@ -335,15 +321,15 @@ VolcanoPlot_ttest <- function(RES,
 #' @param ylim                   \strong{numeric} \cr
 #'                               The limits for y-axis.
 #' @param add_labels             \strong{logical} \cr
-#'                               If \code{TRUE}, labels will be added. 
+#'                               If \code{TRUE}, labels will be added.
 #'
 #' @return A list of ggplots of the volcano plot from an ANOVA result.
 #' @export
-#' 
+#'
 #' @seealso [VolcanoPlot()], [VolcanoPlot_ttest()], [add_labels()]
 #'
 #' @examples
-#' 
+#'
 
 VolcanoPlot_ANOVA <- function(RES,
                               columnname_p_ANOVA = "p.anova",
@@ -376,9 +362,12 @@ VolcanoPlot_ANOVA <- function(RES,
   #nr_comparisons <- choose(n = nr_groups, k = 2) # pairwise comparisons between two groups
 
   # names of the comparisons
-  comp_names <- colnames(RES)[columns_p_posthoc]
-  comp_names <- stringr::str_replace_all(comp_names, "p.posthoc.", "")
-  comp_names <- stringr::str_replace_all(comp_names, "_", " ")
+  comp_names <- colnames(RES)[columns_FC]
+  comp_names <- substring(comp_names, 4) # remove "FC_" at beginning
+  comp_names <- stringr::str_replace_all(comp_names, "devided_by_", "vs")
+
+  #comp_names <- stringr::str_replace_all(comp_names, "FC_", "")
+  #comp_names <- stringr::str_replace_all(comp_names, "_", " ")
 
   Volcano_plots <- list()
   for (i in 1:nr_comparisons) {
@@ -460,11 +449,11 @@ VolcanoPlot_ANOVA <- function(RES,
 #'
 #' @return A ggplot object with labels.
 #' @export
-#' 
+#'
 #' @seealso [VolcanoPlot()], [VolcanoPlot_ttest()], [VolcanoPlot_ANOVA()]
 #'
-#' @examples 
-#' 
+#' @examples
+#'
 
 add_labels <- function(RES_Volcano,
                        label_type = "FDR",
@@ -511,10 +500,6 @@ add_labels <- function(RES_Volcano,
     labels_up[ind_label_up] <- protein_names[ind_label_up]
     labels_down[ind_label_down] <- protein_names[ind_label_down]
   }
-
-  ### TODO: what if genenames are too long?
-  ### TODO: what if genenames are not unique?
-  ### TODO: what if genenames are not available?
 
   nudge_x = 0.2
   nudge_y = 0.2

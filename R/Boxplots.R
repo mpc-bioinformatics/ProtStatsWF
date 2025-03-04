@@ -46,20 +46,20 @@ Boxplots <- function(D_long,
 
   mess <- ""
 
-  if(is.null(use_groups)){
-    if(is.na(D_long$group[1])){
+  if (is.null(use_groups)) {
+    if (is.na(D_long$group[1])) {
       use_groups <- FALSE
     }
     else{use_groups <- TRUE}
   }
   else{
-    if(use_groups && is.na(D_long$group[1])){
+    if (use_groups && is.na(D_long$group[1])) {
       use_groups <- FALSE
     }
   }
 
   # log-transform data if necessary
-  if(do_log_transformation) {
+  if (do_log_transformation) {
     D_long$value <- log(D_long$value, base = log_base)
   }
 
@@ -80,12 +80,12 @@ Boxplots <- function(D_long,
 
   pl_boxplot <- pl_boxplot +
     ggplot2::theme_bw(base_size = base_size) +
-    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, vjust = 1, hjust=1)) +
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, vjust = 1, hjust = 1)) +
     ggplot2::ylab("Log intensity") + ggplot2::xlab("Sample") +
     ggplot2::scale_x_discrete(limits = x_axis, drop = FALSE, na.translate = TRUE)
 
 
-  if (method == "violinplot"){
+  if (method == "violinplot") {
     pl_boxplot <- pl_boxplot + ggplot2::geom_violin()
     mess <- paste0("Violin Plot generated ", mess)
   }

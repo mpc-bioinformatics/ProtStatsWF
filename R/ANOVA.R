@@ -24,14 +24,12 @@
 #'                             The minimum number of observations per group.
 #' @param min_perc_per_group   \strong{integer} \cr
 #'                             The minimum ratio of observations per group as an alternative to min_obs_per_group.
-#' @param filename             \strong{character} \cr
-#'                             The name of the output file.
 #'
 #' @return A data.frame with p-values and fold changes
 #' @export
 #'
 #' @examples
-#' 
+#'
 
 ANOVA <- function(D,
                   id = NULL,
@@ -43,8 +41,7 @@ ANOVA <- function(D,
                   delog_for_FC = TRUE,
                   log_base = 2,
                   min_obs_per_group = 3,
-                  min_perc_per_group = NULL,
-                  filename = "results_ANOVA.xlsx") {
+                  min_perc_per_group = NULL) {
 
   if (!is.null(min_obs_per_group) & !is.null(min_perc_per_group)) stop("Please specify only one of min_obs_per_group or min_perc_per_group.")
 
@@ -68,6 +65,7 @@ ANOVA <- function(D,
     } else {
       ### Welch ANOVA (unequal variances)
       print("Welch ANOVA")
+      i <<- 0
       RES <- pbapply::pbapply(D, 1, ANOVA_Welch_single_row, group = group, log_before_test = log_before_test,
                      delog_for_FC = delog_for_FC, min_obs_per_group = min_obs_per_group,
                      min_perc_per_group = min_perc_per_group,
@@ -84,7 +82,7 @@ ANOVA <- function(D,
   if (!is.null(id)) {
     D <- cbind(id, D)
   }
-  openxlsx::write.xlsx(cbind(D, RES), filename, keepNA = TRUE, overwrite = TRUE)
+  #openxlsx::write.xlsx(cbind(D, RES), filename, keepNA = TRUE, overwrite = TRUE)
 
   return(cbind(D, RES))
 }
@@ -201,9 +199,6 @@ ANOVA_standard_single_row <- function(x,
     x2 <- x
   }
 
-
-  ### TODO: fold changes nur berechnen, wenn für die Gruppe auch ein posthoc test berechnet werden konnte
-
   fcs <- NULL
   name.fcs <- NULL
   for (j in 1:(nr_groups-1)) {
@@ -225,11 +220,6 @@ ANOVA_standard_single_row <- function(x,
 
 ################################################################################
 ################################################################################
-
-
-#### TODO: Derzeit müssen Factor-levels der Gruppen alphabetisch sortiert sein,
-### damit die Ergebnisse des posthoc tests richtig ausgelesen werden können
-### TODO: Option einbauen, dass nur getestet wird, wenn alle Gruppen vorhanden sind
 
 
 #' Repeated measures ANOVA (paired samples)
@@ -344,8 +334,6 @@ ANOVA_repeatedMeasurements_single_row <- function(x,
     x2 <- x
   }
 
-
-  ### TODO: fold changes nur berechnen, wenn für die Gruppe auch ein posthoc test berechnet werden konnte
   fcs <- NULL
   name.fcs <- NULL
   for (j in 1:(nr_groups - 1)) {
@@ -441,7 +429,14 @@ ANOVA_Welch_single_row <- function(x,
   }
 
   model <- stats::lm(intensity ~ group, data = D_tmp_naomit)
-  ANOVA <- suppressMessages(car::Anova(model, white.adjust = TRUE))
+  ANOVA <- try({suppressMessages(car::Anova(model, white.adjust = TRUE))})
+
+  if ("try-error" %in% class(ANOVA)) {
+    res <- rep(NA, 3 * nr_comparisons + 2)
+    names(res) <- cnames
+    return(res)
+  }
+
   p.anova <- ANOVA$`Pr(>F)`[1]
   p.anova.fdr <- NA
 
@@ -465,8 +460,6 @@ ANOVA_Welch_single_row <- function(x,
     x2 <- x
   }
 
-
-  ### TODO: fold changes nur berechnen, wenn für die Gruppe auch ein posthoc test berechnet werden konnte
   fcs <- NULL
   name.fcs <- NULL
   for (j in 1:(nr_groups-1)) {
