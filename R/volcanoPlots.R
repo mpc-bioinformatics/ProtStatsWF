@@ -32,6 +32,10 @@
 #'                                The limits for x-axis.
 #' @param ylim                    \strong{numeric} \cr
 #'                                The limits for y-axis.
+#' @param alpha                   \strong{numeric} \cr
+#'                                The transparency of the data points.
+#' @param point_size              \strong{numeric} \cr
+#'                                The size of the data points.
 #'
 #' @return A ggplot showing the volcano plot.
 #' @export
@@ -55,7 +59,8 @@ VolcanoPlot <- function(p,
                         legend_position = "bottom",
                         base_size = NULL,
                         xlim = NULL,
-                        ylim = NULL, alpha = 0.5,
+                        ylim = NULL, 
+                        alpha = 0.5,
                         point_size = 3) {
 
 
@@ -134,6 +139,11 @@ VolcanoPlot <- function(p,
 #'                          The columns name for adjusted p-value.
 #' @param columnname_FC     \strong{character} \cr
 #'                          The column name for fold change.
+#'                          
+#' @param thres_fc          \strong{numeric} \cr
+#'                          The threshold for fold change.
+#' @param thres_p           \strong{numeric} \cr
+#'                          The threshold for p-value.
 #' @param log_base_fc       \strong{numeric} \cr
 #'                          The base for the fold changes log-transformation.
 #' @param log_base_p        \strong{numeric} \cr
@@ -142,31 +152,14 @@ VolcanoPlot <- function(p,
 #'                          If \code{TRUE}, fold change is already log-transformed.
 #' @param is_p_log          \strong{logical} \cr
 #'                          If \code{TRUE}, p-value is already log-transformed.
-#' @param thres_fc          \strong{numeric} \cr
-#'                          The threshold for fold change.
-#' @param thres_p           \strong{numeric} \cr
-#'                          The threshold for p-value.
+#'                          
 #' @param show_thres_line   \strong{logical} \cr
 #'                          If \code{TRUE}, threshold lines will be shown.
-#' @param colour1           \strong{character} \cr
-#'                          The color for not significant proteins.
-#' @param colour2           \strong{character} \cr
-#'                          The color for significant proteins.
-#' @param colour3           \strong{character} \cr
-#'                          The color for significant proteins after FDR correction.
 #' @param groupname1        \strong{character} \cr
 #'                          The name of first group.
 #' @param groupname2        \strong{character} \cr
 #'                          The name of second group.
-#' @param xlim              \strong{numeric} \cr
-#'                          The limits for x-axis.
-#' @param ylim              \strong{numeric} \cr
-#'                          The limits for y-axis.
-#' @param symmetric_x       \strong{logical} \cr
-#'                          If \code{TRUE}, x-axis limits will be made symmetric (not used if xlim is defined).
-#' @param legend_position   \strong{character} \cr
-#'                          The positioning of the legend.
-#'                          Options are "none", "left", "right", "bottom", "top" and "inside".
+#'                          
 #' @param plot_height       \strong{numeric} \cr
 #'                          The height of plot.
 #' @param plot_width        \strong{numeric} \cr
@@ -176,14 +169,16 @@ VolcanoPlot <- function(p,
 #' @param plot_device       \strong{character} \cr
 #'                          The plot device that is used for the resulting plot.
 #'                          Options are "pdf" and "png".
+#'                          
 #' @param output_path       \strong{character} \cr
 #'                          The path for output file.
 #' @param suffix            \strong{character} \cr
 #'                          The suffix for output file.
-#' @param base_size         \strong{numeric} \cr
-#'                          The base size for theme.
 #' @param add_annotation    \strong{logical} \cr
 #'                          If \code{TRUE}, annotation will be added.
+#'                          
+#' @param ...               Additional arguments for the plot.
+#'                         
 #'
 #' @return A ggplot object of the volcano plot from a ttest result.
 #' @export
@@ -197,19 +192,23 @@ VolcanoPlot_ttest <- function(RES,
                         columnname_p = "p",
                         columnname_padj = "padj",
                         columnname_FC = "FC",
-                        thres_p = 0.05,
+                        
                         thres_fc = 2,
+                        thres_p = 0.05,
                         log_base_fc = 2,
                         log_base_p = 10,
                         is_FC_log = FALSE,
                         is_p_log = FALSE,
+                        
                         show_thres_line = TRUE,
                         groupname1 = "group1",
                         groupname2 = "group2",
+                        
                         plot_height = 15,
                         plot_width = 15,
                         plot_dpi = 300,
                         plot_device="pdf",
+                        
                         output_path = NULL,
                         suffix = NULL,
                         add_annotation = TRUE,

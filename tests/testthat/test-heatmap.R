@@ -1,6 +1,6 @@
 test_that("Calculate heatmap for a ttest ", {
   
-  pData <- openxlsx::read.xlsx(xlsxFile = test_path("testdata", "result_ttest.xlsx"), na.strings = c("NA", "NaN", "Filtered","#NV"))
+  pData <- openxlsx::read.xlsx(xlsxFile = system.file("extdata", "result_ttest.xlsx", package = "ProtStatsWF"), na.strings = c("NA", "NaN", "Filtered","#NV"))
   
   significance <- calculate_significance_categories_ttest(p = pData[["p"]], 
                                                           p_adj = pData[["p.fdr"]],
@@ -25,7 +25,7 @@ test_that("Calculate heatmap for a ttest ", {
 
 test_that("Calculate heatmap for an ANOVA ", {
   
-  pData <- openxlsx::read.xlsx(xlsxFile = test_path("testdata", "result_ANOVA.xlsx"), na.strings = c("NA", "NaN", "Filtered","#NV"))
+  pData <- openxlsx::read.xlsx(xlsxFile = system.file("extdata", "result_ANOVA.xlsx", package = "ProtStatsWF"), na.strings = c("NA", "NaN", "Filtered","#NV"))
   
   #candidates <- 11:12
   

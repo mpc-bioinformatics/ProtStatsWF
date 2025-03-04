@@ -12,7 +12,7 @@ test_that("Single MA plot", {
   
   png_file_path <- file.path(temp_dir, "result_MA_plot_snapshot.png")
   
-  pData <- prepareData(data_path = test_path("testdata", "test_file_MA_plots.xlsx"), intensity_columns = 3:6)
+  pData <- prepareData(data_path = system.file("extdata", "test_file_MA_plots.xlsx", package = "ProtStatsWF"), intensity_columns = 3:6)
   D = pData[["D"]]
   s1 = D[,1]
   s2 = D[,2]
@@ -32,7 +32,7 @@ test_that("plot", {
   dir.create(temp_dir)
   on.exit(unlink(temp_dir, recursive = TRUE)) 
 
-  pData <- prepareData(data_path = test_path("testdata", "test_file_MA_plots.xlsx"), intensity_columns = 3:6)
+  pData <- prepareData(data_path = system.file("extdata", "test_file_MA_plots.xlsx", package = "ProtStatsWF"), intensity_columns = 3:6)
   D = pData[["D"]]
 
   pResult <- MA_Plots(D = D, do_log_transformation = FALSE, output_path = temp_dir, suffix = "_result")

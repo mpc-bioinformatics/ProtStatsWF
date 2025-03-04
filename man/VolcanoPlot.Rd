@@ -19,7 +19,9 @@ VolcanoPlot(
   legend_position = "bottom",
   base_size = NULL,
   xlim = NULL,
-  ylim = NULL
+  ylim = NULL,
+  alpha = 0.5,
+  point_size = 3
 )
 }
 \arguments{
@@ -68,6 +70,12 @@ The limits for x-axis.}
 
 \item{ylim}{\strong{numeric} \cr
 The limits for y-axis.}
+
+\item{alpha}{\strong{numeric} \cr
+The transparency of the data points.}
+
+\item{point_size}{\strong{numeric} \cr
+The size of the data points.}
 }
 \value{
 A ggplot showing the volcano plot.
