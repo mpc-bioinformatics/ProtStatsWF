@@ -52,7 +52,7 @@
 #'                               The plot width in cm.
 #' @param plot_dpi               \strong{integer} \cr
 #'                               The "dots per inch" of the plot aka. the plot resolution.
-#'                               
+#'
 #' @param column_name_protein    \strong{character} \cr
 #'                               The column name containing the proteins.
 #'
@@ -381,8 +381,8 @@ workflow_ANOVA <- function(data_path,
                          group = data[["group"]],  sample = data[["sample"]],
                          paired = paired, var.equal = var.equal,
                          log_before_test = log_before_test, delog_for_FC = delog_for_FC, log_base = 2,
-                         min_obs_per_group = 3, min_perc_per_group = NULL,
-                         filename = paste0(output_path, "results_ANOVA", suffix, ".xlsx"))
+                         min_obs_per_group = 3, min_perc_per_group = NULL)#,
+                         #filename = paste0(output_path, "results_ANOVA", suffix, ".xlsx"))
 
   mess <- paste0(mess, "ANOVA calculated. \n")
 
