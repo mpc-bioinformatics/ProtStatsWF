@@ -9,6 +9,14 @@ You can install the development version of ProtStatsWF from
 
 ``` r
 # install.packages("devtools")
+
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("limma")
+BiocManager::install("vsn")
+BiocManager::install("ComplexHeatmap")
+
+
 devtools::install_github("mpc-bioinformatics/ProtStatsWF")
 library(ProtStatsWF)
 ```
