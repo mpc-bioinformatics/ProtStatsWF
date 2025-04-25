@@ -40,7 +40,7 @@ Boxplots <- function(D_long,
                      groupvar_name = "Group",
                      group_colours = NULL,
                      base_size = 15,
-                     lwd = 1,
+                     lwd = 0.5,
                      outlier_size = 1){
 
 
