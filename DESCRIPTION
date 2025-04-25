@@ -18,8 +18,10 @@ Config/testthat/edition: 3
 biocViews:
 Imports: 
     affy,
+    amap,
     car,
     ComplexHeatmap,
+    dendextend,
     dplyr,
     ggplot2,
     ggrepel,
@@ -31,6 +33,7 @@ Imports:
     nlme,
     openxlsx,
     pbapply,
+    reshape2,
     scales,
     stats,
     tidyr,

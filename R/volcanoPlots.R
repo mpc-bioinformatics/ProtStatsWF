@@ -78,7 +78,11 @@ VolcanoPlot <- function(p,
                     significance = significance_category)
 
 
+<<<<<<< HEAD
   significance <- RES$significance
+=======
+  significance <- NULL # silence notes when checking the package
+>>>>>>> cdea481 (clean up to get rid of most warnings and notes when checking)
 
   plot <- ggplot2::ggplot(data = RES, ggplot2::aes(x = transformed_FC, y = transformed_p, colour = significance)) +
     ggplot2::geom_point(alpha = alpha, show.legend = TRUE, size = point_size) +
@@ -328,7 +332,28 @@ VolcanoPlot_ttest <- function(RES,
 #'
 #' @seealso [VolcanoPlot()], [VolcanoPlot_ttest()], [add_labels()]
 #'
+<<<<<<< HEAD
 #' @examples
+=======
+#' @param RES result of ProtStatsWF::ANOVA() or other ANOVA function
+#' @param columnname_p_ANOVA column name of the p-values from the ANOVA
+#' @param columnname_p_ANOVA_adj column name of the adjusted p-values from the ANOVA
+#' @param columns_FC vector of column numbers for the fold changes
+#' @param columns_p_posthoc vector of column numbers for the posthoc p-values
+#' @param log_base_fc base for log2 transformation of fold changes
+#' @param log_base_p base for log10 transformation of p-values
+#' @param thres_p threshold for p-values
+#' @param thres_fc threshold for fold changes
+#' @param colour1 colour for not significant proteins
+#' @param colour2 colour for significant proteins
+#' @param colour3 colour for significant proteins after FDR correction
+#' @param symmetric_x logical, if TRUE, x-axis will be made symmetric
+#' @param legend_position position of the legend
+#' @param base_size base size for the ggplot theme
+#' @param xlim x-axis limits
+#' @param ylim y-axis limits
+#' @param add_labels add labels to interesting proteins in the volcano plot
+>>>>>>> cdea481 (clean up to get rid of most warnings and notes when checking)
 #'
 
 VolcanoPlot_ANOVA <- function(RES,
@@ -359,6 +384,8 @@ VolcanoPlot_ANOVA <- function(RES,
 
   p_anova <- RES[, columnname_p_ANOVA]
   p_anova_adj <- RES[, columnname_p_ANOVA_adj]
+  p_anova <- RES[, columnname_p_ANOVA]
+  p_anova_adj <- RES[, columnname_p_ANOVA_adj]
   #nr_comparisons <- choose(n = nr_groups, k = 2) # pairwise comparisons between two groups
 
   # names of the comparisons
@@ -372,6 +399,8 @@ VolcanoPlot_ANOVA <- function(RES,
   Volcano_plots <- list()
   for (i in 1:nr_comparisons) {
 
+    p_posthoc <- RES[, columns_p_posthoc[i]]
+    fc <- RES[, columns_FC[i]]
     p_posthoc <- RES[, columns_p_posthoc[i]]
     fc <- RES[, columns_FC[i]]
 
@@ -432,6 +461,7 @@ VolcanoPlot_ANOVA <- function(RES,
 
 #' Add labels to a volcano plot.
 #'
+<<<<<<< HEAD
 #' @param RES_Volcano           \strong{result from [VolcanoPlot()]} \cr
 #'                              A list containing the data.frame with the transformed data and the ggplot object.
 #' @param label_type            \strong{character} \cr
@@ -443,6 +473,13 @@ VolcanoPlot_ANOVA <- function(RES,
 #'                              The index if the label_type is "index".
 #' @param protein_names         \strong{character vector} \cr
 #'                              The names of the proteins.
+=======
+#' @param RES_Volcano  result from volcanoPlot(): a list containing the data frame with the transformed data and the ggplot object
+#' @param label_type "FDR" (significant after correction) or "noFDR" (significant without correction) or "index" -> define indizes to label
+#' @param protein_name_column column name of the protein names in the RES data frame
+#' @param ind index of the proteins to label
+#' @param protein_names vector of protein names to label
+>>>>>>> cdea481 (clean up to get rid of most warnings and notes when checking)
 #'
 #' @return A ggplot object with labels.
 #' @export
@@ -478,15 +515,9 @@ add_labels <- function(RES_Volcano,
     ind_label <- ind
   }
 
-  ind0 <<- ind_label
-
-  print(RES_Volcano$data$transformed_FC[ind_label])
-
   ind_label_down <- ind_label[RES_Volcano$data$transformed_FC[ind_label] < 0]
   ind_label_up <- ind_label[RES_Volcano$data$transformed_FC[ind_label] > 0]
 
-  ind1 <<- ind_label_up
-  ind2 <<- ind_label_down
 
   labels_up <- rep(NA, nrow(RES_Volcano$data))
   labels_down <- rep(NA, nrow(RES_Volcano$data))
@@ -507,17 +538,12 @@ add_labels <- function(RES_Volcano,
   xaxis_limits <- xaxis_limits * 1.1
 
   yaxis_limits <- ggplot2::layer_scales(RES_Volcano)$y$get_limits()
-  yaxis_limits[2] <- yaxis_limits[2] * 1.1 # only changge upper limit
-
-
-  x1 <<- labels_up
-  x2 <<- labels_down
+  yaxis_limits[2] <- yaxis_limits[2] * 1.1 # only change upper limit
+  yaxis_limits[2] <- yaxis_limits[2] * 1.1 # only change upper limit
 
   ### add labels
   plot <- RES_Volcano +
     ggplot2::ylim(yaxis_limits) + ggplot2::xlim(xaxis_limits) +
-    # geom_point(data= RES_Volcano$RES[!is.na(labels_up) | !is.na(labels_down),],
-    #             aes(x=transformed_FC,y=transformed_p)) +
     ggrepel::geom_label_repel(ggplot2::aes(label = labels_up), size = 2,
                               nudge_x = nudge_x, nudge_y = nudge_y, show.legend = FALSE,
                               max.overlaps = 20) +

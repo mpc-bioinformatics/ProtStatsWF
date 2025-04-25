@@ -1,5 +1,4 @@
 
-
 #' ANOVA to compare three or more experimental groups
 #'
 #' @param D                    \strong{data.frame} \cr
@@ -148,7 +147,7 @@ ANOVA_standard_single_row <- function(x,
   }
 
 
-  ### TODO: die Benennung der Spalten in die aeussere Funktion verlagern
+  ### generate column names
   namesfc1 <- paste0("FC_", comparisons[,1], "_divided_by_", comparisons[,2])
   namesfc2 <- paste0("FC_", comparisons[,2], "_divided_by_", comparisons[,1])
   namesfc <- character(2*nr_comparisons)
@@ -280,7 +279,7 @@ ANOVA_repeatedMeasurements_single_row <- function(x,
     D_tmp_naomit <- droplevels(D_tmp_naomit)
   }
 
-  ### TODO: die Benennung der Spalten in die aeussere Funktion verlagern
+  ### generating column names
   namesfc1 <- paste0("FC_", comparisons[,1], "_divided_by_", comparisons[,2])
   namesfc2 <- paste0("FC_", comparisons[,2], "_divided_by_", comparisons[,1])
   namesfc <- character(2*nr_comparisons)
@@ -303,7 +302,7 @@ ANOVA_repeatedMeasurements_single_row <- function(x,
     names(res) <- cnames
     return(res)
     }  # Modellberechnung fehlgeschlagen
-  lme.aov <- stats::anova(Lme.mod)  # Wald test
+  lme.aov <- nlme::anova.lme(Lme.mod)  # Wald test
   p.anova <- lme.aov$`p-value`[2]  # p-Wert der ANOVA fuer den Faktor group
   if (is.nan(p.anova)) {
     z <- rep(NA, h)
@@ -412,7 +411,7 @@ ANOVA_Welch_single_row <- function(x,
     D_tmp_naomit <- droplevels(D_tmp_naomit)
   }
 
-  ### TODO: die Benennung der Spalten in die aeussere Funktion verlagern
+  ### generating column names
   namesfc1 <- paste0("FC_", comparisons[,1], "_divided_by_", comparisons[,2])
   namesfc2 <- paste0("FC_", comparisons[,2], "_divided_by_", comparisons[,1])
   namesfc <- character(2*nr_comparisons)

@@ -21,27 +21,31 @@
 #' @param outlier_size            \strong{numeric} \cr
 #'                                The size of the outliers.
 #'
-#' @return A tibble and a ggplot of the valid values.
+#' @return boxplots and messages
 #' @export
 #'
 #' @examples
 #' \dontrun{
 #' prepared_data <- prepareData(...)
 #'
+#'
 #' boxplot <- Boxplots(D_long = prepared_data[["D_long"]])
 #' }
 #'
+#'
 
 Boxplots <- function(D_long,
+                     do_log_transformation = FALSE,
                      do_log_transformation = FALSE,
                      log_base = 2,
                      method = "boxplot",
                      use_groups = NULL,
                      groupvar_name = "Group",
+                     groupvar_name = "Group",
                      group_colours = NULL,
-                     base_size = 15,
-                     lwd = 0.5,
-                     outlier_size = 1){
+                     base_size = 15){
+
+
 
 
   mess <- ""
@@ -58,17 +62,21 @@ Boxplots <- function(D_long,
     }
   }
 
+
   # log-transform data if necessary
   if (do_log_transformation) {
     D_long$value <- log(D_long$value, base = log_base)
   }
 
+
   x_axis <- sort(unique(D_long$name)) # save the different states for later
   D_long <- D_long[!is.na(D_long$value),] # remove NA values
+
 
   name <- value <- group <- NULL
   if (use_groups) {
    pl_boxplot <- ggplot2::ggplot(D_long, ggplot2::aes(x = name, y = value, fill = group)) +
+     ggplot2::labs(fill = groupvar_name)
      ggplot2::labs(fill = groupvar_name)
     if (!is.null(group_colours)) pl_boxplot <- pl_boxplot + ggplot2::scale_fill_manual(values = group_colours)
     mess <- paste0(mess, "with groups. \n")
@@ -78,24 +86,33 @@ Boxplots <- function(D_long,
   }
 
 
+
+
   pl_boxplot <- pl_boxplot +
     ggplot2::theme_bw(base_size = base_size) +
-    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, vjust = 1, hjust = 1)) +
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, vjust = 1, hjust=1)) +
+    ggplot2::ylab("Log intensity") + ggplot2::xlab("Sample") +
     ggplot2::ylab("Log intensity") + ggplot2::xlab("Sample") +
     ggplot2::scale_x_discrete(limits = x_axis, drop = FALSE, na.translate = TRUE)
 
 
-  if (method == "violinplot") {
+
+
+  if (method == "violinplot"){
     pl_boxplot <- pl_boxplot + ggplot2::geom_violin()
     mess <- paste0("Violin Plot generated ", mess)
   }
+
 
   if (method == "boxplot") {
     pl_boxplot <- pl_boxplot + ggplot2::geom_boxplot(linewidth = lwd, outlier.size = outlier_size)
     mess <- paste0("Boxplot generated ", mess)
   }
 
+
   message(mess)
+
 
   return(list("plot" = pl_boxplot, "message" = mess))
 }
+
