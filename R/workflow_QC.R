@@ -225,8 +225,7 @@ workflow_QC <- function(data_path,
   boxplot_data <- Boxplots(D_long = prepared_data[["D_long"]],
                            do_log_transformation = FALSE, log_base = log_base,
                            use_groups = use_groups, groupvar_name = groupvar_name, group_colours = group_colours,
-
-                           base_size = base_size, method = boxplot_method)
+                           base_size = base_size, method = boxplot_method, lwd = 0.5)
 
   mess <- paste0(mess, boxplot_data[["message"]])
 
