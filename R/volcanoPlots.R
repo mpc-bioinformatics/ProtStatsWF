@@ -384,6 +384,8 @@ VolcanoPlot_ANOVA <- function(RES,
 
   p_anova <- RES[, columnname_p_ANOVA]
   p_anova_adj <- RES[, columnname_p_ANOVA_adj]
+  p_anova <- RES[, columnname_p_ANOVA]
+  p_anova_adj <- RES[, columnname_p_ANOVA_adj]
   #nr_comparisons <- choose(n = nr_groups, k = 2) # pairwise comparisons between two groups
 
   # names of the comparisons
@@ -397,6 +399,8 @@ VolcanoPlot_ANOVA <- function(RES,
   Volcano_plots <- list()
   for (i in 1:nr_comparisons) {
 
+    p_posthoc <- RES[, columns_p_posthoc[i]]
+    fc <- RES[, columns_FC[i]]
     p_posthoc <- RES[, columns_p_posthoc[i]]
     fc <- RES[, columns_FC[i]]
 
@@ -534,6 +538,7 @@ add_labels <- function(RES_Volcano,
   xaxis_limits <- xaxis_limits * 1.1
 
   yaxis_limits <- ggplot2::layer_scales(RES_Volcano)$y$get_limits()
+  yaxis_limits[2] <- yaxis_limits[2] * 1.1 # only change upper limit
   yaxis_limits[2] <- yaxis_limits[2] * 1.1 # only change upper limit
 
   ### add labels

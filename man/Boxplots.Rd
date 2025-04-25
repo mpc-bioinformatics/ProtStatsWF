@@ -49,7 +49,7 @@ The line width of the boxplot.}
 The size of the outliers.}
 }
 \value{
-A tibble and a ggplot of the valid values.
+a tibble and a ggplot of the valid values
 }
 \description{
 Barplots showing the percentage of valid values for each sample.

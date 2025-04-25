@@ -26,6 +26,7 @@ VolcanoPlot(
 )
 }
 \arguments{
+<<<<<<< HEAD
 \item{p}{\strong{numeric factor} \cr
 The values for the p-values.}
 
@@ -80,10 +81,49 @@ The size of the data points.}
 }
 \value{
 A ggplot showing the volcano plot.
+=======
+\item{p}{vector of p-values (before p-value correction)}
+
+\item{FC}{vector of fold changes}
+
+\item{significance_category}{vector of significance categories ("not significant", "significant", "significant after FDR correction")}
+
+\item{log_base_fc}{base for logarithm of the fold change (default is 2).}
+
+\item{log_base_p}{base for logarithm of the p-value (default is 10, the negative log-p-value is plotted, e.g. -log10(p)).}
+
+\item{thres_p}{threshold for p-value (default is 0.05)}
+
+\item{thres_fc}{threshold for fold change (default is 2)}
+
+\item{colour1}{colour for not significant points, default is grey}
+
+\item{colour2}{colour for significant points, default is black}
+
+\item{colour3}{colour for significant points after FDR correction, default is orange}
+
+\item{symmetric_x}{if TRUE, x-axis will be made symmetric, default is FALSE}
+
+\item{legend_position}{position of the legen, default is "bottom"}
+
+\item{base_size}{base size for ggplot2 theme, default is NULL}
+
+\item{xlim}{x-axis limits, default is NULL, i.e. will be determined automatically}
+
+\item{ylim}{y-axis limits, default is NULL, i.e. will be determined automatically}
+}
+\value{
+Volcano plot as ggplot object
+>>>>>>> 87feb7e7ecaac8ef8743c891d467d40e48c27c9c
 }
 \description{
 Simple volcano plot from p-value, fold change and significance category
 }
+<<<<<<< HEAD
 \seealso{
 \code{\link[=VolcanoPlot_ttest]{VolcanoPlot_ttest()}}, \code{\link[=VolcanoPlot_ANOVA]{VolcanoPlot_ANOVA()}}
+=======
+\examples{
+# TODO
+>>>>>>> 87feb7e7ecaac8ef8743c891d467d40e48c27c9c
 }

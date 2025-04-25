@@ -46,6 +46,8 @@ Boxplots <- function(D_long,
                      base_size = 15){
 
 
+
+
   mess <- ""
 
   if (is.null(use_groups)) {
@@ -90,7 +92,10 @@ Boxplots <- function(D_long,
     ggplot2::theme_bw(base_size = base_size) +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, vjust = 1, hjust=1)) +
     ggplot2::ylab("Log intensity") + ggplot2::xlab("Sample") +
+    ggplot2::ylab("Log intensity") + ggplot2::xlab("Sample") +
     ggplot2::scale_x_discrete(limits = x_axis, drop = FALSE, na.translate = TRUE)
+
+
 
 
   if (method == "violinplot"){

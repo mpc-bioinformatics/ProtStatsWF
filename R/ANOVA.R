@@ -1,8 +1,4 @@
 
-<<<<<<< HEAD
-
-=======
->>>>>>> cdea481 (clean up to get rid of most warnings and notes when checking)
 #' ANOVA to compare three or more experimental groups
 #'
 #' @param D                    \strong{data.frame} \cr
@@ -306,11 +302,7 @@ ANOVA_repeatedMeasurements_single_row <- function(x,
     names(res) <- cnames
     return(res)
     }  # Modellberechnung fehlgeschlagen
-<<<<<<< HEAD
-  lme.aov <- stats::anova(Lme.mod)  # Wald test
-=======
   lme.aov <- nlme::anova.lme(Lme.mod)  # Wald test
->>>>>>> cdea481 (clean up to get rid of most warnings and notes when checking)
   p.anova <- lme.aov$`p-value`[2]  # p-Wert der ANOVA fuer den Faktor group
   if (is.nan(p.anova)) {
     z <- rep(NA, h)
