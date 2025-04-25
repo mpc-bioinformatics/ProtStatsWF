@@ -21,7 +21,8 @@ VolcanoPlot(
   xlim = NULL,
   ylim = NULL,
   alpha = 0.5,
-  point_size = 3
+  point_size = 3,
+  linewidth = 2
 )
 }
 \arguments{

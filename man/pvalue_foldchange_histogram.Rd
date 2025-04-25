@@ -8,7 +8,8 @@ pvalue_foldchange_histogram(
   RES,
   columnname_p = "p",
   columnname_padj = "padj",
-  columnname_FC = "FC"
+  columnname_FC = "FC",
+  base_size = 15
 )
 }
 \arguments{

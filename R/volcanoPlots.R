@@ -59,9 +59,10 @@ VolcanoPlot <- function(p,
                         legend_position = "bottom",
                         base_size = NULL,
                         xlim = NULL,
-                        ylim = NULL, 
+                        ylim = NULL,
                         alpha = 0.5,
-                        point_size = 3) {
+                        point_size = 3,
+                        linewidth = 2) {
 
 
   ### transform p-values and fold changes and thresholds
@@ -72,7 +73,7 @@ VolcanoPlot <- function(p,
   log_thres_p <- -log(thres_p, base = log_base_p)
   log_thres_fc <- log(thres_fc, base = log_base_fc)
 
-  RES <<- data.frame(transformed_FC = transformed_FC,
+  RES <- data.frame(transformed_FC = transformed_FC,
                     transformed_p = transformed_p,
                     significance = significance_category)
 
@@ -113,9 +114,9 @@ VolcanoPlot <- function(p,
   }
 
   ## draw threshold lines
-  plot <- plot + ggplot2::geom_hline(yintercept = log_thres_p, linetype = "dotted") +
-    ggplot2::geom_vline(xintercept =  log_thres_fc, linetype = "dotted") +
-    ggplot2::geom_vline(xintercept = -log_thres_fc, linetype = "dotted")
+  plot <- plot + ggplot2::geom_hline(yintercept = log_thres_p, linetype = "dotted", linewidth = linewidth) +
+    ggplot2::geom_vline(xintercept =  log_thres_fc, linetype = "dotted", linewidth = linewidth) +
+    ggplot2::geom_vline(xintercept = -log_thres_fc, linetype = "dotted", linewidth = linewidth)
 
   return(plot)
 
@@ -139,7 +140,7 @@ VolcanoPlot <- function(p,
 #'                          The columns name for adjusted p-value.
 #' @param columnname_FC     \strong{character} \cr
 #'                          The column name for fold change.
-#'                          
+#'
 #' @param thres_fc          \strong{numeric} \cr
 #'                          The threshold for fold change.
 #' @param thres_p           \strong{numeric} \cr
@@ -152,14 +153,14 @@ VolcanoPlot <- function(p,
 #'                          If \code{TRUE}, fold change is already log-transformed.
 #' @param is_p_log          \strong{logical} \cr
 #'                          If \code{TRUE}, p-value is already log-transformed.
-#'                          
+#'
 #' @param show_thres_line   \strong{logical} \cr
 #'                          If \code{TRUE}, threshold lines will be shown.
 #' @param groupname1        \strong{character} \cr
 #'                          The name of first group.
 #' @param groupname2        \strong{character} \cr
 #'                          The name of second group.
-#'                          
+#'
 #' @param plot_height       \strong{numeric} \cr
 #'                          The height of plot.
 #' @param plot_width        \strong{numeric} \cr
@@ -169,16 +170,16 @@ VolcanoPlot <- function(p,
 #' @param plot_device       \strong{character} \cr
 #'                          The plot device that is used for the resulting plot.
 #'                          Options are "pdf" and "png".
-#'                          
+#'
 #' @param output_path       \strong{character} \cr
 #'                          The path for output file.
 #' @param suffix            \strong{character} \cr
 #'                          The suffix for output file.
 #' @param add_annotation    \strong{logical} \cr
 #'                          If \code{TRUE}, annotation will be added.
-#'                          
+#'
 #' @param ...               Additional arguments for the plot.
-#'                         
+#'
 #'
 #' @return A ggplot object of the volcano plot from a ttest result.
 #' @export
@@ -192,23 +193,23 @@ VolcanoPlot_ttest <- function(RES,
                         columnname_p = "p",
                         columnname_padj = "padj",
                         columnname_FC = "FC",
-                        
+
                         thres_fc = 2,
                         thres_p = 0.05,
                         log_base_fc = 2,
                         log_base_p = 10,
                         is_FC_log = FALSE,
                         is_p_log = FALSE,
-                        
+
                         show_thres_line = TRUE,
                         groupname1 = "group1",
                         groupname2 = "group2",
-                        
+
                         plot_height = 15,
                         plot_width = 15,
                         plot_dpi = 300,
                         plot_device="pdf",
-                        
+
                         output_path = NULL,
                         suffix = NULL,
                         add_annotation = TRUE,
@@ -376,7 +377,7 @@ VolcanoPlot_ANOVA <- function(RES,
 
     X <- cbind(p_anova, p_anova_adj, p_posthoc, fc)
 
-    significance <- calculate_significance_categories_ANOVA(p_posthoc = p_posthoc, p_anova_adj = p_anova_adj, p_anova = p_anova, fc = fc, thres_fc=2, thres_p=0.05)
+    significance <- calculate_significance_categories_ANOVA(p_posthoc = p_posthoc, p_anova_adj = p_anova_adj, p_anova = p_anova, fc = fc, thres_fc = 2, thres_p = 0.05)
 
     X <- cbind(X, significance)
 
@@ -398,9 +399,6 @@ VolcanoPlot_ANOVA <- function(RES,
                         ylim = ylim)
 
     plot <- plot + ggplot2::ggtitle(comp_names[i])
-
-    print(plot$data)
-
 
     if (add_labels) {
       plot <- add_labels(plot,
