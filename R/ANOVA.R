@@ -103,7 +103,6 @@ ANOVA <- function(D,
 #' @param min_perc_per_group Numeric indicating the minimum ratio of observations per group.
 #'
 #' @return Vector with p-values and fold changes.
-#' @export
 #'
 #' @examples # TODO
 ANOVA_standard_single_row <- function(x,
@@ -233,7 +232,6 @@ ANOVA_standard_single_row <- function(x,
 #' @param min_perc_per_group Numeric indicating the minimum ratio of observations per group.
 #'
 #' @return Vector with p-values and fold changes.
-#' @export
 #'
 #' @examples # TODO
 ANOVA_repeatedMeasurements_single_row <- function(x,
@@ -368,7 +366,6 @@ ANOVA_repeatedMeasurements_single_row <- function(x,
 #' @param min_perc_per_group Numeric indicating the minimum ratio of observations per group.
 #'
 #' @return Vector with p-values and fold changes.
-#' @export
 #'
 #' @examples # TODO
 ANOVA_Welch_single_row <- function(x,

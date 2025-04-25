@@ -23,12 +23,11 @@
 #'                                  If \code{TRUE}, the variances of the groups are expected to be equal.
 #'
 #' @return A vector with the following components: mean group 1, mean group 2, test statistics, p-value, free space fpr corrected p-value, fold changes (both directions), lower and upper limit of confidence interval, number of valid values per group.
-#' @export
-#' 
+#'
 #' @seealso [ttest()], [ttest_single_row_paired()]
 #'
-#' @examples 
-#' 
+#' @examples
+#'
 
 ttest_single_row <- function(x, group, log_before_test = TRUE, delog_for_FC = TRUE,
                              min_obs_per_group = NULL, min_obs_per_group_ratio = NULL,
@@ -142,12 +141,11 @@ ttest_single_row <- function(x, group, log_before_test = TRUE, delog_for_FC = TR
 #'                                  The row number of the data for the function call.
 #'
 #' @return A vector with the following components: mean difference between groups, test statistics, p-value, free space fpr corrected p-value, fold changes (both directions), lower and upper limit of confidence interval, number of valid values per group.
-#' @export
-#' 
+#'
 #' @seealso [ttest()], [ttest_single_row()]
 #'
-#' @examples 
-#' 
+#' @examples
+#'
 
 ttest_single_row_paired <- function(x, group, sample, log_before_test = TRUE, delog_for_FC = TRUE,
                              min_nr_pairs = NULL,
@@ -267,11 +265,11 @@ ttest_single_row_paired <- function(x, group, sample, log_before_test = TRUE, de
 #'
 #' @return A data frame containing the results of the t-test.
 #' @export
-#' 
+#'
 #' @seealso [ttest_single_row()], [ttest_single_row_paired()]
 #'
-#' @examples 
-#' 
+#' @examples
+#'
 
 ttest <- function(D, id = NULL, group, sample = NULL, paired = FALSE, var.equal = FALSE,
                   log_before_test = TRUE, delog_for_FC = TRUE, log_base = 2,

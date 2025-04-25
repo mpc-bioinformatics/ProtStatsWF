@@ -15,8 +15,7 @@
 #' @param ...                     Additional arguments for affy::ma.plot.
 #'
 #' @return Generates the MA plot for two samples.
-#' @export
-#' 
+#'
 #' @seealso [MA_Plots()]
 #'
 #' @examples
@@ -94,10 +93,10 @@ MA_Plot_single <- function(sample_1, sample_2,
 #' @param sampling                \strong{numeric} \cr
 #'                                The sampling rate. Useful to sample part of the data set for data sets on peptide/feature level with many data points.
 #' @param ...                     Additional arguments for affy::ma.plot.
-#' 
+#'
 #' @return A pdf file containing the MA plots for all sample combinations.
 #' @export
-#' 
+#'
 #' @seealso [MA_Plot_single()]
 #'
 #' @examples
