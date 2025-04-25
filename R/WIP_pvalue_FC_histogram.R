@@ -28,13 +28,9 @@ pvalue_foldchange_histogram <- function(RES,
                   padj = RES[[columnname_padj]],
                   FC = RES[[columnname_FC]])
 
-<<<<<<< HEAD:R/pvalue_FC_histogram.R
-  pl_hist_p <- ggplot2::ggplot(D, ggplot2::aes(x = D[["p"]])) +
-=======
   p <- padj <- FC <- NULL # silence notes when checking the package
 
   pl_hist_p <- ggplot2::ggplot(D, ggplot2::aes(x = p)) +
->>>>>>> cdea481 (clean up to get rid of most warnings and notes when checking):R/WIP_pvalue_FC_histogram.R
     ggplot2::geom_histogram(breaks = seq(0,1, 0.05)) +
     ggplot2::theme_bw(base_size = base_size) +
     ggplot2::labs(title = "Histogram of p-values",

@@ -14,8 +14,27 @@ calculate_significance_categories_ANOVA(
 )
 }
 \arguments{
-\item{thres_p}{}
+\item{p_posthoc}{\strong{numeric vector} \cr
+The posthoc p-values .}
+
+\item{p_anova_adj}{\strong{numeric vector} \cr
+The p-values after FDR-correction.}
+
+\item{p_anova}{\strong{numeric vector} \cr
+The p-values before FDR-correction}
+
+\item{fc}{\strong{numeric vector} \cr
+The values of the fold changes.}
+
+\item{thres_fc}{\strong{numeric} \cr
+The threshold for the fold changes.}
+
+\item{thres_p}{\strong{numeric} \cr
+The threshold for the p-values.}
+}
+\value{
+A factor containing the significances.
 }
 \description{
-Calculate significance categories for ANOVA
+Calculate significance categories for ANOVA.
 }

@@ -36,39 +36,19 @@ Heatmap_with_groups(
 )
 }
 \arguments{
-<<<<<<< HEAD
-<<<<<<< HEAD
 \item{D}{\strong{data.frame} \cr
 The data set containing only protein intensities, already filtered for interesting candidates.}
 
 \item{id}{\strong{data.frame} \cr
 The corresponding ID columns for the parameter D e.g. containing further columns like protein or gene names}
-=======
-\item{D}{dataframe containing only protein intensities (if applicable, already filtered for interesting candidate proteins)}
-=======
-\item{D}{dataframe containing only protein intensities (if applicable, already filtered for interesting candidate proteins)}
-
-\item{id}{dataframe containing further columns, e.g. protein or gene names}
->>>>>>> 87feb7e7ecaac8ef8743c891d467d40e48c27c9c
-
-\item{id}{dataframe containing further columns, e.g. protein or gene names}
->>>>>>> b4b9e04 (fix lineplot branch)
 
 \item{protein_names_col}{\strong{integer} \cr
 The column with protein or gene names, if the names should be plotted.}
 
-<<<<<<< HEAD
 \item{na_method}{\strong{character} \cr
 The method with which missing values are handeled.
 Options are "na.omit" (proteins with any missing values will be removed), "impute" (missing values will be imputed) and "keep" (missing values will be kept).
 Note that clustering may not work when too many missing values are present.}
-=======
-\item{na_method}{"na.omit" -> proteins with any missing values will be removed
-Please note that clustering may not work when too many missing values are present.}
-<<<<<<< HEAD
->>>>>>> b4b9e04 (fix lineplot branch)
-=======
->>>>>>> 87feb7e7ecaac8ef8743c891d467d40e48c27c9c
 
 \item{filtermissings}{\strong{integer} \cr
 The threshold for missing values.
@@ -87,100 +67,39 @@ The group of the data with two or more grouping variables.}
 \item{cluster_column_slices}{\strong{logical} \cr
 ? If \code{TRUE}, column slices will be clustered.}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 \item{cluster_rows}{\strong{logical} \cr
 If \code{TRUE}, the rows will be clustered.}
 
 \item{cluster_columns}{\strong{logical} \cr
 If \code{TRUE}, the columns will be clustered.}
-=======
-\item{cluster_rows}{logical determining if rows will be clustered. Alternatively a dendrogram can be provided (potentially coloured using the dendextend package).}
-=======
-\item{cluster_rows}{logical determining if rows will be clustered. Alternatively a dendrogram can be provided (potentially coloured using the dendextend package).}
-
-\item{cluster_columns}{logical determining if columns will be clustered. Alternatively a dendrogram can be provided (potentially coloured using the dendextend package).}
->>>>>>> 87feb7e7ecaac8ef8743c891d467d40e48c27c9c
-
-\item{cluster_columns}{logical determining if columns will be clustered. Alternatively a dendrogram can be provided (potentially coloured using the dendextend package).}
->>>>>>> b4b9e04 (fix lineplot branch)
 
 \item{dist_method}{\strong{character} \cr
 The distance metric for clustering. Options are "pearson", "spearman" and "euclidean".}
 
-<<<<<<< HEAD
 \item{clust_method}{\strong{character} \cr
 The linkage method for clustering. Options are "complete", "single" and "average".}
 
-<<<<<<< HEAD
 \item{symmetric_legend}{\strong{logical} \cr
 If \code{TRUE}, the colour code will be  symmetric.
 Note that it only make sense for z-scored data.}
-=======
-\item{symmetric_legend}{should colour code be made symmetric? (only makes sense for z-scored data)}
-
-\item{scale_data}{should intensities be scaled ( = z-scored per row/protein)? Usually recommended for better visualization of the heatmap.}
->>>>>>> 87feb7e7ecaac8ef8743c891d467d40e48c27c9c
 
 \item{scale_data}{\strong{logical} \cr
 If \code{TRUE}, the data will be scaled ( = z-scored).}
-=======
-\item{symmetric_legend}{should colour code be made symmetric? (only makes sense for z-scored data)}
-
-\item{scale_data}{should intensities be scaled ( = z-scored per row/protein)? Usually recommended for better visualization of the heatmap.}
->>>>>>> b4b9e04 (fix lineplot branch)
 
 \item{output_path}{\strong{character} \cr
 The path to the output folder.}
 
-<<<<<<< HEAD
 \item{suffix}{\strong{character} \cr
 The suffix of the file names should have one.}
 
 \item{legend_name}{\strong{character} \cr
 The name for legend.}
-=======
-\item{title}{title of the heatmap plot}
 
-\item{legend_colours}{colours for colour gradient (vector of 3 color names of hex codes for low-middle-high intensities)}
-
-\item{plot_height}{plot height}
-
-\item{plot_width}{plot width}
-
-\item{plot_dpi}{plot resolution in DPI}
-
-\item{log_data}{if TRUE, intensities will be log-transformed}
-
-\item{log_base}{base for log-transformation}
-
-\item{colour_scale_max}{maximum value for colour scale (useful if data contains strong outliers)}
-
-\item{textsize}{test size for labels}
->>>>>>> 87feb7e7ecaac8ef8743c891d467d40e48c27c9c
-
-<<<<<<< HEAD
 \item{title}{\strong{character} \cr
 The title of the plot.}
-=======
-\item{title}{title of the heatmap plot}
->>>>>>> b4b9e04 (fix lineplot branch)
 
-\item{legend_colours}{colours for colour gradient (vector of 3 color names of hex codes for low-middle-high intensities)}
-
-\item{plot_height}{plot height}
-
-\item{plot_width}{plot width}
-
-\item{plot_dpi}{plot resolution in DPI}
-
-\item{log_data}{if TRUE, intensities will be log-transformed}
-
-\item{log_base}{base for log-transformation}
-
-\item{colour_scale_max}{maximum value for colour scale (useful if data contains strong outliers)}
-
-\item{textsize}{test size for labels}
+\item{legend_colours}{\strong{character} \cr
+A vector of colours for colour gradient.}
 
 \item{plot_height}{\strong{numeric} \cr
 The plot height in cm.}
@@ -206,29 +125,8 @@ The size of text in the plot.}
 \item{...}{Further arguments to Heatmap}
 }
 \value{
-heatmap + data used for the heatmap before and after imputation
+A heatmap of the given data.
 }
 \description{
-<<<<<<< HEAD
-<<<<<<< HEAD
 Create a Heatmap.
-=======
-=======
->>>>>>> 87feb7e7ecaac8ef8743c891d467d40e48c27c9c
-This function produces a heatmap based on the Heatmap()-function from the ComplexHeatmap package.
-Use cases may be to get an overview over the whole proteomics data set or parts of it
-(e.g. interesting candidate proteins that were significant in prior analysis).
-}
-\details{
-Missing values
-
-Clustering, Optionen an Methoden (all based on hclust function)
-
-Einfärben weiterer Variablen
-
-weitere Einstelloptionen
-}
-\examples{
-# TODO
->>>>>>> b4b9e04 (fix lineplot branch)
 }

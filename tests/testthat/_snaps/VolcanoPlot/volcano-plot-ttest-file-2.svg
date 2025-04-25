@@ -52,9 +52,9 @@
 <circle cx='683.31' cy='44.74' r='3.56' style='stroke-width: 0.71; stroke: #FFA500; stroke-opacity: 0.50; fill: #FFA500; fill-opacity: 0.50;' />
 <circle cx='59.11' cy='165.65' r='3.56' style='stroke-width: 0.71; stroke: #FFA500; stroke-opacity: 0.50; fill: #FFA500; fill-opacity: 0.50;' />
 <circle cx='301.77' cy='354.14' r='3.56' style='stroke-width: 0.71; stroke: #FFA500; stroke-opacity: 0.50; fill: #FFA500; fill-opacity: 0.50;' />
-<line x1='27.90' y1='388.17' x2='714.52' y2='388.17' style='stroke-width: 1.07; stroke-dasharray: 1.42,4.27; stroke-linecap: butt;' />
-<line x1='525.67' y1='505.91' x2='525.67' y2='22.78' style='stroke-width: 1.07; stroke-dasharray: 1.42,4.27; stroke-linecap: butt;' />
-<line x1='329.39' y1='505.91' x2='329.39' y2='22.78' style='stroke-width: 1.07; stroke-dasharray: 1.42,4.27; stroke-linecap: butt;' />
+<line x1='27.90' y1='388.17' x2='714.52' y2='388.17' style='stroke-width: 4.27; stroke-dasharray: 5.69,17.07; stroke-linecap: butt;' />
+<line x1='525.67' y1='505.91' x2='525.67' y2='22.78' style='stroke-width: 4.27; stroke-dasharray: 5.69,17.07; stroke-linecap: butt;' />
+<line x1='329.39' y1='505.91' x2='329.39' y2='22.78' style='stroke-width: 4.27; stroke-dasharray: 5.69,17.07; stroke-linecap: butt;' />
 <rect x='27.90' y='22.78' width='686.62' height='483.13' style='stroke-width: 1.07; stroke: #333333;' />
 </g>
 <g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>

@@ -49,7 +49,7 @@ The line width of the boxplot.}
 The size of the outliers.}
 }
 \value{
-a tibble and a ggplot of the valid values
+boxplots and messages
 }
 \description{
 Barplots showing the percentage of valid values for each sample.
@@ -58,7 +58,9 @@ Barplots showing the percentage of valid values for each sample.
 \dontrun{
 prepared_data <- prepareData(...)
 
+
 boxplot <- Boxplots(D_long = prepared_data[["D_long"]])
 }
+
 
 }

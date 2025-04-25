@@ -26,15 +26,14 @@ VolcanoPlot_ANOVA(
 )
 }
 \arguments{
-<<<<<<< HEAD
 \item{RES}{\strong{data.frame} \cr
-The result of ProtStatsWF::ANOVA() or other ANOVA function.}
+The results from an ANOVA.}
 
 \item{columnname_p_ANOVA}{\strong{character} \cr
-The column name for the p-values of the ANOVA.}
+The column name for the p-values.}
 
 \item{columnname_p_ANOVA_adj}{\strong{character} \cr
-The column name for the adjusted p-values of the ANOVA.}
+The column name for the adjusted p-values.}
 
 \item{columns_FC}{\strong{integer vector} \cr
 The column indices of the fold changes.}
@@ -84,53 +83,10 @@ If \code{TRUE}, labels will be added.}
 }
 \value{
 A list of ggplots of the volcano plot from an ANOVA result.
-=======
-\item{RES}{result of ProtStatsWF::ANOVA() or other ANOVA function}
-
-\item{columnname_p_ANOVA}{column name of the p-values from the ANOVA}
-
-\item{columnname_p_ANOVA_adj}{column name of the adjusted p-values from the ANOVA}
-
-\item{columns_FC}{vector of column numbers for the fold changes}
-
-\item{columns_p_posthoc}{vector of column numbers for the posthoc p-values}
-
-\item{log_base_fc}{base for log2 transformation of fold changes}
-
-\item{log_base_p}{base for log10 transformation of p-values}
-
-\item{thres_p}{threshold for p-values}
-
-\item{thres_fc}{threshold for fold changes}
-
-\item{colour1}{colour for not significant proteins}
-
-\item{colour2}{colour for significant proteins}
-
-\item{colour3}{colour for significant proteins after FDR correction}
-
-\item{symmetric_x}{logical, if TRUE, x-axis will be made symmetric}
-
-\item{legend_position}{position of the legend}
-
-\item{base_size}{base size for the ggplot theme}
-
-\item{xlim}{x-axis limits}
-
-\item{ylim}{y-axis limits}
-
-\item{add_labels}{add labels to interesting proteins in the volcano plot}
-}
-\value{
-list of volcano plots as ggplot objects
->>>>>>> 87feb7e7ecaac8ef8743c891d467d40e48c27c9c
 }
 \description{
 Volcano Plots for an ANOVA result.
 }
 \seealso{
 \code{\link[=VolcanoPlot]{VolcanoPlot()}}, \code{\link[=VolcanoPlot_ttest]{VolcanoPlot_ttest()}}, \code{\link[=add_labels]{add_labels()}}
-}
-\examples{
-# TODO
 }

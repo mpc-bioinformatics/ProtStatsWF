@@ -36,17 +36,14 @@
 
 Boxplots <- function(D_long,
                      do_log_transformation = FALSE,
-                     do_log_transformation = FALSE,
                      log_base = 2,
                      method = "boxplot",
                      use_groups = NULL,
                      groupvar_name = "Group",
-                     groupvar_name = "Group",
                      group_colours = NULL,
-                     base_size = 15){
-
-
-
+                     base_size = 15,
+                     lwd = 0.5,
+                     outlier_size = 1){
 
   mess <- ""
 

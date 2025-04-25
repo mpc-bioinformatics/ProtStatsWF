@@ -57,17 +57,11 @@ The numbers of the intensity columns in the table.}
 \item{normalization_method}{\strong{character} \cr
 The method of normalization. Options are "nonorm" (no normalization), "median", "loess", "quantile" or "lts" normalization.}
 
-<<<<<<< HEAD
 \item{lts_quantile}{\strong{numeric} \cr
 The quantile for the lts normalization if \code{normalization = "lts"}.}
 
 \item{use_groups}{\strong{logical} \cr
 If \code{TRUE}, group information encoded in the column names is used.}
-=======
-\item{lts_quantile}{A numeric containing the quantile for the lts normalization if \code{normalization = "lts"}, default is 0.8.}
-
-\item{use_groups}{If \code{TRUE}, group information encoded in the column names are used. Default is \code{TRUE}.}
->>>>>>> 87feb7e7ecaac8ef8743c891d467d40e48c27c9c
 
 \item{na_strings}{\strong{character} \cr
 A vector containing the symbols to be recognized as missing values (with the exception of 0).}
@@ -108,28 +102,20 @@ The suffix for the output files. It needs to start with an underscore.}
 \item{boxplot_method}{\strong{character} \cr
 The method used. Options are "boxplot" and "violinplot".}
 
-<<<<<<< HEAD
 \item{generate_MAplots}{\strong{logical} \cr
 If \code{TRUE}, MA plots will be generated, if \code{FALSE} they will not be generated (mostly for debugging purposes).}
 
 \item{MA_maxPlots}{\strong{integer} \cr
 The maximum number of MA plots that should be generated.}
-=======
-\item{MA_maxPlots}{A numeric containing the maximum number of MA plots that should be generated. Defaults is 5000.}
->>>>>>> 87feb7e7ecaac8ef8743c891d467d40e48c27c9c
 
 \item{MA_alpha}{\strong{logical} \cr
 If \code{TRUE}, the data points of the MA plots will be transparent.}
 
-<<<<<<< HEAD
 \item{MA_sampling}{\strong{numeric} \cr
 The sampling rate for MA-Plots. Useful to sample part of the data set for data sets on peptide/feature level with many data points.}
 
 \item{PCA_impute}{\strong{logical} \cr
 If \code{TRUE}, missing values will be imputed for the PCA.}
-=======
-\item{PCA_impute}{If \code{TRUE}, missing values will be imputed.}
->>>>>>> 87feb7e7ecaac8ef8743c891d467d40e48c27c9c
 
 \item{PCA_impute_method}{\strong{character} \cr
 The imputation method. Options are "mean" or "median".}
@@ -171,11 +157,7 @@ The limit of the y-axis.}
 The size of the data points.}
 }
 \value{
-<<<<<<< HEAD
 The workflow saves several plots and excel files and returns a message log of the workflow.
-=======
-List with the messages. Different csv and plot files are saved.
->>>>>>> 87feb7e7ecaac8ef8743c891d467d40e48c27c9c
 }
 \description{
 Workflow for quality control of quantitative proteomics data
