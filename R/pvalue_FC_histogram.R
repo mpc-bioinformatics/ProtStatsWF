@@ -15,21 +15,22 @@
 #' @return A list of 3 ggplot objects with a histogram for p-values, adjusted p-values and fold changes each.
 #' @export
 #'
-#' @examples 
-#' 
+#' @examples
+#'
 
 pvalue_foldchange_histogram <- function(RES,
                              columnname_p = "p",
                              columnname_padj = "padj",
-                             columnname_FC = "FC") {
+                             columnname_FC = "FC",
+                             base_size = 15) {
 
   D <- data.frame(p = RES[[columnname_p]],
                   padj = RES[[columnname_padj]],
                   FC = RES[[columnname_FC]])
-  
+
   pl_hist_p <- ggplot2::ggplot(D, ggplot2::aes(x = D[["p"]])) +
     ggplot2::geom_histogram(breaks = seq(0,1, 0.05)) +
-    ggplot2::theme_bw() +
+    ggplot2::theme_bw(base_size = base_size) +
     ggplot2::labs(title = "Histogram of p-values",
          x = "p-value",
          y = "Frequency") +
@@ -37,16 +38,16 @@ pvalue_foldchange_histogram <- function(RES,
 
   pl_hist_padj <- ggplot2::ggplot(D, ggplot2::aes(x = D[["padj"]])) +
     ggplot2::geom_histogram(breaks = seq(0,1, 0.05)) +
-    ggplot2::theme_bw() +
-    ggplot2::labs(title = "Histogram of p-values",
+    ggplot2::theme_bw(base_size = base_size) +
+    ggplot2::labs(title = "Histogram of adjusted p-values",
          x = "Adjusted p-value",
          y = "Frequency") +
     ggplot2::xlim(0,1)
 
   pl_hist_FC <- ggplot2::ggplot(D, ggplot2::aes(x = log2(D[["FC"]]))) +
     ggplot2::geom_histogram() +
-    ggplot2::theme_bw() +
-    ggplot2::labs(title = "Histogram of p-values",
+    ggplot2::theme_bw(base_size = base_size) +
+    ggplot2::labs(title = "Histogram of fold changes",
          x = "log2 Fold change",
          y = "Frequency")
 
