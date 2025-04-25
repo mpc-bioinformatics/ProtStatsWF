@@ -65,7 +65,7 @@
 #'
 #' @return A heatmap of the given data.
 #'
-#'
+#' @export
 #' @examples
 #'
 
