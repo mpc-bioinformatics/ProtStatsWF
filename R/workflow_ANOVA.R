@@ -1,8 +1,3 @@
-
-
-
-
-
 #' The workflow for ANOVA of quantitative proteomics data
 #'
 #' @param data_path              \strong{character} \cr

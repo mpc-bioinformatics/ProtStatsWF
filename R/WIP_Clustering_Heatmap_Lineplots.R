@@ -10,7 +10,7 @@
 #' @param dist_method distance method for clustering, default is "correlation"
 #'
 #' @return save heatmap and data frame with cluster information, as well as line plots
-#' @export
+#'
 #'
 #' @examples # TODO
 Clustering_heatmap_lineplots2 <- function(D, id, output_path, suffix = "", nr_clusters = NULL, row_split = TRUE, dist_method = "correlation") {
