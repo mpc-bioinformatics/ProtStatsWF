@@ -15,11 +15,12 @@ Suggests:
     testthat (>= 3.0.0),
     vdiffr
 Config/testthat/edition: 3
-biocViews:
+biocViews: Software
 Imports: 
     affy,
     amap,
     car,
+    circlize,
     ComplexHeatmap,
     dendextend,
     dplyr,
@@ -35,7 +36,7 @@ Imports:
     pbapply,
     reshape2,
     scales,
-    stats,
+    stringr,
     tidyr,
     vsn
 URL: https://github.com/mpc-bioinformatics/ProtStatsWF

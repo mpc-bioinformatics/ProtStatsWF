@@ -95,7 +95,7 @@ Onoff_plus_heatmap <- function(RES_onoff,
                                protein_name_column = "Gene.names",
                                relative = FALSE){
 
-  require(tidyverse)
+  #require(tidyverse)
 
   ## choose only the rows with on/off proteins
   RES_onoff2 <- RES_onoff[RES_onoff$isonoff, ]
