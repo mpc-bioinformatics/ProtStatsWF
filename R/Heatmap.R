@@ -24,10 +24,10 @@
 #'                                ? The name of the column in groups, if the columns should be split.
 #' @param cluster_column_slices   \strong{logical} \cr
 #'                                ? If \code{TRUE}, column slices will be clustered.
-#' @param cluster_rows            \strong{logical} \cr
-#'                                If \code{TRUE}, the rows will be clustered.
-#' @param cluster_columns         \strong{logical} \cr
-#'                                If \code{TRUE}, the columns will be clustered.
+#' @param cluster_rows            \strong{logical or dendrogram} \cr
+#'                                If \code{TRUE}, the rows will be clustered. Can also be a dendrogram object which is used to cluster the rows.
+#' @param cluster_cols            \strong{logical or dendrogram} \cr
+#'                                If \code{TRUE}, the columns will be clustered. Can also be a dendrogram object which is used to cluster the columns.
 #' @param dist_method             \strong{character} \cr
 #'                                The distance metric for clustering. Options are "pearson", "spearman" and "euclidean".
 #' @param clust_method            \strong{character} \cr
@@ -37,22 +37,12 @@
 #'                                Note that it only make sense for z-scored data.
 #' @param scale_data              \strong{logical} \cr
 #'                                If \code{TRUE}, the data will be scaled ( = z-scored).
-#' @param output_path             \strong{character} \cr
-#'                                The path to the output folder.
-#' @param suffix                  \strong{character} \cr
-#'                                The suffix of the file names should have one.
 #' @param legend_name             \strong{character} \cr
 #'                                The name for legend.
 #' @param title                   \strong{character} \cr
 #'                                The title of the plot.
 #' @param legend_colours          \strong{character} \cr
 #'                                A vector of colours for colour gradient.
-#' @param plot_height             \strong{numeric} \cr
-#'                                The plot height in cm.
-#' @param plot_width              \strong{numeric} \cr
-#'                                The plot width in cm.
-#' @param plot_dpi                \strong{integer} \cr
-#'                                The "dots per inch" of the plot aka. the plot resolution.
 #' @param log_data                \strong{logical} \cr
 #'                                If \code{TRUE}, the data will be log-transformed.
 #' @param log_base                \strong{integer} \cr
@@ -69,111 +59,133 @@
 #' @examples
 #'
 
-Heatmap_with_groups <- function(D, id, protein_names_col = NULL,
-                           na_method = "na.omit", filtermissings = 2,
-                           groups = NULL, group_colours = NULL,
-                           column_split = NULL, cluster_column_slices = FALSE,
-                           cluster_rows = TRUE, cluster_columns = TRUE,
-                           dist_method = "pearson", clust_method = "complete",
-                           symmetric_legend = TRUE, scale_data = TRUE,
-                           output_path = paste0(getwd(), "//"), suffix = NULL,
-                           legend_name = "Legend", title = "Heatmap",
-                           legend_colours = c("blue", "white", "red"),
-                           plot_height = 20, plot_width = 20, plot_dpi = 300,
-                           log_data = TRUE, log_base = 2,
-                           colour_scale_max = NULL, textsize = 15,
-                           ...){
+Heatmap_with_groups <- function(D,
+                                id,
+                                protein_names_col = NULL,
+                                na_method = "na.omit",
+                                filtermissings = 2,
+                                groups = NULL,
+                                group_colours = NULL,
+                                column_split = NULL,
+                                cluster_column_slices = FALSE,
+                                cluster_rows = TRUE,
+                                cluster_cols = TRUE,
+                                dist_method = "pearson",
+                                clust_method = "complete",
+                                symmetric_legend = TRUE,
+                                scale_data = TRUE,
+                                #output_path = paste0(getwd(), "//"),
+                                #suffix = NULL,
+                                legend_name = "Legend",
+                                title = "Heatmap",
+                                legend_colours = c("blue", "white", "red"),
+                                #plot_height = 20,
+                                #plot_width = 20,
+                                #plot_dpi = 300,
+                                log_data = TRUE,
+                                log_base = 2,
+                                colour_scale_max = NULL,
+                                textsize = 15,
+                                ...) {
 
   data.asmatrix <- as.matrix(D)
 
-  if(log_data){
+  ### log-transformation
+  if (log_data) {
     data.asmatrix <- log(data.asmatrix, log_base)
   }
 
-
-
-  if (scale_data) {
   ### calculation of z-scores
+  if (scale_data) {
   data.asmatrix_scaled <- t(scale(t(data.asmatrix)))
   data.asmatrix <- data.asmatrix_scaled
   }
+
 
   ### remove rows with only missing values
   ind  <- rowSums(!is.na(data.asmatrix)) >= filtermissings
   data.asmatrix <- data.asmatrix[ind,]
   id <- id[ind,, drop = FALSE]
 
+
+  ### cap colour gradient at a maximum value (may be valuable if there are extreme outliers)
+  if (!is.null(colour_scale_max)) {
+    data.asmatrix[data.asmatrix < -colour_scale_max] <- -colour_scale_max
+    data.asmatrix[data.asmatrix > colour_scale_max] <- colour_scale_max
+  }
+
+
   ### imputation or filter out rows with missing values
-  if(na_method == "impute"){
+  if (na_method == "impute") {
     data.asmatrix[is.na(data.asmatrix)] <- 0
   }
-  if(na_method == "na.omit") {
-    data.asmatrix_tmp <- data.asmatrix
-    rownames(data.asmatrix_tmp) <- 1:nrow(data.asmatrix_tmp)
-    data.asmatrix_tmp <- stats::na.omit(data.asmatrix_tmp)
-    ind <- as.numeric(rownames(data.asmatrix_tmp))
+
+  if (na_method == "na.omit") {
+    #data.asmatrix_tmp <- data.asmatrix
+    #rownames(data.asmatrix_tmp) <- 1:nrow(data.asmatrix_tmp)
+    data.asmatrix <- stats::na.omit(data.asmatrix)
+    ind <- as.numeric(rownames(data.asmatrix))
 
     id <- id[ind,, drop = FALSE]
 
-    ### if there are no rows remaining after na.omit, keep them and impute by 0
-    if(nrow(data.asmatrix_tmp) == 0){
-      print("All rows contain at least one missing value. Switched to imputation instead.")
-      data.asmatrix[is.na(data.asmatrix)] <- 0
-    } else {
-      data.asmatrix <- data.asmatrix_tmp
+    ### if there are no rows remaining after na.omit, throw error message
+    if (nrow(data.asmatrix) == 0) {
+      stop("All rows contain at least one missing value. Heatmap cannot be created.")
     }
 
   }
+
   if (na_method == "keep") {
     data.asmatrix <- data.asmatrix
   }
 
 
 
-  if (!is.null(colour_scale_max)) {
-    data.asmatrix[data.asmatrix < -colour_scale_max] <- -colour_scale_max
-    data.asmatrix[data.asmatrix > colour_scale_max] <- colour_scale_max
 
-  }
-
-
-
-  ### export data used in heatmap
-  # openxlsx::write.xlsx(cbind(id, zscore = data.asmatrix), paste0(output_path,"Heatmap_data_", suffix, ".xlsx"), overwrite = TRUE, keepNA = TRUE)
-
+  ### make legend/colour gradient symmetric
   if (symmetric_legend) {
-  minmax <- max(abs(c(min(data.asmatrix, na.rm = TRUE), max(data.asmatrix, na.rm = TRUE))))
-  legend_colours <- circlize::colorRamp2(c(-minmax, 0, minmax), legend_colours)
+    minmax <- max(abs(c(min(data.asmatrix, na.rm = TRUE), max(data.asmatrix, na.rm = TRUE))))
+    legend_colours <- circlize::colorRamp2(c(-minmax, 0, minmax), legend_colours)
   }
 
-
+  ### get row labels from id dataframe
   if (!is.null(protein_names_col)) {
     row_labels <- id[, protein_names_col]
   } else {
     row_labels <- rep("", nrow(data.asmatrix))
   }
 
-  ## to annotation for groups
+  ### top annotation for groups
   if (!is.null(groups)) {
-    top_annotation = ComplexHeatmap::HeatmapAnnotation(Group = groups, col = group_colours, annotation_name_gp = grid::gpar(fontsize = textsize), name = "Group",
-                                       annotation_legend_param = list(title_gp = grid::gpar(fontsize = textsize, fontface = "bold"),
-                                                                      labels_gp = grid::gpar(fontsize = textsize)))
+    top_annotation = ComplexHeatmap::HeatmapAnnotation(Group = groups,
+                                                       col = group_colours,
+                                                       annotation_name_gp = grid::gpar(fontsize = textsize), name = "Group",
+                                                       annotation_legend_param = list(title_gp = grid::gpar(fontsize = textsize,
+                                                                                                            fontface = "bold"),
+                                                                                      labels_gp = grid::gpar(fontsize = textsize)))
   } else {
     top_annotation = NULL
   }
 
-
+  ### set column split
   if (!is.null(column_split)) {
     column_split = groups[, column_split]
   }
 
 
+  ### set up hierarchical clustering
+  if (is.logical(cluster_rows) && cluster_rows == TRUE) {
+    cluster_rows = stats::as.dendrogram(stats::hclust(amap::Dist(data.asmatrix, method = dist_method), method = clust_method))
+  }
+  if (is.logical(cluster_cols) && cluster_cols == TRUE) {
+    cluster_cols = stats::as.dendrogram(stats::hclust(amap::Dist(t(data.asmatrix), method = dist_method), method = clust_method))
+  }
+
   ht <- ComplexHeatmap::Heatmap(data.asmatrix,
-                column_title = title , name = legend_name,
+                column_title = title ,
+                name = legend_name,
                 cluster_rows = cluster_rows,
-                clustering_distance_rows = dist_method, clustering_method_rows = clust_method,
-                cluster_columns = cluster_columns,
-                clustering_distance_columns = dist_method, clustering_method_columns = clust_method,
+                cluster_columns = cluster_cols,
                 cluster_column_slices = cluster_column_slices,
                 top_annotation = top_annotation,
                 column_split = column_split,
@@ -185,11 +197,7 @@ Heatmap_with_groups <- function(D, id, protein_names_col = NULL,
                 column_title_gp = grid::gpar(fontsize = textsize),
                 ...)
 
-  #png(paste0(output_path,"Heatmap_", suffix, ".png"), width = plot_width, height = plot_height, units = "cm", res = plot_dpi)
-  #ComplexHeatmap::draw(ht, annotation_legend_side = "right", heatmap_legend_side = "right", merge_legend = TRUE)
-  #dev.off()
-
-  return(list("heatmap" = ht, "data_as_matrix" = data.asmatrix))
+  return(list("heatmap" = ht, "data_as_matrix" = cbind(id, data.asmatrix)))
 }
 
 
