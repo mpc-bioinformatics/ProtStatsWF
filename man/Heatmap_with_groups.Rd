@@ -15,19 +15,14 @@ Heatmap_with_groups(
   column_split = NULL,
   cluster_column_slices = FALSE,
   cluster_rows = TRUE,
-  cluster_columns = TRUE,
+  cluster_cols = TRUE,
   dist_method = "pearson",
   clust_method = "complete",
   symmetric_legend = TRUE,
   scale_data = TRUE,
-  output_path = paste0(getwd(), "//"),
-  suffix = NULL,
   legend_name = "Legend",
   title = "Heatmap",
   legend_colours = c("blue", "white", "red"),
-  plot_height = 20,
-  plot_width = 20,
-  plot_dpi = 300,
   log_data = TRUE,
   log_base = 2,
   colour_scale_max = NULL,
@@ -67,11 +62,11 @@ The group of the data with two or more grouping variables.}
 \item{cluster_column_slices}{\strong{logical} \cr
 ? If \code{TRUE}, column slices will be clustered.}
 
-\item{cluster_rows}{\strong{logical} \cr
-If \code{TRUE}, the rows will be clustered.}
+\item{cluster_rows}{\strong{logical or dendrogram} \cr
+If \code{TRUE}, the rows will be clustered. Can also be a dendrogram object which is used to cluster the rows.}
 
-\item{cluster_columns}{\strong{logical} \cr
-If \code{TRUE}, the columns will be clustered.}
+\item{cluster_cols}{\strong{logical or dendrogram} \cr
+If \code{TRUE}, the columns will be clustered. Can also be a dendrogram object which is used to cluster the columns.}
 
 \item{dist_method}{\strong{character} \cr
 The distance metric for clustering. Options are "pearson", "spearman" and "euclidean".}
@@ -86,12 +81,6 @@ Note that it only make sense for z-scored data.}
 \item{scale_data}{\strong{logical} \cr
 If \code{TRUE}, the data will be scaled ( = z-scored).}
 
-\item{output_path}{\strong{character} \cr
-The path to the output folder.}
-
-\item{suffix}{\strong{character} \cr
-The suffix of the file names should have one.}
-
 \item{legend_name}{\strong{character} \cr
 The name for legend.}
 
@@ -100,15 +89,6 @@ The title of the plot.}
 
 \item{legend_colours}{\strong{character} \cr
 A vector of colours for colour gradient.}
-
-\item{plot_height}{\strong{numeric} \cr
-The plot height in cm.}
-
-\item{plot_width}{\strong{numeric} \cr
-The plot width in cm.}
-
-\item{plot_dpi}{\strong{integer} \cr
-The "dots per inch" of the plot aka. the plot resolution.}
 
 \item{log_data}{\strong{logical} \cr
 If \code{TRUE}, the data will be log-transformed.}
