@@ -12,8 +12,16 @@
 #'
 #' @param data_path              \strong{character} \cr
 #'                               The path to an .xlsx file containing the input data.
+#'
+#'
+#' @param filetype **character(1)** \cr Type of input file: "csv" or "tsv" or "txt" or "xlsx".
+#' @param sep **character(1)** \cr The field separator, e.g. " " for blanks, "," for comma or "\\t" for tab. Default is ",".
+#' @param dec **character(1)** \cr Decimal separator, e.g. "," for comma or "." for dot. Default is ".".
+#' @param header **logical(1)** \cr If TRUE, first line is counted as column names.
+#' @param sheet **integer(1)** \cr Sheet number (only needed for xlsx files, default is to use the first sheet).
 #' @param output_path            \strong{character} \cr
 #'                               The path to the output folder.
+#' @param output_type **character(1)** \cr Type of input file: "csv" or "tsv" or "xlsx".
 #'
 # mandatory parameters
 #' @param intensity_columns      \strong{integer vector} \cr
@@ -131,7 +139,13 @@
 
 
 workflow_QC <- function(data_path,
+                        filetype = "xlsx",
+                        sep = ",",
+                        dec = ".",
+                        header = TRUE,
+                        sheet = 1,
                         output_path,
+                        output_type = "xlsx",
 
                         intensity_columns,
                         normalization_method = "loess",
@@ -180,7 +194,13 @@ workflow_QC <- function(data_path,
 
   #### Prepare Data ####
 
-  prepared_data <- prepareData(data_path = data_path, intensity_columns = intensity_columns,
+  prepared_data <- prepareData(data_path = data_path,
+                               filetype = filetype,
+                               sep = sep,
+                               dec = dec,
+                               header = header,
+                               sheet = sheet,
+                               intensity_columns = intensity_columns,
                                na_strings = na_strings, zero_to_NA = zero_to_NA,
                                do_log_transformation = do_log_transformation, log_base = log_base,
                                use_groups = use_groups, group_colours = group_colours,
@@ -195,9 +215,19 @@ workflow_QC <- function(data_path,
   utils::write.csv(x = prepared_data$D, file = paste0(output_path, "/D_norm_wide", suffix, ".csv"), row.names = FALSE)
   utils::write.csv(x = prepared_data$D_long, file = paste0(output_path, "/D_norm_long", suffix, ".csv"), row.names = FALSE)
 
-  openxlsx::write.xlsx(x = cbind(prepared_data$ID, prepared_data$D), file = paste0(output_path, "/D_norm_ID", suffix, ".xlsx"),
-                       rowNames = FALSE, overwrite = TRUE, keepNA = TRUE)
 
+  if (output_type == "xlsx") {
+    openxlsx::write.xlsx(x = cbind(prepared_data$ID, prepared_data$D), file = paste0(output_path, "/D_norm_ID", suffix, ".xlsx"),
+                         rowNames = FALSE, overwrite = TRUE, keepNA = TRUE)
+  }
+  if (output_type == "csv") {
+    utils::write.csv(x = cbind(prepared_data$ID, prepared_data$D), file = paste0(output_path, "/D_norm_ID", suffix, ".csv"),
+                     row.names = FALSE)
+  }
+  if (output_type == "tsv") {
+    utils::write.table(x = cbind(prepared_data$ID, prepared_data$D), file = paste0(output_path, "/D_norm_ID", suffix, ".tsv"),
+                     row.names = FALSE, sep = "\t")
+  }
 
 
   #### Calculate Valid Value Plot ####

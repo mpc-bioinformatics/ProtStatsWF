@@ -6,7 +6,13 @@
 \usage{
 workflow_QC(
   data_path,
+  filetype = "xlsx",
+  sep = ",",
+  dec = ".",
+  header = TRUE,
+  sheet = 1,
   output_path,
+  output_type = "xlsx",
   intensity_columns,
   normalization_method = "loess",
   lts_quantile = 0.8,
@@ -48,8 +54,20 @@ workflow_QC(
 \item{data_path}{\strong{character} \cr
 The path to an .xlsx file containing the input data.}
 
+\item{filetype}{\strong{character(1)} \cr Type of input file: "csv" or "tsv" or "txt" or "xlsx".}
+
+\item{sep}{\strong{character(1)} \cr The field separator, e.g. " " for blanks, "," for comma or "\\t" for tab. Default is ",".}
+
+\item{dec}{\strong{character(1)} \cr Decimal separator, e.g. "," for comma or "." for dot. Default is ".".}
+
+\item{header}{\strong{logical(1)} \cr If TRUE, first line is counted as column names.}
+
+\item{sheet}{\strong{integer(1)} \cr Sheet number (only needed for xlsx files, default is to use the first sheet).}
+
 \item{output_path}{\strong{character} \cr
 The path to the output folder.}
+
+\item{output_type}{\strong{character(1)} \cr Type of input file: "csv" or "tsv" or "xlsx".}
 
 \item{intensity_columns}{\strong{integer vector} \cr
 The numbers of the intensity columns in the table.}

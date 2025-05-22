@@ -6,6 +6,11 @@
 \usage{
 prepareData(
   data_path,
+  filetype = "xlsx",
+  sep = ",",
+  dec = ".",
+  header = TRUE,
+  sheet = 1,
   intensity_columns,
   na_strings = c("NA", "NaN", "Filtered", "#NV"),
   zero_to_NA = TRUE,
@@ -20,6 +25,16 @@ prepareData(
 \arguments{
 \item{data_path}{\strong{character} \cr
 The path to an .xlsx file containing the input data.}
+
+\item{filetype}{\strong{character(1)} \cr Type of input file: "csv" or "tsv" or "txt" or "xlsx".}
+
+\item{sep}{\strong{character(1)} \cr The field separator, e.g. " " for blanks, "," for comma or "\\t" for tab. Default is ",".}
+
+\item{dec}{\strong{character(1)} \cr Decimal separator, e.g. "," for comma or "." for dot. Default is ".".}
+
+\item{header}{\strong{logical(1)} \cr If TRUE, first line is counted as column names.}
+
+\item{sheet}{\strong{integer(1)} \cr Sheet number (only needed for xlsx files, default is to use the first sheet).}
 
 \item{intensity_columns}{\strong{integer vector} \cr
 The numbers of the intensity columns in the table.}

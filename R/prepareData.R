@@ -2,6 +2,11 @@
 #'
 #' @param data_path               \strong{character} \cr
 #'                                The path to an .xlsx file containing the input data.
+#' @param filetype **character(1)** \cr Type of input file: "csv" or "tsv" or "txt" or "xlsx".
+#' @param sep **character(1)** \cr The field separator, e.g. " " for blanks, "," for comma or "\\t" for tab. Default is ",".
+#' @param dec **character(1)** \cr Decimal separator, e.g. "," for comma or "." for dot. Default is ".".
+#' @param header **logical(1)** \cr If TRUE, first line is counted as column names.
+#' @param sheet **integer(1)** \cr Sheet number (only needed for xlsx files, default is to use the first sheet).
 #' @param intensity_columns       \strong{integer vector} \cr
 #'                                The numbers of the intensity columns in the table.
 #' @param na_strings              \strong{character} \cr
@@ -28,6 +33,11 @@
 #'
 
 prepareData <- function (data_path,
+                         filetype = "xlsx",
+                         sep = ",",
+                         dec = ".",
+                         header = TRUE,
+                         sheet = 1,
                          intensity_columns,
                          na_strings = c("NA", "NaN", "Filtered","#NV"),
                          zero_to_NA = TRUE,
@@ -38,7 +48,24 @@ prepareData <- function (data_path,
 
   #### read and prepare data file ####
 
-  D <- openxlsx::read.xlsx(data_path, na.strings = na_strings)
+
+  if (filetype == "csv" | filetype == "txt" | filetype == "tsv") {
+    if (filetype == "csv") {
+      sep <- ","
+    } else if (filetype == "tsv") {
+      sep <- "\t"
+    }
+    D <- utils::read.table(data_path,
+                           sep = sep,
+                           header = header,
+                           dec = dec)
+  }
+  if (filetype == "xlsx") {
+    D <- openxlsx::read.xlsx(data_path, colNames = header, sheet = sheet)
+  }
+
+
+  #D <- openxlsx::read.xlsx(data_path, na.strings = na_strings)
   mess = ""
 
   id <- D[, -intensity_columns]
