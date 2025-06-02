@@ -86,6 +86,7 @@ Heatmap_with_groups <- function(D,
                                 log_base = 2,
                                 colour_scale_max = NULL,
                                 textsize = 15,
+                                top_annotation = NULL,
                                 ...) {
 
   data.asmatrix <- as.matrix(D)
@@ -155,16 +156,19 @@ Heatmap_with_groups <- function(D,
     row_labels <- rep("", nrow(data.asmatrix))
   }
 
-  ### top annotation for groups
-  if (!is.null(groups)) {
-    top_annotation = ComplexHeatmap::HeatmapAnnotation(Group = groups,
-                                                       col = group_colours,
-                                                       annotation_name_gp = grid::gpar(fontsize = textsize), name = "Group",
-                                                       annotation_legend_param = list(title_gp = grid::gpar(fontsize = textsize,
-                                                                                                            fontface = "bold"),
-                                                                                      labels_gp = grid::gpar(fontsize = textsize)))
-  } else {
-    top_annotation = NULL
+
+  if (is.null(top_annotation)) {
+    ### top annotation for groups
+    if (!is.null(groups)) {
+      top_annotation = ComplexHeatmap::HeatmapAnnotation(Group = groups,
+                                                         col = group_colours,
+                                                         annotation_name_gp = grid::gpar(fontsize = textsize), name = "Group",
+                                                         annotation_legend_param = list(title_gp = grid::gpar(fontsize = textsize,
+                                                                                                              fontface = "bold"),
+                                                                                        labels_gp = grid::gpar(fontsize = textsize)))
+    } else {
+      top_annotation = NULL
+    }
   }
 
   ### set column split
