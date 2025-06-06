@@ -12,8 +12,8 @@
 #'                         The proteins below the threshold of the maximum number of valid values are considered off proteins.
 #' @param min_vv_on        \strong{integer} \cr
 #'                         The proteins above the threshold of the minimum number of valid values are considered on proteins.
-#' @param protein_id_col   \strong{integer} \cr
-#'                         The column in id parameter containing the protein IDs used for mapping.
+#' @param protein_names_column   \strong{character} \cr
+#'                         The column name in the id dataframe containing the protein IDs used for mapping.
 #'
 #' @return A data.frame with the number of valid values per group (absolute and relative) and on/off status
 #'
@@ -23,13 +23,13 @@
 #' @examples
 #'
 
-calculate_onoff <- function(D, id, group, max_vv_off, min_vv_on, protein_id_col = 1) {
+calculate_onoff <- function(D, id, group, max_vv_off, min_vv_on, protein_names_column = 1) {
 
   group <- droplevels(group)
   nr_groups <- length(levels(group))
 
   #Gene.names <- id[, gene_names_col]
-  Protein.IDs <- id[, protein_id_col]
+  Protein.IDs <- id[, protein_names_column]
 
   ## converting to long format
   D_long <- tidyr::pivot_longer(data = cbind(Protein.IDs = Protein.IDs, D), cols = colnames(D))

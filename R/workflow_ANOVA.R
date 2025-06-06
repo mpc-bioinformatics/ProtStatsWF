@@ -209,7 +209,7 @@ workflow_ANOVA <- function(data_path,
 
 
   Boxplots_candidates(D = data[["D"]][union_candidates, ],
-                      protein.names = protein_names_column,
+                      protein.names = data[["ID"]][, protein_names_column],
                       group = data[["group"]],
                       suffix = suffix,
                       output_path = paste0(output_path),
@@ -233,7 +233,7 @@ workflow_ANOVA <- function(data_path,
   t_heatmap <- Heatmap_with_groups(D = data[["D"]][union_candidates, ],
                                    id = data[["ID"]][union_candidates, ],
                                    groups = data[["group"]],
-                                   cluster_columns = FALSE,
+                                   cluster_cols = FALSE,
                                    group_colours = group_colours)
 
   grDevices::pdf(paste0(output_path, "heatmap", suffix, ".pdf"), height = plot_height, width = plot_width)
@@ -255,12 +255,16 @@ workflow_ANOVA <- function(data_path,
     min_valid_values_on <- length(intensity_columns)
   }
 
+
+  X <<- data[["D"]]
+  ID <<- data[["ID"]]
+
   on_off <- calculate_onoff(D = data[["D"]],
                                       id = data[["ID"]],
                                       group = data[["group"]],
                                       max_vv_off = max_valid_values_off,
                                       min_vv_on = min_valid_values_on,
-                                      protein_id_col = 1)
+                                      protein_names_column = protein_names_column)
   openxlsx::write.xlsx(on_off, paste0(output_path, "table_on_off", suffix, ".xlsx"), keepNA = TRUE)
 
 
@@ -269,7 +273,7 @@ workflow_ANOVA <- function(data_path,
   #graphics::plot(t_on_off_heatmap)
   #grDevices::dev.off()
 
-  mess <- paste0(mess, "On-Off-Heatmap made. \n", "There were ", sum(t_on_off_heatmap[["isonoff"]]), " on/off proteins.")
+  #mess <- paste0(mess, "On-Off-Heatmap made. \n", "There were ", sum(t_on_off_heatmap[["isonoff"]]), " on/off proteins.")
 
   #rm(t_on_off_heatmap)
 
