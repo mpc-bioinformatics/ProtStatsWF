@@ -36,6 +36,8 @@
 # additional parameters
 #' @param na_strings             \strong{character} \cr
 #'                               A vector containing the symbols to be recognized as missing values (with the exception of 0).
+#' @param na_out                 \strong{character} \cr
+#'                               NA values will be converted to this character before writing results.
 #' @param zero_to_NA             \strong{logical} \cr
 #'                               If \code{TRUE}, 0 will be treated as missing value.
 #' @param do_log_transformation  \strong{logical} \cr
@@ -51,6 +53,8 @@
 #'                               The suffix for the output files. It needs to start with an underscore.
 #'
 # general plot parameters
+#' @param plot                   \strong{logical} \cr
+#'                               If TRUE (default), plots are generated. If FALSE, plots are skipped (may be useful for debugging purposes and reduces runtime for large data sets).
 #' @param base_size              \strong{numeric} \cr
 #'                               The base size of the font.
 #' @param plot_device            \strong{character} \cr
@@ -153,6 +157,7 @@ workflow_QC <- function(data_path,
                         use_groups = TRUE,
 
                         na_strings = c("NA", "NaN", "Filtered","#NV"),
+                        na_out = "NA",
                         zero_to_NA = TRUE,
                         do_log_transformation = TRUE,
                         log_base = 2,
@@ -160,14 +165,15 @@ workflow_QC <- function(data_path,
                         groupvar_name = "Group",
                         group_colours = NULL,
 
+                        suffix = "_",
+
+
+                        plot = TRUE,
                         base_size = 15,
                         plot_device = "pdf",
                         plot_height = 10,
                         plot_width = 15,
                         plot_dpi = 300,
-
-                        suffix = "_",
-
 
                         boxplot_method = "boxplot",
 
@@ -218,98 +224,101 @@ workflow_QC <- function(data_path,
 
   if (output_type == "xlsx") {
     openxlsx::write.xlsx(x = cbind(prepared_data$ID, prepared_data$D), file = paste0(output_path, "/D_norm_ID", suffix, ".xlsx"),
-                         rowNames = FALSE, overwrite = TRUE, keepNA = TRUE)
+                         rowNames = FALSE, overwrite = TRUE, keepNA = TRUE, na.string = na_out)
   }
   if (output_type == "csv") {
     utils::write.csv(x = cbind(prepared_data$ID, prepared_data$D), file = paste0(output_path, "/D_norm_ID", suffix, ".csv"),
-                     row.names = FALSE)
+                     row.names = FALSE, na = na_out)
   }
   if (output_type == "tsv") {
     utils::write.table(x = cbind(prepared_data$ID, prepared_data$D), file = paste0(output_path, "/D_norm_ID", suffix, ".tsv"),
-                     row.names = FALSE, sep = "\t")
+                       row.names = FALSE, sep = "\t", na = na_out)
   }
 
 
-  #### Calculate Valid Value Plot ####
+  if (plot) {
+    #### Calculate Valid Value Plot ####
 
-  vv_plot_data <- ValidValuePlot(D_long = prepared_data[["D_long"]],
-                                 use_groups = use_groups, groupvar_name = groupvar_name, group_colours = group_colours,
-                                 base_size = base_size)
+    vv_plot_data <- ValidValuePlot(D_long = prepared_data[["D_long"]],
+                                   use_groups = use_groups, groupvar_name = groupvar_name, group_colours = group_colours,
+                                   base_size = base_size)
 
-  #### reorder valid values table to stay in the same order as the original data ####
-  cnames <- colnames(prepared_data$D)
-  vv_plot_data$table$name <- factor(vv_plot_data$table$name, levels = cnames)
-  vv_plot_data$table <- vv_plot_data$table[order(vv_plot_data$table$name),]
+    #### reorder valid values table to stay in the same order as the original data ####
+    cnames <- colnames(prepared_data$D)
+    vv_plot_data$table$name <- factor(vv_plot_data$table$name, levels = cnames)
+    vv_plot_data$table <- vv_plot_data$table[order(vv_plot_data$table$name),]
 
-  mess <- paste0(mess, vv_plot_data[["message"]])
-
-
-  ggplot2::ggsave(paste0(output_path, "/valid_value_plot", suffix, ".", plot_device), plot = vv_plot_data[["plot"]],
-                  device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi, units = "cm")
-  utils::write.csv(x = vv_plot_data$table, file = paste0(output_path, "/D_validvalues", suffix, ".csv"), row.names = FALSE)
+    mess <- paste0(mess, vv_plot_data[["message"]])
 
 
-
-  #### Calculate Boxlots ####
-
-  boxplot_data <- Boxplots(D_long = prepared_data[["D_long"]],
-                           do_log_transformation = FALSE, log_base = log_base,
-                           use_groups = use_groups, groupvar_name = groupvar_name, group_colours = group_colours,
-                           base_size = base_size, method = boxplot_method, lwd = 0.5)
-
-  mess <- paste0(mess, boxplot_data[["message"]])
-
-  ggplot2::ggsave(paste0(output_path, "/boxplot", suffix, ".", plot_device), plot = boxplot_data[["plot"]],
-
-                  device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi, units = "cm")
+    ggplot2::ggsave(paste0(output_path, "/valid_value_plot", suffix, ".", plot_device), plot = vv_plot_data[["plot"]],
+                    device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi, units = "cm")
+    utils::write.csv(x = vv_plot_data$table, file = paste0(output_path, "/D_validvalues", suffix, ".csv"), row.names = FALSE)
 
 
-  #### Calculate MA Plot ####
 
-  if (generate_MAplots) {
-  ma_data <- MA_Plots(D = prepared_data[["D"]],
-                      do_log_transformation = FALSE,
-                      output_path = output_path, suffix = suffix,
-                      labels = 1:ncol(prepared_data[["D"]]), labels2 = colnames(prepared_data[["D"]]),
-                      maxPlots = MA_maxPlots, alpha = MA_alpha,
-                      plot_height = plot_height, plot_width = plot_width, sampling = MA_sampling)
+    #### Calculate Boxlots ####
 
-  mess <- paste0(mess, ma_data)
+    boxplot_data <- Boxplots(D_long = prepared_data[["D_long"]],
+                             do_log_transformation = FALSE, log_base = log_base,
+                             use_groups = use_groups, groupvar_name = groupvar_name, group_colours = group_colours,
+                             base_size = base_size, method = boxplot_method, lwd = 0.5)
+
+    mess <- paste0(mess, boxplot_data[["message"]])
+
+    ggplot2::ggsave(paste0(output_path, "/boxplot", suffix, ".", plot_device), plot = boxplot_data[["plot"]],
+
+                    device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi, units = "cm")
+
+
+    #### Calculate MA Plot ####
+
+    if (generate_MAplots) {
+      ma_data <- MA_Plots(D = prepared_data[["D"]],
+                          do_log_transformation = FALSE,
+                          output_path = output_path, suffix = suffix,
+                          labels = 1:ncol(prepared_data[["D"]]), labels2 = colnames(prepared_data[["D"]]),
+                          maxPlots = MA_maxPlots, alpha = MA_alpha,
+                          plot_height = plot_height, plot_width = plot_width, sampling = MA_sampling)
+
+      mess <- paste0(mess, ma_data)
+    }
+
+
+    #### Calculate PCA Plot ####
+
+
+    ### depending of groups should be used or not, the group variable is used in the PCA function
+    if (use_groups) {
+      PCA_groupvar1 <- group
+    } else {
+      PCA_groupvar1 <- NULL
+    }
+
+
+    pca_data <- PCA_Plot(D = prepared_data[["D"]],
+                         groupvar1 = group,
+                         groupvar2 = NULL,
+                         impute = PCA_impute, impute_method = PCA_impute_method, propNA = PCA_propNA,
+                         scale. = PCA_scale.,
+                         PCx = PCA_PCx, PCy = PCA_PCy,
+                         groupvar1_name = PCA_groupvar1_name,
+                         groupvar2_name = NULL,
+                         group_colours = group_colours, PCA_alpha = 1,
+                         label = PCA_label, PCA_label_seed = NA, PCA_label_size = 4,
+                         xlim = PCA_xlim, ylim = PCA_ylim,
+                         point.size = PCA_point.size, base_size = base_size)
+
+    mess <- paste0(mess, pca_data[["message"]])
+
+
+    ggplot2::ggsave(paste0(output_path, "/PCA_plot", suffix, ".", plot_device), plot = pca_data[["plot"]],
+                    device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi, units = "cm")
+    utils::write.csv(x = pca_data$D_PCA_plot, file = paste0(output_path, "/D_PCA", suffix, ".csv"), row.names = FALSE)
+    utils::write.csv(x = pca_data$filtered_D, file = paste0(output_path, "/PCA_data_after_imputation", suffix, ".csv"), row.names = FALSE)
+
+
   }
-
-
-  #### Calculate PCA Plot ####
-
-
-  ### depending of groups should be used or not, the group variable is used in the PCA function
-  if (use_groups) {
-    PCA_groupvar1 <- group
-  } else {
-    PCA_groupvar1 <- NULL
-  }
-
-
-  pca_data <- PCA_Plot(D = prepared_data[["D"]],
-                       groupvar1 = group,
-                       groupvar2 = NULL,
-                       impute = PCA_impute, impute_method = PCA_impute_method, propNA = PCA_propNA,
-                       scale. = PCA_scale.,
-                       PCx = PCA_PCx, PCy = PCA_PCy,
-                       groupvar1_name = PCA_groupvar1_name,
-                       groupvar2_name = NULL,
-                       group_colours = group_colours, PCA_alpha = 1,
-                       label = PCA_label, PCA_label_seed = NA, PCA_label_size = 4,
-                       xlim = PCA_xlim, ylim = PCA_ylim,
-                       point.size = PCA_point.size, base_size = base_size)
-
-  mess <- paste0(mess, pca_data[["message"]])
-
-
-  ggplot2::ggsave(paste0(output_path, "/PCA_plot", suffix, ".", plot_device), plot = pca_data[["plot"]],
-                  device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi, units = "cm")
-  utils::write.csv(x = pca_data$D_PCA_plot, file = paste0(output_path, "/D_PCA", suffix, ".csv"), row.names = FALSE)
-  utils::write.csv(x = pca_data$filtered_D, file = paste0(output_path, "/PCA_data_after_imputation", suffix, ".csv"), row.names = FALSE)
-
 
   return(list("message" = mess))
 }
