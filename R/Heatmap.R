@@ -129,7 +129,7 @@ Heatmap_with_groups <- function(D,
 
     ### TODO: geht kaputt weil keine rownames?
     #id <- id[ind,, drop = FALSE]
-    print(id)
+    #print(id)
 
     ### if there are no rows remaining after na.omit, throw error message
     if (nrow(data.asmatrix) == 0) {
@@ -154,8 +154,8 @@ Heatmap_with_groups <- function(D,
   ### get row labels from id dataframe
   if (!is.null(protein_names_col)) {
     row_labels <- id[, protein_names_col]
-    row_labels <- unlist(as.vector(row_labels))
-    print(row_labels)
+    #row_labels <- unlist(as.vector(row_labels))
+    #print(row_labels)
   } else {
     row_labels <- rep("", nrow(data.asmatrix))
   }
@@ -189,8 +189,8 @@ Heatmap_with_groups <- function(D,
     cluster_cols = stats::as.dendrogram(stats::hclust(amap::Dist(t(data.asmatrix), method = dist_method), method = clust_method))
   }
 
-  row_labels <<- row_labels
-  data.asmatrix <<- data.asmatrix
+  #row_labels <<- row_labels
+  #data.asmatrix <<- data.asmatrix
 
   print(row_labels)
 
