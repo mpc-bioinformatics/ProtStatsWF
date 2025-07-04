@@ -17,7 +17,7 @@ test_that("Calculate heatmap for a ttest ", {
                                    id = data[["ID"]][candidates, ],
                                    groups = data[["group"]])
 
-  vdiffr::expect_doppelganger("Heatmap_ttest", t_heatmap[["heatmap"]])
+  vdiffr::expect_doppelganger("Heatmap_ttest", t_heatmap)#[["heatmap"]])
 
 })
 
@@ -60,6 +60,6 @@ test_that("Calculate heatmap for an ANOVA ", {
                                    id = data[["ID"]][union_candidates, ],
                                    groups = data[["group"]])
 
-  vdiffr::expect_doppelganger("Heatmap_ANOVA", t_heatmap[["heatmap"]])
+  vdiffr::expect_doppelganger("Heatmap_ANOVA", t_heatmap)#[["heatmap"]])
 
 })
