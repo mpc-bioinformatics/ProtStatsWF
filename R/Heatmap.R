@@ -127,7 +127,9 @@ Heatmap_with_groups <- function(D,
     data.asmatrix <- stats::na.omit(data.asmatrix)
     ind <- as.numeric(rownames(data.asmatrix))
 
-    id <- id[ind,, drop = FALSE]
+    ### TODO: geht kaputt weil keine rownames?
+    #id <- id[ind,, drop = FALSE]
+    print(id)
 
     ### if there are no rows remaining after na.omit, throw error message
     if (nrow(data.asmatrix) == 0) {
@@ -152,6 +154,8 @@ Heatmap_with_groups <- function(D,
   ### get row labels from id dataframe
   if (!is.null(protein_names_col)) {
     row_labels <- id[, protein_names_col]
+    row_labels <- unlist(as.vector(row_labels))
+    print(row_labels)
   } else {
     row_labels <- rep("", nrow(data.asmatrix))
   }
@@ -185,9 +189,17 @@ Heatmap_with_groups <- function(D,
     cluster_cols = stats::as.dendrogram(stats::hclust(amap::Dist(t(data.asmatrix), method = dist_method), method = clust_method))
   }
 
+  row_labels <<- row_labels
+  data.asmatrix <<- data.asmatrix
+
+  print(row_labels)
+
+  #row.names(data.asmatrix) <- row_labels
+
+
   ht <- ComplexHeatmap::Heatmap(data.asmatrix,
-                column_title = title ,
-                name = legend_name,
+                column_title = title,
+                #name = legend_name,
                 cluster_rows = cluster_rows,
                 cluster_columns = cluster_cols,
                 cluster_column_slices = cluster_column_slices,
@@ -195,13 +207,13 @@ Heatmap_with_groups <- function(D,
                 column_split = column_split,
                 row_labels = row_labels,
                 col = legend_colours,
-                heatmap_legend_param = list(direction = "vertical", title = "Legend", title_gp = grid::gpar(fontsize = textsize, fontface = "bold"),
+                heatmap_legend_param = list(direction = "vertical", title = legend_name, title_gp = grid::gpar(fontsize = textsize, fontface = "bold"),
                                             labels_gp = grid::gpar(fontsize = textsize)),
                 column_names_gp = grid::gpar(fontsize = textsize),
                 column_title_gp = grid::gpar(fontsize = textsize),
                 ...)
 
-  return(list("heatmap" = ht, "data_as_matrix" = cbind(id, data.asmatrix)))
+  #return(list("heatmap" = ht, "data_as_matrix" = cbind(id, data.asmatrix)))
 }
 
 
