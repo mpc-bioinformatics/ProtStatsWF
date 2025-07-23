@@ -213,6 +213,7 @@ Heatmap_with_groups <- function(D,
                 column_title_gp = grid::gpar(fontsize = textsize),
                 ...)
 
+  return(ht)
   #return(list("heatmap" = ht, "data_as_matrix" = cbind(id, data.asmatrix)))
 }
 
