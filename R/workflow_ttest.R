@@ -220,20 +220,20 @@ workflow_ttest <- function(data_path,
 
   #### Create Heatmap ####
 
-  set.seed(14)
+  if (nrow(data[["D"]][candidates, ]) > 1) {
+    set.seed(14)
+    t_heatmap <- Heatmap_with_groups(D = data[["D"]][candidates, ],
+                                     id = data[["ID"]][candidates, ],
+                                     groups = data[["group"]])
 
-  t_heatmap <- Heatmap_with_groups(D = data[["D"]][candidates, ],
-                                   id = data[["ID"]][candidates, ],
-                                   groups = data[["group"]])
+    grDevices::pdf(paste0(output_path, "heatmap", suffix, ".pdf"), height = plot_height, width = plot_width)
+    graphics::plot(t_heatmap) # [["heatmap"]]
+    grDevices::dev.off()
 
-  grDevices::pdf(paste0(output_path, "heatmap", suffix, ".pdf"), height = plot_height, width = plot_width)
-  graphics::plot(t_heatmap) # [["heatmap"]]
-  grDevices::dev.off()
+    #openxlsx::write.xlsx(cbind(data[["ID"]][candidates, ], zscore = t_heatmap[["data_as_matrix"]]), paste0(output_path, "heatmap_data", suffix, ".xlsx"), overwrite = TRUE, keepNA = TRUE)
 
-  #openxlsx::write.xlsx(cbind(data[["ID"]][candidates, ], zscore = t_heatmap[["data_as_matrix"]]), paste0(output_path, "heatmap_data", suffix, ".xlsx"), overwrite = TRUE, keepNA = TRUE)
-
-  mess <- paste0(mess, "Heatmap made for the candidates. \n")
-
+    mess <- paste0(mess, "Heatmap made for the candidates. \n")
+  }
 
 
   # #### Create On-Off Heatmap ####
