@@ -3,6 +3,7 @@
 export(ANOVA)
 export(Boxplots)
 export(Boxplots_candidates)
+export(Clustering_heatmap_lineplots)
 export(Heatmap_with_groups)
 export(MA_Plots)
 export(PCA_Plot)

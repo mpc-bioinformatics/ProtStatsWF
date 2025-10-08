@@ -26,7 +26,7 @@
 #'                                ? If \code{TRUE}, column slices will be clustered.
 #' @param cluster_rows            \strong{logical or dendrogram} \cr
 #'                                If \code{TRUE}, the rows will be clustered. Can also be a dendrogram object which is used to cluster the rows.
-#' @param cluster_cols            \strong{logical or dendrogram} \cr
+#' @param cluster_columns         \strong{logical or dendrogram} \cr
 #'                                If \code{TRUE}, the columns will be clustered. Can also be a dendrogram object which is used to cluster the columns.
 #' @param dist_method             \strong{character} \cr
 #'                                The distance metric for clustering. Options are "pearson", "spearman" and "euclidean".
@@ -69,7 +69,7 @@ Heatmap_with_groups <- function(D,
                                 column_split = NULL,
                                 cluster_column_slices = FALSE,
                                 cluster_rows = TRUE,
-                                cluster_cols = TRUE,
+                                cluster_columns = TRUE,
                                 dist_method = "pearson",
                                 clust_method = "complete",
                                 symmetric_legend = TRUE,
@@ -185,14 +185,14 @@ Heatmap_with_groups <- function(D,
   if (is.logical(cluster_rows) && cluster_rows == TRUE) {
     cluster_rows = stats::as.dendrogram(stats::hclust(amap::Dist(data.asmatrix, method = dist_method), method = clust_method))
   }
-  if (is.logical(cluster_cols) && cluster_cols == TRUE) {
-    cluster_cols = stats::as.dendrogram(stats::hclust(amap::Dist(t(data.asmatrix), method = dist_method), method = clust_method))
+  if (is.logical(cluster_columns) && cluster_columns == TRUE) {
+    cluster_columns = stats::as.dendrogram(stats::hclust(amap::Dist(t(data.asmatrix), method = dist_method), method = clust_method))
   }
 
   #row_labels <<- row_labels
   #data.asmatrix <<- data.asmatrix
 
-  print(row_labels)
+  #print(row_labels)
 
   #row.names(data.asmatrix) <- row_labels
 
@@ -201,7 +201,7 @@ Heatmap_with_groups <- function(D,
                 column_title = title,
                 #name = legend_name,
                 cluster_rows = cluster_rows,
-                cluster_columns = cluster_cols,
+                cluster_columns = cluster_columns,
                 cluster_column_slices = cluster_column_slices,
                 top_annotation = top_annotation,
                 column_split = column_split,

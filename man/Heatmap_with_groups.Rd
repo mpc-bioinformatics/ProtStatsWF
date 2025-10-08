@@ -15,7 +15,7 @@ Heatmap_with_groups(
   column_split = NULL,
   cluster_column_slices = FALSE,
   cluster_rows = TRUE,
-  cluster_cols = TRUE,
+  cluster_columns = TRUE,
   dist_method = "pearson",
   clust_method = "complete",
   symmetric_legend = TRUE,
@@ -27,6 +27,7 @@ Heatmap_with_groups(
   log_base = 2,
   colour_scale_max = NULL,
   textsize = 15,
+  top_annotation = NULL,
   ...
 )
 }
@@ -65,7 +66,7 @@ The group of the data with two or more grouping variables.}
 \item{cluster_rows}{\strong{logical or dendrogram} \cr
 If \code{TRUE}, the rows will be clustered. Can also be a dendrogram object which is used to cluster the rows.}
 
-\item{cluster_cols}{\strong{logical or dendrogram} \cr
+\item{cluster_columns}{\strong{logical or dendrogram} \cr
 If \code{TRUE}, the columns will be clustered. Can also be a dendrogram object which is used to cluster the columns.}
 
 \item{dist_method}{\strong{character} \cr

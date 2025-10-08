@@ -11,6 +11,7 @@
 #'
 #' @return save heatmap and data frame with cluster information, as well as line plots
 #'
+#' @export
 #'
 #' @examples # TODO
 Clustering_heatmap_lineplots <- function(D,
@@ -56,7 +57,7 @@ Clustering_heatmap_lineplots <- function(D,
                                    # TODO: no filtering at the moment but it may be necessary/useful depending on the data
                                    filtermissings = ncol(D),
                                    cluster_rows = row_dend_color,
-                                   cluster_cols = FALSE,
+                                   cluster_columns = FALSE,
                                    log_data = FALSE,
                                    #output_path = output_path,
                                    #suffix = paste(suffix, nr_clusters, sep = "_"),
@@ -65,15 +66,17 @@ Clustering_heatmap_lineplots <- function(D,
                                    row_split = nr_clusters,
                                    row_gap = grid::unit(5, "mm"))
 
-  grDevices::pdf(paste0(output_path, "heatmap", suffix, "_", nr_clusters, ".pdf"),
+  ht2 <<- ht
+
+  grDevices::png(paste0(output_path, "/heatmap", suffix, "_", nr_clusters, ".png"),
                  height = plot_height_heatmap,
-                 width = plot_width_heatmap)
-  graphics::plot(ht[["heatmap"]])
+                 width = plot_width_heatmap, units = "cm", res = 300)
+  graphics::plot(ht)#[["heatmap"]])
   grDevices::dev.off()
 
 
   ### get cluster for each protein (cluster number from heatmap doesn't correspond to apply cutree() on the dendrogram. This is why we need to get the cluster number from the heatmap directly).
-  ht_draw <- ComplexHeatmap::draw(ht$heatmap)
+  ht_draw <- ComplexHeatmap::draw(ht)#$heatmap)
   x <- ComplexHeatmap::row_dend(ht_draw)
   cluster <- integer(nrow(D))
   for (j in 1:nr_clusters) {
@@ -85,13 +88,13 @@ Clustering_heatmap_lineplots <- function(D,
   ### write table with cluster results
   ### TODO: add z-scores to the table
   RES_clustering <- cbind(id, cluster = cluster, D)
-  openxlsx::write.xlsx(RES_clustering, paste0(output_path, "cluster_table", suffix, "_", nr_clusters, ".xlsx"))
+  openxlsx::write.xlsx(RES_clustering, paste0(output_path, "/cluster_table", suffix, "_", nr_clusters, ".xlsx"))
 
 
   ###############
   ### draw lineplot for each cluster, coloured by distance to the cluster center
 
-  D_zscore <- cbind(ht$data_as_matrix, cluster = cluster)
+  D_zscore <- cbind(ht@matrix, cluster = cluster)
   #id_columns <- 1:ncol(id)
   ### TODO: currently only plots without imputation. This should be changed to allow for imputation as well.
 
@@ -101,9 +104,10 @@ Clustering_heatmap_lineplots <- function(D,
 
   for (i in 1:nr_clusters) {
 
-
     ## choose only data points from the specific cluster
-    D_tmp <- D_zscore[cluster == i, -c(id_columns, ncol(D_zscore))] # remove id columns and cluster column
+    D_tmp <- D_zscore[cluster == i, -c(ncol(D_zscore)), drop = FALSE] # remove id columns and cluster column
+
+    D_tmp2 <<- D_tmp
 
     ## calculate mean profile of the cluster
     mean_profile <- colMeans(D_tmp, na.rm = TRUE)
@@ -114,7 +118,7 @@ Clustering_heatmap_lineplots <- function(D,
     X <- data.frame(D_tmp, Dists_euclidean, id = 1:nrow(D_tmp))
     X_long <- reshape2::melt(X, id.vars = c("id", "Dists_euclidean"))
 
-    X_long <- rbind(X_long, data.frame(id = max(X_long$id)+1, Dists_euclidean = NA,
+    X_long <- rbind(X_long, data.frame(id = max(X_long$id) + 1, Dists_euclidean = NA,
                                        variable = colnames(D_tmp),
                                        value = mean_profile))
     X_long <- dplyr::mutate(X_long, ClusterCenter = dplyr::case_when(is.na(Dists_euclidean) ~ "Cluster Center", TRUE ~ "Cluster Members"))
@@ -123,12 +127,12 @@ Clustering_heatmap_lineplots <- function(D,
     variable <- value <- ClusterCenter <- NULL # to silence notes while checking the package
 
     pl <- ggplot2::ggplot(data = X_long, ggplot2::aes(x = variable, y = value, group = id,
-                                                      colour = Dists_euclidean, linetype = ClusterCenter, size = ClusterCenter)) +
-      ggplot2::geom_line() +
+                                                      colour = Dists_euclidean, linetype = ClusterCenter)) + #, linewidth = ClusterCenter)) +
+      ggplot2::geom_line() + # linewidth = 0.5
       ggplot2::scale_colour_gradient2(low = "red", mid = "yellow", high = "green", na.value = "black",
                                       midpoint = 2, limits = c(0, max(X_long$Dists_euclidean, na.rm = TRUE)), name = "Distance \nto center") +
       ggplot2::scale_linetype_manual(values=c("dotted", "solid"), na.value = "solid", name = "") +
-      ggplot2::scale_size_manual(values=c(1.3, 1), na.value = 1, guide = "none") +
+      ggplot2::scale_linewidth_manual(values=c("Cluster Members" = 0.7, "Cluster Center" = 3), na.value = 1, guide = "none") +
       ggplot2::xlab("") + ggplot2::ylab("Z-Score") +
       ggplot2::scale_x_discrete(expand = c(0.03, 0.03)) +
       ggplot2::ggtitle(paste0("Cluster ", i, " (", nrow(X), " proteins)")) +
