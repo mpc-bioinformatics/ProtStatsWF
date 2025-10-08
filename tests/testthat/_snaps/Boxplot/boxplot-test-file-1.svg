@@ -138,16 +138,22 @@
 <polyline points='656.25,256.62 656.25,254.03 ' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt; stroke-linejoin: miter;' />
 <rect x='649.77' y='256.62' width='12.96' height='8.64' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt; stroke-linejoin: miter; fill: #F8766D;' />
 <polyline points='649.77,260.94 662.73,260.94 ' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt; stroke-linejoin: miter;' />
+<polyline points='656.25,267.86 656.25,267.86 ' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt; stroke-linejoin: miter;' />
+<polyline points='656.25,254.03 656.25,254.03 ' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt; stroke-linejoin: miter;' />
 <rect x='647.61' y='269.58' width='17.28' height='17.28' style='stroke-width: 1.45; stroke: none; fill: #FFFFFF;' />
 <polyline points='656.25,285.14 656.25,282.54 ' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt; stroke-linejoin: miter;' />
 <polyline points='656.25,273.90 656.25,271.31 ' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt; stroke-linejoin: miter;' />
 <rect x='649.77' y='273.90' width='12.96' height='8.64' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt; stroke-linejoin: miter; fill: #00BA38;' />
 <polyline points='649.77,278.22 662.73,278.22 ' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt; stroke-linejoin: miter;' />
+<polyline points='656.25,285.14 656.25,285.14 ' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt; stroke-linejoin: miter;' />
+<polyline points='656.25,271.31 656.25,271.31 ' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt; stroke-linejoin: miter;' />
 <rect x='647.61' y='286.86' width='17.28' height='17.28' style='stroke-width: 1.45; stroke: none; fill: #FFFFFF;' />
 <polyline points='656.25,302.42 656.25,299.82 ' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt; stroke-linejoin: miter;' />
 <polyline points='656.25,291.18 656.25,288.59 ' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt; stroke-linejoin: miter;' />
 <rect x='649.77' y='291.18' width='12.96' height='8.64' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt; stroke-linejoin: miter; fill: #619CFF;' />
 <polyline points='649.77,295.50 662.73,295.50 ' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt; stroke-linejoin: miter;' />
+<polyline points='656.25,302.42 656.25,302.42 ' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt; stroke-linejoin: miter;' />
+<polyline points='656.25,288.59 656.25,288.59 ' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt; stroke-linejoin: miter;' />
 <text x='672.36' y='265.07' style='font-size: 12.00px; font-family: sans;' textLength='32.70px' lengthAdjust='spacingAndGlyphs'>state1</text>
 <text x='672.36' y='282.35' style='font-size: 12.00px; font-family: sans;' textLength='32.70px' lengthAdjust='spacingAndGlyphs'>state2</text>
 <text x='672.36' y='299.63' style='font-size: 12.00px; font-family: sans;' textLength='32.70px' lengthAdjust='spacingAndGlyphs'>state3</text>
