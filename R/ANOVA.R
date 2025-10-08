@@ -64,7 +64,6 @@ ANOVA <- function(D,
     } else {
       ### Welch ANOVA (unequal variances)
       print("Welch ANOVA")
-      i <<- 0
       RES <- pbapply::pbapply(D, 1, ANOVA_Welch_single_row, group = group, log_before_test = log_before_test,
                      delog_for_FC = delog_for_FC, min_obs_per_group = min_obs_per_group,
                      min_perc_per_group = min_perc_per_group,

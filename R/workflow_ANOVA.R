@@ -202,9 +202,9 @@ workflow_ANOVA <- function(data_path,
   #### Create Boxplots of Biomarker Candidates ####
 
   if (is.null(protein_names_column)) {
-    protein_names <<- as.vector(data[["ID"]][1])
+    protein_names <- as.vector(data[["ID"]][1])
   } else {
-    protein_names <<- as.vector(data[["ID"]][protein_names_column])
+    protein_names <- as.vector(data[["ID"]][protein_names_column])
   }
 
 
@@ -256,8 +256,8 @@ workflow_ANOVA <- function(data_path,
   }
 
 
-  X <<- data[["D"]]
-  ID <<- data[["ID"]]
+  # X <<- data[["D"]]
+  # ID <<- data[["ID"]]
 
   on_off <- calculate_onoff(D = data[["D"]],
                                       id = data[["ID"]],
