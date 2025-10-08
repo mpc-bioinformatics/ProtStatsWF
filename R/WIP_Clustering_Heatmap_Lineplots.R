@@ -66,8 +66,6 @@ Clustering_heatmap_lineplots <- function(D,
                                    row_split = nr_clusters,
                                    row_gap = grid::unit(5, "mm"))
 
-  ht2 <<- ht
-
   grDevices::png(paste0(output_path, "/heatmap", suffix, "_", nr_clusters, ".png"),
                  height = plot_height_heatmap,
                  width = plot_width_heatmap, units = "cm", res = 300)
@@ -106,8 +104,6 @@ Clustering_heatmap_lineplots <- function(D,
 
     ## choose only data points from the specific cluster
     D_tmp <- D_zscore[cluster == i, -c(ncol(D_zscore)), drop = FALSE] # remove id columns and cluster column
-
-    D_tmp2 <<- D_tmp
 
     ## calculate mean profile of the cluster
     mean_profile <- colMeans(D_tmp, na.rm = TRUE)
