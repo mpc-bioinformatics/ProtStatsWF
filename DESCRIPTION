@@ -22,7 +22,7 @@ Imports:
     amap,
     car,
     circlize,
-    ComplexHeatmap,
+    ComplexHeatmap (>= 2.24.1),
     dendextend,
     dplyr,
     ggplot2,
