@@ -4,7 +4,7 @@
 \alias{calculate_onoff}
 \title{Calculate on/off proteins}
 \usage{
-calculate_onoff(D, id, group, max_vv_off, min_vv_on, protein_id_col = 1)
+calculate_onoff(D, id, group, max_vv_off, min_vv_on, protein_names_column = 1)
 }
 \arguments{
 \item{D}{\strong{data.frame} \cr
@@ -22,8 +22,8 @@ The proteins below the threshold of the maximum number of valid values are consi
 \item{min_vv_on}{\strong{integer} \cr
 The proteins above the threshold of the minimum number of valid values are considered on proteins.}
 
-\item{protein_id_col}{\strong{integer} \cr
-The column in id parameter containing the protein IDs used for mapping.}
+\item{protein_names_column}{\strong{character} \cr
+The column name in the id dataframe containing the protein IDs used for mapping.}
 }
 \value{
 A data.frame with the number of valid values per group (absolute and relative) and on/off status

@@ -18,17 +18,19 @@ workflow_QC(
   lts_quantile = 0.8,
   use_groups = TRUE,
   na_strings = c("NA", "NaN", "Filtered", "#NV"),
+  na_out = "NA",
   zero_to_NA = TRUE,
   do_log_transformation = TRUE,
   log_base = 2,
   groupvar_name = "Group",
   group_colours = NULL,
+  suffix = "_",
+  plot = TRUE,
   base_size = 15,
   plot_device = "pdf",
   plot_height = 10,
   plot_width = 15,
   plot_dpi = 300,
-  suffix = "_",
   boxplot_method = "boxplot",
   generate_MAplots = TRUE,
   MA_maxPlots = 5000,
@@ -84,6 +86,9 @@ If \code{TRUE}, group information encoded in the column names is used.}
 \item{na_strings}{\strong{character} \cr
 A vector containing the symbols to be recognized as missing values (with the exception of 0).}
 
+\item{na_out}{\strong{character} \cr
+NA values will be converted to this character before writing results.}
+
 \item{zero_to_NA}{\strong{logical} \cr
 If \code{TRUE}, 0 will be treated as missing value.}
 
@@ -99,6 +104,12 @@ The name for the group variable.}
 \item{group_colours}{\strong{character vector} \cr
 The hex codes for the group colors, if the data has groups. If \code{NULL}, a default color scale will be used.}
 
+\item{suffix}{\strong{character} \cr
+The suffix for the output files. It needs to start with an underscore.}
+
+\item{plot}{\strong{logical} \cr
+If TRUE (default), plots are generated. If FALSE, plots are skipped (may be useful for debugging purposes and reduces runtime for large data sets).}
+
 \item{base_size}{\strong{numeric} \cr
 The base size of the font.}
 
@@ -113,9 +124,6 @@ The plot width in cm.}
 
 \item{plot_dpi}{\strong{numeric} \cr
 The "dots per inch" of the plot aka. the plot resolution.}
-
-\item{suffix}{\strong{character} \cr
-The suffix for the output files. It needs to start with an underscore.}
 
 \item{boxplot_method}{\strong{character} \cr
 The method used. Options are "boxplot" and "violinplot".}

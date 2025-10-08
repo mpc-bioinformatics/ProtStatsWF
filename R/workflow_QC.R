@@ -167,7 +167,6 @@ workflow_QC <- function(data_path,
 
                         suffix = "_",
 
-
                         plot = TRUE,
                         base_size = 15,
                         plot_device = "pdf",
