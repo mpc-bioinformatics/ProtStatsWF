@@ -58,7 +58,8 @@ prepareData <- function (data_path,
     D <- utils::read.table(data_path,
                            sep = sep,
                            header = header,
-                           dec = dec)
+                           dec = dec,
+                           quote = "\"")
   }
   if (filetype == "xlsx") {
     D <- openxlsx::read.xlsx(data_path, colNames = header, sheet = sheet)
