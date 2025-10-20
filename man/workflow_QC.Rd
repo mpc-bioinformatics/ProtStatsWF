@@ -24,7 +24,7 @@ workflow_QC(
   log_base = 2,
   groupvar_name = "Group",
   group_colours = NULL,
-  suffix = "_",
+  suffix = "",
   plot = TRUE,
   base_size = 15,
   plot_device = "pdf",

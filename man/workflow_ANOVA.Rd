@@ -13,6 +13,7 @@ workflow_ANOVA(
   var.equal = TRUE,
   log_before_test = TRUE,
   delog_for_FC = TRUE,
+  min_obs_per_group = 3,
   p_value_zeros_to_min = TRUE,
   significant_after_FDR = TRUE,
   max_valid_values_off = 0,

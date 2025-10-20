@@ -15,6 +15,7 @@
 #'                               If \code{TRUE}, the data will be log-transformed.
 #' @param delog_for_FC           \strong{logical} \cr
 #'                               If \code{TRUE}, the fold change will be calculated without the log-transformation.
+#' @param min_obs_per_group
 #' @param p_value_zeros_to_min   \strong{logical} \cr
 #'                               If \code{TRUE}, then \code{p_values == 0} will be set to the next smallest value of the p-values.
 #'
@@ -79,6 +80,7 @@ workflow_ANOVA <- function(data_path,
                            var.equal = TRUE,
                            log_before_test = TRUE,
                            delog_for_FC = TRUE,
+                           min_obs_per_group = 3,
                            p_value_zeros_to_min = TRUE,
 
                            significant_after_FDR = TRUE,
@@ -110,8 +112,8 @@ workflow_ANOVA <- function(data_path,
                          group = data[["group"]],  sample = data[["sample"]],
                          paired = paired, var.equal = var.equal,
                          log_before_test = log_before_test, delog_for_FC = delog_for_FC, log_base = 2,
-                         min_obs_per_group = 3, min_perc_per_group = NULL)
-  openxlsx::write.xlsx(ANOVA_results, paste0(output_path, "results_ANOVA", suffix, ".xlsx"), keepNA = TRUE)
+                         min_obs_per_group = min_obs_per_group, min_perc_per_group = NULL)
+  openxlsx::write.xlsx(ANOVA_results, paste0(file.path(output_path, "results_ANOVA", suffix), ".xlsx"), keepNA = TRUE)
   mess <- paste0(mess, "ANOVA calculated. \n")
 
 
@@ -149,15 +151,11 @@ workflow_ANOVA <- function(data_path,
 
   mess <- paste0(mess, length(volcano_plots), " volcano plots calculated. \n")
 
-  grDevices::pdf(paste0(output_path, "volcano_plots", suffix ,".pdf"), height = plot_height, width = plot_width)
+  grDevices::pdf(paste0(file.path(output_path, "volcano_plots", suffix),".pdf"), height = plot_height, width = plot_width)
   for (v_plot in volcano_plots) {
     graphics::plot(x = v_plot)
   }
   grDevices::dev.off()
-
-  #rm(volcano_plots, v_plot)
-
-
 
   #### Create Histogram for p-values and fold changes ####
 
@@ -166,7 +164,8 @@ workflow_ANOVA <- function(data_path,
                                             columnname_FC = colnames(ANOVA_results)[[fc_columns[[1]]]],
                                             base_size = volcano_base_size)
 
-  grDevices::pdf(paste0(output_path, "histograms", suffix ,".pdf"), height = plot_height, width = plot_width)
+  grDevices::pdf(paste0(file.path(output_path, "histograms", suffix) ,".pdf"),
+                 height = plot_height, width = plot_width)
   graphics::plot(x = histograms[["histogram_p_value"]])
   graphics::plot(x = histograms[["histogram_adjusted_p_value"]])
   graphics::plot(x = histograms[["histogram_fold_change"]])
@@ -231,23 +230,20 @@ workflow_ANOVA <- function(data_path,
 
 
   t_heatmap <- Heatmap_with_groups(D = data[["D"]][union_candidates, ],
-                                   id = data[["ID"]][union_candidates, ],
+                                   id = data[["ID"]][union_candidates, , drop = FALSE],
                                    groups = data[["group"]],
-                                   cluster_cols = FALSE,
+                                   cluster_columns = FALSE,
                                    group_colours = group_colours)
 
-  grDevices::pdf(paste0(output_path, "heatmap", suffix, ".pdf"), height = plot_height, width = plot_width)
-  graphics::plot(t_heatmap[["heatmap"]])
+  grDevices::pdf(paste0(file.path(output_path, "heatmap", suffix), ".pdf"), height = plot_height, width = plot_width)
+  graphics::plot(t_heatmap) # [["heatmap"]]
   grDevices::dev.off()
 
-  remaining_candidates <- as.integer(row.names(t_heatmap[["data_as_matrix"]]))
-  openxlsx::write.xlsx(cbind(data[["ID"]][remaining_candidates, ], zscore = t_heatmap[["data_as_matrix"]]), paste0(output_path, "heatmap_data", suffix, ".xlsx"), overwrite = TRUE, keepNA = TRUE)
+  remaining_candidates <- as.integer(row.names(t_heatmap@matrix))
+  openxlsx::write.xlsx(cbind(data[["ID"]][remaining_candidates, ], zscore = t_heatmap@matrix),
+                       paste0(file.path(output_path, "heatmap_data", suffix), ".xlsx"), overwrite = TRUE, keepNA = TRUE)
 
   mess <- paste0(mess, "Heatmap made for the union of all candidates. \n")
-
-  #rm(t_heatmap, remaining_candidates)
-
-
 
   #### Create On-Off Heatmap ####
 
@@ -255,17 +251,13 @@ workflow_ANOVA <- function(data_path,
     min_valid_values_on <- length(intensity_columns)
   }
 
-
-  # X <<- data[["D"]]
-  # ID <<- data[["ID"]]
-
   on_off <- calculate_onoff(D = data[["D"]],
                                       id = data[["ID"]],
                                       group = data[["group"]],
                                       max_vv_off = max_valid_values_off,
                                       min_vv_on = min_valid_values_on,
                                       protein_names_column = protein_names_column)
-  openxlsx::write.xlsx(on_off, paste0(output_path, "table_on_off", suffix, ".xlsx"), keepNA = TRUE)
+  openxlsx::write.xlsx(on_off, paste0(file.path(output_path, "table_on_off", suffix), ".xlsx"), keepNA = TRUE)
 
 
 
@@ -275,13 +267,9 @@ workflow_ANOVA <- function(data_path,
 
   #mess <- paste0(mess, "On-Off-Heatmap made. \n", "There were ", sum(t_on_off_heatmap[["isonoff"]]), " on/off proteins.")
 
-  #rm(t_on_off_heatmap)
-
-
-
   #### Save message log ####
 
-  cat(mess, file = paste0(output_path, "message_log_anova", suffix, ".txt"))
+  cat(mess, file = paste0(file.path(output_path, "message_log_anova", suffix), ".txt"))
 
 
 

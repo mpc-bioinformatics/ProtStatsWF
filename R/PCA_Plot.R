@@ -110,7 +110,7 @@ PCA_Plot <- function(D,
 
 
   #### make plot ####
-  pl <- ggplot2::ggplot(data = D_PCA, ggplot2::aes(x = PCx, y = PCy), text = paste("sample:", "label")) +
+  pl <- ggplot2::ggplot(data = D_PCA, ggplot2::aes(x = PCx, y = PCy)) + # text = paste("sample:", "label")
     ggplot2::geom_point(ggplot2::aes(colour = groupvar1, shape = groupvar2), size = point.size, alpha = alpha)
 
   pl <- pl + ggplot2::labs(colour = groupvar1_name, shape = groupvar2_name)

@@ -8,6 +8,7 @@
 #'
 #' @return A list containing an intensity data.frame, an IDs data frame and a factor of the sample groups.
 #'
+#' @export
 #' @examples
 #' \dontrun{
 #' in_path <- "/Users/thisuser/Documents/dataFolder/data.xlsx"
@@ -22,7 +23,7 @@ prepareTtestData <- function(data_path,
 
   D <- openxlsx::read.xlsx(data_path, na.strings = c("NA", "NaN", "Filtered","#NV"))
 
-  id <- D[, -intensity_columns]
+  id <- D[, -intensity_columns, drop = FALSE]
   D <- D[, intensity_columns]
 
   D[D == 0] <- NA

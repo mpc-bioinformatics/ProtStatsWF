@@ -130,7 +130,8 @@ MA_Plots <- function(D,
   num <- 0
   pb <- utils::txtProgressBar(min = 0,max = number_plots,char = "#",style = 3)
 
-  grDevices::pdf(paste0(output_path, "/MA_Plots", suffix, ".pdf"), height = plot_height/2.54, width = plot_width/2.54)
+  filname <- paste0("MA_Plots", suffix, ".pdf")
+  grDevices::pdf(paste0(file.path(output_path, "MA_Plots", suffix), ".pdf"), height = plot_height/2.54, width = plot_width/2.54)
 
   for(i in 1:(ncol(D)-1)) {
     for (j in (i + 1):ncol(D)) {
