@@ -113,7 +113,7 @@ workflow_ANOVA <- function(data_path,
                          paired = paired, var.equal = var.equal,
                          log_before_test = log_before_test, delog_for_FC = delog_for_FC, log_base = 2,
                          min_obs_per_group = min_obs_per_group, min_perc_per_group = NULL)
-  openxlsx::write.xlsx(ANOVA_results, paste0(file.path(output_path, "results_ANOVA", suffix), ".xlsx"), keepNA = TRUE)
+  openxlsx::write.xlsx(ANOVA_results, file.path(output_path, paste0("results_ANOVA", suffix, ".xlsx")), keepNA = TRUE)
   mess <- paste0(mess, "ANOVA calculated. \n")
 
 
@@ -151,7 +151,7 @@ workflow_ANOVA <- function(data_path,
 
   mess <- paste0(mess, length(volcano_plots), " volcano plots calculated. \n")
 
-  grDevices::pdf(paste0(file.path(output_path, "volcano_plots", suffix),".pdf"), height = plot_height, width = plot_width)
+  grDevices::pdf(file.path(output_path, paste0("volcano_plots", suffix,".pdf")), height = plot_height, width = plot_width)
   for (v_plot in volcano_plots) {
     graphics::plot(x = v_plot)
   }
@@ -164,7 +164,7 @@ workflow_ANOVA <- function(data_path,
                                             columnname_FC = colnames(ANOVA_results)[[fc_columns[[1]]]],
                                             base_size = volcano_base_size)
 
-  grDevices::pdf(paste0(file.path(output_path, "histograms", suffix) ,".pdf"),
+  grDevices::pdf(file.path(output_path, paste0("histograms", suffix,".pdf")),
                  height = plot_height, width = plot_width)
   graphics::plot(x = histograms[["histogram_p_value"]])
   graphics::plot(x = histograms[["histogram_adjusted_p_value"]])
@@ -235,7 +235,7 @@ workflow_ANOVA <- function(data_path,
                                    cluster_columns = FALSE,
                                    group_colours = group_colours)
 
-  grDevices::pdf(paste0(file.path(output_path, "heatmap", suffix), ".pdf"), height = plot_height, width = plot_width)
+  grDevices::pdf(file.path(output_path, paste0("heatmap", suffix, ".pdf")), height = plot_height, width = plot_width)
   graphics::plot(t_heatmap) # [["heatmap"]]
   grDevices::dev.off()
 
@@ -247,17 +247,17 @@ workflow_ANOVA <- function(data_path,
 
   #### Create On-Off Heatmap ####
 
-  if (is.null(min_valid_values_on)) {
-    min_valid_values_on <- length(intensity_columns)
-  }
-
-  on_off <- calculate_onoff(D = data[["D"]],
-                                      id = data[["ID"]],
-                                      group = data[["group"]],
-                                      max_vv_off = max_valid_values_off,
-                                      min_vv_on = min_valid_values_on,
-                                      protein_names_column = protein_names_column)
-  openxlsx::write.xlsx(on_off, paste0(file.path(output_path, "table_on_off", suffix), ".xlsx"), keepNA = TRUE)
+  # if (is.null(min_valid_values_on)) {
+  #   min_valid_values_on <- length(intensity_columns)
+  # }
+  #
+  # on_off <- calculate_onoff(D = data[["D"]],
+  #                                     id = data[["ID"]],
+  #                                     group = data[["group"]],
+  #                                     max_vv_off = max_valid_values_off,
+  #                                     min_vv_on = min_valid_values_on,
+  #                                     protein_names_column = protein_names_column)
+  # openxlsx::write.xlsx(on_off, paste0(file.path(output_path, "table_on_off", suffix), ".xlsx"), keepNA = TRUE)
 
 
 
@@ -269,7 +269,7 @@ workflow_ANOVA <- function(data_path,
 
   #### Save message log ####
 
-  cat(mess, file = paste0(file.path(output_path, "message_log_anova", suffix), ".txt"))
+  cat(mess, file = file.path(output_path, paste0("message_log_anova", suffix, ".txt")))
 
 
 

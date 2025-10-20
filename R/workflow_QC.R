@@ -216,21 +216,21 @@ workflow_QC <- function(data_path,
 
   group <- prepared_data$group
 
-  utils::write.csv(x = prepared_data$ID, file = paste0(file.path(output_path, "ID", suffix), ".csv"), row.names = FALSE)
-  utils::write.csv(x = prepared_data$D, file = paste0(file.path(output_path, "D_norm_wide", suffix), ".csv"), row.names = FALSE)
-  utils::write.csv(x = prepared_data$D_long, file = paste0(file.path(output_path, "D_norm_long", suffix), ".csv"), row.names = FALSE)
+  utils::write.csv(x = prepared_data$ID, file = file.path(output_path, paste0("ID", suffix, ".csv")), row.names = FALSE)
+  utils::write.csv(x = prepared_data$D, file = file.path(output_path, paste0("D_norm_wide", suffix, ".csv")), row.names = FALSE)
+  utils::write.csv(x = prepared_data$D_long, file = file.path(output_path, paste0("D_norm_long", suffix, ".csv")), row.names = FALSE)
 
 
   if (output_type == "xlsx") {
-    openxlsx::write.xlsx(x = cbind(prepared_data$ID, prepared_data$D), file = paste0(file.path(output_path, "D_norm_ID", suffix), ".xlsx"),
+    openxlsx::write.xlsx(x = cbind(prepared_data$ID, prepared_data$D), file = file.path(output_path, paste0("D_norm_ID", suffix, ".xlsx")),
                          rowNames = FALSE, overwrite = TRUE, keepNA = TRUE, na.string = na_out)
   }
   if (output_type == "csv") {
-    utils::write.csv(x = cbind(prepared_data$ID, prepared_data$D), file = paste0(file.path(output_path, "D_norm_ID", suffix), ".csv"),
+    utils::write.csv(x = cbind(prepared_data$ID, prepared_data$D), file = file.path(output_path, paste0("D_norm_ID", suffix, ".csv")),
                      row.names = FALSE, na = na_out)
   }
   if (output_type == "tsv") {
-    utils::write.table(x = cbind(prepared_data$ID, prepared_data$D), file = paste0(file.path(output_path, "D_norm_ID", suffix), ".tsv"),
+    utils::write.table(x = cbind(prepared_data$ID, prepared_data$D), file = file.path(output_path, paste0("D_norm_ID", suffix, ".tsv")),
                        row.names = FALSE, sep = "\t", na = na_out)
   }
 
@@ -250,9 +250,9 @@ workflow_QC <- function(data_path,
     mess <- paste0(mess, vv_plot_data[["message"]])
 
 
-    ggplot2::ggsave(paste0(file.path(output_path, "valid_value_plot", suffix), ".", plot_device), plot = vv_plot_data[["plot"]],
+    ggplot2::ggsave(file.path(output_path, paste0("valid_value_plot", suffix, ".", plot_device)), plot = vv_plot_data[["plot"]],
                     device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi, units = "cm")
-    utils::write.csv(x = vv_plot_data$table, file = paste0(file.path(output_path, "D_validvalues", suffix), ".csv"), row.names = FALSE)
+    utils::write.csv(x = vv_plot_data$table, file = file.path(output_path, paste0("D_validvalues", suffix, ".csv")), row.names = FALSE)
 
 
 
@@ -265,7 +265,7 @@ workflow_QC <- function(data_path,
 
     mess <- paste0(mess, boxplot_data[["message"]])
 
-    ggplot2::ggsave(paste0(file.path(output_path, "boxplot", suffix), ".", plot_device), plot = boxplot_data[["plot"]],
+    ggplot2::ggsave(file.path(output_path, paste0("boxplot", suffix, ".", plot_device)), plot = boxplot_data[["plot"]],
                     device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi, units = "cm")
 
 
@@ -310,10 +310,10 @@ workflow_QC <- function(data_path,
     mess <- paste0(mess, pca_data[["message"]])
 
 
-    ggplot2::ggsave(paste0(file.path(output_path, "PCA_plot", suffix), ".", plot_device), plot = pca_data[["plot"]],
+    ggplot2::ggsave(file.path(output_path, paste0("PCA_plot", suffix, ".", plot_device)), plot = pca_data[["plot"]],
                     device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi, units = "cm")
-    utils::write.csv(x = pca_data$D_PCA_plot, file = paste0(file.path(output_path, "D_PCA", suffix), ".csv"), row.names = FALSE)
-    utils::write.csv(x = pca_data$filtered_D, file = paste0(file.path(output_path, "PCA_data_after_imputation", suffix), ".csv"), row.names = FALSE)
+    utils::write.csv(x = pca_data$D_PCA_plot, file = file.path(output_path, paste0("D_PCA", suffix, ".csv")), row.names = FALSE)
+    utils::write.csv(x = pca_data$filtered_D, file = file.path(output_path, paste0("PCA_data_after_imputation", suffix, ".csv")), row.names = FALSE)
 
 
   }

@@ -125,7 +125,7 @@ workflow_ttest <- function(data_path,
                         paired = paired, var.equal = var.equal,
                         log_before_test = log_before_test, delog_for_FC = delog_for_FC, log_base = 2,
                         min_obs_per_group = 3, min_obs_per_group_ratio = NULL,
-                        filename = paste0(file.path(output_path, "results_ttest", suffix), ".xlsx"))
+                        filename = file.path(output_path, paste0("results_ttest", suffix, ".xlsx")))
 
   mess <- paste0(mess,
                  ifelse(paired, "Paired", "Unaired"),
@@ -163,7 +163,7 @@ workflow_ttest <- function(data_path,
                                     columnname_p = "p", columnname_padj = "p.fdr",
                                     columnname_FC = fc_col_name, base_size = volcano_base_size)
 
-  ggplot2::ggsave(paste0(file.path(output_path, "volcano_plot", suffix), ".", plot_device), plot = volcano_plot,
+  ggplot2::ggsave(file.path(output_path, paste0("volcano_plot", suffix, ".", plot_device)), plot = volcano_plot,
                   device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi)
 
   mess <- paste0(mess, "Volcano plot calculated. \n")
@@ -176,11 +176,11 @@ workflow_ttest <- function(data_path,
                                             columnname_p = "p", columnname_padj = "p.fdr",
                                             columnname_FC = fc_col_name)
 
-  ggplot2::ggsave(paste0(file.path(output_path, "histogram_p_value", suffix), ".", plot_device), plot = histograms[["histogram_p_value"]],
+  ggplot2::ggsave(file.path(output_path, paste0("histogram_p_value", suffix, ".", plot_device)), plot = histograms[["histogram_p_value"]],
                   device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi)
-  ggplot2::ggsave(paste0(file.path(output_path, "histogram_adjusted_p_value", suffix), ".", plot_device), plot = histograms[["histogram_adjusted_p_value"]],
+  ggplot2::ggsave(file.path(output_path, paste0("histogram_adjusted_p_value", suffix, ".", plot_device)), plot = histograms[["histogram_adjusted_p_value"]],
                   device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi)
-  ggplot2::ggsave(paste0(file.path(output_path, "histogram_fold_change", suffix), ".", plot_device), plot = histograms[["histogram_fold_change"]],
+  ggplot2::ggsave(file.path(output_path, paste0("histogram_fold_change", suffix, ".", plot_device)), plot = histograms[["histogram_fold_change"]],
                   device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi)
 
   mess <- paste0(mess, "p-value, adjusted p-value and fold change histograms calculated. \n")
@@ -226,7 +226,7 @@ workflow_ttest <- function(data_path,
                                      id = data[["ID"]][candidates, ],
                                      groups = data[["group"]])
 
-    grDevices::pdf(paste0(file.path(output_path, "heatmap", suffix), ".pdf"), height = plot_height, width = plot_width)
+    grDevices::pdf(file.path(output_path, paste0("heatmap", suffix, ".pdf")), height = plot_height, width = plot_width)
     graphics::plot(t_heatmap) # [["heatmap"]]
     grDevices::dev.off()
 
@@ -259,7 +259,7 @@ workflow_ttest <- function(data_path,
 
   #### Save message log ####
 
-  cat(mess, file = paste0(file.path(output_path, "message_log_ttest", suffix), ".txt"))
+  cat(mess, file = file.path(output_path, paste0("message_log_ttest", suffix, ".txt")))
 
   return(list("message" = mess))
 }
