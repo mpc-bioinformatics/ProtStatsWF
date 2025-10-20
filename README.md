@@ -36,6 +36,7 @@ The following workflows and features are planned for later versions:
 - Adding the calculation of on/off proteins to `workflow_ttest` and `workflow_ANOVA`
 - `workflow_clustering`: Hierarchical clustering of proteins based on their intensity patterns, visualized by a heatmap and lineplots of individual clusters
 - `workflow_GO`: GO- and Pathway-analysis of a set of biomarker candidates with heatmaps of proteins belonging to a specific term
+- `workflow_samplesize`: Sample size estimation for planning of new experiments
 
 
 ## Usage
