@@ -2,6 +2,8 @@
 #'
 #' @param D                \strong{data.frame} \cr
 #'                         The data set containing intensities of the sample.
+#' @param id                \strong{data.frame} \cr
+#'                         The corresponding ID columns for the parameter D e.g. containing further columns like protein or gene names
 #' @param groupvar1        \strong{character vector} \cr
 #'                         The variable used for colors.
 #' @param groupvar2        \strong{character vector} \cr
@@ -49,6 +51,7 @@
 #'
 
 PCA_Plot <- function(D,
+                     id = NULL,
                      groupvar1 = NULL, groupvar2 = NULL,
 
                      impute = FALSE, impute_method = "mean", propNA = 0,
@@ -67,7 +70,9 @@ PCA_Plot <- function(D,
 
   mess = ""
 
-  filtered_D <- filter_PCA_data(D = D, impute = impute, impute_method = impute_method, propNA = propNA)
+  filtered_data <- filter_PCA_data(D = D, id = id, impute = impute, impute_method = impute_method, propNA = propNA)
+  filtered_D <- filtered_data$D
+  filtered_id <- filtered_data$id
 
   if(is.null(filtered_D)){
     mess <- paste0(mess, "All rows were filtered out. \n")
@@ -142,7 +147,12 @@ PCA_Plot <- function(D,
 
   message(mess)
 
-  return(list("plot" = pl, "D_PCA_plot" = cbind(D_PCA, "Sample" = colnames(D)),
-              "pca" = pca, "message" = mess, "filtered_D" = filtered_D, "loadings" = pca$rotation))
+  Loadings <- as.data.frame(pca$rotation)
+  if (!is.null(filtered_id)) {
+    Loadings <- cbind(filtered_id, Loadings)
+  }
+
+  return(list("D_PCA_plot" = cbind(D_PCA, "Sample" = colnames(D)),
+              "pca" = pca, "message" = mess, "filtered_D" = filtered_D, "loadings" = Loadings, "plot" = pl))
 }
 

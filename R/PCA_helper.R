@@ -3,6 +3,8 @@
 #'
 #' @param D                \strong{data.frame} \cr
 #'                         The data set containing intensities of the sample.
+#' @param id               \strong{data.frame} \cr
+#'                         The corresponding ID columns for the parameter D e.g. containing further columns like protein or gene names
 #' @param impute           \strong{logical} \cr
 #'                         If \code{TRUE}, missing values will be imputed.
 #' @param impute_method    \strong{character} \cr
@@ -17,13 +19,17 @@
 #'
 #'
 
-filter_PCA_data <- function(D, impute = FALSE, impute_method = "mean", propNA = 0){
+filter_PCA_data <- function(D, id = NULL, impute = FALSE, impute_method = "mean", propNA = 0){
 
   # proportion if missing values per protein
   mean_NA <- apply(D, 1, function(x) mean(is.na(x)))
 
   ### remove rows with too many missing values
-  D <- D[mean_NA <= propNA, ]
+  index_to_keep <- mean_NA <= propNA
+  D <- D[index_to_keep, ]
+  if (!is.null(id)) {
+    id <- id[index_to_keep, ]
+  }
 
   if (nrow(D) == 0){
     return(NULL)
@@ -52,7 +58,7 @@ filter_PCA_data <- function(D, impute = FALSE, impute_method = "mean", propNA = 
   ind_zeroVar <- which(v < 1e-25)
   if (length(ind_zeroVar) > 0) D <- D[-ind_zeroVar,]
 
-  return(D)
+  return(list(D = D, id = id))
 }
 
 
