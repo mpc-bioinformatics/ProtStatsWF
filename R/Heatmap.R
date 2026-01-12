@@ -12,9 +12,9 @@
 #'                                The method with which missing values are handeled.
 #'                                Options are "na.omit" (proteins with any missing values will be removed), "impute" (missing values will be imputed) and "keep" (missing values will be kept).
 #'                                Note that clustering may not work when too many missing values are present.
-#' @param filtermissings          \strong{integer} \cr
-#'                                The threshold for missing values.
-#'                                If a protein has more missing values, it will be filtered out.
+#' @param min_valid_values        \strong{integer} \cr
+#'                                The minimum number of valid values \string{per row}.
+#'                                If a protein has less valid values, it will be filtered out.
 #'                                Note that rows with only 1 or 2 valid values may cause problems with clustering.
 #' @param groups                  \strong{character factor} \cr
 #'                                The group of the data with two or more grouping variables.
@@ -63,7 +63,7 @@ Heatmap_with_groups <- function(D,
                                 id,
                                 protein_names_col = NULL,
                                 na_method = "na.omit",
-                                filtermissings = 2,
+                                min_valid_values = 2,
                                 groups = NULL,
                                 group_colours = NULL,
                                 column_split = NULL,
@@ -103,11 +103,11 @@ Heatmap_with_groups <- function(D,
   }
 
 
-  ### remove rows with only missing values
-  ind  <- rowSums(!is.na(data.asmatrix)) >= filtermissings
-  data.asmatrix <- data.asmatrix[ind,]
-  id <- id[ind,, drop = FALSE]
-
+  ### remove rows with too many missing values
+  ind_row  <- rowSums(!is.na(data.asmatrix)) >= min_valid_values
+  data.asmatrix <- data.asmatrix[ind_row,]
+  id <- id[ind_row,, drop = FALSE]
+  message(sum(!ind_row), " rows with too many missing values removed.")
 
   ### cap colour gradient at a maximum value (may be valuable if there are extreme outliers)
   if (!is.null(colour_scale_max)) {
