@@ -4,11 +4,20 @@
 \alias{filter_PCA_data}
 \title{A method for filtering the data for PCA.}
 \usage{
-filter_PCA_data(D, impute = FALSE, impute_method = "mean", propNA = 0)
+filter_PCA_data(
+  D,
+  id = NULL,
+  impute = FALSE,
+  impute_method = "mean",
+  propNA = 0
+)
 }
 \arguments{
 \item{D}{\strong{data.frame} \cr
 The data set containing intensities of the sample.}
+
+\item{id}{\strong{data.frame} \cr
+The corresponding ID columns for the parameter D e.g. containing further columns like protein or gene names}
 
 \item{impute}{\strong{logical} \cr
 If \code{TRUE}, missing values will be imputed.}
