@@ -247,7 +247,7 @@ workflow_ttest <- function(data_path,
                                       group = data[["group"]],
                                       max_vv_off = max_valid_values_off,
                                       min_vv_on = min_valid_values_on,
-                                      protein_id_col = 1)
+                            protein_names_column = 1)
   openxlsx::write.xlsx(on_off, file = file.path(output_path, paste0("results_onoff", suffix, ".xlsx")))
 
 
