@@ -236,19 +236,21 @@ workflow_ttest <- function(data_path,
   }
 
 
-  # #### Create On-Off Heatmap ####
+  # #### calculate on/off proteins ####
   #
-  # if(is.null(min_valid_values_on)){
-  #   min_valid_values_on <- length(intensity_columns)
-  # }
+  if(is.null(min_valid_values_on)){
+    min_valid_values_on <- length(intensity_columns)
+  }
   #
-  # t_on_off_heatmap <- calculate_onoff(D = data[["D"]],
-  #                                     id = data[["ID"]],
-  #                                     group = data[["group"]],
-  #                                     max_vv_off = max_valid_values_off,
-  #                                     min_vv_on = min_valid_values_on,
-  #                                     protein_id_col = 1)
-  #
+  on_off <- calculate_onoff(D = data[["D"]],
+                                      id = data[["ID"]],
+                                      group = data[["group"]],
+                                      max_vv_off = max_valid_values_off,
+                                      min_vv_on = min_valid_values_on,
+                                      protein_id_col = column_name_protein)
+  openxlsx::write.xlsx(on_off, file = file.path(output_path, paste0("results_onoff", suffix, ".xlsx")))
+
+
   # grDevices::pdf(paste0(output_path, "on_off_heatmap", suffix, ".pdf"), height = plot_height, width = plot_width)
   # graphics::plot(t_on_off_heatmap)
   # grDevices::dev.off()
