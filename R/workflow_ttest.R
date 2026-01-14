@@ -239,7 +239,7 @@ workflow_ttest <- function(data_path,
   # #### calculate on/off proteins ####
   #
   if(is.null(min_valid_values_on)){
-    min_valid_values_on <- length(intensity_columns)
+    min_valid_values_on <- min(table(data[["group"]])) #length(intensity_columns)
   }
   #
   on_off <- calculate_onoff(D = data[["D"]],
