@@ -1,80 +1,82 @@
 
-#' Clustering, Heatmap and Lineplots
+
+
+#' Cluster proteins for similar patterns across samples
 #'
-#' @param D **data.frame** \cr Dataframe with log-transformed protein intensities, e.g. filtered for significant proteins form the ANOVA or t-test results.
-#' @param id **data.frame** \cr dataframe with id information e.g. protein names, gene names, accessions etc.
-#' @param output_path **char(1)** \cr Path where results will be saved.
-#' @param suffix **char(1)** \cr Suffix for the file names, should start with a underscore.
-#' @param nr_clusters **int(1)** \cr Number of clusters. Default is NULL, meaning that the optimal number of clusters will be determined by [dendextend::find_k()].
-#' @param row_split **logi(1)** \cr If TRUE, there will be space between row clusters in the heatmap.
-#' @param dist_method **char(1)** \cr distance method for clustering, default is "correlation" (centered Pearson correlation)
+#' @param D \strong{data.frame} \cr
+#'        Dataframe containing protein intensities.
+#' @param dist_method \strong{character(1)} \cr
+#'        Distance measure to use for the hierarchical clustering. In principle,
+#'        all methods available in \code{\link[amap]{Dist}} are possible, however
+#'        correlation-based metrics like "correlation",  "pearson" or "spearman"
+#'        are recommended. The default is "correlation", which uses the centere
+#'        Pearson correlation.
+#' @param nr_clusters \strong{integer(1)} \cr
+#'        Number of clusters to cut the dendrogram into. If \code{NULL} (default),
+#'        the optimal number of clusters is determined based on silhouette values
+#'        using the \code{\link[dendextend]{find_k}} function.
+#' @param cluster_colours \strong{character vector} \cr
+#'       Colours to use for the different clusters. If \code{NULL} (default),
+#'       the default ggplot color palette is used.
+#' @param colour_dend \strong{logical(1)} \cr
+#'       If \code{TRUE} (default), the branches of the dendrogram are coloured
+#'       according to the clusters, using the defined cluster_colours.
 #'
-#' @return save heatmap and data frame with cluster information, as well as line plots
+#' @returns A list containing the following entries:
+#' \item{row_dend}{The dendrogram object for the rows (proteins).}
+#' \item{nr_clusters}{The number of clusters.}
+#' \item{cluster_colours}{The colours used for the different clusters.}
 #'
 #' @export
 #'
-#' @examples # TODO
-Clustering_heatmap_lineplots <- function(D,
-                                         id,
-                                         output_path,
-                                         suffix = "",
-                                         nr_clusters = NULL,
-                                         row_split = TRUE,
-                                         dist_method = "correlation",
-                                         plot_height_heatmap = 15,
-                                         plot_width_heatmap = 15,
-                                         plot_height_lineplot= 10,
-                                         plot_width_lineplot = 15) {
-
-  ### TODO: What to do with NAs
-  ### TODO: what to do with constant rows (may happen for extremely low of high abundant proteins)
-
-  id_columns <- 1:ncol(id)
-
+#' @examples
+clustering <- function(D,
+                       dist_method = "correlation",
+                       nr_clusters = NULL,
+                       cluster_colours = NULL,
+                       colour_dend = TRUE) {
   rownames(D) <- 1:nrow(D)  # reset rownames (important to match cluster information later)
   # cluster the proteins with centered Pearson correlation as distance function
   row_dend <- stats::as.dendrogram(stats::hclust(amap::Dist(D, method = dist_method)))
 
   if (is.null(nr_clusters)) {
-  # find optimal number of clusters based on silhouette values
-  nr_clusters <- dendextend::find_k(row_dend)$k
+    # find optimal number of clusters based on silhouette values
+    nr_clusters <- dendextend::find_k(row_dend)$k
   }
 
   ## define colours for each cluster
   cluster_colours <- scales::hue_pal()(nr_clusters)
-  ## colour branches of the dendrogram to plot next to the heatmap
-  row_dend_color = dendextend::color_branches(row_dend, k = nr_clusters, col = cluster_colours)
 
-  if (row_split) {
-    row_split = nr_clusters
-  } else {
-    row_split = NULL
+  if (colour_dend) {
+    ## colour branches of the dendrogram to plot next to the heatmap
+    row_dend = dendextend::color_branches(row_dend, k = nr_clusters, col = cluster_colours)
   }
 
-
-  ht <- ProtStatsWF::Heatmap_with_groups(D = D,
-                                   id = id,
-                                   # TODO: no filtering at the moment but it may be necessary/useful depending on the data
-                                   filtermissings = ncol(D),
-                                   cluster_rows = row_dend_color,
-                                   cluster_columns = FALSE,
-                                   log_data = FALSE,
-                                   #output_path = output_path,
-                                   #suffix = paste(suffix, nr_clusters, sep = "_"),
-                                   ### TODO: allow omitting rows with missing values
-                                   na_method = "impute",
-                                   row_split = nr_clusters,
-                                   row_gap = grid::unit(5, "mm"))
-
-  grDevices::png(paste0(output_path, "/heatmap", suffix, "_", nr_clusters, ".png"),
-                 height = plot_height_heatmap,
-                 width = plot_width_heatmap, units = "cm", res = 300)
-  graphics::plot(ht)#[["heatmap"]])
-  grDevices::dev.off()
+  return(list(row_dend = row_dend, nr_clusters = nr_clusters, cluster_colours = cluster_colours))
+}
 
 
+
+
+
+#' Get cluster information from heatmap
+#'
+#' @param heatmap \strong{Heatmap object} \cr
+#'        Heatmap object generated by \code{\link[ComplexHeatmap]{Heatmap}}.
+#' @param nr_clusters \strong{integer(1)} \cr
+#'        Number of clusters to cut the dendrogram into.
+#' @param D \strong{data.frame} \cr
+#'        Dataframe containing only protein intensities.
+#' @param id \strong{data.frame} \cr
+#'       Dataframe containing the ID columns for the parameter D e.g. containing further columns like protein or gene names.
+#'
+#' @returns A data.frame containing the cluster assignment for each protein along with the original ID columns and the intensity values.
+#' @export
+#'
+#' @examples
+getClusterInfos <- function(heatmap, nr_clusters, D, id) {
   ### get cluster for each protein (cluster number from heatmap doesn't correspond to apply cutree() on the dendrogram. This is why we need to get the cluster number from the heatmap directly).
-  ht_draw <- ComplexHeatmap::draw(ht)#$heatmap)
+  ht_draw <- ComplexHeatmap::draw(heatmap)#$heatmap)
   x <- ComplexHeatmap::row_dend(ht_draw)
   cluster <- integer(nrow(D))
   for (j in 1:nr_clusters) {
@@ -82,28 +84,41 @@ Clustering_heatmap_lineplots <- function(D,
     cluster[cluster_members] <- j
   }
 
-
-  ### write table with cluster results
-  ### TODO: add z-scores to the table
+  ### TODO: add z-scores to the table or generate separate table for that.
   RES_clustering <- cbind(id, cluster = cluster, D)
-  openxlsx::write.xlsx(RES_clustering, paste0(output_path, "/cluster_table", suffix, "_", nr_clusters, ".xlsx"))
+
+  return(RES_clustering)
 
 
-  ###############
-  ### draw lineplot for each cluster, coloured by distance to the cluster center
+}
 
-  D_zscore <- cbind(ht@matrix, cluster = cluster)
-  #id_columns <- 1:ncol(id)
+
+
+
+#' Generate Lineplots for each cluster.
+#'
+#' @param D_zscore \strong{data.frame} \cr
+#'       Dataframe containing the z-score normalized protein intensities along
+#'       with a column "cluster" indicating the cluster assignment for each protein.
+#' @param cluster_colours \strong{character vector} \cr
+#'      Colours to use for the different clusters.
+#'
+#' @returns A list of ggplot2 objects, each containing the lineplot for one cluster.
+#' @export
+#'
+#' @examples
+Lineplots <- function(D_zscore, cluster_colours) {
+
   ### TODO: currently only plots without imputation. This should be changed to allow for imputation as well.
 
-  grDevices::pdf(paste0(output_path, "/Lineplots", suffix, "_", nr_clusters, ".pdf"),
-                 width = plot_width_lineplot,
-                 height = plot_height_lineplot)
+  nr_clusters <- max(D_zscore$cluster)
+
+  lineplots <- list()
 
   for (i in 1:nr_clusters) {
 
     ## choose only data points from the specific cluster
-    D_tmp <- D_zscore[cluster == i, -c(ncol(D_zscore)), drop = FALSE] # remove id columns and cluster column
+    D_tmp <- D_zscore[D_zscore$cluster == i, -c(ncol(D_zscore)), drop = FALSE] # remove cluster column
 
     ## calculate mean profile of the cluster
     mean_profile <- colMeans(D_tmp, na.rm = TRUE)
@@ -120,7 +135,7 @@ Clustering_heatmap_lineplots <- function(D,
     X_long <- dplyr::mutate(X_long, ClusterCenter = dplyr::case_when(is.na(Dists_euclidean) ~ "Cluster Center", TRUE ~ "Cluster Members"))
 
 
-    variable <- value <- ClusterCenter <- NULL # to silence notes while checking the package
+    variable <- value <- ClusterCenter <- id <- NULL # to silence notes while checking the package
 
     pl <- ggplot2::ggplot(data = X_long, ggplot2::aes(x = variable, y = value, group = id,
                                                       colour = Dists_euclidean, linetype = ClusterCenter)) + #, linewidth = ClusterCenter)) +
@@ -137,14 +152,17 @@ Clustering_heatmap_lineplots <- function(D,
       ggplot2::guides(linetype = ggplot2::guide_legend(override.aes = list(linewidth = 1.3), order = 1))+
       ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5, colour = cluster_colours[i]), legend.position = "bottom")
 
-    print(pl)
-
-
+    lineplots[[i]] <- pl
   }
-
-  grDevices::dev.off()
+  return(lineplots)
 
 }
+
+
+
+
+
+
 
 
 

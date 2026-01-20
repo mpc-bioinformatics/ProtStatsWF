@@ -63,7 +63,7 @@ The maximum number of valid values to be an off protein.}
 The minimum number of valid values to be an on protein.}
 
 \item{suffix}{\strong{character} \cr
-The suffix of the file names should have one.}
+The suffix for the output files. It needs to start with an underscore.}
 
 \item{plot_device}{\strong{character} \cr
 The type of the output file, e.g. "pdf" or "png".}
