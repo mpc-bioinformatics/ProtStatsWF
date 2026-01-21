@@ -44,7 +44,7 @@
 #' @param ... Additional parameters passed to \code{\link[ProtStatsWF]{Heatmap_with_groups}}.
 #'
 #' @returns Nothing, but saves a heatmap, a set of lineplots (one per cluster)
-#' ans a cluster table to the output folder.
+#' and a cluster table to the output folder.
 #' @export
 #'
 #' @examples
