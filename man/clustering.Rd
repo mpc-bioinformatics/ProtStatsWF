@@ -20,7 +20,7 @@ Dataframe containing protein intensities.}
 Distance measure to use for the hierarchical clustering. In principle,
 all methods available in \code{\link[amap]{Dist}} are possible, however
 correlation-based metrics like "correlation",  "pearson" or "spearman"
-are recommended. The default is "correlation", which uses the centere
+are recommended. The default is "correlation", which uses the centered
 Pearson correlation.}
 
 \item{nr_clusters}{\strong{integer(1)} \cr
