@@ -61,8 +61,8 @@ workflow_clustering <- function(data_path,
                                 suffix = "",
                                 plot_height_heatmap = 15,
                                 plot_width_heatmap = 15,
-                                plot_height_lineplot= 10,
-                                plot_width_lineplot = 15,
+                                plot_height_lineplot= 20,
+                                plot_width_lineplot = 25,
                                 plot_dpi = 300,
 
                                 column_name_protein = "Protein",
@@ -74,9 +74,12 @@ workflow_clustering <- function(data_path,
   ### TODO: option to aggregate data by group before clustering
 
   #### Prepare Data ####
-  dataPrep <- prepareTtestData(data_path = data_path , intensity_columns = intensity_columns)
+  dataPrep <- prepareTtestData(data_path = data_path , intensity_columns = intensity_columns,
+                               remove_missings = TRUE)
 
-  clust <- clustering(D,
+  Dprep2id <<- dataPrep$id
+
+  clust <- clustering(dataPrep$D,
              dist_method = dist_method,
              nr_clusters = nr_clusters,
              cluster_colours = cluster_colours,
@@ -103,10 +106,12 @@ workflow_clustering <- function(data_path,
   grDevices::dev.off()
 
 
-  clusterInfo <- getClusterInfos(heatmap = ht, nr_clusters = clust$nr_clusters, D = dataPrep$D, id = dataPrep$id)
+  clusterInfo <- getClusterInfos(heatmap = ht, nr_clusters = clust$nr_clusters, D = dataPrep$D, id = dataPrep$ID)
   openxlsx::write.xlsx(clusterInfo, paste0(output_path, "/cluster_table", suffix, "_", clust$nr_clusters, ".xlsx"))
 
-  D_zscore <- cbind(ht@matrix, cluster = clusterInfo$cluster)
+  D_zscore <- data.frame(ht@matrix, cluster = clusterInfo$cluster)
+
+  D_zscore2 <<- D_zscore
 
   lineplots <- Lineplots(D_zscore = D_zscore, cluster_colours = clust$cluster_colours)
 

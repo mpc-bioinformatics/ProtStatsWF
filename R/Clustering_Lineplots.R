@@ -35,6 +35,9 @@ clustering <- function(D,
                        nr_clusters = NULL,
                        cluster_colours = NULL,
                        colour_dend = TRUE) {
+
+  D2 <<- D
+
   rownames(D) <- 1:nrow(D)  # reset rownames (important to match cluster information later)
   # cluster the proteins with centered Pearson correlation as distance function
   row_dend <- stats::as.dendrogram(stats::hclust(amap::Dist(D, method = dist_method)))
@@ -85,6 +88,10 @@ getClusterInfos <- function(heatmap, nr_clusters, D, id) {
     cluster_members <- as.integer(names(dendextend::cutree(x[[j]],1))) ### get cluster members
     cluster[cluster_members] <- j
   }
+
+  # print(dim(id))
+  # print(dim(D))
+  # print(length(cluster))
 
   ### TODO: add z-scores to the table or generate separate table for that.
   RES_clustering <- cbind(id, cluster = cluster, D)

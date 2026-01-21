@@ -196,6 +196,7 @@ Heatmap_with_groups <- function(D,
 
   #row.names(data.asmatrix) <- row_labels
 
+  data.asmatrix2 <<- data.asmatrix
 
   ht <- ComplexHeatmap::Heatmap(data.asmatrix,
                 column_title = title,
