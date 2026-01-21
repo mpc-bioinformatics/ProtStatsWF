@@ -81,7 +81,7 @@ The name of the column containing the protein identifiers.}
 }
 \value{
 Nothing, but saves a heatmap, a set of lineplots (one per cluster)
-ans a cluster table to the output folder.
+and a cluster table to the output folder.
 }
 \description{
 Workflow that clusters proteins for similar patterns over the samples and
