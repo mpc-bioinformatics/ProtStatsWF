@@ -44,8 +44,10 @@ clustering <- function(D,
     nr_clusters <- dendextend::find_k(row_dend)$k
   }
 
-  ## define colours for each cluster
-  cluster_colours <- scales::hue_pal()(nr_clusters)
+  ## define colours for each cluster (only if not provided by user)
+  if (is.null(cluster_colours)) {
+    cluster_colours <- scales::hue_pal()(nr_clusters)
+  }
 
   if (colour_dend) {
     ## colour branches of the dendrogram to plot next to the heatmap
