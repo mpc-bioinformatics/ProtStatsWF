@@ -36,7 +36,7 @@
 #' @param plot_height_lineplot \strong{numeric} \cr
 #'                               The height for the lineplots in cm.
 #' @param plot_width_lineplot \strong{numeric} \cr
-#'                               The width for the lineplotsin cm.
+#'                               The width for the lineplots in cm.
 #' @param plot_dpi \strong{numeric} \cr
 #'                              The plot resolution for the heatmap.
 #' @param column_name_protein \strong{character(1)} \cr
