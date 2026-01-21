@@ -92,25 +92,25 @@ workflow_clustering <- function(data_path,
                                          log_data = FALSE,
                                          ### TODO: allow omitting rows with missing values
                                          na_method = "impute",
-                                         row_split = nr_clusters,
+                                         row_split = clust$nr_clusters,
                                          row_gap = grid::unit(5, "mm"),
                                          ...)
 
-  grDevices::png(paste0(output_path, "/heatmap", suffix, "_", nr_clusters, ".png"),
+  grDevices::png(paste0(output_path, "/heatmap", suffix, "_", clust$nr_clusters, ".png"),
                  height = plot_height_heatmap,
                  width = plot_width_heatmap, units = "cm", res = plot_dpi)
   graphics::plot(ht)
   grDevices::dev.off()
 
 
-  clusterInfo <- getClusterInfos(heatmap = ht, nr_clusters = nr_clusters, D = dataPrep$D, id = dataPrep$id)
-  openxlsx::write.xlsx(clusterInfo, paste0(output_path, "/cluster_table", suffix, "_", nr_clusters, ".xlsx"))
+  clusterInfo <- getClusterInfos(heatmap = ht, nr_clusters = clust$nr_clusters, D = dataPrep$D, id = dataPrep$id)
+  openxlsx::write.xlsx(clusterInfo, paste0(output_path, "/cluster_table", suffix, "_", clust$nr_clusters, ".xlsx"))
 
   D_zscore <- cbind(ht@matrix, cluster = clusterInfo$cluster)
 
   lineplots <- Lineplots(D_zscore = D_zscore, cluster_colours = clust$cluster_colours)
 
-  grDevices::pdf(paste0(output_path, "/Lineplots", suffix, "_", nr_clusters, ".pdf"),
+  grDevices::pdf(paste0(output_path, "/Lineplots", suffix, "_", clust$nr_clusters, ".pdf"),
                  width = plot_width_lineplot/2.54,
                  height = plot_height_lineplot/2.54)
 
