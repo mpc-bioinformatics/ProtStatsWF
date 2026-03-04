@@ -25,11 +25,13 @@ workflow_QC(
   groupvar_name = "Group",
   group_colours = NULL,
   suffix = "",
-  plot = TRUE,
+  verbose = TRUE,
   base_size = 15,
   plot_device = "pdf",
-  plot_height = 10,
-  plot_width = 15,
+  plot_height_BP_VV = 10,
+  plot_width_BP_VV = 15,
+  plot_height_PCA_MA = 15,
+  plot_width_PCA_MA = 15,
   plot_dpi = 300,
   boxplot_method = "boxplot",
   generate_MAplots = TRUE,
@@ -107,20 +109,23 @@ The hex codes for the group colors, if the data has groups. If \code{NULL}, a de
 \item{suffix}{\strong{character} \cr
 The suffix for the output files. It needs to start with an underscore.}
 
-\item{plot}{\strong{logical} \cr
-If TRUE (default), plots are generated. If FALSE, plots are skipped (may be useful for debugging purposes and reduces runtime for large data sets).}
-
 \item{base_size}{\strong{numeric} \cr
 The base size of the font.}
 
 \item{plot_device}{\strong{character} \cr
 The type of the output file. Options are "pdf" or "png".}
 
-\item{plot_height}{\strong{numeric} \cr
-The plot height in cm.}
+\item{plot_height_BP_VV}{\strong{numeric} \cr
+The plot height for boxplots and valid-value plots in cm.}
 
-\item{plot_width}{\strong{numeric} \cr
-The plot width in cm.}
+\item{plot_width_BP_VV}{\strong{numeric} \cr
+The plot width for boxplots and valid-value plots in cm. The optimal width is highly affected by the number of samples.}
+
+\item{plot_height_PCA_MA}{\strong{numeric} \cr
+The plot height for PCA and MA-plots in cm.}
+
+\item{plot_width_PCA_MA}{\strong{numeric} \cr
+The plot width for PCA and MA-plots in cm.}
 
 \item{plot_dpi}{\strong{numeric} \cr
 The "dots per inch" of the plot aka. the plot resolution.}
@@ -129,7 +134,7 @@ The "dots per inch" of the plot aka. the plot resolution.}
 The method used. Options are "boxplot" and "violinplot".}
 
 \item{generate_MAplots}{\strong{logical} \cr
-If \code{TRUE}, MA plots will be generated, if \code{FALSE} they will not be generated (mostly for debugging purposes).}
+If \code{TRUE}, MA plots will be generated, if \code{FALSE} they will not be generated (mostly for debugging purposes and time reduction in large datasets).}
 
 \item{MA_maxPlots}{\strong{integer} \cr
 The maximum number of MA plots that should be generated.}

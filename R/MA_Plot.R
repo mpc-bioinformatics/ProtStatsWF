@@ -31,17 +31,11 @@
 #'
 
 MA_Plot_single <- function(sample_1, sample_2,
-                          do_log_transformation = FALSE,
                           alpha = FALSE,
                           point_color = "black",
                           sampling = 1,
                           ...) {
 
-
-  if(do_log_transformation) {
-    sample_1 <- log2(sample_1)
-    sample_2 <- log2(sample_2)
-  }
   if(alpha) {
     point_color = alpha(point_color, 0.5)
   }
@@ -72,8 +66,6 @@ MA_Plot_single <- function(sample_1, sample_2,
 #'
 #' @param D                       \strong{data.frame} \cr
 #'                                The data set containing intensities of the sample.
-#' @param do_log_transformation   \strong{logical} \cr
-#'                                If \code{TRUE}, the data will be log-transformed.
 #' @param output_path             \strong{character} \cr
 #'                                The path to a folder for the output.
 #' @param suffix                  \strong{character} \cr
@@ -109,7 +101,6 @@ MA_Plot_single <- function(sample_1, sample_2,
 #'
 
 MA_Plots <- function(D,
-                    do_log_transformation = FALSE,
                     output_path = "", suffix = "",
                     labels = 1:ncol(D), labels2 = colnames(D),
                     maxPlots = 5000,
@@ -122,9 +113,8 @@ MA_Plots <- function(D,
   number_states <- max(as.integer(as.factor(colnames(D))))
   number_plots <- choose(number_states,2)
 
-  mess <- ""
   if (number_plots > maxPlots) {
-    mess <- paste0(mess, "Number of MA-Plots (", number_plots, ") is higher than maxPlots (", maxPlots, ").\nPlease increase maxPlots to plot all MA-plots. \n")
+    message("Number of MA-Plots (", number_plots, ") is higher than maxPlots (", maxPlots, ").\nPlease increase maxPlots to plot all MA-plots.")
   }
 
   num <- 0
@@ -139,8 +129,7 @@ MA_Plots <- function(D,
       # if maximum number of plots is reached, stop.
       if (num > maxPlots) {
         grDevices::dev.off()
-        mess <- paste0(mess, maxPlots, " MA plots generated. \n")
-        return("message" = mess)
+        message(maxPlots, " MA plots generated.")
       }
 
       if (is.null(labels2)) {
@@ -152,7 +141,7 @@ MA_Plots <- function(D,
       num <- num + 1
       utils::setTxtProgressBar(pb, num)
 
-      MA_Plot_single(D[,i], D[, j], do_log_transformation = do_log_transformation, main = main, sampling = sampling, ...)
+      MA_Plot_single(D[,i], D[, j], main = main, sampling = sampling, ...)
     }
   }
 

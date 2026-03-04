@@ -1,17 +1,17 @@
 test_that("Single MA plot", {
 
   # Skip this test on continuous integration systems like GitHub Actions
-  # The function expect_snapshot_file is otherwise too strict 
+  # The function expect_snapshot_file is otherwise too strict
   # and there is no way to get a few pixel of tolerance
   testthat::skip_on_ci()
-  
+
   # Create a temporary directory so no permanent files are put on a package users directory
   temp_dir <- tempfile(pattern = "test_dir")
   dir.create(temp_dir)
-  on.exit(unlink(temp_dir, recursive = TRUE)) 
-  
+  on.exit(unlink(temp_dir, recursive = TRUE))
+
   png_file_path <- file.path(temp_dir, "result_MA_plot_snapshot.png")
-  
+
   pData <- prepareData(data_path = system.file("extdata", "test_file_MA_plots.xlsx", package = "ProtStatsWF"), intensity_columns = 3:6)
   D = pData[["D"]]
   s1 = D[,1]
@@ -27,12 +27,12 @@ test_that("Single MA plot", {
 
 
 test_that("plot", {
-  
+
   temp_dir <- tempfile(pattern = "test_dir")
   dir.create(temp_dir)
-  on.exit(unlink(temp_dir, recursive = TRUE)) 
+  on.exit(unlink(temp_dir, recursive = TRUE))
 
-  pData <- prepareData(data_path = system.file("extdata", "test_file_MA_plots.xlsx", package = "ProtStatsWF"), intensity_columns = 3:6)
+  pData <- prepareData(dataPath = system.file("extdata", "test_file_MA_plots.xlsx", package = "ProtStatsWF"), intensity_columns = 3:6)
   D = pData[["D"]]
 
   pResult <- MA_Plots(D = D, do_log_transformation = FALSE, output_path = temp_dir, suffix = "_result")

@@ -4,7 +4,7 @@
 \alias{prepareTtestData}
 \title{Prepare data from an .xlsx sheet.}
 \usage{
-prepareTtestData(data_path, intensity_columns)
+prepareTtestData(data_path, intensity_columns, remove_missings = FALSE)
 }
 \arguments{
 \item{data_path}{\strong{character} \cr

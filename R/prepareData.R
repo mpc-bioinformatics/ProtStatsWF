@@ -1,5 +1,171 @@
 #' Prepare proteomics data for analysis.
 #'
+#' @template param_dataPath
+#' @param intensityColumns **integer** \cr The columns numbers containing protein intensities in the data set.
+#' @param proteinNameColumn **character(1)** \cr The name of the column in the data file that contains the protein names. Default is "Protein".
+#' @param sampleInfoPath **character(1)** \cr The path to the sample information file with group information.
+#'    This file must contain a column corresponding to the column names of the data file (only intensity columns).
+#'    Further columns are optional and may give information on groups, timepoints or patient information (patient ID, age, gender etc.).
+#' @param sampleNameColumn **character(1)** \cr The name of the column in the sample information file that contains the sample names.
+#'    The sample names have to correspond to the columns names of the data file (only for intensity columns),
+#'    but they do not necessarily have to be in the same order as the columns. They will be used to match the data file and the sample information file.
+# @param groupColumn **character(1)** \cr The name of the column in the sample information file that contains the group information.
+#    Will be used for colouring in the plots. If NULL, no colouring is done.
+# @param group2Column **character(1)** \cr The name of the column in the sample information file that contains a second grouping variable, e.g. timepoints.
+#    This will be used in the PCA plot for "shape" of the data points.
+# @param sampleIDColumn **character(1)** \cr The name of the column in the sample information file that contains the sample IDs.
+#    This is especially important if a paired analysis is going to be used (paired t-test, repeated measures ANOVA),
+#    as the sample IDs will be used to link the paired samples.
+#'
+#' @param doLogTrans **logical(1)** \cr If \code{TRUE}, the data will be log-transformed.
+#' @param logBase **numeric(1)** \cr The base for the logarithm, if \code{do_log_transformation = TRUE}. Default is 2.
+#' @param normMethod **character(1)** \cr The method of normalization. Options are "nonorm" (no normalization), "median", "loess", "quantile" or "lts" normalization.
+#' @param ltsQuantile **numeric(1)** The quantile for the lts normalization if \code{normalization = "lts"}.
+#'
+#' @param fileType **character(1)** \cr Type of input file: "csv" or "tsv" or "txt" or "xlsx".
+#' @param sep **character(1)** \cr The field separator, e.g. " " for blanks, "," for comma or "\\t" for tab. Default is ",".
+#' @param dec **character(1)** \cr Decimal separator, e.g. "," for comma or "." for dot. Default is ".".
+#' @param header **logical(1)** \cr If TRUE, first line is counted as column names.
+#' @param sheet **integer(1)** \cr Sheet number (only needed for xlsx files, default is to use the first sheet).
+#' @param zeroToNA **logical(1)** \cr If \code{TRUE}, 0 will be treated as missing value.
+#' @param NAStrings **character** \cr A vector containing the symbols to be recognized as missing values (except 0).
+#' @param verbose **logical(1)** \cr If \code{TRUE}, messages about the performed steps will be printed in the console.
+#'
+#' @return A list containing the prepared data and the ids of the data as data.frames as well as the groups, number of groups and group colors.
+#' @export
+#'
+#' @examples
+#'
+prepareDataSE <- function(dataPath,
+                          intensityColumns,
+                          proteinNameColumn = "Protein",
+                          sampleInfoPath = NULL,
+                          sampleNameColumn = "sampleName",
+                          doLogTrans = TRUE,
+                          logBase = 2,
+                          normMethod = "loess",
+                          ltsQuantile = 0.8,
+
+                          fileType = "xlsx",
+                          sep = ",",
+                          dec = ".",
+                          header = TRUE,
+                          sheet = 1,
+                          zeroToNA = TRUE,
+                          NAStrings = c("NA", "NaN", "Filtered","#NV"),
+                          verbose = TRUE) {
+
+
+  ### import data file
+
+  if (fileType == "csv" | fileType == "txt" | fileType == "tsv") {
+    if (fileType == "csv") {
+      sep <- ","
+    } else if (fileType == "tsv") {
+      sep <- "\t"
+    }
+    D_complete <- utils::read.table(dataPath, sep = sep, header = header, dec = dec,
+                           quote = "\"")
+  }
+  if (fileType == "xlsx") {
+    D_complete <- openxlsx::read.xlsx(dataPath, colNames = header, sheet = sheet)
+  }
+
+  id <- D_complete[, -intensityColumns]
+  D <- D_complete[, intensityColumns] # only intensity columns
+  rownames(id) <- id[, proteinNameColumn]
+  rownames(D) <- id[, proteinNameColumn]
+
+  #ID <<- id
+
+  ## data preprocessing (NAs, log, normalization)
+  if (zeroToNA) {
+    D[D == 0] <- NA
+    message("Zeros set to NA.")
+  }
+
+  if (doLogTrans) {
+    D <- log(D, base = logBase)
+    message("Log-transformation with base ", logBase, ".")
+  }
+
+  D_norm <- automatedNormalization(DATA = D, method = normMethod,
+                              is_log_transformed = doLogTrans,
+                              log_base = logBase, lts.quantile = ltsQuantile)
+
+
+  ## read in sample information file, if given
+  if (!is.null(sampleInfoPath)) {
+    sampleInfo <- openxlsx::read.xlsx(sampleInfoPath, colNames = TRUE)
+    ind <- match(colnames(D), sampleInfo[, sampleNameColumn])
+    sampleInfo <- sampleInfo[ind, ] # sort sampleInfo like the columns of D
+    message("Sample information file read in.")
+  } else {
+    sampleInfo <- NULL
+    message("No sample information file given.")
+  }
+
+ # SI <<- sampleInfo
+
+  #if (normMethod != "nonorm") {
+    assays <- list(intensity_norm = as.matrix(D_norm), intensity = as.matrix(D))
+  #} else {
+  #  assays <- list(intensity = as.matrix(D))
+  #}
+
+  # TODO: include metadata, e.g. about normalization method?
+  if (is.null(sampleInfo)) {
+    SE <- SummarizedExperiment::SummarizedExperiment(assays = assays,
+                                                     rowData = id)
+  } else {
+    SE <- SummarizedExperiment::SummarizedExperiment(assays = assays,
+                                                     colData = sampleInfo,
+                                                     rowData = id)
+  }
+
+  ### long format:
+  # TODO: this is a generic function from tidySummarizedExperiments package
+  D_long <- tidyr::pivot_longer(SE, cols = proteinNameColumn)
+  D_long <- dplyr::select(D_long, -c("name", "value"))
+
+  return(list(SE = SE, D_long = D_long))
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#' Prepare proteomics data for analysis.
+#'
 #' @param data_path               \strong{character} \cr
 #'                                The path to an .xlsx file containing the input data.
 #' @param filetype **character(1)** \cr Type of input file: "csv" or "tsv" or "txt" or "xlsx".

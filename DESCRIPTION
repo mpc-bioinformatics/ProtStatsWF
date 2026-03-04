@@ -1,6 +1,6 @@
 Package: ProtStatsWF
 Title: Statistics Workflows for Proteomics Data
-Version: 0.2.0
+Version: 0.3.0
 Authors@R: c(
     person("Karin", "Schork", , "karin.schork@rub.de", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-3756-4347")),
@@ -38,7 +38,9 @@ Imports:
     reshape2,
     scales,
     stringr,
+    SummarizedExperiment,
     tidyr,
+    tidySummarizedExperiment,
     vsn
 URL: https://github.com/mpc-bioinformatics/ProtStatsWF
 BugReports: https://github.com/mpc-bioinformatics/ProtStatsWF/issues

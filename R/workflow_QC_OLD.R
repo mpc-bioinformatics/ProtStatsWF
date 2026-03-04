@@ -10,7 +10,7 @@
 #'
 #'
 #'
-#' @param dataPath              \strong{character} \cr
+#' @param data_path              \strong{character} \cr
 #'                               The path to an .xlsx file containing the input data.
 #'
 #'
@@ -144,15 +144,8 @@
 
 
 
-workflow_QC <- function(dataPath,
-                        intensityColumns,
-                        proteinNameColumn = "Protein",
-                        sampleInfoPath = NULL,
-                        sampleNameColumn = "sampleName",
-                        groupColumn = NULL,
-                        group2Column = NULL,
-
-                        fileType = "xlsx",
+workflow_QC_OLD <- function(data_path,
+                        filetype = "xlsx",
                         sep = ",",
                         dec = ".",
                         header = TRUE,
@@ -160,15 +153,16 @@ workflow_QC <- function(dataPath,
                         output_path,
                         output_type = "xlsx",
 
+                        intensity_columns,
+                        normalization_method = "loess",
+                        lts_quantile = 0.8,
+                        use_groups = TRUE,
 
-                        normMethod = "loess",
-                        ltsQuantile = 0.8,
-
-                        NAStrings = c("NA", "NaN", "Filtered","#NV"),
+                        na_strings = c("NA", "NaN", "Filtered","#NV"),
                         na_out = "NA",
-                        zeroToNA = TRUE,
-                        doLogTrans = TRUE,
-                        logBase = 2,
+                        zero_to_NA = TRUE,
+                        do_log_transformation = TRUE,
+                        log_base = 2,
 
                         groupvar_name = "Group",
                         group_colours = NULL,
@@ -212,85 +206,75 @@ workflow_QC <- function(dataPath,
 
   #### Prepare Data ####
 
-  prepared_data <- prepareDataSE(dataPath,
-                                 intensityColumns,
-                                 proteinNameColumn = proteinNameColumn,
-                                 sampleInfoPath = sampleInfoPath,
-                                 sampleNameColumn = sampleNameColumn,
-                                 doLogTrans = doLogTrans,
-                                 logBase = logBase,
-                                 normMethod = normMethod,
-                                 ltsQuantile = ltsQuantile,
-
-                                 fileType = fileType,
-                                 sep = sep,
-                                 dec = dec,
-                                 header = header,
-                                 sheet = sheet,
-                                 zeroToNA = zeroToNA,
-                                 NAStrings = NAStrings,
-                                 verbose = verbose)
+  prepared_data <- prepareData(data_path = data_path,
+                               filetype = filetype,
+                               sep = sep,
+                               dec = dec,
+                               header = header,
+                               sheet = sheet,
+                               intensity_columns = intensity_columns,
+                               na_strings = na_strings, zero_to_NA = zero_to_NA,
+                               do_log_transformation = do_log_transformation, log_base = log_base,
+                               use_groups = use_groups, group_colours = group_colours,
+                               normalization = normalization_method, lts_quantile = lts_quantile)
 
 
-  # TODO: how to transform SE in a data.frame and export?
+  #mess <- paste0(mess, prepared_data[["message"]])
 
-  # if (output_type == "xlsx") {
-  #   openxlsx::write.xlsx(x = cbind(prepared_data$ID, prepared_data$D), file = file.path(output_path, paste0("D_norm", suffix, ".xlsx")),
-  #                        rowNames = FALSE, overwrite = TRUE, keepNA = TRUE, na.string = na_out)
-  # }
-  # if (output_type == "csv") {
-  #   utils::write.csv(x = cbind(prepared_data$ID, prepared_data$D), file = file.path(output_path, paste0("D_norm", suffix, ".csv")),
-  #                    row.names = FALSE, na = na_out)
-  # }
-  # if (output_type == "tsv") {
-  #   utils::write.table(x = cbind(prepared_data$ID, prepared_data$D), file = file.path(output_path, paste0("D_norm", suffix, ".tsv")),
-  #                      row.names = FALSE, sep = "\t", na = na_out)
-  # }
+  group <- prepared_data$group
+
+  #utils::write.csv(x = prepared_data$ID, file = file.path(output_path, paste0("ID", suffix, ".csv")), row.names = FALSE)
+  #utils::write.csv(x = prepared_data$D, file = file.path(output_path, paste0("D_norm_wide", suffix, ".csv")), row.names = FALSE)
+  #utils::write.csv(x = prepared_data$D_long, file = file.path(output_path, paste0("D_norm_long", suffix, ".csv")), row.names = FALSE)
 
 
-  # prepare group colours
-  group <- summarizedExperiment::colData(prepared_data$SE)[, groupColumn]
-  nr_groups <- length(levels(group))
-  if (is.null(group_colours) & nr_groups >= 1) group_colours <- scales::hue_pal()(nr_groups)
+  if (output_type == "xlsx") {
+    openxlsx::write.xlsx(x = cbind(prepared_data$ID, prepared_data$D), file = file.path(output_path, paste0("D_norm", suffix, ".xlsx")),
+                         rowNames = FALSE, overwrite = TRUE, keepNA = TRUE, na.string = na_out)
+  }
+  if (output_type == "csv") {
+    utils::write.csv(x = cbind(prepared_data$ID, prepared_data$D), file = file.path(output_path, paste0("D_norm", suffix, ".csv")),
+                     row.names = FALSE, na = na_out)
+  }
+  if (output_type == "tsv") {
+    utils::write.table(x = cbind(prepared_data$ID, prepared_data$D), file = file.path(output_path, paste0("D_norm", suffix, ".tsv")),
+                       row.names = FALSE, sep = "\t", na = na_out)
+  }
 
 
   #### Calculate Valid Value Plot ####
-  vv_plot <- ValidValuePlot(D_long = prepared_data$D_long,
-                                 groupColumn = groupColumn,
-                                 group_colours = group_colours,
+
+  vv_plot_data <- ValidValuePlot(D_long = prepared_data[["D_long"]],
+                                 use_groups = use_groups, groupvar_name = groupvar_name, group_colours = group_colours,
                                  base_size = base_size)
 
-  #### TODO: reorder valid values table to stay in the same order as the original data ####
-  #cnames <- colnames(prepared_data$D)
-  #vv_plot_data$table$name <- factor(vv_plot_data$table$name, levels = cnames)
-  #vv_plot_data$table <- vv_plot_data$table[order(vv_plot_data$table$name),]
+  #### reorder valid values table to stay in the same order as the original data ####
+  cnames <- colnames(prepared_data$D)
+  vv_plot_data$table$name <- factor(vv_plot_data$table$name, levels = cnames)
+  vv_plot_data$table <- vv_plot_data$table[order(vv_plot_data$table$name),]
 
-  ggplot2::ggsave(file.path(output_path, paste0("valid_value_plot", suffix, ".", plot_device)), plot = vv_plot$plot,
+  ggplot2::ggsave(file.path(output_path, paste0("valid_value_plot", suffix, ".", plot_device)), plot = vv_plot_data[["plot"]],
                   device = plot_device, height = plot_height_BP_VV, width = plot_width_BP_VV, dpi = plot_dpi, units = "cm")
-  utils::write.csv(x = vv_plot$table, file = file.path(output_path, paste0("D_validvalues", suffix, ".csv")), row.names = FALSE)
+  utils::write.csv(x = vv_plot_data$table, file = file.path(output_path, paste0("D_validvalues", suffix, ".csv")), row.names = FALSE)
 
 
 
   #### Calculate Boxlots ####
 
-  boxplots <- Boxplots(D_long = prepared_data[["D_long"]],
-                           groupColumn = groupColumn,
-                           group_colours = group_colours,
+  boxplot_data <- Boxplots(D_long = prepared_data[["D_long"]],
+                           do_log_transformation = FALSE, log_base = log_base,
+                           use_groups = use_groups, groupvar_name = groupvar_name, group_colours = group_colours,
                            base_size = base_size, method = boxplot_method, lwd = 0.5)
 
-  ggplot2::ggsave(file.path(output_path, paste0("boxplot", suffix, ".", plot_device)), plot = boxplots,
+  ggplot2::ggsave(file.path(output_path, paste0("boxplot", suffix, ".", plot_device)), plot = boxplot_data[["plot"]],
                   device = plot_device, height = plot_height_BP_VV, width = plot_width_BP_VV, dpi = plot_dpi, units = "cm")
-
-
-
 
 
   #### Calculate MA Plot ####
 
-
-
   if (generate_MAplots) {
-    ma_data <- MA_Plots(D = prepared_data$SE,
+    ma_data <- MA_Plots(D = prepared_data[["D"]],
+                        do_log_transformation = FALSE,
                         output_path = output_path, suffix = suffix,
                         labels = 1:ncol(prepared_data[["D"]]), labels2 = colnames(prepared_data[["D"]]),
                         maxPlots = MA_maxPlots, alpha = MA_alpha,

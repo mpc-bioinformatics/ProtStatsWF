@@ -2,14 +2,9 @@
 #'
 #' @param D_long                  \strong{data.frame} \cr
 #'                                The data set given in long format.
-#' @param do_log_transformation   \strong{logical} \cr
-#'                                If \code{TRUE}, the data is log-transformed
-#' @param log_base                \strong{numeric} \cr
-#'                                The base used, if data is log-transformed.
 #' @param method                  \strong{character} \cr
 #'                                The method used. Options are "boxplot" and "violinplot".
-#' @param use_groups              \strong{logical} \cr
-#'                                If \code{TRUE} data will be plotted in groups.
+#' @param groupColumn              \strong{logical} \cr
 #' @param groupvar_name           \strong{character} \cr
 #'                                The name for the group variable.
 #' @param group_colours           \strong{character vector} \cr
@@ -35,81 +30,44 @@
 #'
 
 Boxplots <- function(D_long,
-                     do_log_transformation = FALSE,
-                     log_base = 2,
                      method = "boxplot",
-                     use_groups = NULL,
-                     groupvar_name = "Group",
+                     groupColumn = NULL,
                      group_colours = NULL,
                      base_size = 15,
                      lwd = 0.5,
-                     outlier_size = 1){
+                     outlier_size = 1) {
 
-  mess <- ""
+  # select only relevant columns
+  D_long <- dplyr::select(D_long, c(".feature", ".sample", "intensity_norm", group = groupColumn))
 
-  if (is.null(use_groups)) {
-    if (is.na(D_long$group[1])) {
-      use_groups <- FALSE
-    }
-    else{use_groups <- TRUE}
-  }
-  else{
-    if (use_groups && is.na(D_long$group[1])) {
-      use_groups <- FALSE
-    }
-  }
+  x_axis <- sort(unique(D_long$.sample)) # save the different states for later
+  D_long <- D_long[!is.na(D_long$intensity_norm),] # remove NA values
 
 
-  # log-transform data if necessary
-  if (do_log_transformation) {
-    D_long$value <- log(D_long$value, base = log_base)
-  }
-
-
-  x_axis <- sort(unique(D_long$name)) # save the different states for later
-  D_long <- D_long[!is.na(D_long$value),] # remove NA values
-
-
-  name <- value <- group <- NULL
-  if (use_groups) {
-   pl_boxplot <- ggplot2::ggplot(D_long, ggplot2::aes(x = name, y = value, fill = group)) +
-     ggplot2::labs(fill = groupvar_name)
-     ggplot2::labs(fill = groupvar_name)
+  .sample <- intensity_norm <- group <- NULL
+  if (!is.null(groupColumn)) {
+   pl_boxplot <- ggplot2::ggplot(data = D_long, mapping = ggplot2::aes(x = .sample, y = intensity_norm, fill = group)) +
+     ggplot2::labs(fill = groupColumn)
     if (!is.null(group_colours)) pl_boxplot <- pl_boxplot + ggplot2::scale_fill_manual(values = group_colours)
-    mess <- paste0(mess, "with groups. \n")
   } else {
-    pl_boxplot <- ggplot2::ggplot(D_long, ggplot2::aes(x = name, y = value))
-    mess <- paste0(mess, "without groups. \n")
+    pl_boxplot <- ggplot2::ggplot(data = D_long, mapping = ggplot2::aes(x = .sample, y = intensity_norm))
   }
-
-
 
 
   pl_boxplot <- pl_boxplot +
     ggplot2::theme_bw(base_size = base_size) +
-    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, vjust = 1, hjust=1)) +
-    ggplot2::ylab("Log intensity") + ggplot2::xlab("Sample") +
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, vjust = 1, hjust = 1)) +
     ggplot2::ylab("Log intensity") + ggplot2::xlab("Sample") +
     ggplot2::scale_x_discrete(limits = x_axis, drop = FALSE, na.translate = TRUE)
 
 
-
-
-  if (method == "violinplot"){
+  if (method == "violinplot") {
     pl_boxplot <- pl_boxplot + ggplot2::geom_violin()
-    mess <- paste0("Violin Plot generated ", mess)
   }
-
-
   if (method == "boxplot") {
     pl_boxplot <- pl_boxplot + ggplot2::geom_boxplot(linewidth = lwd, outlier.size = outlier_size)
-    mess <- paste0("Boxplot generated ", mess)
   }
 
-
-  message(mess)
-
-
-  return(list("plot" = pl_boxplot, "message" = mess))
+  return(pl_boxplot)
 }
 
