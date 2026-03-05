@@ -246,7 +246,7 @@ ANOVA_repeatedMeasurements_single_row <- function(x,
   nr_groups <- length(levels(group))
   groups <- factor(levels(group), levels = levels(group))
 
-  h <- 2 + nr_groups + 2*choose(nr_groups, 2)
+  h <- 2 + 3*choose(nr_groups, 2)
 
   comparisons <- gtools::combinations(n = nr_groups, r = 2)
   comparisons_char <- matrix(data = NA_character_, nrow = nrow(comparisons), ncol = ncol(comparisons))
