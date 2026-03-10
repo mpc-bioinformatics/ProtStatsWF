@@ -101,12 +101,12 @@ MA_Plot_single <- function(sample_1, sample_2,
 #'
 
 MA_Plots <- function(D,
-                    output_path = "", suffix = "",
+                    output_path = NULL, suffix = "",
                     labels = 1:ncol(D), labels2 = colnames(D),
                     maxPlots = 5000,
                     alpha = FALSE,
                     plot_height = 15, plot_width = 15,
-                    sampling = 1,
+                    sampling = 1, verbose = TRUE,
                     ...) {
 
 
@@ -117,12 +117,15 @@ MA_Plots <- function(D,
     message("Number of MA-Plots (", number_plots, ") is higher than maxPlots (", maxPlots, ").\nPlease increase maxPlots to plot all MA-plots.")
   }
 
+  ## TODO: disable progress bar is verbose = FALSE
   num <- 0
   pb <- utils::txtProgressBar(min = 0,max = number_plots,char = "#",style = 3)
 
-  filename <- paste0("MA_Plots", suffix, ".pdf")
-  grDevices::pdf(file.path(output_path, filename), height = plot_height/2.54, width = plot_width/2.54)
-
+  if (!is.null(output_path)) {
+    filename <- paste0("MA_Plots", suffix, ".pdf")
+    grDevices::pdf(file.path(output_path, filename), height = plot_height/2.54, width = plot_width/2.54)
+  }
+  
   for(i in 1:(ncol(D)-1)) {
     for (j in (i + 1):ncol(D)) {
 
@@ -145,13 +148,14 @@ MA_Plots <- function(D,
     }
   }
 
-  grDevices::dev.off()
+  if (!is.null(output_path)) {
+    grDevices::dev.off()
+  }
   close(pb)
-  mess <- paste0(mess, number_plots, " MA plots generated. \n")
 
-  message(mess)
+  if (verbose) message(number_plots, " MA plots generated.")
 
-  return("message" = mess)
+  return(invisible(NULL))
 }
 
 

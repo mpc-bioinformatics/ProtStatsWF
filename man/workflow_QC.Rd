@@ -176,9 +176,6 @@ The method of normalization. Options are "nonorm" (no normalization), "median", 
 \item{lts_quantile}{\strong{numeric} \cr
 The quantile for the lts normalization if \code{normalization = "lts"}.}
 
-\item{use_groups}{\strong{logical} \cr
-If \code{TRUE}, group information encoded in the column names is used.}
-
 \item{na_strings}{\strong{character} \cr
 A vector containing the symbols to be recognized as missing values (with the exception of 0).}
 

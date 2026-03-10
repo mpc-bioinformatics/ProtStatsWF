@@ -30,9 +30,6 @@
 #'                               The method of normalization. Options are "nonorm" (no normalization), "median", "loess", "quantile" or "lts" normalization.
 #' @param lts_quantile           \strong{numeric} \cr
 #'                               The quantile for the lts normalization if \code{normalization = "lts"}.
-#' @param use_groups             \strong{logical} \cr
-#'                               If \code{TRUE}, group information encoded in the column names is used.
-#'
 # additional parameters
 #' @param na_strings             \strong{character} \cr
 #'                               A vector containing the symbols to be recognized as missing values (with the exception of 0).
@@ -279,7 +276,9 @@ workflow_QC <- function(dataPath,
                         output_path = output_path, suffix = suffix,
                         labels = 1:ncol(prepared_data[["D"]]), labels2 = colnames(prepared_data[["D"]]),
                         maxPlots = MA_maxPlots, alpha = MA_alpha,
-                        plot_height = plot_height_PCA_MA, plot_width = plot_width_PCA_MA, sampling = MA_sampling)
+                        plot_height = plot_height_PCA_MA, 
+                        plot_width = plot_width_PCA_MA, 
+                        sampling = MA_sampling, verbose = verbose)
   }
 
 
