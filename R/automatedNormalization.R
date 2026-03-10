@@ -20,7 +20,8 @@ automatedNormalization <- function(DATA,
                                    method = "median",
                                    is_log_transformed = TRUE,
                                    log_base = 2,
-                                   lts.quantile = 0.8){
+                                   lts.quantile = 0.8, 
+                                   verbose = TRUE) {
 
   if(method == "loess" | method == "quantile" | method == "median"){
 
@@ -40,7 +41,7 @@ automatedNormalization <- function(DATA,
     DATA_norm <- do.call(fun, args)
     DATA_norm <- as.data.frame(DATA_norm)
 
-    message("Data successfully ", method ," normalized.")
+    if (verbose) message("Data successfully ", method ," normalized.")
   }
 
   if (method == "lts") {
@@ -53,12 +54,12 @@ automatedNormalization <- function(DATA,
     DATA_norm <- vsn::vsn2(as.matrix(DATA), lts.quantile = lts.quantile)
     DATA_norm <- DATA_norm@hx
     DATA_norm <- as.data.frame(DATA_norm)
-    message("Data successfully lts normalized with lts.quantile = ", lts.quantile, ".")
+    if (verbose) message("Data successfully lts normalized with lts.quantile = ", lts.quantile, ".")
   }
 
   if (method == "nonorm") {
     DATA_norm <- DATA
-    message("No normalization.")
+    if (verbose) message("No normalization.")
   }
 
   return(DATA_norm)

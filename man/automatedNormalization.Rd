@@ -9,7 +9,8 @@ automatedNormalization(
   method = "median",
   is_log_transformed = TRUE,
   log_base = 2,
-  lts.quantile = 0.8
+  lts.quantile = 0.8,
+  verbose = TRUE
 )
 }
 \arguments{

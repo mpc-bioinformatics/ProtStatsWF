@@ -6,11 +6,8 @@
 \usage{
 Boxplots(
   D_long,
-  do_log_transformation = FALSE,
-  log_base = 2,
   method = "boxplot",
-  use_groups = NULL,
-  groupvar_name = "Group",
+  groupColumn = NULL,
   group_colours = NULL,
   base_size = 15,
   lwd = 0.5,
@@ -21,20 +18,10 @@ Boxplots(
 \item{D_long}{\strong{data.frame} \cr
 The data set given in long format.}
 
-\item{do_log_transformation}{\strong{logical} \cr
-If \code{TRUE}, the data is log-transformed}
-
-\item{log_base}{\strong{numeric} \cr
-The base used, if data is log-transformed.}
-
 \item{method}{\strong{character} \cr
 The method used. Options are "boxplot" and "violinplot".}
 
-\item{use_groups}{\strong{logical} \cr
-If \code{TRUE} data will be plotted in groups.}
-
-\item{groupvar_name}{\strong{character} \cr
-The name for the group variable.}
+\item{groupColumn}{\strong{logical} \cr}
 
 \item{group_colours}{\strong{character vector} \cr
 The hex codes for the group colors.}
@@ -47,6 +34,9 @@ The line width of the boxplot.}
 
 \item{outlier_size}{\strong{numeric} \cr
 The size of the outliers.}
+
+\item{groupvar_name}{\strong{character} \cr
+The name for the group variable.}
 }
 \value{
 boxplots and messages

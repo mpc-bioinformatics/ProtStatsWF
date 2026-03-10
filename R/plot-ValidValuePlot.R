@@ -13,14 +13,14 @@
 #'
 #' @examples
 #'
-#' path <- system.file("extdata", "exampleQC.xlsx", package = "ProtStatsWF")
-#' columns <- 3:11
+#' #path <- system.file("extdata", "exampleQC.xlsx", package = "ProtStatsWF")
+#' #columns <- 3:11
 #'
-#' prepared_data <- prepareData(data_path = path, intensity_columns = columns)
+#' #prepared_data <- prepareData(data_path = path, intensity_columns = columns)
 #'
-#' vvplot <- ValidValuePlot(D_long = prepared_data[["D_long"]])
+#' #vvplot <- ValidValuePlot(D_long = prepared_data[["D_long"]])
 #'
-#' plot(vvplot[["plot"]])
+#' #plot(vvplot[["plot"]])
 #'
 #'
 #' @importFrom magrittr %>%
@@ -32,16 +32,19 @@ ValidValuePlot <- function(D_long,
                            base_size = 15) {
 
   # select only relevant columns
-  D_long <- dplyr::select(D_long, c(".feature", ".sample", "intensity_norm", group = groupColumn))
+  D_long_sel <- dplyr::select(D_long, c(".feature", ".sample", "intensity_norm"))
+  D_long_sel <- cbind(D_long_sel, group = D_long[, groupColumn])
+  
+  sample_levels <- levels(D_long_sel$.sample)
 
-
-  #### calculate valid value table and save it ####
-
+  #### calculate valid value table ####
   .sample <- group <- intensity_norm <- nrvalid <- NULL  # initialize variables
   valid_value_table <- D_long %>%
     dplyr::group_by(.sample, group) %>%
     dplyr::summarize(nrvalid = sum(!is.na(intensity_norm)), meanvalid = mean(!is.na(intensity_norm)), .groups = 'drop')
-
+  valid_value_table$.sample <- factor(valid_value_table$.sample, levels = sample_levels)
+  
+  valid_value_table2 <<- valid_value_table
   ### add column with sample number
   #valid_value_table$sample <- limma::strsplit2(valid_value_table$name, "_")[,2]
 

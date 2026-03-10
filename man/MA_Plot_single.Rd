@@ -7,7 +7,6 @@
 MA_Plot_single(
   sample_1,
   sample_2,
-  do_log_transformation = FALSE,
   alpha = FALSE,
   point_color = "black",
   sampling = 1,
@@ -21,9 +20,6 @@ The data of the first sample.}
 \item{sample_2}{\strong{numeric vector} \cr
 The data of the second sample.}
 
-\item{do_log_transformation}{\strong{logical} \cr
-If \code{TRUE}, the data will be log-transformed.}
-
 \item{alpha}{\strong{logical} \cr
 If \code{TRUE}, the data points will be transparent.}
 
@@ -34,6 +30,9 @@ The color of the data points.}
 The sampling rate. Useful to sample part of the data set for data sets on peptide/feature level with many data points.}
 
 \item{...}{Additional arguments for affy::ma.plot.}
+
+\item{do_log_transformation}{\strong{logical} \cr
+If \code{TRUE}, the data will be log-transformed.}
 }
 \value{
 Generates the MA plot for two samples.

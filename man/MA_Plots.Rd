@@ -6,7 +6,6 @@
 \usage{
 MA_Plots(
   D,
-  do_log_transformation = FALSE,
   output_path = "",
   suffix = "",
   labels = 1:ncol(D),
@@ -22,9 +21,6 @@ MA_Plots(
 \arguments{
 \item{D}{\strong{data.frame} \cr
 The data set containing intensities of the sample.}
-
-\item{do_log_transformation}{\strong{logical} \cr
-If \code{TRUE}, the data will be log-transformed.}
 
 \item{output_path}{\strong{character} \cr
 The path to a folder for the output.}

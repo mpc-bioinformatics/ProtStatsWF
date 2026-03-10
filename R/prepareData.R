@@ -40,7 +40,7 @@ prepareDataSE <- function(dataPath,
                           intensityColumns,
                           proteinNameColumn = "Protein",
                           sampleInfoPath = NULL,
-                          sampleNameColumn = "sampleName",
+                          sampleNameColumn = "SampleName",
                           doLogTrans = TRUE,
                           logBase = 2,
                           normMethod = "loess",
@@ -81,31 +81,37 @@ prepareDataSE <- function(dataPath,
   ## data preprocessing (NAs, log, normalization)
   if (zeroToNA) {
     D[D == 0] <- NA
-    message("Zeros set to NA.")
+    if(verbose) message("Zeros set to NA.")
   }
 
   if (doLogTrans) {
     D <- log(D, base = logBase)
-    message("Log-transformation with base ", logBase, ".")
+    if (verbose) message("Log-transformation with base ", logBase, ".")
   }
 
   D_norm <- automatedNormalization(DATA = D, method = normMethod,
                               is_log_transformed = doLogTrans,
-                              log_base = logBase, lts.quantile = ltsQuantile)
+                              log_base = logBase, lts.quantile = ltsQuantile, 
+                              verbose = verbose)
 
+  ### TODO: check if all samples can be found in sampleInfo
+  ### TODO: remove additional samples from sampleInfo
+  
 
   ## read in sample information file, if given
   if (!is.null(sampleInfoPath)) {
     sampleInfo <- openxlsx::read.xlsx(sampleInfoPath, colNames = TRUE)
-    ind <- match(colnames(D), sampleInfo[, sampleNameColumn])
-    sampleInfo <- sampleInfo[ind, ] # sort sampleInfo like the columns of D
-    message("Sample information file read in.")
+    ind <- match(sampleInfo[, sampleNameColumn], colnames(D))
+    D_norm <- D_norm[,ind] # sort columns of D like sampleInfo
+    D <- D[, ind]
+    if (verbose) message("Sample information file read in.")
   } else {
-    sampleInfo <- NULL
-    message("No sample information file given.")
+    sampleInfo <- data.frame(SampleName = colnames(D))
+    rownames(sampleInfo) <- colnames(D)
+    if(verbose) message("No sample information file given.")
   }
 
- # SI <<- sampleInfo
+  SI <<- sampleInfo
 
   #if (normMethod != "nonorm") {
     assays <- list(intensity_norm = as.matrix(D_norm), intensity = as.matrix(D))
@@ -114,20 +120,29 @@ prepareDataSE <- function(dataPath,
   #}
 
   # TODO: include metadata, e.g. about normalization method?
-  if (is.null(sampleInfo)) {
+  #if (is.null(sampleInfo)) {
     SE <- SummarizedExperiment::SummarizedExperiment(assays = assays,
-                                                     rowData = id)
-  } else {
-    SE <- SummarizedExperiment::SummarizedExperiment(assays = assays,
-                                                     colData = sampleInfo,
-                                                     rowData = id)
-  }
+                                                     rowData = id, 
+                                                     colData = sampleInfo)
+  #} else {
+  #  SE <- SummarizedExperiment::SummarizedExperiment(assays = assays,
+  #                                                   colData = sampleInfo,
+  #                                                   rowData = id)
+  #}
 
   ### long format:
   # TODO: this is a generic function from tidySummarizedExperiments package
-  D_long <- tidyr::pivot_longer(SE, cols = proteinNameColumn)
+  suppressMessages({
+  D_long <- tidySummarizedExperiment:::pivot_longer.SummarizedExperiment(SE, 
+                  cols = proteinNameColumn)
+  })
   D_long <- dplyr::select(D_long, -c("name", "value"))
+  # bring factor levels in same order as in sampleInfo
+  D_long$.sample <- factor(D_long$.sample, levels = sampleInfo[, sampleNameColumn])
 
+  #print(sampleInfo[, sampleNameColumn])
+  #print(levels(D_long$.sample))
+  
   return(list(SE = SE, D_long = D_long))
 }
 

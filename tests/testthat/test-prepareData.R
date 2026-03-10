@@ -1,16 +1,37 @@
 
 test_that("Data preparation with groups (median normalization) for test_file_1", {
-  prepData <- prepareData(data_path = system.file("extdata", "test_file_1.xlsx", package = "ProtStatsWF"), intensity_columns = 3:11, use_groups = TRUE, normalization = "median")
+  dataPath <- system.file("extdata", "test_file_1.xlsx", package = "ProtStatsWF")
+  sampleInfoPath <- system.file("extdata", "test_file_1_sampleInfo.xlsx", package = "ProtStatsWF")
+
+  prepData <- prepareDataSE(dataPath = dataPath, 
+                          intensityColumns = 3:11,
+                          proteinNameColumn = "peptide",
+                          normMethod = "median", 
+                          sampleInfoPath = sampleInfoPath, 
+                          verbose = FALSE)
   
-  expect_snapshot(prepData[["D"]])
-  expect_snapshot(prepData[["ID"]])
-  expect_snapshot(prepData[["D_long"]])
+  expect_snapshot(prepData$SE)
+  expect_snapshot(SummarizedExperiment::colData(prepData$SE))
+  expect_snapshot(SummarizedExperiment::rowData(prepData$SE))
+  expect_snapshot(SummarizedExperiment::assays(prepData$SE)$intensity)
+  expect_snapshot(SummarizedExperiment::assays(prepData$SE)$intensity_norm)
+  expect_snapshot(print(prepData$D_long, n = 200))
 })
 
 test_that("Data preparation without groups (loess normalization) for test_file_1", {
-  prepData <- prepareData(data_path = system.file("extdata", "test_file_1.xlsx", package = "ProtStatsWF"), intensity_columns = 3:11, use_groups = FALSE, normalization = "loess")
+  dataPath <- system.file("extdata", "test_file_1.xlsx", package = "ProtStatsWF")
+ 
+  prepData <- prepareDataSE(dataPath = dataPath, 
+                          intensityColumns = 3:11, 
+                          proteinNameColumn = "peptide",
+                          normMethod = "loess",
+                          sampleInfoPath = NULL, 
+                          verbose = FALSE)
   
-  expect_snapshot(prepData[["D"]])
-  expect_snapshot(prepData[["ID"]])
-  expect_snapshot(prepData[["D_long"]])
+  expect_snapshot(prepData$SE)
+  expect_snapshot(SummarizedExperiment::colData(prepData$SE))
+  expect_snapshot(SummarizedExperiment::rowData(prepData$SE))
+  expect_snapshot(SummarizedExperiment::assays(prepData$SE)$intensity)
+  expect_snapshot(SummarizedExperiment::assays(prepData$SE)$intensity_norm)
+  expect_snapshot(print(prepData$D_long, n = 200))
 })

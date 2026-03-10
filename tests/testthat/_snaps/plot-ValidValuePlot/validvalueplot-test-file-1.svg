@@ -81,7 +81,7 @@
 <text x='334.96' y='565.41' text-anchor='middle' style='font-size: 15.00px; font-family: sans;' textLength='50.87px' lengthAdjust='spacingAndGlyphs'>Sample</text>
 <text transform='translate(17.79,267.77) rotate(-90)' text-anchor='middle' style='font-size: 15.00px; font-family: sans;' textLength='152.60px' lengthAdjust='spacingAndGlyphs'>Number of valid values</text>
 <rect x='640.14' y='223.92' width='72.39' height='87.69' style='stroke-width: 1.45; stroke: none; fill: #FFFFFF;' />
-<text x='647.61' y='243.28' style='font-size: 15.00px; font-family: sans;' textLength='41.70px' lengthAdjust='spacingAndGlyphs'>Group</text>
+<text x='647.61' y='243.28' style='font-size: 15.00px; font-family: sans;' textLength='38.37px' lengthAdjust='spacingAndGlyphs'>group</text>
 <rect x='647.61' y='252.30' width='17.28' height='17.28' style='stroke-width: 1.45; stroke: none; fill: #FFFFFF;' />
 <rect x='648.58' y='253.27' width='15.35' height='15.35' style='stroke-width: 1.45; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #F8766D;' />
 <rect x='647.61' y='269.58' width='17.28' height='17.28' style='stroke-width: 1.45; stroke: none; fill: #FFFFFF;' />

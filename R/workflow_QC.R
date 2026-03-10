@@ -231,28 +231,14 @@ workflow_QC <- function(dataPath,
                                  NAStrings = NAStrings,
                                  verbose = verbose)
 
-
-  # TODO: how to transform SE in a data.frame and export?
-
-  # if (output_type == "xlsx") {
-  #   openxlsx::write.xlsx(x = cbind(prepared_data$ID, prepared_data$D), file = file.path(output_path, paste0("D_norm", suffix, ".xlsx")),
-  #                        rowNames = FALSE, overwrite = TRUE, keepNA = TRUE, na.string = na_out)
-  # }
-  # if (output_type == "csv") {
-  #   utils::write.csv(x = cbind(prepared_data$ID, prepared_data$D), file = file.path(output_path, paste0("D_norm", suffix, ".csv")),
-  #                    row.names = FALSE, na = na_out)
-  # }
-  # if (output_type == "tsv") {
-  #   utils::write.table(x = cbind(prepared_data$ID, prepared_data$D), file = file.path(output_path, paste0("D_norm", suffix, ".tsv")),
-  #                      row.names = FALSE, sep = "\t", na = na_out)
-  # }
-
-
+  if (output_type == "xlsx") {
+    exportSE(prepared_data$SE, file = file.path(output_path, paste0("D_norm", suffix, ".xlsx")))
+  }
+           
   # prepare group colours
   group <- summarizedExperiment::colData(prepared_data$SE)[, groupColumn]
   nr_groups <- length(levels(group))
   if (is.null(group_colours) & nr_groups >= 1) group_colours <- scales::hue_pal()(nr_groups)
-
 
   #### Calculate Valid Value Plot ####
   vv_plot <- ValidValuePlot(D_long = prepared_data$D_long,

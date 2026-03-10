@@ -9,7 +9,7 @@ prepareDataSE(
   intensityColumns,
   proteinNameColumn = "Protein",
   sampleInfoPath = NULL,
-  sampleNameColumn = "sampleName",
+  sampleNameColumn = "SampleName",
   doLogTrans = TRUE,
   logBase = 2,
   normMethod = "loess",
