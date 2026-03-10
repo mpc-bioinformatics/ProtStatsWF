@@ -1,3 +1,92 @@
+#' Boxplots showing the distribution of intensities over all samples
+#'
+#' @param D_long                  \strong{data.frame} \cr
+#'                                The data set given in long format.
+#' @param method                  \strong{character} \cr
+#'                                The method used. Options are "boxplot" and "violinplot".
+#' @param groupColumn              \strong{logical} \cr
+#' @param groupvar_name           \strong{character} \cr
+#'                                The name for the group variable.
+#' @param group_colours           \strong{character vector} \cr
+#'                                The hex codes for the group colors.
+#' @param base_size               \strong{numeric} \cr
+#'                                The base size of the font.
+#' @param lwd                     \strong{numeric} \cr
+#'                                The line width of the boxplot.
+#' @param outlier_size            \strong{numeric} \cr
+#'                                The size of the outliers.
+#'
+#' @return boxplots and messages
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' prepared_data <- prepareData(...)
+#'
+#'
+#' boxplot <- Boxplots(D_long = prepared_data[["D_long"]])
+#' }
+#'
+#'
+
+Boxplots <- function(D_long,
+                     method = "boxplot",
+                     groupColumn = NULL,
+                     group_colours = NULL,
+                     base_size = 15,
+                     lwd = 0.5,
+                     outlier_size = 1) {
+
+  # select only relevant columns
+  D_long <- dplyr::select(D_long, c(".feature", ".sample", "intensity_norm", group = groupColumn))
+
+  x_axis <- sort(unique(D_long$.sample)) # save the different states for later
+  D_long <- D_long[!is.na(D_long$intensity_norm),] # remove NA values
+
+
+  .sample <- intensity_norm <- group <- NULL
+  if (!is.null(groupColumn)) {
+   pl_boxplot <- ggplot2::ggplot(data = D_long, mapping = ggplot2::aes(x = .sample, y = intensity_norm, fill = group)) +
+     ggplot2::labs(fill = groupColumn)
+    if (!is.null(group_colours)) pl_boxplot <- pl_boxplot + ggplot2::scale_fill_manual(values = group_colours)
+  } else {
+    pl_boxplot <- ggplot2::ggplot(data = D_long, mapping = ggplot2::aes(x = .sample, y = intensity_norm))
+  }
+
+
+  pl_boxplot <- pl_boxplot +
+    ggplot2::theme_bw(base_size = base_size) +
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, vjust = 1, hjust = 1)) +
+    ggplot2::ylab("Log intensity") + ggplot2::xlab("Sample") +
+    ggplot2::scale_x_discrete(limits = x_axis, drop = FALSE, na.translate = TRUE)
+
+
+  if (method == "violinplot") {
+    pl_boxplot <- pl_boxplot + ggplot2::geom_violin()
+  }
+  if (method == "boxplot") {
+    pl_boxplot <- pl_boxplot + ggplot2::geom_boxplot(linewidth = lwd, outlier.size = outlier_size)
+  }
+
+  return(pl_boxplot)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #' Boxplots for biomarker candidates including the data point (jitter).
 #'
@@ -50,23 +139,23 @@ Boxplots_candidates <- function(D,
                                 output_path,
                                 suffix = NULL,
                                 plot_NA_level = FALSE) {
-
-
+  
+  
   if (plot_device == "pdf") {
     grDevices::pdf(paste0(output_path, "/boxplots_candidates", suffix, ".pdf"),
-        height = plot_height/2.54,
-        width = plot_width/2.54)
+                   height = plot_height/2.54,
+                   width = plot_width/2.54)
   }
-
+  
   pb <- pbapply::startpb(min = 0, max = nrow(D))
   for (i in c(1:nrow(D))) {
-
+    
     # prepare data for single protein
     data <- data.frame(value = unlist(D[i,]), group = group)
     if (log_data) {
       data$value <- log(data$value, log_base)
     }
-
+    
     if (!plot_NA_level) {
       data <- stats::na.omit(data)
       if (nrow(data) == 0) {
@@ -75,10 +164,10 @@ Boxplots_candidates <- function(D,
       }
     }
     data$group <- factor(data$group, levels = levels(group))
-
-
+    
+    
     value <- NULL # to silence notes while checking package
-
+    
     plot <- ggplot2::ggplot(data = data, ggplot2::aes(x = group, y = value, fill = group)) +
       ggplot2::geom_boxplot(outlier.shape = NA) +
       ggplot2::labs(title = protein.names[i]) +
@@ -87,15 +176,15 @@ Boxplots_candidates <- function(D,
       ggplot2::theme(legend.position = "bottom") +
       ggplot2::labs(fill = groupvar_name, y = "log2(intensity)", x = groupvar_name) +
       ggplot2::ggtitle(protein.names[i])
-
-
+    
+    
     if (is.null(group_colours)) {
       group_colours <- scales::hue_pal()(length(levels(group)))
     }
     names(group_colours) <- levels(data$group)
     plot <- plot + ggplot2::scale_fill_manual(values = group_colours, breaks = names(group_colours), drop = FALSE)
-
-
+    
+    
     if (plot_device == "png") {
       protein_names <- gsub("/", "_", protein.names[i])
       grDevices::png(paste0(output_path, "/boxplots_candidates", "_", protein_names, suffix, ".png"),
@@ -103,15 +192,16 @@ Boxplots_candidates <- function(D,
     }
     plot(plot)
     if (plot_device == "png") grDevices::dev.off()
-
-
+    
+    
     pbapply::setpb(pb, i)
   }
   invisible(NULL)
-
+  
   if (plot_device == "pdf") grDevices::dev.off()
-
+  
   return(invisible(NULL))
 }
+
 
 

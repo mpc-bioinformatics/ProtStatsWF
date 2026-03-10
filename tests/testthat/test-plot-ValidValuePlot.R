@@ -24,8 +24,8 @@ test_that("Regular ValidValue Plot for test_file_1", {
                             sampleInfoPath = sampleInfoPath2, 
                             verbose = FALSE)
   
-  pResult2 <- ValidValuePlot(D_long = prepData2$D_long)
+  pResult2 <- ValidValuePlot(D_long = prepData2$D_long, groupColumn = "group")
   expect_snapshot(pResult2$table)
-  vdiffr::expect_doppelganger("ValidValuePlot_test_file_2", pResult2$plot)
+  vdiffr::expect_doppelganger("ValidValuePlot_test_file_1_ordered", pResult2$plot)
 })
 

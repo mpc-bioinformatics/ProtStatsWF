@@ -246,26 +246,25 @@ workflow_QC <- function(dataPath,
                                  group_colours = group_colours,
                                  base_size = base_size)
 
-  #### TODO: reorder valid values table to stay in the same order as the original data ####
-  #cnames <- colnames(prepared_data$D)
-  #vv_plot_data$table$name <- factor(vv_plot_data$table$name, levels = cnames)
-  #vv_plot_data$table <- vv_plot_data$table[order(vv_plot_data$table$name),]
-
-  ggplot2::ggsave(file.path(output_path, paste0("valid_value_plot", suffix, ".", plot_device)), plot = vv_plot$plot,
-                  device = plot_device, height = plot_height_BP_VV, width = plot_width_BP_VV, dpi = plot_dpi, units = "cm")
-  utils::write.csv(x = vv_plot$table, file = file.path(output_path, paste0("D_validvalues", suffix, ".csv")), row.names = FALSE)
+  ggplot2::ggsave(file.path(output_path, paste0("valid_value_plot", suffix, ".", plot_device)), 
+                  plot = vv_plot$plot, device = plot_device, height = plot_height_BP_VV, 
+                  width = plot_width_BP_VV, dpi = plot_dpi, units = "cm")
+  utils::write.csv(x = vv_plot$table, file = file.path(output_path, 
+                    paste0("D_validvalues", suffix, ".csv")), row.names = FALSE)
 
 
 
   #### Calculate Boxlots ####
 
-  boxplots <- Boxplots(D_long = prepared_data[["D_long"]],
+  boxplots <- Boxplots(D_long = prepared_data$D_long,
                            groupColumn = groupColumn,
                            group_colours = group_colours,
-                           base_size = base_size, method = boxplot_method, lwd = 0.5)
+                           base_size = base_size, 
+                           method = boxplot_method, lwd = 0.5)
 
-  ggplot2::ggsave(file.path(output_path, paste0("boxplot", suffix, ".", plot_device)), plot = boxplots,
-                  device = plot_device, height = plot_height_BP_VV, width = plot_width_BP_VV, dpi = plot_dpi, units = "cm")
+  ggplot2::ggsave(file.path(output_path, paste0("boxplot", suffix, ".", plot_device)), 
+                  plot = boxplots, device = plot_device, height = plot_height_BP_VV, 
+                  width = plot_width_BP_VV, dpi = plot_dpi, units = "cm")
 
 
 
