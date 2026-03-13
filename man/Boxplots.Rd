@@ -34,9 +34,6 @@ The line width of the boxplot.}
 
 \item{outlier_size}{\strong{numeric} \cr
 The size of the outliers.}
-
-\item{groupvar_name}{\strong{character} \cr
-The name for the group variable.}
 }
 \value{
 boxplots and messages

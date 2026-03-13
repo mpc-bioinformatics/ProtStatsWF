@@ -7,17 +7,14 @@
 filter_PCA_data(SE, imputeMethod = "none", propNA = 0)
 }
 \arguments{
+\item{SE}{\strong{SummarizedExperiment object} \cr
+The data set containing intensities of the sample.}
+
 \item{imputeMethod}{\strong{character} \cr
 The imputation method. Options are "mean" or "median" or "none}
 
 \item{propNA}{\strong{numeric} \cr
 The proportion of allowed missing NAs for a protein, before it is discarded. It is set to 0 if imputeMethod is "none".}
-
-\item{D}{\strong{data.frame} \cr
-The data set containing intensities of the sample.}
-
-\item{id}{\strong{data.frame} \cr
-The corresponding ID columns for the parameter D e.g. containing further columns like protein or gene names}
 }
 \value{
 The filtered data.

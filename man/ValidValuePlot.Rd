@@ -15,6 +15,9 @@ ValidValuePlot(
 \item{D_long}{\strong{data.frame} \cr
 The data set given in long format.}
 
+\item{groupColumn}{\strong{character(1)} \cr
+Column used for colouring.}
+
 \item{group_colours}{\strong{character vector} \cr
 The hex codes for the group colors.}
 

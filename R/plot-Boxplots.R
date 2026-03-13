@@ -5,8 +5,6 @@
 #' @param method                  \strong{character} \cr
 #'                                The method used. Options are "boxplot" and "violinplot".
 #' @param groupColumn              \strong{logical} \cr
-#' @param groupvar_name           \strong{character} \cr
-#'                                The name for the group variable.
 #' @param group_colours           \strong{character vector} \cr
 #'                                The hex codes for the group colors.
 #' @param base_size               \strong{numeric} \cr

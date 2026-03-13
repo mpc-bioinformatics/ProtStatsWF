@@ -2,7 +2,8 @@
 #'
 #' @param D_long          \strong{data.frame} \cr
 #'                        The data set given in long format.
-#' @param groupColumn
+#' @param groupColumn     \strong{character(1)} \cr
+#'                        Column used for colouring.
 #' @param group_colours   \strong{character vector} \cr
 #'                        The hex codes for the group colors.
 #' @param base_size       \strong{numeric} \cr

@@ -1,10 +1,8 @@
 #' A method for filtering the data for PCA.
 #'
 #'
-#' @param D                \strong{data.frame} \cr
+#' @param SE                \strong{SummarizedExperiment object} \cr
 #'                         The data set containing intensities of the sample.
-#' @param id               \strong{data.frame} \cr
-#'                         The corresponding ID columns for the parameter D e.g. containing further columns like protein or gene names
 #' @param imputeMethod    \strong{character} \cr
 #'                         The imputation method. Options are "mean" or "median" or "none
 #' @param propNA           \strong{numeric} \cr

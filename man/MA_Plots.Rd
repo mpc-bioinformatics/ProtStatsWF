@@ -50,6 +50,8 @@ The width of the resulting MA plots.}
 \item{sampling}{\strong{numeric} \cr
 The sampling rate. Useful to sample part of the data set for data sets on peptide/feature level with many data points.}
 
+\item{verbose}{If TRUE, messages are printed out.}
+
 \item{...}{Additional arguments for affy::ma.plot.}
 }
 \value{

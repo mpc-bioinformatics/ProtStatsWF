@@ -10,6 +10,7 @@
 #'                             The base, in case the data was log-transformed.
 #' @param lts.quantile         \strong{numeric} \cr
 #'                             The quantile for the lts normalization.
+#' @param verbose If TRUE, messages are printed.
 #'
 #' @return The normalized data as well as a message.
 #' @export

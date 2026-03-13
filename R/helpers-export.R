@@ -17,7 +17,7 @@ exportSE <- function(SE, file) {
   
   wb <- openxlsx::createWorkbook()
   
-  cData <- colData(SE)
+  cData <- SummarizedExperiment::colData(SE)
   
   for (assay_name in SummarizedExperiment::assayNames(SE)) {
     openxlsx::addWorksheet(wb, assay_name)

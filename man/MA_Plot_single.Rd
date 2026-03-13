@@ -30,9 +30,6 @@ The color of the data points.}
 The sampling rate. Useful to sample part of the data set for data sets on peptide/feature level with many data points.}
 
 \item{...}{Additional arguments for affy::ma.plot.}
-
-\item{do_log_transformation}{\strong{logical} \cr
-If \code{TRUE}, the data will be log-transformed.}
 }
 \value{
 Generates the MA plot for two samples.

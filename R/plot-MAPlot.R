@@ -4,8 +4,6 @@
 #'                                The data of the first sample.
 #' @param sample_2                \strong{numeric vector} \cr
 #'                                The data of the second sample.
-#' @param do_log_transformation   \strong{logical} \cr
-#'                                If \code{TRUE}, the data will be log-transformed.
 #' @param alpha                   \strong{logical} \cr
 #'                                If \code{TRUE}, the data points will be transparent.
 #' @param point_color             \strong{character} \cr
@@ -85,6 +83,7 @@ MA_Plot_single <- function(sample_1, sample_2,
 #' @param sampling                \strong{numeric} \cr
 #'                                The sampling rate. Useful to sample part of the data set for data sets on peptide/feature level with many data points.
 #' @param ...                     Additional arguments for affy::ma.plot.
+#' @param verbose If TRUE, messages are printed out.
 #'
 #' @return A pdf file containing the MA plots for all sample combinations.
 #' @export

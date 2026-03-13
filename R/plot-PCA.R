@@ -1,17 +1,13 @@
 #' Calculate a PCA plot for proteomics data.
 #'
-#' @param D                \strong{data.frame} \cr
+#' @param SE               \strong{SummarizedExperiment object} \cr
 #'                         The data set containing intensities of the sample.
-#' @param id                \strong{data.frame} \cr
-#'                         The corresponding ID columns for the parameter D e.g. containing further columns like protein or gene names
-#' @param groupvar1        \strong{character vector} \cr
+#' @param groupForColour   \strong{character(1)} \cr
 #'                         The variable used for colors.
-#' @param groupvar2        \strong{character vector} \cr
+#' @param groupForShape    \strong{character(1)} \cr
 #'                         The variable used for shapes.
-#' @param impute           \strong{logical} \cr
-#'                         If \code{TRUE}, missing values will be imputed.
-#' @param impute_method    \strong{character} \cr
-#'                         The imputation method. Options are "mean" or "median".
+#' @param imputeMethod    \strong{character} \cr
+#'                         The imputation method. Options are "mean", "median" or "none.
 #' @param propNA           \strong{numeric} \cr
 #'                         The proportion of allowed missing NAs for a protein, before it is discarded.
 #' @param scale.           \strong{logical} \cr
@@ -43,6 +39,8 @@
 #' @param base_size        \strong{numeric} \cr
 #'                         The base size for the plot.
 #' @param ...              Additional arguments for ggplot2::plot.
+#' @param verbose          \strong{logical(1)} \cr
+#'                          If TRUE, messages are printed.
 #'
 #' @return The PCA plot for a proteomics sample.
 #' @export
@@ -79,7 +77,7 @@ PCA_Plot <- function(SE,
   if(nrow(SE) == 0) {
     if (verbose) message("All rows were filtered out. \n Try increasing the proportion of missing NAs allowed or imputing missing values.")
     return(list("plot" = NULL, "D_PCA_plot" = NULL,
-                "pca" = NULL, "message" = mess))
+                "pca" = NULL))
   }
   
   

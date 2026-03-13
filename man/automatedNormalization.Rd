@@ -28,6 +28,8 @@ The base, in case the data was log-transformed.}
 
 \item{lts.quantile}{\strong{numeric} \cr
 The quantile for the lts normalization.}
+
+\item{verbose}{If TRUE, messages are printed.}
 }
 \value{
 The normalized data as well as a message.

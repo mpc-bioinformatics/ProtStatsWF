@@ -29,6 +29,18 @@ PCA_Plot(
 )
 }
 \arguments{
+\item{SE}{\strong{SummarizedExperiment object} \cr
+The data set containing intensities of the sample.}
+
+\item{groupForColour}{\strong{character(1)} \cr
+The variable used for colors.}
+
+\item{groupForShape}{\strong{character(1)} \cr
+The variable used for shapes.}
+
+\item{imputeMethod}{\strong{character} \cr
+The imputation method. Options are "mean", "median" or "none.}
+
 \item{propNA}{\strong{numeric} \cr
 The proportion of allowed missing NAs for a protein, before it is discarded.}
 
@@ -74,25 +86,10 @@ The size of the data points.}
 \item{base_size}{\strong{numeric} \cr
 The base size for the plot.}
 
+\item{verbose}{\strong{logical(1)} \cr
+If TRUE, messages are printed.}
+
 \item{...}{Additional arguments for ggplot2::plot.}
-
-\item{D}{\strong{data.frame} \cr
-The data set containing intensities of the sample.}
-
-\item{id}{\strong{data.frame} \cr
-The corresponding ID columns for the parameter D e.g. containing further columns like protein or gene names}
-
-\item{groupvar1}{\strong{character vector} \cr
-The variable used for colors.}
-
-\item{groupvar2}{\strong{character vector} \cr
-The variable used for shapes.}
-
-\item{impute}{\strong{logical} \cr
-If \code{TRUE}, missing values will be imputed.}
-
-\item{impute_method}{\strong{character} \cr
-The imputation method. Options are "mean" or "median".}
 }
 \value{
 The PCA plot for a proteomics sample.
