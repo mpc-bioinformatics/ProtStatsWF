@@ -54,7 +54,8 @@ automatedNormalization <- function(DATA,
     DATA_norm <- vsn::vsn2(as.matrix(DATA), lts.quantile = lts.quantile)
     DATA_norm <- DATA_norm@hx
     DATA_norm <- as.data.frame(DATA_norm)
-    if (verbose) message("Data successfully lts normalized with lts.quantile = ", lts.quantile, ".")
+    if (verbose) message("Data successfully lts normalized with lts.quantile = ", 
+                         lts.quantile, ".")
   }
 
   if (method == "nonorm") {

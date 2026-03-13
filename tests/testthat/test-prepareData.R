@@ -1,6 +1,6 @@
 
 test_that("Data preparation with groups (median normalization) for test_file_1", {
-  dataPath <- system.file("extdata", "test_file_1.xlsx", package = "ProtStatsWF")
+  dataPath <- system.file("extdata", "test_file_2.xlsx", package = "ProtStatsWF")
   sampleInfoPath <- system.file("extdata", "test_file_1_sampleInfo.xlsx", package = "ProtStatsWF")
 
   prepData <- prepareDataSE(dataPath = dataPath, 
@@ -24,7 +24,7 @@ test_that("Data preparation without groups (loess normalization) for test_file_1
   prepData <- prepareDataSE(dataPath = dataPath, 
                           intensityColumns = 3:11, 
                           proteinNameColumn = "peptide",
-                          normMethod = "loess",
+                          normMethod = "quantile",
                           sampleInfoPath = NULL, 
                           verbose = FALSE)
   

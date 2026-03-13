@@ -50,11 +50,12 @@
 #' @examples
 #'
 
-PCA_Plot <- function(D,
-                     id = NULL,
-                     groupvar1 = NULL, groupvar2 = NULL,
+PCA_Plot <- function(SE,
+                     #id = NULL,
+                     groupForColour = NULL, 
+                     groupForShape = NULL,
 
-                     impute = FALSE, impute_method = "mean", propNA = 0,
+                     imputeMethod = "mean", propNA = 0,
                      scale. = TRUE,
                      PCx = 1, PCy = 2,
 
@@ -64,71 +65,99 @@ PCA_Plot <- function(D,
                      xlim = NULL, ylim = NULL,
 
                      point.size = 4, base_size = 11,
+                     verbose = TRUE,
                      ...
 
 ) {
 
-  mess = ""
-
-  filtered_data <- filter_PCA_data(D = D, id = id, impute = impute, impute_method = impute_method, propNA = propNA)
-  filtered_D <- filtered_data$D
-  filtered_id <- filtered_data$id
-
-  if(is.null(filtered_D)){
-    mess <- paste0(mess, "All rows were filtered out. \n")
-    mess <- paste0(mess, "Try increasing the proportion of missing NAs allowed or imputing missing values. \n")
-    message(mess)
+  # warning if propNA = 0 and imputation method is chosen (no imp. will be done)
+  
+  filtered_data <- filter_PCA_data(SE = SE, 
+                                   imputeMethod = imputeMethod, 
+                                   propNA = propNA)
+  
+  if(nrow(SE) == 0) {
+    if (verbose) message("All rows were filtered out. \n Try increasing the proportion of missing NAs allowed or imputing missing values.")
     return(list("plot" = NULL, "D_PCA_plot" = NULL,
                 "pca" = NULL, "message" = mess))
   }
+  
+  
+  D <- SummarizedExperiment::assays(filtered_data)$intensity_norm
+  id <- SummarizedExperiment::rowData(filtered_data)
+  
+  if (!is.null(groupForColour)) {
+    group1 <- SummarizedExperiment::colData(filtered_data)[,groupForColour]
+    group1 <- factor(group1)
+  } else {
+    group1 <- NULL
+  }
+  if (!is.null(groupForShape)) {
+    group2 <- SummarizedExperiment::colData(filtered_data)[,groupForShape]
+    group2 <- factor(group2)
+  } else {
+    group2 <- NULL
+  }
 
-  mess <- paste0(mess, nrow(filtered_D), " of ", nrow(D), " rows are used for PCA. \n")
 
+
+  if (verbose)
+    message(nrow(D), " of ", nrow(SE), " rows are used for PCA.")
+
+  
   #### calculate PCA ####
-  pca <- stats::prcomp(t(filtered_D), scale. = scale.)
-  pred <- stats::predict(pca, t(filtered_D))
+  pca <- stats::prcomp(t(D), scale. = scale.)
+  pred <- stats::predict(pca, t(D))
   summ <- summary(pca)
 
   var50 <- which(summ$importance[3,] >= 0.5)[1]
-  mess <- paste0(mess, paste0("50% explained variance is reached with ", var50, " principle components.\n"))
+  if (verbose)
+    message("50% explained variance is reached with ", var50, " principle components.")
 
-
+  pl <- ggplot2::ggplot(mapping = ggplot2::aes(x = PCx, y = PCy))
+  
   #### prepare data.frame ####
   # version with colour and shape
-  if (!is.null(groupvar1) & !is.null(groupvar2)) {
-    D_PCA <- data.frame(pred[,c(PCx,PCy)], groupvar1 = groupvar1, groupvar2 = groupvar2)
+  if (!is.null(groupForColour) & !is.null(groupForShape)) {
+    D_PCA <- data.frame(pred[,c(PCx,PCy)], group1 = group1, group2 = group2, label = colnames(D))
+    colnames(D_PCA)[1:2] <- c("PCx", "PCy")
     ### more than 6 different shapes will otherwise give an error message:
-    if (nlevels(D_PCA$groupvar2) > 6) pl <- pl + ggplot2::scale_shape_manual(values = 1:nlevels(D$groupvar2))
+    pl <- pl + ggplot2::geom_point(data = D_PCA, ggplot2::aes(colour = group1, shape = group2), size = point.size, alpha = alpha)
   }
 
   # version with only colour
-  if (!is.null(groupvar1) & is.null(groupvar2)) {
-    D_PCA <- data.frame(pred[,c(PCx,PCy)], groupvar1 = groupvar1, label = colnames(filtered_D))
+  if (!is.null(groupForColour) & is.null(groupForShape)) {
+    D_PCA <- data.frame(pred[,c(PCx,PCy)], group1 = group1, label = colnames(D))
+    colnames(D_PCA)[1:2] <- c("PCx", "PCy")
+    pl <- pl + ggplot2::geom_point(data = D_PCA, ggplot2::aes(colour = group1), size = point.size, alpha = alpha)
   }
 
+  # version with only shape
+  if (is.null(groupForColour) & !is.null(groupForShape)) {
+    D_PCA <- data.frame(pred[,c(PCx,PCy)], group2 = group2, label = colnames(D))
+    colnames(D_PCA)[1:2] <- c("PCx", "PCy")
+    pl <- pl + ggplot2::geom_point(data = D_PCA, ggplot2::aes(shape = group2), size = point.size, alpha = alpha)
+  }
+  
   # version without colour or shape
-  if (is.null(groupvar1) & is.null(groupvar2)) {
-    D_PCA <- data.frame(pred[,c(PCx,PCy)], label = colnames(filtered_D))
+  if (is.null(groupForColour) & is.null(groupForShape)) {
+    D_PCA <- data.frame(pred[,c(PCx,PCy)], label = colnames(D))
+    colnames(D_PCA)[1:2] <- c("PCx", "PCy")
+    pl <- pl + ggplot2::geom_point(data = D_PCA, size = point.size, alpha = alpha)
   }
 
-  colnames(D_PCA)[1:2] <- c("PCx", "PCy")
+  if (!is.null(groupForColour)) pl <- pl + ggplot2::labs(colour = groupForColour)
+  if (!is.null(groupForShape)) pl <- pl + ggplot2::labs(shape = groupForShape)
 
-
-  #### make plot ####
-  pl <- ggplot2::ggplot(data = D_PCA, ggplot2::aes(x = PCx, y = PCy)) + # text = paste("sample:", "label")
-    ggplot2::geom_point(ggplot2::aes(colour = groupvar1, shape = groupvar2), size = point.size, alpha = alpha)
-
-  pl <- pl + ggplot2::labs(colour = groupvar1_name, shape = groupvar2_name)
-
-  if(!is.null(groupvar1) & !is.null(group_colours)){
+  if(!is.null(groupForColour) & !is.null(group_colours)){
     pl <- pl + ggplot2::scale_colour_manual(values = group_colours)
   }
 
-  if(label) {
-    pl <- pl + ggrepel::geom_text_repel(ggplot2::aes(x=PCx, y=PCy, label = label, colour = groupvar1), size = label_size, seed = label_seed) +
+  if (label) {
+    pl <- pl + ggrepel::geom_text_repel(data = D_PCA, ggplot2::aes(x=PCx, y=PCy, label = label, colour = group1), 
+                                        size = label_size, seed = label_seed) +
       ggplot2::guides(colour = ggplot2::guide_legend(override.aes = ggplot2::aes(label = "")))
   }
-
 
   #### add % of explainable variance to the axis label ####
   pl <- pl + ggplot2::theme_bw(base_size = base_size) +
@@ -136,8 +165,8 @@ PCA_Plot <- function(D,
     ggplot2::ylab(paste0("PC", PCy, " (", round(100*summ$importance[2,PCy], 1), "%)"))
 
   # allow more than 6 different shapes
-  if (!is.null(groupvar1) & !is.null(groupvar2)) {
-    if (nlevels(D_PCA$groupvar2) > 6) pl <- pl + ggplot2::scale_shape_manual(values = 1:nlevels(D$groupvar2))
+  if (!is.null(group2)) {
+    if (nlevels(D_PCA$group2) > 6) pl <- pl + ggplot2::scale_shape_manual(values = 1:nlevels(D$group2))
   }
 
 
@@ -145,14 +174,12 @@ PCA_Plot <- function(D,
   if (!is.null(xlim)) pl <- pl + xlim(xlim)
   if (!is.null(ylim)) pl <- pl + ylim(ylim)
 
-  message(mess)
-
   Loadings <- as.data.frame(pca$rotation)
-  if (!is.null(filtered_id)) {
-    Loadings <- cbind(filtered_id, Loadings)
+  if (!is.null(id)) {
+    Loadings <- cbind(id, Loadings)
   }
 
   return(list("D_PCA_plot" = cbind(D_PCA, "Sample" = colnames(D)),
-              "pca" = pca, "message" = mess, "filtered_D" = filtered_D, "loadings" = Loadings, "plot" = pl))
+              "pca" = pca, "filtered_data" = filtered_data, "loadings" = Loadings, "plot" = pl))
 }
 

@@ -285,18 +285,12 @@ workflow_QC <- function(dataPath,
   #### Calculate PCA Plot ####
 
 
-  ### depending of groups should be used or not, the group variable is used in the PCA function
-  if (use_groups) {
-    PCA_groupvar1 <- group
-  } else {
-    PCA_groupvar1 <- NULL
-  }
-
-
-  pca_data <- PCA_Plot(D = prepared_data[["D"]],
-                       groupvar1 = group,
-                       groupvar2 = NULL,
-                       impute = PCA_impute, impute_method = PCA_impute_method, propNA = PCA_propNA,
+  pca_data <- PCA_Plot(D = preparedData$SE,
+                       groupForColour = groupColumn,
+                       groupForShape = group2Column,
+                       impute = PCA_impute, 
+                       impute_method = PCA_impute_method, 
+                       propNA = PCA_propNA,
                        scale. = PCA_scale.,
                        PCx = PCA_PCx, PCy = PCA_PCy,
                        groupvar1_name = PCA_groupvar1_name,
@@ -306,7 +300,12 @@ workflow_QC <- function(dataPath,
                        xlim = PCA_xlim, ylim = PCA_ylim,
                        point.size = PCA_point.size, base_size = base_size)
 
-
+### TODO:: extract and save loadings
+  # Loadings <- as.data.frame(pca$rotation)
+  # if (!is.null(id)) {
+  #   Loadings <- cbind(id, Loadings)
+  
+  
   ggplot2::ggsave(file.path(output_path, paste0("PCA_plot", suffix, ".", plot_device)), plot = pca_data[["plot"]],
                   device = plot_device, height = plot_height_PCA_MA, width = plot_width_PCA_MA, dpi = plot_dpi, units = "cm")
   utils::write.csv(x = pca_data$D_PCA_plot, file = file.path(output_path, paste0("D_PCA", suffix, ".csv")), row.names = FALSE)

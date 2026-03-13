@@ -44,7 +44,6 @@ ValidValuePlot <- function(D_long,
     dplyr::summarize(nrvalid = sum(!is.na(intensity_norm)), meanvalid = mean(!is.na(intensity_norm)), .groups = 'drop')
   valid_value_table$.sample <- factor(valid_value_table$.sample, levels = sample_levels)
   
-  valid_value_table2 <<- valid_value_table
   ### add column with sample number
   #valid_value_table$sample <- limma::strsplit2(valid_value_table$name, "_")[,2]
 
@@ -66,9 +65,6 @@ ValidValuePlot <- function(D_long,
     valid_value_plot <- valid_value_plot +
       ggplot2::geom_bar(stat = "identity",ggplot2::aes(x = .sample, y = nrvalid))
   }
-
-  ### TODO: plot sorts samples alphabetically, not by the order it appears in the data set.
-
   return(list("plot" = valid_value_plot, "table" = valid_value_table))
 }
 

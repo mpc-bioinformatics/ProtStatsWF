@@ -1,6 +1,6 @@
 
 test_that("Boxplot with groups for test_file_1", {
-  dataPath <- system.file("extdata", "test_file_1.xlsx", package = "ProtStatsWF")
+  dataPath <- system.file("extdata", "test_file_2.xlsx", package = "ProtStatsWF")
   sampleInfoPath <- system.file("extdata", "test_file_1_sampleInfo.xlsx", package = "ProtStatsWF")
   
   pData <- prepareDataSE(dataPath = dataPath, intensityColumns = 3:11, 
@@ -23,7 +23,7 @@ test_that("Boxplot with groups for test_file_1", {
 })
 
 test_that("Violinplot without groups for test_file_1", {
-  dataPath <- system.file("extdata", "test_file_1.xlsx", package = "ProtStatsWF")
+  dataPath <- system.file("extdata", "test_file_2.xlsx", package = "ProtStatsWF")
   sampleInfoPath <- system.file("extdata", "test_file_1_sampleInfo.xlsx", package = "ProtStatsWF")
   
   pData <- prepareDataSE(dataPath = dataPath, intensityColumns = 3:11, 

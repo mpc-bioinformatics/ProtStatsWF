@@ -1,6 +1,6 @@
 
-test_that("Regular ValidValue Plot for test_file_1", {
-  dataPath <- system.file("extdata", "test_file_1.xlsx", package = "ProtStatsWF")
+test_that("Regular ValidValue Plot for test_file_2", {
+  dataPath <- system.file("extdata", "test_file_2.xlsx", package = "ProtStatsWF")
   sampleInfoPath <- system.file("extdata", "test_file_1_sampleInfo.xlsx", 
                                 package = "ProtStatsWF")
   
@@ -8,7 +8,8 @@ test_that("Regular ValidValue Plot for test_file_1", {
                             intensityColumns = 3:11,
                             proteinNameColumn = "peptide",
                             sampleInfoPath = sampleInfoPath, 
-                            verbose = FALSE)
+                            verbose = FALSE, 
+                            normMethod = "median")
   
   pResult <- ValidValuePlot(D_long = prepData$D_long, groupColumn = "group")
   expect_snapshot(pResult$table)
@@ -22,7 +23,8 @@ test_that("Regular ValidValue Plot for test_file_1", {
                             intensityColumns = 3:11,
                             proteinNameColumn = "peptide",
                             sampleInfoPath = sampleInfoPath2, 
-                            verbose = FALSE)
+                            verbose = FALSE, 
+                            normMethod = "median")
   
   pResult2 <- ValidValuePlot(D_long = prepData2$D_long, groupColumn = "group")
   expect_snapshot(pResult2$table)

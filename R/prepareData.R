@@ -96,13 +96,13 @@ prepareDataSE <- function(dataPath,
 
   ### TODO: check if all samples can be found in sampleInfo
   ### TODO: remove additional samples from sampleInfo
-  
 
   ## read in sample information file, if given
   if (!is.null(sampleInfoPath)) {
     sampleInfo <- openxlsx::read.xlsx(sampleInfoPath, colNames = TRUE)
     ind <- match(sampleInfo[, sampleNameColumn], colnames(D))
     D_norm <- D_norm[,ind] # sort columns of D like sampleInfo
+
     D <- D[, ind]
     if (verbose) message("Sample information file read in.")
   } else {
@@ -111,7 +111,7 @@ prepareDataSE <- function(dataPath,
     if(verbose) message("No sample information file given.")
   }
 
-  SI <<- sampleInfo
+  #SI <<- sampleInfo
 
   #if (normMethod != "nonorm") {
     assays <- list(intensity_norm = as.matrix(D_norm), intensity = as.matrix(D))
