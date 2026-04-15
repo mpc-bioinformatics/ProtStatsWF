@@ -7,7 +7,7 @@
 #' @param groupForShape    \strong{character(1)} \cr
 #'                         The variable used for shapes.
 #' @param imputeMethod    \strong{character} \cr
-#'                         The imputation method. Options are "mean", "median" or "none.
+#'                         The imputation method. Options are "mean", "median" or "none".
 #' @param propNA           \strong{numeric} \cr
 #'                         The proportion of allowed missing NAs for a protein, before it is discarded.
 #' @param scale.           \strong{logical} \cr
@@ -50,7 +50,7 @@
 
 PCA_Plot <- function(SE,
                      #id = NULL,
-                     groupForColour = NULL, 
+                     groupForColour = NULL,
                      groupForShape = NULL,
 
                      imputeMethod = "mean", propNA = 0,
@@ -69,21 +69,21 @@ PCA_Plot <- function(SE,
 ) {
 
   # warning if propNA = 0 and imputation method is chosen (no imp. will be done)
-  
-  filtered_data <- filter_PCA_data(SE = SE, 
-                                   imputeMethod = imputeMethod, 
+
+  filtered_data <- filter_PCA_data(SE = SE,
+                                   imputeMethod = imputeMethod,
                                    propNA = propNA)
-  
+
   if(nrow(SE) == 0) {
     if (verbose) message("All rows were filtered out. \n Try increasing the proportion of missing NAs allowed or imputing missing values.")
     return(list("plot" = NULL, "D_PCA_plot" = NULL,
                 "pca" = NULL))
   }
-  
-  
+
+
   D <- SummarizedExperiment::assays(filtered_data)$intensity_norm
   id <- SummarizedExperiment::rowData(filtered_data)
-  
+
   if (!is.null(groupForColour)) {
     group1 <- SummarizedExperiment::colData(filtered_data)[,groupForColour]
     group1 <- factor(group1)
@@ -102,7 +102,7 @@ PCA_Plot <- function(SE,
   if (verbose)
     message(nrow(D), " of ", nrow(SE), " rows are used for PCA.")
 
-  
+
   #### calculate PCA ####
   pca <- stats::prcomp(t(D), scale. = scale.)
   pred <- stats::predict(pca, t(D))
@@ -113,7 +113,7 @@ PCA_Plot <- function(SE,
     message("50% explained variance is reached with ", var50, " principle components.")
 
   pl <- ggplot2::ggplot(mapping = ggplot2::aes(x = PCx, y = PCy))
-  
+
   #### prepare data.frame ####
   # version with colour and shape
   if (!is.null(groupForColour) & !is.null(groupForShape)) {
@@ -136,7 +136,7 @@ PCA_Plot <- function(SE,
     colnames(D_PCA)[1:2] <- c("PCx", "PCy")
     pl <- pl + ggplot2::geom_point(data = D_PCA, ggplot2::aes(shape = group2), size = point.size, alpha = alpha)
   }
-  
+
   # version without colour or shape
   if (is.null(groupForColour) & is.null(groupForShape)) {
     D_PCA <- data.frame(pred[,c(PCx,PCy)], label = colnames(D))
@@ -152,7 +152,7 @@ PCA_Plot <- function(SE,
   }
 
   if (label) {
-    pl <- pl + ggrepel::geom_text_repel(data = D_PCA, ggplot2::aes(x=PCx, y=PCy, label = label, colour = group1), 
+    pl <- pl + ggrepel::geom_text_repel(data = D_PCA, ggplot2::aes(x=PCx, y=PCy, label = label, colour = group1),
                                         size = label_size, seed = label_seed) +
       ggplot2::guides(colour = ggplot2::guide_legend(override.aes = ggplot2::aes(label = "")))
   }
