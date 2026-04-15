@@ -15,9 +15,10 @@ test_that("Calculate heatmap for a ttest ", {
 
   t_heatmap <- Heatmap_with_groups(D = data[["D"]][candidates, ],
                                    id = data[["ID"]][candidates, ],
-                                   groups = data[["group"]])
+                                   groups = data[["group"]],
+                                   group_name = "state")
 
-  vdiffr::expect_doppelganger("Heatmap_ttest", t_heatmap)#[["heatmap"]])
+  vdiffr::expect_doppelganger("Heatmap_ttest", t_heatmap$heatmap)#[["heatmap"]])
 
 })
 
@@ -60,6 +61,6 @@ test_that("Calculate heatmap for an ANOVA ", {
                                    id = data[["ID"]][union_candidates, ],
                                    groups = data[["group"]])
 
-  vdiffr::expect_doppelganger("Heatmap_ANOVA", t_heatmap)#[["heatmap"]])
+  vdiffr::expect_doppelganger("Heatmap_ANOVA", t_heatmap$heatmap)#[["heatmap"]])
 
 })
