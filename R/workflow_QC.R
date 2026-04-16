@@ -41,10 +41,12 @@
 #'                               If \code{TRUE}, the data will be log-transformed.
 #' @param log_base               \strong{numeric} \cr
 #'                               The base used, if \code{do_log_transformation = TRUE}.
-#' @param groupvar_name          \strong{character} \cr
-#'                               The name for the group variable.
+#' @param groupName              \strong{character} \cr
+#'                               The name for the first group variable (used for colour in plots).
+#' @param group2Name              \strong{character} \cr
+#'                               The name for the second group variable (used for shape in the PCA-plot).
 #' @param group_colours          \strong{character vector} \cr
-#'                               The hex codes for the group colors, if the data has groups. If \code{NULL}, a default color scale will be used.
+#'                               The hex codes for the group colors, if the data has groups. If \code{NULL}, the default color scale from ggplot2 will be used.
 #'
 #' @param suffix                 \strong{character} \cr
 #'                               The suffix for the output files. It needs to start with an underscore.
@@ -63,7 +65,7 @@
 #' @param plot_width_PCA_MA      \strong{numeric} \cr
 #'                               The plot width for PCA and MA-plots in cm.
 #' @param plot_dpi               \strong{numeric} \cr
-#'                               The "dots per inch" of the plot aka. the plot resolution.
+#'                               The plot resolution in "dots per inch".
 #'
 #'
 # Boxplot parameters
@@ -87,12 +89,8 @@
 #'                               The imputation method. Options are "mean" or "median".
 #' @param PCA_propNA             \strong{numeric} \cr
 #'                               The proportion of allowed missing NAs for a protein, before it is discarded.
-#' @param PCA_scale.             \strong{logical} \cr
+#' @param PCA_scale              \strong{logical} \cr
 #'                               If \code{TRUE}, the data will be scaled before computing the PCA.
-#' @param PCA_PCx                \strong{numeric} \cr
-#'                               The principle component for the x-axis.
-#' @param PCA_PCy                \strong{numeric} \cr
-#'                               The principle component for the y-axis.
 #' @param PCA_groupvar1_name     \strong{character} \cr
 #'                               The titles of legends for colour.
 #' @param PCA_alpha              \strong{logical} \cr
@@ -154,58 +152,46 @@ workflow_QC <- function(dataPath,
                         dec = ".",
                         header = TRUE,
                         sheet = 1,
-                        output_path,
-                        output_type = "xlsx",
-
-
-                        normMethod = "loess",
-                        ltsQuantile = 0.8,
 
                         NAStrings = c("NA", "NaN", "Filtered","#NV"),
-                        na_out = "NA",
                         zeroToNA = TRUE,
                         doLogTrans = TRUE,
                         logBase = 2,
+                        normMethod = "loess",
+                        ltsQuantile = 0.8,
 
-                        groupvar_name = "Group",
-                        group_colours = NULL,
-
+                        outPath,
+                        outType = "xlsx",
                         suffix = "",
+                        NAOut = "NA",
                         verbose = TRUE,
 
-                        base_size = 15,
-                        plot_device = "pdf",
-                        plot_height_BP_VV = 10,
-                        plot_width_BP_VV = 15,
-                        plot_height_PCA_MA = 15,
-                        plot_width_PCA_MA = 15,
-                        plot_dpi = 300,
+                        baseSize = 15,
+                        plotDevice = "pdf",
+                        plotHeight_BP_VV = 10,
+                        plotWidth_BP_VV = 15,
+                        plotHeight_PCA_MA = 15,
+                        plotWidth_PCA_MA = 15,
+                        plotDPI = 300,
 
-                        boxplot_method = "boxplot",
+                        boxplotMethod = "boxplot",
 
-                        generate_MAplots = TRUE,
-                        MA_maxPlots = 5000,
-                        MA_alpha = FALSE,
-                        MA_sampling = 1,
+                        MAMaxPlots = 5000, # TODO: if = 0, MA plost are skipped
+                        MAAlpha = 1, # TODO: give degree of alpha, not only TRUE/FALSE
 
-                        PCA_impute = FALSE,
-                        PCA_impute_method = "mean",
-                        PCA_propNA = 0,
-                        PCA_scale. = TRUE,
-                        PCA_PCx = 1,
-                        PCA_PCy = 2,
-                        PCA_groupvar1_name = "group",
-                        PCA_alpha = 1,
-                        PCA_label = FALSE,
-                        PCA_label_seed = NA,
-                        PCA_label_size = 4,
-                        PCA_xlim = NULL,
-                        PCA_ylim = NULL,
-                        PCA_point.size = 4
-
+                        PCAImputeMethod = "mean", ## TODO: none means no imputation
+                        PCAPropNA = 0,
+                        PCAScale = TRUE,
+                        PCAAlpha = 1,
+                        PCALabel = FALSE,
+                        PCALabelSeed = NA,
+                        PCALabelSize = 4,
+                        PCAXlim = NULL,
+                        PCAYlim = NULL,
+                        PCAPointSize = 4
 ){
 
-
+# TODO: check all variables that are not used in another main function in this workflow
 
   #### Prepare Data ####
 
@@ -228,25 +214,28 @@ workflow_QC <- function(dataPath,
                                  NAStrings = NAStrings,
                                  verbose = verbose)
 
-  if (output_type == "xlsx") {
+  if (outType == "xlsx") {
     exportSE(prepared_data$SE, file = file.path(output_path, paste0("D_norm", suffix, ".xlsx")))
   }
+  ### TODO: na out and other output types
            
   # prepare group colours
   group <- summarizedExperiment::colData(prepared_data$SE)[, groupColumn]
   nr_groups <- length(levels(group))
-  if (is.null(group_colours) & nr_groups >= 1) group_colours <- scales::hue_pal()(nr_groups)
+  if (is.null(groupColours) & nr_groups >= 1) groupColours <- scales::hue_pal()(nr_groups)
 
   #### Calculate Valid Value Plot ####
   vv_plot <- ValidValuePlot(D_long = prepared_data$D_long,
                                  groupColumn = groupColumn,
-                                 group_colours = group_colours,
-                                 base_size = base_size)
+                                 groupColours = groupColours,
+                                 baseSize = baseSize)
 
   ggplot2::ggsave(file.path(output_path, paste0("valid_value_plot", suffix, ".", plot_device)), 
-                  plot = vv_plot$plot, device = plot_device, height = plot_height_BP_VV, 
-                  width = plot_width_BP_VV, dpi = plot_dpi, units = "cm")
-  utils::write.csv(x = vv_plot$table, file = file.path(output_path, 
+                  plot = vv_plot$plot, device = plotDevice, height = plotHeight_BP_VV, 
+                  width = plotWidth_BP_VV, dpi = plotDPI, units = "cm")
+  
+  ### TODO: different output file types
+  utils::write.csv(x = vv_plot$table, file = file.path(outPath, 
                     paste0("D_validvalues", suffix, ".csv")), row.names = FALSE)
 
 
@@ -255,13 +244,13 @@ workflow_QC <- function(dataPath,
 
   boxplots <- Boxplots(D_long = prepared_data$D_long,
                            groupColumn = groupColumn,
-                           group_colours = group_colours,
-                           base_size = base_size, 
-                           method = boxplot_method, lwd = 0.5)
+                           groupColours = groupColours,
+                           baseSize = baseSize, 
+                           method = boxplotMethod, lwd = 0.5)
 
-  ggplot2::ggsave(file.path(output_path, paste0("boxplot", suffix, ".", plot_device)), 
-                  plot = boxplots, device = plot_device, height = plot_height_BP_VV, 
-                  width = plot_width_BP_VV, dpi = plot_dpi, units = "cm")
+  ggplot2::ggsave(file.path(outPath, paste0("boxplot", suffix, ".", plotDevice)), 
+                  plot = boxplots, device = plotDevice, height = plotHeight_BP_VV, 
+                  width = plotWidth_BP_VV, dpi = plotDPI, units = "cm")
 
 
 
@@ -271,14 +260,15 @@ workflow_QC <- function(dataPath,
 
 
 
-  if (generate_MAplots) {
+  if (MAMaxPlots > 0) {
     ma_data <- MA_Plots(D = prepared_data$SE,
-                        output_path = output_path, suffix = suffix,
-                        labels = 1:ncol(prepared_data[["D"]]), labels2 = colnames(prepared_data[["D"]]),
-                        maxPlots = MA_maxPlots, alpha = MA_alpha,
-                        plot_height = plot_height_PCA_MA, 
-                        plot_width = plot_width_PCA_MA, 
-                        sampling = MA_sampling, verbose = verbose)
+                        outPath = outPath, suffix = suffix,
+                        labels = 1:ncol(prepared_data[["D"]]),  # TODO
+                        labels2 = colnames(prepared_data[["D"]]),  # TODO
+                        maxPlots = MAMaxPlots, alpha = MAAlpha,
+                        plot_height = plotHeight_PCA_MA, 
+                        plot_width = plotWidth_PCA_MA, 
+                        sampling = 1, verbose = verbose)
   }
 
 
@@ -288,17 +278,18 @@ workflow_QC <- function(dataPath,
   pca_data <- PCA_Plot(D = preparedData$SE,
                        groupForColour = groupColumn,
                        groupForShape = group2Column,
-                       impute = PCA_impute, 
-                       impute_method = PCA_impute_method, 
-                       propNA = PCA_propNA,
-                       scale. = PCA_scale.,
-                       PCx = PCA_PCx, PCy = PCA_PCy,
-                       groupvar1_name = PCA_groupvar1_name,
-                       groupvar2_name = NULL,
-                       group_colours = group_colours, PCA_alpha = 1,
-                       label = PCA_label, PCA_label_seed = NA, PCA_label_size = 4,
-                       xlim = PCA_xlim, ylim = PCA_ylim,
-                       point.size = PCA_point.size, base_size = base_size)
+                       #impute = PCA_impute, 
+                       imputeMethod = PCAImputeMethod, 
+                       propNA = PCAPropNA,
+                       scale. = PCAScale,
+                       PCx = 1, PCy = 2,
+                       groupvar1_name = groupColumn,
+                       groupvar2_name = group2Column,
+                       groupColours = group_colours, 
+                       alpha = PCAAlpha,
+                       label = PCALabel, PCALabelSeed = NA, PCALabelSize = 4,
+                       xlim = PCAXlim, ylim = PCAYlim,
+                       pointSize = PCAPointSize, baseSize = baseSize)
 
 ### TODO:: extract and save loadings
   # Loadings <- as.data.frame(pca$rotation)
@@ -306,10 +297,10 @@ workflow_QC <- function(dataPath,
   #   Loadings <- cbind(id, Loadings)
   
   
-  ggplot2::ggsave(file.path(output_path, paste0("PCA_plot", suffix, ".", plot_device)), plot = pca_data[["plot"]],
+  ggplot2::ggsave(file.path(outPath, paste0("PCA_plot", suffix, ".", plot_device)), plot = pca_data[["plot"]],
                   device = plot_device, height = plot_height_PCA_MA, width = plot_width_PCA_MA, dpi = plot_dpi, units = "cm")
-  utils::write.csv(x = pca_data$D_PCA_plot, file = file.path(output_path, paste0("D_PCA", suffix, ".csv")), row.names = FALSE)
-  utils::write.csv(x = pca_data$filtered_D, file = file.path(output_path, paste0("PCA_data_after_imputation", suffix, ".csv")), row.names = FALSE)
+  utils::write.csv(x = pca_data$D_PCA_plot, file = file.path(outPath, paste0("D_PCA", suffix, ".csv")), row.names = FALSE)
+  utils::write.csv(x = pca_data$filtered_D, file = file.path(outPath, paste0("PCA_data_after_imputation", suffix, ".csv")), row.names = FALSE)
 
 
   return(invisible(NULL))

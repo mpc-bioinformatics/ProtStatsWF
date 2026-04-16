@@ -64,11 +64,11 @@ PCA_Plot <- function(SE,
                      PCx = 1, PCy = 2,
 
                      groupvar1_name = "group", groupvar2_name = NULL,
-                     group_colours = NULL, alpha = 1,
-                     label = FALSE, label_seed = NA, label_size = 4,
+                     groupColours = NULL, alpha = 1,
+                     label = FALSE, labelSeed = NA, labelSize = 4,
                      xlim = NULL, ylim = NULL,
 
-                     point.size = 4, base_size = 11,
+                     pointSize = 4, baseSize = 11,
                      verbose = TRUE,
                      ...
 

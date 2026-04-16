@@ -29,8 +29,8 @@
 
 ValidValuePlot <- function(D_long,
                            groupColumn = NULL,
-                           group_colours = NULL,
-                           base_size = 15) {
+                           groupColours = NULL,
+                           baseSize = 15) {
 
   # select only relevant columns
   D_long_sel <- dplyr::select(D_long, c(".feature", ".sample", "intensity_norm"))
@@ -50,7 +50,7 @@ ValidValuePlot <- function(D_long,
 
   #### generate basic plot skeleton ####
   valid_value_plot <- ggplot2::ggplot(valid_value_table) +
-    ggplot2::theme_bw(base_size = base_size) +
+    ggplot2::theme_bw(base_size = baseSize) +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, vjust = 1, hjust = 1),
                    plot.title = ggplot2::element_text(hjust = 0.5)) +
     ggplot2::ylab("Number of valid values") + ggplot2::xlab("Sample")
@@ -61,7 +61,7 @@ ValidValuePlot <- function(D_long,
     valid_value_plot <- valid_value_plot +
       ggplot2::geom_bar(stat = "identity", ggplot2::aes(x = .sample, y = nrvalid, fill = group)) +
       ggplot2::labs(fill = groupColumn)
-    if (!is.null(group_colours)) valid_value_plot <- valid_value_plot + ggplot2::scale_fill_manual(values = group_colours)
+    if (!is.null(groupColours)) valid_value_plot <- valid_value_plot + ggplot2::scale_fill_manual(values = groupColours)
   } else {
     valid_value_plot <- valid_value_plot +
       ggplot2::geom_bar(stat = "identity",ggplot2::aes(x = .sample, y = nrvalid))
