@@ -3,14 +3,22 @@
     Code
       prepData$SE
     Output
-      class: SummarizedExperiment 
-      dim: 16 9 
-      metadata(0):
-      assays(2): intensity_norm intensity
-      rownames(16): AALNALQPPEFR ESSSHHPGIAEFPSR ... VVAGVANALAHK YTPLYPFR
-      rowData names(2): peptide protein
-      colnames(9): state1_1 state1_2 ... state3_2 state3_3
-      colData names(3): SampleName group replicate
+      # A SummarizedExperiment-tibble abstraction: 144 x 9
+      # Features=16 | Samples=9 | Assays=intensity_norm, intensity
+         .feature  .sample intensity_norm intensity SampleName group replicate peptide
+         <chr>     <chr>            <dbl>     <dbl> <chr>      <chr>     <dbl> <chr>  
+       1 AALNALQP~ state1~           26.7      26.3 state1_1   stat~         1 AALNAL~
+       2 ESSSHHPG~ state1~           32.0      31.5 state1_1   stat~         1 ESSSHH~
+       3 FEAHPNDL~ state1~           NA        NA   state1_1   stat~         1 FEAHPN~
+       4 LPNSVLGR  state1~           25.2      24.8 state1_1   stat~         1 LPNSVL~
+       5 LQQDIEAVK state1~           29.3      28.8 state1_1   stat~         1 LQQDIE~
+       6 MELERPGG~ state1~           33.3      32.8 state1_1   stat~         1 MELERP~
+       7 MQEVVANL~ state1~           22.5      22.1 state1_1   stat~         1 MQEVVA~
+       8 NNKDSHSL~ state1~           29.5      29.0 state1_1   stat~         1 NNKDSH~
+       9 NVVIAADG~ state1~           25.1      24.7 state1_1   stat~         1 NVVIAA~
+      10 QGQDGLLS~ state1~           25.3      24.9 state1_1   stat~         1 QGQDGL~
+      # i 134 more rows
+      # i 1 more variable: protein <chr>
 
 ---
 
@@ -288,15 +296,21 @@
     Code
       prepData$SE
     Output
-      class: SummarizedExperiment 
-      dim: 15 9 
-      metadata(0):
-      assays(2): intensity_norm intensity
-      rownames(15): AIIEEYLHLNDMK CLAFHDISPQAPTHFLVIPK ... WYLTLAR
-        YAALSDQGLDIK
-      rowData names(2): peptide protein
-      colnames(9): state1_1 state1_2 ... state3_2 state3_3
-      colData names(1): SampleName
+      # A SummarizedExperiment-tibble abstraction: 135 x 7
+      # Features=15 | Samples=9 | Assays=intensity_norm, intensity
+         .feature          .sample intensity_norm intensity SampleName peptide protein
+         <chr>             <chr>            <dbl>     <dbl> <chr>      <chr>   <chr>  
+       1 AIIEEYLHLNDMK     state1~           24.9      25.1 state1_1   AIIEEY~ A0A0J9~
+       2 CLAFHDISPQAPTHFL~ state1~           28.0      27.8 state1_1   CLAFHD~ B0R1E3~
+       3 EGWEYLK           state1~           24.6      24.6 state1_1   EGWEYLK Q8R404 
+       4 FSLQDPPNK         state1~           NA        NA   state1_1   FSLQDP~ O70475 
+       5 GPPPTDPYGRPPPYDR  state1~           NA        NA   state1_1   GPPPTD~ H3BJ30~
+       6 KSQVFSTAADGQTQVE~ state1~           24.2      24.5 state1_1   KSQVFS~ P38647 
+       7 LQISHEAAACITALR   state1~           25.1      25.1 state1_1   LQISHE~ A0A087~
+       8 MLVDDIGDVTITNDGA~ state1~           25.3      25.2 state1_1   MLVDDI~ F2Z483~
+       9 QLIVGVNK          state1~           31.3      31.3 state1_1   QLIVGV~ D3YZ68~
+      10 RGEDMMHPLK        state1~           21.2      20.5 state1_1   RGEDMM~ Q9QYJ0 
+      # i 125 more rows
 
 ---
 

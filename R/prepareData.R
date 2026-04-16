@@ -91,7 +91,7 @@ prepareDataSE <- function(dataPath,
 
   D_norm <- automatedNormalization(DATA = D, method = normMethod,
                               is_log_transformed = doLogTrans,
-                              log_base = logBase, lts.quantile = ltsQuantile, 
+                              log_base = logBase, lts.quantile = ltsQuantile,
                               verbose = verbose)
 
   ### TODO: check if all samples can be found in sampleInfo
@@ -122,7 +122,7 @@ prepareDataSE <- function(dataPath,
   # TODO: include metadata, e.g. about normalization method?
   #if (is.null(sampleInfo)) {
     SE <- SummarizedExperiment::SummarizedExperiment(assays = assays,
-                                                     rowData = id, 
+                                                     rowData = id,
                                                      colData = sampleInfo)
   #} else {
   #  SE <- SummarizedExperiment::SummarizedExperiment(assays = assays,
@@ -133,7 +133,7 @@ prepareDataSE <- function(dataPath,
   ### long format:
   # TODO: this is a generic function from tidySummarizedExperiments package
   suppressMessages({
-  D_long <- tidySummarizedExperiment:::pivot_longer.SummarizedExperiment(SE, 
+  D_long <- tidySummarizedExperiment:::pivot_longer.SummarizedExperiment(SE,
                   cols = proteinNameColumn)
   })
   D_long <- dplyr::select(D_long, -c("name", "value"))
@@ -142,15 +142,34 @@ prepareDataSE <- function(dataPath,
 
   #print(sampleInfo[, sampleNameColumn])
   #print(levels(D_long$.sample))
-  
+
   return(list(SE = SE, D_long = D_long))
 }
 
 
 
 
+### helper function to extract assay data and pivot to long format.
+### Also add the information from colData
+pivot_longer_SE <- function(SE, cols) {
 
+  # Extract assay
+  D <- as.data.frame(SummarizedExperiment::assay(SE))
+  D$id. <- rownames(D)
 
+  D_long <- tidyr::pivot_longer(D, -id., names_to = "sample.", values_to = "value.")
+
+  # Add colData
+  col_data <- as.data.frame(SummarizedExperiment::colData(SE))
+  col_data$sample. <- rownames(col_data)
+  D_long <- dplyr::left_join(D_long, col_data, by = "sample.")
+
+  # Add rowData
+  row_data <- as.data.frame(SummarizedExperiment::rowData(SE))
+  row_data$id. <- rownames(row_data)
+  D_long <- dplyr::left_join(D_long, row_data, by = "id.")
+
+}
 
 
 

@@ -56,15 +56,15 @@
 <circle cx='416.80' cy='481.87' r='4.62' style='stroke-width: 0.71; stroke: none; fill: #000000;' />
 <polygon points='129.12,514.18 135.35,524.96 122.90,524.96 ' style='stroke-width: 0.71; stroke: none; fill: #000000;' />
 <polygon points='359.93,439.34 369.18,439.34 369.18,430.09 359.93,430.09 ' style='stroke-width: 0.71; stroke: none; fill: #000000;' />
-<text x='350.70' y='59.09' text-anchor='middle' style='font-size: 11.38px; font-family: sans;' textLength='43.67px' lengthAdjust='spacingAndGlyphs'>state1_1</text>
-<text x='66.48' y='142.06' text-anchor='middle' style='font-size: 11.38px; font-family: sans;' textLength='43.67px' lengthAdjust='spacingAndGlyphs'>state1_2</text>
-<text x='69.05' y='170.84' text-anchor='middle' style='font-size: 11.38px; font-family: sans;' textLength='43.67px' lengthAdjust='spacingAndGlyphs'>state1_3</text>
-<text x='625.51' y='290.92' text-anchor='middle' style='font-size: 11.38px; font-family: sans;' textLength='43.67px' lengthAdjust='spacingAndGlyphs'>state2_1</text>
-<text x='572.98' y='223.16' text-anchor='middle' style='font-size: 11.38px; font-family: sans;' textLength='43.67px' lengthAdjust='spacingAndGlyphs'>state2_2</text>
-<text x='594.85' y='170.44' text-anchor='middle' style='font-size: 11.38px; font-family: sans;' textLength='43.67px' lengthAdjust='spacingAndGlyphs'>state2_3</text>
-<text x='427.02' y='477.06' text-anchor='middle' style='font-size: 11.38px; font-family: sans;' textLength='43.67px' lengthAdjust='spacingAndGlyphs'>state3_1</text>
-<text x='119.09' y='533.84' text-anchor='middle' style='font-size: 11.38px; font-family: sans;' textLength='43.67px' lengthAdjust='spacingAndGlyphs'>state3_2</text>
-<text x='354.42' y='447.27' text-anchor='middle' style='font-size: 11.38px; font-family: sans;' textLength='43.67px' lengthAdjust='spacingAndGlyphs'>state3_3</text>
+<text x='371.11' y='41.73' text-anchor='middle' style='font-size: 11.38px; font-family: sans;' textLength='43.67px' lengthAdjust='spacingAndGlyphs'>state1_1</text>
+<text x='86.78' y='124.95' text-anchor='middle' style='font-size: 11.38px; font-family: sans;' textLength='43.67px' lengthAdjust='spacingAndGlyphs'>state1_2</text>
+<text x='56.32' y='188.01' text-anchor='middle' style='font-size: 11.38px; font-family: sans;' textLength='43.67px' lengthAdjust='spacingAndGlyphs'>state1_3</text>
+<text x='625.51' y='290.89' text-anchor='middle' style='font-size: 11.38px; font-family: sans;' textLength='43.67px' lengthAdjust='spacingAndGlyphs'>state2_1</text>
+<text x='573.14' y='223.01' text-anchor='middle' style='font-size: 11.38px; font-family: sans;' textLength='43.67px' lengthAdjust='spacingAndGlyphs'>state2_2</text>
+<text x='595.11' y='170.37' text-anchor='middle' style='font-size: 11.38px; font-family: sans;' textLength='43.67px' lengthAdjust='spacingAndGlyphs'>state2_3</text>
+<text x='406.58' y='494.31' text-anchor='middle' style='font-size: 11.38px; font-family: sans;' textLength='43.67px' lengthAdjust='spacingAndGlyphs'>state3_1</text>
+<text x='139.07' y='516.79' text-anchor='middle' style='font-size: 11.38px; font-family: sans;' textLength='43.67px' lengthAdjust='spacingAndGlyphs'>state3_2</text>
+<text x='354.50' y='447.19' text-anchor='middle' style='font-size: 11.38px; font-family: sans;' textLength='43.67px' lengthAdjust='spacingAndGlyphs'>state3_3</text>
 <rect x='30.83' y='22.78' width='620.19' height='522.33' style='stroke-width: 1.07; stroke: #333333;' />
 </g>
 <g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>

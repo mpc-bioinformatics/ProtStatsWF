@@ -129,45 +129,45 @@ PCA_Plot <- function(SE,
     D_PCA <- data.frame(pred[,c(PCx,PCy)], group1 = group1, group2 = group2, label = colnames(D))
     colnames(D_PCA)[1:2] <- c("PCx", "PCy")
     ### more than 6 different shapes will otherwise give an error message:
-    pl <- pl + ggplot2::geom_point(data = D_PCA, ggplot2::aes(colour = group1, shape = group2), size = point.size, alpha = alpha)
+    pl <- pl + ggplot2::geom_point(data = D_PCA, ggplot2::aes(colour = group1, shape = group2), size = pointSize, alpha = alpha)
   }
 
   # version with only colour
   if (!is.null(groupForColour) & is.null(groupForShape)) {
     D_PCA <- data.frame(pred[,c(PCx,PCy)], group1 = group1, label = colnames(D))
     colnames(D_PCA)[1:2] <- c("PCx", "PCy")
-    pl <- pl + ggplot2::geom_point(data = D_PCA, ggplot2::aes(colour = group1), size = point.size, alpha = alpha)
+    pl <- pl + ggplot2::geom_point(data = D_PCA, ggplot2::aes(colour = group1), size = pointSize, alpha = alpha)
   }
 
   # version with only shape
   if (is.null(groupForColour) & !is.null(groupForShape)) {
     D_PCA <- data.frame(pred[,c(PCx,PCy)], group2 = group2, label = colnames(D))
     colnames(D_PCA)[1:2] <- c("PCx", "PCy")
-    pl <- pl + ggplot2::geom_point(data = D_PCA, ggplot2::aes(shape = group2), size = point.size, alpha = alpha)
+    pl <- pl + ggplot2::geom_point(data = D_PCA, ggplot2::aes(shape = group2), size = pointSize, alpha = alpha)
   }
 
   # version without colour or shape
   if (is.null(groupForColour) & is.null(groupForShape)) {
     D_PCA <- data.frame(pred[,c(PCx,PCy)], label = colnames(D))
     colnames(D_PCA)[1:2] <- c("PCx", "PCy")
-    pl <- pl + ggplot2::geom_point(data = D_PCA, size = point.size, alpha = alpha)
+    pl <- pl + ggplot2::geom_point(data = D_PCA, size = pointSize, alpha = alpha)
   }
 
   if (!is.null(groupForColour)) pl <- pl + ggplot2::labs(colour = groupForColour)
   if (!is.null(groupForShape)) pl <- pl + ggplot2::labs(shape = groupForShape)
 
-  if(!is.null(groupForColour) & !is.null(group_colours)){
-    pl <- pl + ggplot2::scale_colour_manual(values = group_colours)
+  if(!is.null(groupForColour) & !is.null(groupColours)){
+    pl <- pl + ggplot2::scale_colour_manual(values = groupColours)
   }
 
   if (label) {
     pl <- pl + ggrepel::geom_text_repel(data = D_PCA, ggplot2::aes(x=PCx, y=PCy, label = label, colour = group1),
-                                        size = label_size, seed = label_seed) +
+                                        size = labelSize, seed = labelSeed) +
       ggplot2::guides(colour = ggplot2::guide_legend(override.aes = ggplot2::aes(label = "")))
   }
 
   #### add % of explainable variance to the axis label ####
-  pl <- pl + ggplot2::theme_bw(base_size = base_size) +
+  pl <- pl + ggplot2::theme_bw(base_size = baseSize) +
     ggplot2::xlab(paste0("PC", PCx, " (", round(100*summ$importance[2,PCx], 1), "%)")) +
     ggplot2::ylab(paste0("PC", PCy, " (", round(100*summ$importance[2,PCy], 1), "%)"))
 
