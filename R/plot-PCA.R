@@ -6,6 +6,11 @@
 #'                         The variable used for colors.
 #' @param groupForShape    \strong{character(1)} \cr
 #'                         The variable used for shapes.
+#' @param assay            \strong{character(1)} \cr
+#'                         The name of the assay in SE containing the protein intensities.
+#'                         Default is "intensity_norm", which uses the normalized
+#'                         protein intensities if the SE object was generated
+#'                         by the ProtStatsWF functionality.
 #' @param imputeMethod    \strong{character} \cr
 #'                         The imputation method. Options are "mean", "median" or "none".
 #' @param propNA           \strong{numeric} \cr
@@ -52,6 +57,7 @@ PCA_Plot <- function(SE,
                      #id = NULL,
                      groupForColour = NULL,
                      groupForShape = NULL,
+                     assay = "intensity_norm",
 
                      imputeMethod = "mean", propNA = 0,
                      scale. = TRUE,
@@ -70,7 +76,8 @@ PCA_Plot <- function(SE,
 
   # warning if propNA = 0 and imputation method is chosen (no imp. will be done)
 
-  filtered_data <- filter_PCA_data(SE = SE,
+  filtered_data <<- filter_PCA_data(SE = SE,
+                                    assay = assay,
                                    imputeMethod = imputeMethod,
                                    propNA = propNA)
 
@@ -81,7 +88,7 @@ PCA_Plot <- function(SE,
   }
 
 
-  D <- SummarizedExperiment::assays(filtered_data)$intensity_norm
+  D <- SummarizedExperiment::assays(filtered_data)[[assay]]
   id <- SummarizedExperiment::rowData(filtered_data)
 
   if (!is.null(groupForColour)) {
@@ -104,6 +111,8 @@ PCA_Plot <- function(SE,
 
 
   #### calculate PCA ####
+  print(D)
+
   pca <- stats::prcomp(t(D), scale. = scale.)
   pred <- stats::predict(pca, t(D))
   summ <- summary(pca)
