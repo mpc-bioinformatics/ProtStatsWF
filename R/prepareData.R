@@ -146,6 +146,7 @@ prepareDataSE <- function(dataPath,
 
   ### long format:
   # TODO: this is a generic function from tidySummarizedExperiments package
+  # TODO: D_long is a tibble, will that cause problems?
   suppressMessages({
   D_long <- tidySummarizedExperiment:::pivot_longer.SummarizedExperiment(SE,
                   cols = proteinNameColumn)

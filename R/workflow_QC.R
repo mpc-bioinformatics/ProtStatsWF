@@ -204,7 +204,7 @@ workflow_QC <- function(D,
   ### TODO: na out and other output types
 
   # prepare group colours
-  group <- summarizedExperiment::colData(D$SE)[, groupColumn]
+  group <- SummarizedExperiment::colData(D$SE)[, groupColumn]
   nr_groups <- length(levels(group))
   if (is.null(groupColours) & nr_groups >= 1) groupColours <- scales::hue_pal()(nr_groups)
 
