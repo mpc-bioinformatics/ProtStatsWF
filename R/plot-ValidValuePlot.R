@@ -35,16 +35,16 @@ ValidValuePlot <- function(D_long,
   # select only relevant columns
   D_long_sel <- dplyr::select(D_long, c(".feature", ".sample", "intensity_norm"))
   D_long_sel <- cbind(D_long_sel, group = D_long[, groupColumn])
-  
+
   sample_levels <- levels(D_long_sel$.sample)
 
   #### calculate valid value table ####
   .sample <- group <- intensity_norm <- nrvalid <- NULL  # initialize variables
-  valid_value_table <- D_long %>%
+  valid_value_table <- D_long_sel %>%
     dplyr::group_by(.sample, group) %>%
     dplyr::summarize(nrvalid = sum(!is.na(intensity_norm)), meanvalid = mean(!is.na(intensity_norm)), .groups = 'drop')
   valid_value_table$.sample <- factor(valid_value_table$.sample, levels = sample_levels)
-  
+
   ### add column with sample number
   #valid_value_table$sample <- limma::strsplit2(valid_value_table$name, "_")[,2]
 
