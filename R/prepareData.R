@@ -65,10 +65,17 @@ prepareDataSE <- function(dataPath,
       sep <- "\t"
     }
     D_complete <- utils::read.table(dataPath, sep = sep, header = header, dec = dec,
-                           quote = "\"")
+                                    quote = "\"")
+    if (!is.null(sampleInfoPath)) {
+      sampleInfo <- utils::read.table(sampleInfoPath, sep = sep, header = header, dec = dec,
+                                      quote = "\"")
+    }
   }
   if (fileType == "xlsx") {
     D_complete <- openxlsx::read.xlsx(dataPath, colNames = header, sheet = sheet)
+    if (!is.null(sampleInfoPath)) {
+      sampleInfo <- openxlsx::read.xlsx(sampleInfoPath, colNames = TRUE, sheet = 1)
+    }
   }
 
   id <- D_complete[, -intensityColumns]
@@ -106,7 +113,7 @@ prepareDataSE <- function(dataPath,
 
   ## read in sample information file, if given
   if (!is.null(sampleInfoPath)) {
-    sampleInfo <- openxlsx::read.xlsx(sampleInfoPath, colNames = TRUE)
+    #sampleInfo <- openxlsx::read.xlsx(sampleInfoPath, colNames = TRUE)
     ind <- match(sampleInfo[, sampleNameColumn], colnames(D))
     D_norm <- D_norm[,ind] # sort columns of D like sampleInfo
 
