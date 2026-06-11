@@ -146,7 +146,6 @@ prepareDataSE <- function(dataPath,
 
   ### long format:
   # TODO: this is a generic function from tidySummarizedExperiments package
-  # TODO: D_long is a tibble, will that cause problems?
   suppressMessages({
   D_long <- tidySummarizedExperiment:::pivot_longer.SummarizedExperiment(SE,
                   cols = proteinNameColumn)
@@ -154,6 +153,7 @@ prepareDataSE <- function(dataPath,
   D_long <- dplyr::select(D_long, -c("name", "value"))
   # bring factor levels in same order as in sampleInfo
   D_long$.sample <- factor(D_long$.sample, levels = sampleInfo[, sampleNameColumn])
+  D_long <- as.data.frame(D_long)
 
   #print(sampleInfo[, sampleNameColumn])
   #print(levels(D_long$.sample))
