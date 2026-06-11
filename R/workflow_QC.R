@@ -10,15 +10,9 @@
 #'
 #'
 #'
-#' @param dataPath              \strong{character} \cr
-#'                               The path to an .xlsx file containing the input data.
-#'
-#'
-#' @param filetype **character(1)** \cr Type of input file: "csv" or "tsv" or "txt" or "xlsx".
-#' @param sep **character(1)** \cr The field separator, e.g. " " for blanks, "," for comma or "\\t" for tab. Default is ",".
-#' @param dec **character(1)** \cr Decimal separator, e.g. "," for comma or "." for dot. Default is ".".
-#' @param header **logical(1)** \cr If TRUE, first line is counted as column names.
-#' @param sheet **integer(1)** \cr Sheet number (only needed for xlsx files, default is to use the first sheet).
+#' @param D              \strong{list} \cr
+#'                               Output from [prepareDataSE()], containing the data
+#'                               as a SummarizedExperiment object and in long format.
 #' @param output_path            \strong{character} \cr
 #'                               The path to the output folder.
 #' @param output_type **character(1)** \cr Type of input file: "csv" or "tsv" or "xlsx".
@@ -31,16 +25,8 @@
 #' @param lts_quantile           \strong{numeric} \cr
 #'                               The quantile for the lts normalization if \code{normalization = "lts"}.
 # additional parameters
-#' @param na_strings             \strong{character} \cr
-#'                               A vector containing the symbols to be recognized as missing values (with the exception of 0).
 #' @param na_out                 \strong{character} \cr
 #'                               NA values will be converted to this character before writing results.
-#' @param zero_to_NA             \strong{logical} \cr
-#'                               If \code{TRUE}, 0 will be treated as missing value.
-#' @param do_log_transformation  \strong{logical} \cr
-#'                               If \code{TRUE}, the data will be log-transformed.
-#' @param log_base               \strong{numeric} \cr
-#'                               The base used, if \code{do_log_transformation = TRUE}.
 #' @param groupName              \strong{character} \cr
 #'                               The name for the first group variable (used for colour in plots).
 #' @param group2Name              \strong{character} \cr
@@ -139,26 +125,26 @@
 
 
 
-workflow_QC <- function(dataPath,
-                        intensityColumns,
-                        proteinNameColumn = "Protein",
-                        sampleInfoPath = NULL,
-                        sampleNameColumn = "sampleName",
+workflow_QC <- function(D,
+                        #intensityColumns,
+                        #proteinNameColumn = "Protein",
+                        #sampleInfoPath = NULL,
+                        #sampleNameColumn = "sampleName",
                         groupColumn = NULL,
                         group2Column = NULL,
 
-                        fileType = "xlsx",
-                        sep = ",",
-                        dec = ".",
-                        header = TRUE,
-                        sheet = 1,
+                        #fileType = "xlsx",
+                        #sep = ",",
+                        #dec = ".",
+                        #header = TRUE,
+                        #sheet = 1,
 
-                        NAStrings = c("NA", "NaN", "Filtered","#NV"),
-                        zeroToNA = TRUE,
-                        doLogTrans = TRUE,
-                        logBase = 2,
-                        normMethod = "loess",
-                        ltsQuantile = 0.8,
+                        #NAStrings = c("NA", "NaN", "Filtered","#NV"),
+                        #zeroToNA = TRUE,
+                        #doLogTrans = TRUE,
+                        #logBase = 2,
+                        #normMethod = "loess",
+                        #ltsQuantile = 0.8,
 
                         outPath,
                         outType = "xlsx",
@@ -195,61 +181,59 @@ workflow_QC <- function(dataPath,
 
   #### Prepare Data ####
 
-  prepared_data <- prepareDataSE(dataPath,
-                                 intensityColumns,
-                                 proteinNameColumn = proteinNameColumn,
-                                 sampleInfoPath = sampleInfoPath,
-                                 sampleNameColumn = sampleNameColumn,
-                                 doLogTrans = doLogTrans,
-                                 logBase = logBase,
-                                 normMethod = normMethod,
-                                 ltsQuantile = ltsQuantile,
+  # D <- prepareDataSE(dataPath,
+  #                                intensityColumns,
+  #                                proteinNameColumn = proteinNameColumn,
+  #                                sampleInfoPath = sampleInfoPath,
+  #                                sampleNameColumn = sampleNameColumn,
+  #                                doLogTrans = doLogTrans,
+  #                                logBase = logBase,
+  #                                normMethod = normMethod,
+  #                                ltsQuantile = ltsQuantile,
+  #
+  #                                fileType = fileType,
+  #                                sep = sep,
+  #                                dec = dec,
+  #                                header = header,
+  #                                sheet = sheet,
+  #                                zeroToNA = zeroToNA,
+  #                                NAStrings = NAStrings,
+  #                                verbose = verbose)
 
-                                 fileType = fileType,
-                                 sep = sep,
-                                 dec = dec,
-                                 header = header,
-                                 sheet = sheet,
-                                 zeroToNA = zeroToNA,
-                                 NAStrings = NAStrings,
-                                 verbose = verbose)
 
-  if (outType == "xlsx") {
-    exportSE(prepared_data$SE, file = file.path(output_path, paste0("D_norm", suffix, ".xlsx")))
-  }
   ### TODO: na out and other output types
-           
+
   # prepare group colours
-  group <- summarizedExperiment::colData(prepared_data$SE)[, groupColumn]
+  group <- summarizedExperiment::colData(D$SE)[, groupColumn]
   nr_groups <- length(levels(group))
   if (is.null(groupColours) & nr_groups >= 1) groupColours <- scales::hue_pal()(nr_groups)
 
   #### Calculate Valid Value Plot ####
-  vv_plot <- ValidValuePlot(D_long = prepared_data$D_long,
+  vv_plot <- ValidValuePlot(D_long = D$D_long,
                                  groupColumn = groupColumn,
                                  groupColours = groupColours,
                                  baseSize = baseSize)
 
-  ggplot2::ggsave(file.path(output_path, paste0("valid_value_plot", suffix, ".", plot_device)), 
-                  plot = vv_plot$plot, device = plotDevice, height = plotHeight_BP_VV, 
+  ggplot2::ggsave(file.path(output_path, paste0("valid_value_plot", suffix, ".", plot_device)),
+                  plot = vv_plot$plot, device = plotDevice, height = plotHeight_BP_VV,
                   width = plotWidth_BP_VV, dpi = plotDPI, units = "cm")
-  
+
   ### TODO: different output file types
-  utils::write.csv(x = vv_plot$table, file = file.path(outPath, 
+  utils::write.csv(x = vv_plot$table, file = file.path(outPath,
                     paste0("D_validvalues", suffix, ".csv")), row.names = FALSE)
 
 
 
   #### Calculate Boxlots ####
 
-  boxplots <- Boxplots(D_long = prepared_data$D_long,
+  boxplots <- Boxplots(D_long = D$D_long,
                            groupColumn = groupColumn,
                            groupColours = groupColours,
-                           baseSize = baseSize, 
+                           baseSize = baseSize,
                            method = boxplotMethod, lwd = 0.5)
 
-  ggplot2::ggsave(file.path(outPath, paste0("boxplot", suffix, ".", plotDevice)), 
-                  plot = boxplots, device = plotDevice, height = plotHeight_BP_VV, 
+  ggplot2::ggsave(file.path(outPath, paste0("boxplot", suffix, ".", plotDevice)),
+                  plot = boxplots, device = plotDevice, height = plotHeight_BP_VV,
                   width = plotWidth_BP_VV, dpi = plotDPI, units = "cm")
 
 
@@ -261,13 +245,13 @@ workflow_QC <- function(dataPath,
 
 
   if (MAMaxPlots > 0) {
-    ma_data <- MA_Plots(D = prepared_data$SE,
+    ma_data <- MA_Plots(D = D$SE,
                         outPath = outPath, suffix = suffix,
-                        labels = 1:ncol(prepared_data[["D"]]),  # TODO
-                        labels2 = colnames(prepared_data[["D"]]),  # TODO
+                        labels = 1:ncol(D[["D"]]),  # TODO
+                        labels2 = colnames(D[["D"]]),  # TODO
                         maxPlots = MAMaxPlots, alpha = MAAlpha,
-                        plot_height = plotHeight_PCA_MA, 
-                        plot_width = plotWidth_PCA_MA, 
+                        plot_height = plotHeight_PCA_MA,
+                        plot_width = plotWidth_PCA_MA,
                         sampling = 1, verbose = verbose)
   }
 
@@ -278,14 +262,14 @@ workflow_QC <- function(dataPath,
   pca_data <- PCA_Plot(D = preparedData$SE,
                        groupForColour = groupColumn,
                        groupForShape = group2Column,
-                       #impute = PCA_impute, 
-                       imputeMethod = PCAImputeMethod, 
+                       #impute = PCA_impute,
+                       imputeMethod = PCAImputeMethod,
                        propNA = PCAPropNA,
                        scale. = PCAScale,
                        PCx = 1, PCy = 2,
                        groupvar1_name = groupColumn,
                        groupvar2_name = group2Column,
-                       groupColours = group_colours, 
+                       groupColours = group_colours,
                        alpha = PCAAlpha,
                        label = PCALabel, PCALabelSeed = NA, PCALabelSize = 4,
                        xlim = PCAXlim, ylim = PCAYlim,
@@ -295,8 +279,8 @@ workflow_QC <- function(dataPath,
   # Loadings <- as.data.frame(pca$rotation)
   # if (!is.null(id)) {
   #   Loadings <- cbind(id, Loadings)
-  
-  
+
+
   ggplot2::ggsave(file.path(outPath, paste0("PCA_plot", suffix, ".", plot_device)), plot = pca_data[["plot"]],
                   device = plot_device, height = plot_height_PCA_MA, width = plot_width_PCA_MA, dpi = plot_dpi, units = "cm")
   utils::write.csv(x = pca_data$D_PCA_plot, file = file.path(outPath, paste0("D_PCA", suffix, ".csv")), row.names = FALSE)

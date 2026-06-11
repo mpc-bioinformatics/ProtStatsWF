@@ -94,6 +94,13 @@ prepareDataSE <- function(dataPath,
                               log_base = logBase, lts.quantile = ltsQuantile,
                               verbose = verbose)
 
+  ### TODO: add option to save normalized data as xlsx file
+  # if (outType == "xlsx") {
+  #   exportSE(prepared_data$SE, file = file.path(output_path, paste0("D_norm", suffix, ".xlsx")))
+  # }
+
+
+
   ### TODO: check if all samples can be found in sampleInfo
   ### TODO: remove additional samples from sampleInfo
 
