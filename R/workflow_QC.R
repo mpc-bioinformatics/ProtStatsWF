@@ -132,6 +132,7 @@ workflow_QC <- function(D,
                         #sampleNameColumn = "sampleName",
                         groupColumn = NULL,
                         group2Column = NULL,
+                        groupColours = NULL,
 
                         #fileType = "xlsx",
                         #sep = ",",
