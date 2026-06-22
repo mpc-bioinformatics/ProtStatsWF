@@ -215,7 +215,7 @@ workflow_QC <- function(D,
                                  groupColours = groupColours,
                                  baseSize = baseSize)
 
-  ggplot2::ggsave(file.path(output_path, paste0("valid_value_plot", suffix, ".", plot_device)),
+  ggplot2::ggsave(file.path(outPath, paste0("valid_value_plot", suffix, ".", plot_device)),
                   plot = vv_plot$plot, device = plotDevice, height = plotHeight_BP_VV,
                   width = plotWidth_BP_VV, dpi = plotDPI, units = "cm")
 
