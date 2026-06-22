@@ -30,12 +30,12 @@
 
 MA_Plot_single <- function(sample_1, sample_2,
                           alpha = FALSE,
-                          point_color = "black",
+                          pointColour = "black",
                           sampling = 1,
                           ...) {
 
   if(alpha) {
-    point_color = alpha(point_color, 0.5)
+    pointColour = alpha(pointColour, 0.5)
   }
 
   M <- stats::na.omit(sample_1 - sample_2)
@@ -49,13 +49,13 @@ MA_Plot_single <- function(sample_1, sample_2,
   }
 
 
-  if (length(point_color) > 1) {
+  if (length(pointColour) > 1) {
     na.ind <- attr(M, "na.action")
-    point_color <- point_color[-na.ind]
+    pointColour <- pointColour[-na.ind]
   }
 
 
-  affy::ma.plot(A = A, M = M, pch = 16, cex = 0.7, col = point_color, show.statistics = FALSE, ...)
+  affy::ma.plot(A = A, M = M, pch = 16, cex = 0.7, col = pointColour, show.statistics = FALSE, ...)
 }
 
 
@@ -100,11 +100,11 @@ MA_Plot_single <- function(sample_1, sample_2,
 #'
 
 MA_Plots <- function(D,
-                    output_path = NULL, suffix = "",
+                    outPath = NULL, suffix = "",
                     labels = 1:ncol(D), labels2 = colnames(D),
                     maxPlots = 5000,
                     alpha = FALSE,
-                    plot_height = 15, plot_width = 15,
+                    plotHeight = 15, plotWidth = 15,
                     sampling = 1, verbose = TRUE,
                     ...) {
 
@@ -120,11 +120,11 @@ MA_Plots <- function(D,
   num <- 0
   pb <- utils::txtProgressBar(min = 0,max = number_plots,char = "#",style = 3)
 
-  if (!is.null(output_path)) {
+  if (!is.null(outPath)) {
     filename <- paste0("MA_Plots", suffix, ".pdf")
-    grDevices::pdf(file.path(output_path, filename), height = plot_height/2.54, width = plot_width/2.54)
+    grDevices::pdf(file.path(outPath, filename), height = plotHeight/2.54, width = plotWidth/2.54)
   }
-  
+
   for(i in 1:(ncol(D)-1)) {
     for (j in (i + 1):ncol(D)) {
 
@@ -147,7 +147,7 @@ MA_Plots <- function(D,
     }
   }
 
-  if (!is.null(output_path)) {
+  if (!is.null(outPath)) {
     grDevices::dev.off()
   }
   close(pb)

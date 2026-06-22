@@ -1,82 +1,64 @@
-#' Calculate a PCA plot for proteomics data.
+#' PCA plot for proteomics data.
 #'
-#' @param SE               \strong{SummarizedExperiment object} \cr
-#'                         The data set containing intensities of the sample.
-#' @param groupForColour   \strong{character(1)} \cr
-#'                         The variable used for colors.
-#' @param groupForShape    \strong{character(1)} \cr
-#'                         The variable used for shapes.
-#' @param assay            \strong{character(1)} \cr
-#'                         The name of the assay in SE containing the protein intensities.
-#'                         Default is "intensity_norm", which uses the normalized
-#'                         protein intensities if the SE object was generated
-#'                         by the ProtStatsWF functionality.
-#' @param imputeMethod    \strong{character} \cr
-#'                         The imputation method. Options are "mean", "median" or "none".
-#' @param propNA           \strong{numeric} \cr
-#'                         The proportion of allowed missing NAs for a protein, before it is discarded.
-#' @param scale.           \strong{logical} \cr
-#'                         If \code{TRUE}, the data will be scaled before computing the PCA.
-#' @param PCx              \strong{integer} \cr
-#'                         The principle component for the x-axis.
-#' @param PCy              \strong{integer} \cr
-#'                         The principle component for the y-axis.
-#' @param groupvar1_name   \strong{character} \cr
-#'                         The titles of legends for colour.
-#' @param groupvar2_name   \strong{character} \cr
-#'                         The titles of legends for shape.
-#' @param group_colours    \strong{character vector} \cr
-#'                         The colors for the groups.
-#' @param alpha            \strong{logical} \cr
-#'                         If \code{TRUE}, the data points will be transparent.
-#' @param label            \strong{logical} \cr
-#'                         If \code{TRUE}, the samples will be labeled.
-#' @param label_seed       \strong{numeric} \cr
-#'                         A numeric, which sets the seed for the label.
-#' @param label_size       \strong{numeric} \cr
-#'                         A numeric containing the size of the sample labels.
-#' @param xlim             \strong{numeric} \cr
-#'                         The limit of the x-axis.
-#' @param ylim             \strong{numeric} \cr
-#'                         The limit of the y-axis.
-#' @param point.size       \strong{numeric} \cr
-#'                         The size of the data points.
-#' @param base_size        \strong{numeric} \cr
-#'                         The base size for the plot.
-#' @param ...              Additional arguments for ggplot2::plot.
-#' @param verbose          \strong{logical(1)} \cr
-#'                          If TRUE, messages are printed.
+#' @param SE  **SummarizedExperiment object** \cr A SummarizedExperiment object containing the proteomics data (output element SE from [prepareDataSE]). The assay specified by the `assay` parameter will be used for PCA.
+#' @param groupForColour  **character(1)** \cr The name of the column in the colData of the SummarizedExperiment object to be used for colouring the points in the PCA plot.
+#' @param colourType **character(1)** \cr Type for colour, either "discrete" (default) or "continuous".
+#' @param groupForShape  **character(1)** \cr The name of the column in the colData of the SummarizedExperiment object to be used for shaping the points in the PCA plot.
+#' @param assay  **character(1)** \cr The name of the assay in the SummarizedExperiment object to be used for PCA.
+#' @param imputeMethod  **character(1)** \cr The method to use for imputing missing values. Options are "mean" (default) and "median".
+#' @param propNA  **numeric** \cr The proportion of missing values allowed before imputation is applied.
+#' @param scale. **logical(1)** \cr Whether to scale data for the PCA. Default is TRUE.
+#' @param PCx **integer(1)** \cr The principal component to be plotted on the x-axis. Default is 1.
+#' @param PCy **integer(1)** \cr The principal component to be plotted on the y-axis. Default is 2.
+#' @param groupColours **character** \cr Vector of colours for the groups. Default is NULL
+#' (default ggplot2 colour palette will be used.)
+#' @param alpha **numeric(1)** \cr The transparency level (between 0 and 1) of the points. Default is 1 (no transparency).
+#' @param label **logical(1)** \cr Whether to label the points. Default is FALSE.
+#' @param labelSeed **numeric(1)** \cr Seed for random number generator used for label placement.
+#' Default is NA, which may lead to different label placement for multiple executions of this function.
+#' @param labelSize **numeric(1)** \cr Size of the labels. Default is 4.
+#' @param xlim **numeric(2)** \cr Limits for the x-axis. Default is NULL (automatic).
+#' @param ylim **numeric(2)** \cr Limits for the y-axis. Default is NULL (automatic).
+#' @param pointSize **numeric(1)** \cr Size of data points in the PCA. Default is 4.
+#' @param baseSize **numeric(1)** \cr Base size for the plots. Default is 15.
+#' @param NAValueColour **character(1)** \cr Colour for data points with missing values in the groupForColour variable. Default is grey.
+#' @param NAValueShape **integer(1)** \cr Shape for data points with missing values in the groupForShape variable. Default is 0 (hollow square). Please see [graphics::pch()] for further information.
+#' @param verbose **logical(1)** \cr Whether to print messages during the execution of the function. Default is TRUE.
 #'
-#' @return The PCA plot for a proteomics sample.
+#' @return TODO
 #' @export
 #'
 #' @examples
-#'
-
 PCA_Plot <- function(SE,
-                     #id = NULL,
                      groupForColour = NULL,
+                     colourType = "discrete",
                      groupForShape = NULL,
                      assay = "intensity_norm",
 
-                     imputeMethod = "mean", propNA = 0,
+                     imputeMethod = "mean",
+                     propNA = 0,
                      scale. = TRUE,
-                     PCx = 1, PCy = 2,
+                     PCx = 1,
+                     PCy = 2,
 
-                     groupvar1_name = "group", groupvar2_name = NULL,
-                     groupColours = NULL, alpha = 1,
-                     label = FALSE, labelSeed = NA, labelSize = 4,
-                     xlim = NULL, ylim = NULL,
+                     groupColours = NULL,
+                     alpha = 1,
+                     label = FALSE,
+                     labelSeed = NA,
+                     labelSize = 4,
+                     xlim = NULL,
+                     ylim = NULL,
 
-                     pointSize = 4, baseSize = 11,
-                     verbose = TRUE,
-                     ...
-
+                     pointSize = 4,
+                     baseSize = 11,
+                     NAValueColour = "grey",
+                     NAValueShape = 0,
+                     verbose = TRUE
 ) {
 
   # warning if propNA = 0 and imputation method is chosen (no imp. will be done)
 
-  filtered_data <<- filter_PCA_data(SE = SE,
+  filtered_data <- filter_PCA_data(SE = SE,
                                     assay = assay,
                                    imputeMethod = imputeMethod,
                                    propNA = propNA)
@@ -93,7 +75,9 @@ PCA_Plot <- function(SE,
 
   if (!is.null(groupForColour)) {
     group1 <- SummarizedExperiment::colData(filtered_data)[,groupForColour]
-    group1 <- factor(group1)
+    if (colourType == "discrete") {
+      group1 <- factor(group1)
+    }
   } else {
     group1 <- NULL
   }
@@ -111,7 +95,7 @@ PCA_Plot <- function(SE,
 
 
   #### calculate PCA ####
-  print(D)
+  #print(D)
 
   pca <- stats::prcomp(t(D), scale. = scale.)
   pred <- stats::predict(pca, t(D))
@@ -126,11 +110,13 @@ PCA_Plot <- function(SE,
   #### prepare data.frame ####
   # version with colour and shape
   if (!is.null(groupForColour) & !is.null(groupForShape)) {
-    D_PCA <- data.frame(pred[,c(PCx,PCy)], group1 = group1, group2 = group2, label = colnames(D))
+    D_PCA <<- data.frame(pred[,c(PCx,PCy)], group1 = group1, group2 = group2, label = colnames(D))
     colnames(D_PCA)[1:2] <- c("PCx", "PCy")
     ### more than 6 different shapes will otherwise give an error message:
     pl <- pl + ggplot2::geom_point(data = D_PCA, ggplot2::aes(colour = group1, shape = group2), size = pointSize, alpha = alpha)
   }
+
+  print("sdhfkyd")
 
   # version with only colour
   if (!is.null(groupForColour) & is.null(groupForShape)) {
@@ -156,8 +142,15 @@ PCA_Plot <- function(SE,
   if (!is.null(groupForColour)) pl <- pl + ggplot2::labs(colour = groupForColour)
   if (!is.null(groupForShape)) pl <- pl + ggplot2::labs(shape = groupForShape)
 
-  if(!is.null(groupForColour) & !is.null(groupColours)){
-    pl <- pl + ggplot2::scale_colour_manual(values = groupColours)
+  print(is.numeric(D_PCA$group1))
+  if (!is.null(groupForColour) & (!is.null(groupColours) | is.numeric(D_PCA$group1)) & colourType == "discrete") {
+    pl <- pl + ggplot2::scale_colour_manual(values = groupColours, na.value = NAValueColour)
+  } else {
+    if (is.numeric(D_PCA$group1)) {
+      pl <- pl + ggplot2::scale_colour_continuous(na.value = NAValueColour)
+    } else {
+      pl <- pl + ggplot2::scale_colour_discrete(na.value = NAValueColour)
+    }
   }
 
   if (label) {
@@ -171,9 +164,14 @@ PCA_Plot <- function(SE,
     ggplot2::xlab(paste0("PC", PCx, " (", round(100*summ$importance[2,PCx], 1), "%)")) +
     ggplot2::ylab(paste0("PC", PCy, " (", round(100*summ$importance[2,PCy], 1), "%)"))
 
-  # allow more than 6 different shapes
+  ### allow more than 6 different shapes
   if (!is.null(group2)) {
-    if (nlevels(D_PCA$group2) > 6) pl <- pl + ggplot2::scale_shape_manual(values = 1:nlevels(D$group2))
+    if (nlevels(D_PCA$group2) > 6) {
+      pl <- pl + ggplot2::scale_shape_manual(values = 1:nlevels(D$group2), na.value = NAValueShape)
+    } else {
+      pl <- pl + ggplot2::scale_shape_discrete(na.value = NAValueShape)
+    }
+
   }
 
 

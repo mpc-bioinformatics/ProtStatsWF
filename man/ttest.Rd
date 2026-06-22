@@ -15,7 +15,7 @@ ttest(
   delog_for_FC = TRUE,
   log_base = 2,
   min_obs_per_group = 3,
-  filename = "results_ttest.xlsx",
+  filename = NULL,
   min_obs_per_group_ratio = NULL
 )
 }

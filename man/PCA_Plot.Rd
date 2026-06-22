@@ -2,98 +2,83 @@
 % Please edit documentation in R/plot-PCA.R
 \name{PCA_Plot}
 \alias{PCA_Plot}
-\title{Calculate a PCA plot for proteomics data.}
+\title{PCA plot for proteomics data.}
 \usage{
 PCA_Plot(
   SE,
   groupForColour = NULL,
+  colourType = "discrete",
   groupForShape = NULL,
+  assay = "intensity_norm",
   imputeMethod = "mean",
   propNA = 0,
   scale. = TRUE,
   PCx = 1,
   PCy = 2,
-  groupvar1_name = "group",
-  groupvar2_name = NULL,
-  group_colours = NULL,
+  groupColours = NULL,
   alpha = 1,
   label = FALSE,
-  label_seed = NA,
-  label_size = 4,
+  labelSeed = NA,
+  labelSize = 4,
   xlim = NULL,
   ylim = NULL,
-  point.size = 4,
-  base_size = 11,
-  verbose = TRUE,
-  ...
+  pointSize = 4,
+  baseSize = 11,
+  NAValueColour = "grey",
+  NAValueShape = 0,
+  verbose = TRUE
 )
 }
 \arguments{
-\item{SE}{\strong{SummarizedExperiment object} \cr
-The data set containing intensities of the sample.}
+\item{SE}{\strong{SummarizedExperiment object} \cr A SummarizedExperiment object containing the proteomics data (output element SE from \link{prepareDataSE}). The assay specified by the \code{assay} parameter will be used for PCA.}
 
-\item{groupForColour}{\strong{character(1)} \cr
-The variable used for colors.}
+\item{groupForColour}{\strong{character(1)} \cr The name of the column in the colData of the SummarizedExperiment object to be used for colouring the points in the PCA plot.}
 
-\item{groupForShape}{\strong{character(1)} \cr
-The variable used for shapes.}
+\item{colourType}{\strong{character(1)} \cr Type for colour, either "discrete" (default) or "continous".}
 
-\item{imputeMethod}{\strong{character} \cr
-The imputation method. Options are "mean", "median" or "none.}
+\item{groupForShape}{\strong{character(1)} \cr The name of the column in the colData of the SummarizedExperiment object to be used for shaping the points in the PCA plot.}
 
-\item{propNA}{\strong{numeric} \cr
-The proportion of allowed missing NAs for a protein, before it is discarded.}
+\item{assay}{\strong{character(1)} \cr The name of the assay in the SummarizedExperiment object to be used for PCA.}
 
-\item{scale.}{\strong{logical} \cr
-If \code{TRUE}, the data will be scaled before computing the PCA.}
+\item{imputeMethod}{\strong{character(1)} \cr The method to use for imputing missing values. Options are "mean" (default) and "median".}
 
-\item{PCx}{\strong{integer} \cr
-The principle component for the x-axis.}
+\item{propNA}{\strong{numeric} \cr The proportion of missing values allowed before imputation is applied.}
 
-\item{PCy}{\strong{integer} \cr
-The principle component for the y-axis.}
+\item{scale.}{\strong{logical(1)} \cr Whether to scale data for the PCA. Default is TRUE.}
 
-\item{groupvar1_name}{\strong{character} \cr
-The titles of legends for colour.}
+\item{PCx}{\strong{integer(1)} \cr The principal component to be plotted on the x-axis. Default is 1.}
 
-\item{groupvar2_name}{\strong{character} \cr
-The titles of legends for shape.}
+\item{PCy}{\strong{integer(1)} \cr The principal component to be plotted on the y-axis. Default is 2.}
 
-\item{group_colours}{\strong{character vector} \cr
-The colors for the groups.}
+\item{groupColours}{\strong{character} \cr Vector of colours for the groups. Default is NULL
+(default ggplot2 colour palette will be used.)}
 
-\item{alpha}{\strong{logical} \cr
-If \code{TRUE}, the data points will be transparent.}
+\item{alpha}{\strong{numeric(1)} \cr The transparency level (between 0 and 1) of the points. Default is 1 (no transparency).}
 
-\item{label}{\strong{logical} \cr
-If \code{TRUE}, the samples will be labeled.}
+\item{label}{\strong{logical(1)} \cr Whether to label the points. Default is FALSE.}
 
-\item{label_seed}{\strong{numeric} \cr
-A numeric, which sets the seed for the label.}
+\item{labelSeed}{\strong{numeric(1)} \cr Seed for random number generator used for label placement.
+Default is NA, which may lead to different label placement for multiple executions of this function.}
 
-\item{label_size}{\strong{numeric} \cr
-A numeric containing the size of the sample labels.}
+\item{labelSize}{\strong{numeric(1)} \cr Size of the labels. Default is 4.}
 
-\item{xlim}{\strong{numeric} \cr
-The limit of the x-axis.}
+\item{xlim}{\strong{numeric(2)} \cr Limits for the x-axis. Default is NULL (automatic).}
 
-\item{ylim}{\strong{numeric} \cr
-The limit of the y-axis.}
+\item{ylim}{\strong{numeric(2)} \cr Limits for the y-axis. Default is NULL (automatic).}
 
-\item{point.size}{\strong{numeric} \cr
-The size of the data points.}
+\item{pointSize}{\strong{numeric(1)} \cr Size of data points in the PCA. Default is 4.}
 
-\item{base_size}{\strong{numeric} \cr
-The base size for the plot.}
+\item{baseSize}{\strong{numeric(1)} \cr Base size for the plots. Default is 15.}
 
-\item{verbose}{\strong{logical(1)} \cr
-If TRUE, messages are printed.}
+\item{NAValueColour}{\strong{character(1)} \cr Colour for data points with missing values in the groupForColour variable. Default is grey.}
 
-\item{...}{Additional arguments for ggplot2::plot.}
+\item{NAValueShape}{\strong{integer(1)} \cr Shape for data points with missing values in the groupForShape variable. Default is 0 (hollow square). Please see \code{\link[graphics:pch]{graphics::pch()}} for further information.}
+
+\item{verbose}{\strong{logical(1)} \cr Whether to print messages during the execution of the function. Default is TRUE.}
 }
 \value{
-The PCA plot for a proteomics sample.
+TODO
 }
 \description{
-Calculate a PCA plot for proteomics data.
+PCA plot for proteomics data.
 }

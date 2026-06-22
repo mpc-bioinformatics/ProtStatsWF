@@ -4,11 +4,22 @@
 \alias{filter_PCA_data}
 \title{A method for filtering the data for PCA.}
 \usage{
-filter_PCA_data(SE, imputeMethod = "none", propNA = 0)
+filter_PCA_data(
+  SE,
+  assay = "intensity_norm",
+  imputeMethod = "none",
+  propNA = 0
+)
 }
 \arguments{
 \item{SE}{\strong{SummarizedExperiment object} \cr
 The data set containing intensities of the sample.}
+
+\item{assay}{\strong{character(1)} \cr
+The name of the assay in SE containing the protein intensities.
+Default is "intensity_norm", which uses the normalized
+protein intensities if the SE object was generated
+by the ProtStatsWF functionality.}
 
 \item{imputeMethod}{\strong{character} \cr
 The imputation method. Options are "mean" or "median" or "none}

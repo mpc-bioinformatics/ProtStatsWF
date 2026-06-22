@@ -238,29 +238,28 @@ ttest_single_row_paired <- function(x, group, sample, log_before_test = TRUE, de
 
 
 #' Function to compute t-test (paired or unpaired)
-#' @param D                         \strong{data.frame} \cr
-#'                                  The data set containing only protein intensities, already filtered for interesting candidates.
-#' @param id                        \strong{data.frame} \cr
-#'                                  The corresponding ID columns for the parameter D e.g. containing further columns like protein or gene names.
-#' @param group                     \strong{character factor} \cr
+#' @param D                         **data.frame** \cr
+#'                                  The data set containing only protein intensities.
+#' @param id                        **data.frame** \cr
+#'                                  Data fram containing ID columns like protein names, gene names etc.
+#' @param group                     **factor** \cr
 #'                                  The group membership of the data.
-#' @param sample                    \strong{character factor} \cr
-#'                                  The sample membership of the data.
-#' @param paired                    \strong{logical} \cr
-#'                                  If \code{TRUE}, the test will be paired, otherwise it will be unpaired.
-#' @param var.equal                 \strong{logical} \cr
-#'                                  If \code{TRUE}, the variances of the groups are expected to be equal.
-#' @param log_before_test           \strong{logical} \cr
-#'                                  If \code{TRUE}, the data will be log-transformed before the test.
-#' @param delog_for_FC              \strong{logical} \cr
-#'                                  If \code{TRUE}, the fold change will be calculated on the original scale.
-#' @param log_base                  \strong{numeric} \cr
-#'                                  The base of the logarithm for the log-transformation.
-#' @param min_obs_per_group         \strong{integer} \cr
-#'                                  The minimum number of observations per group.
-#' @param filename                  \strong{characte} \cr
-#'                                  The name of the output file.
-#' @param min_obs_per_group_ratio   \strong{numeric} \cr
+#' @param sample                    **factor** \cr
+#'                                  The sample numbers or IDs of the samples (only used to build pairs if paired = TRUE, otherwise it is ignored).
+#' @param paired                    **logical** \cr
+#'                                  If TRUE, the test will be paired, otherwise it will be unpaired. Default is FALSE.
+#' @param var.equal                 **logical(1)** \cr
+#'                                  If TRUE, the variances of the groups are expected to be equal. Default is FALSE.
+#' @param log_before_test           **logical** \cr
+#'                                  If TRUE, the data will be log-transformed before the test. Default is TRUE. Set it to FALSE if data is already log-transformed, e.g.
+#'                                  if you have already normalized it during [prepareDataSE()].
+#' @param delog_for_FC              **logical** \cr
+#'                                  If TRUE, the fold change will be calculated on the original scale. Default is TRUE.
+#' @param log_base                  **numeric** \cr
+#'                                  The base of the logarithm for the log-transformation. Default is 2.
+#' @param min_obs_per_group         **integer** \cr
+#'                                  The minimum number of observations per group. For a paired ttest, this is counted as the minimum of complete pairs. Default is 3.
+#' @param min_obs_per_group_ratio   **numeric** \cr
 #'                                  The minimum number of observations per group as a ratio (e.g, 0.8 = 80% valid values in each group needed).
 #'
 #' @return A data frame containing the results of the t-test.
@@ -274,7 +273,10 @@ ttest_single_row_paired <- function(x, group, sample, log_before_test = TRUE, de
 ttest <- function(D, id = NULL, group, sample = NULL, paired = FALSE, var.equal = FALSE,
                   log_before_test = TRUE, delog_for_FC = TRUE, log_base = 2,
                   min_obs_per_group = 3,
-                  filename = "results_ttest.xlsx", min_obs_per_group_ratio = NULL) {
+                  min_obs_per_group_ratio = NULL) {
+
+  ### TODO: if group is not a factor, make one out of it!
+
 
   if (!paired) {
     RES <- pbapply::pbapply(D, 1,ttest_single_row, group = group, log_before_test = log_before_test,
@@ -323,7 +325,6 @@ ttest <- function(D, id = NULL, group, sample = NULL, paired = FALSE, var.equal 
     }
   }
 
-  openxlsx::write.xlsx(cbind(D, RES), filename, keepNA = TRUE, overwrite = TRUE)
 
   return(cbind(D, RES))
 }

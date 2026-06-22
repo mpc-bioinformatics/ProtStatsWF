@@ -8,10 +8,10 @@ Boxplots(
   D_long,
   method = "boxplot",
   groupColumn = NULL,
-  group_colours = NULL,
-  base_size = 15,
+  groupColours = NULL,
+  baseSize = 15,
   lwd = 0.5,
-  outlier_size = 1
+  outlierSize = 1
 )
 }
 \arguments{
@@ -23,14 +23,14 @@ The method used. Options are "boxplot" and "violinplot".}
 
 \item{groupColumn}{\strong{logical} \cr}
 
+\item{lwd}{\strong{numeric} \cr
+The line width of the boxplot.}
+
 \item{group_colours}{\strong{character vector} \cr
 The hex codes for the group colors.}
 
 \item{base_size}{\strong{numeric} \cr
 The base size of the font.}
-
-\item{lwd}{\strong{numeric} \cr
-The line width of the boxplot.}
 
 \item{outlier_size}{\strong{numeric} \cr
 The size of the outliers.}

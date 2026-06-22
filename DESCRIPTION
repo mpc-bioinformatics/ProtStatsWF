@@ -11,7 +11,6 @@ Description: This package offers workflows for the statistical analysis of prote
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.3
 Suggests: 
     testthat (>= 3.0.0),
     vdiffr
@@ -44,5 +43,4 @@ Imports:
     vsn
 URL: https://github.com/mpc-bioinformatics/ProtStatsWF
 BugReports: https://github.com/mpc-bioinformatics/ProtStatsWF/issues
-
-
+Config/roxygen2/version: 8.0.0

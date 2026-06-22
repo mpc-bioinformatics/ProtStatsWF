@@ -5,219 +5,111 @@
 \title{QC Workflow (QCQuant)}
 \usage{
 workflow_QC(
-  dataPath,
-  intensityColumns,
-  proteinNameColumn = "Protein",
-  sampleInfoPath = NULL,
-  sampleNameColumn = "sampleName",
+  D,
   groupColumn = NULL,
   group2Column = NULL,
-  fileType = "xlsx",
-  sep = ",",
-  dec = ".",
-  header = TRUE,
-  sheet = 1,
-  output_path,
-  output_type = "xlsx",
-  normMethod = "loess",
-  ltsQuantile = 0.8,
-  NAStrings = c("NA", "NaN", "Filtered", "#NV"),
-  na_out = "NA",
-  zeroToNA = TRUE,
-  doLogTrans = TRUE,
-  logBase = 2,
-  groupvar_name = "Group",
-  group_colours = NULL,
+  groupColours = NULL,
+  outPath,
+  outType = "xlsx",
   suffix = "",
+  NAOut = "NA",
   verbose = TRUE,
-  base_size = 15,
-  plot_device = "pdf",
-  plot_height_BP_VV = 10,
-  plot_width_BP_VV = 15,
-  plot_height_PCA_MA = 15,
-  plot_width_PCA_MA = 15,
-  plot_dpi = 300,
-  boxplot_method = "boxplot",
-  generate_MAplots = TRUE,
-  MA_maxPlots = 5000,
-  MA_alpha = FALSE,
-  MA_sampling = 1,
-  PCA_impute = FALSE,
-  PCA_impute_method = "mean",
-  PCA_propNA = 0,
-  PCA_scale. = TRUE,
-  PCA_PCx = 1,
-  PCA_PCy = 2,
-  PCA_groupvar1_name = "group",
-  PCA_alpha = 1,
-  PCA_label = FALSE,
-  PCA_label_seed = NA,
-  PCA_label_size = 4,
-  PCA_xlim = NULL,
-  PCA_ylim = NULL,
-  PCA_point.size = 4
+  baseSize = 15,
+  plotDevice = "pdf",
+  plotHeight_BP_VV = 10,
+  plotWidth_BP_VV = 15,
+  plotHeight_PCA_MA = 15,
+  plotWidth_PCA_MA = 15,
+  plotDPI = 300,
+  boxplotMethod = "boxplot",
+  MAMaxPlots = 5000,
+  MAAlpha = 1,
+  PCAImputeMethod = "mean",
+  PCAPropNA = 0,
+  PCAScale = TRUE,
+  PCAAlpha = 1,
+  PCALabel = FALSE,
+  PCALabelSeed = NA,
+  PCALabelSize = 4,
+  PCAXlim = NULL,
+  PCAYlim = NULL,
+  PCAPointSize = 4
 )
 }
 \arguments{
-\item{dataPath}{\strong{character} \cr
-The path to an .xlsx file containing the input data.}
+\item{D}{\strong{list} Result from \code{\link[=prepareDatSE]{prepareDatSE()}} containing the imported data.}
 
-\item{sep}{\strong{character(1)} \cr The field separator, e.g. " " for blanks, "," for comma or "\\t" for tab. Default is ",".}
+\item{groupColumn}{\strong{character(1)} Column name in the colData(D$SE) that contains the group
+information for colouring the plots. Default is NULL (no group information for colouring).}
 
-\item{dec}{\strong{character(1)} \cr Decimal separator, e.g. "," for comma or "." for dot. Default is ".".}
+\item{group2Column}{\strong{character(1)} Column name in the colData(D$SE) that
+contains a secondary group information (used in PCA_plot as shape). Default is NULL.}
 
-\item{header}{\strong{logical(1)} \cr If TRUE, first line is counted as column names.}
+\item{groupColours}{\strong{character} Vector of colours for the groups. Default is NULL
+(default ggplot2 colour palette will be used.)}
 
-\item{sheet}{\strong{integer(1)} \cr Sheet number (only needed for xlsx files, default is to use the first sheet).}
+\item{outPath}{\strong{character(1)} Path to save the output files. The corresponding folder must exist.}
 
-\item{output_path}{\strong{character} \cr
-The path to the output folder.}
+\item{outType}{\strong{character(1)} Type of output file. Default is xlsx.}
 
-\item{output_type}{\strong{character(1)} \cr Type of input file: "csv" or "tsv" or "xlsx".}
+\item{suffix}{\strong{character(1)} Suffix to add to the output file names. Default is "".}
 
-\item{na_out}{\strong{character} \cr
-NA values will be converted to this character before writing results.}
+\item{NAOut}{\strong{character(1)} String to represent missing values in the output files. Default is "NA".}
 
-\item{groupvar_name}{\strong{character} \cr
-The name for the group variable.}
+\item{verbose}{\strong{logical(1)} Whether to print messages during the workflow. Default is TRUE.}
 
-\item{group_colours}{\strong{character vector} \cr
-The hex codes for the group colors, if the data has groups. If \code{NULL}, a default color scale will be used.}
+\item{baseSize}{\strong{numeric(1)} Base size for the plots. Default is 15.}
 
-\item{suffix}{\strong{character} \cr
-The suffix for the output files. It needs to start with an underscore.}
+\item{plotDevice}{\strong{character(1)} Device to use for saving plots. Default is "pdf".}
 
-\item{base_size}{\strong{numeric} \cr
-The base size of the font.}
+\item{plotHeight_BP_VV}{\strong{numeric(1)} Height of the boxplot and valid value plots in cm. Default is 10.}
 
-\item{plot_device}{\strong{character} \cr
-The type of the output file. Options are "pdf" or "png".}
+\item{plotWidth_BP_VV}{\strong{numeric(1)} Width of the boxplot and valid value plots in cm. Default is 15.}
 
-\item{plot_height_BP_VV}{\strong{numeric} \cr
-The plot height for boxplots and valid-value plots in cm.}
+\item{plotHeight_PCA_MA}{\strong{numeric(1)} Height of the PCA and MA plots in cm. Default is 15.}
 
-\item{plot_width_BP_VV}{\strong{numeric} \cr
-The plot width for boxplots and valid-value plots in cm. The optimal width is highly affected by the number of samples.}
+\item{plotWidth_PCA_MA}{\strong{numeric(1)} Width of the PCA and MA plots in cm. Default is 15.}
 
-\item{plot_height_PCA_MA}{\strong{numeric} \cr
-The plot height for PCA and MA-plots in cm.}
+\item{plotDPI}{\strong{numeric(1)} DPI for the plots. Default is 300.}
 
-\item{plot_width_PCA_MA}{\strong{numeric} \cr
-The plot width for PCA and MA-plots in cm.}
+\item{boxplotMethod}{\strong{character(1)} Method for boxplot. Default is "boxplot".}
 
-\item{plot_dpi}{\strong{numeric} \cr
-The "dots per inch" of the plot aka. the plot resolution.}
+\item{MAMaxPlots}{\strong{numeric(1)} Maximum number of MA plots to be drawn. Default is 5000.}
 
-\item{boxplot_method}{\strong{character} \cr
-The method used. Options are "boxplot" and "violinplot".}
+\item{MAAlpha}{\strong{numeric(1)} Alpha value for MA plots. Default is 1.}
 
-\item{generate_MAplots}{\strong{logical} \cr
-If \code{TRUE}, MA plots will be generated, if \code{FALSE} they will not be generated (mostly for debugging purposes and time reduction in large datasets).}
+\item{PCAImputeMethod}{\strong{character(1)} Method for missing value imputation for the PCA. Default is "mean".}
 
-\item{MA_maxPlots}{\strong{integer} \cr
-The maximum number of MA plots that should be generated.}
+\item{PCAPropNA}{\strong{numeric(1)} Allowed proportion of missing values for PCA. Default is 0.
+Proteins with more missing values will be removed from the PCA. The others will be imputed.}
 
-\item{MA_alpha}{\strong{logical} \cr
-If \code{TRUE}, the data points of the MA plots will be transparent.}
+\item{PCAScale}{\strong{logical(1)} Whether to scale data for the PCA. Default is TRUE.}
 
-\item{MA_sampling}{\strong{numeric} \cr
-The sampling rate for MA-Plots. Useful to sample part of the data set for data sets on peptide/feature level with many data points.}
+\item{PCAAlpha}{\strong{numeric(1)} Alpha value (transparency) for points in the PCA. Default is 1.}
 
-\item{PCA_impute}{\strong{logical} \cr
-If \code{TRUE}, missing values will be imputed for the PCA.}
+\item{PCALabel}{\strong{logical(1)} Whether to label PCA points. Default is FALSE.}
 
-\item{PCA_impute_method}{\strong{character} \cr
-The imputation method. Options are "mean" or "median".}
+\item{PCALabelSeed}{\strong{numeric(1)} Seed for data point labels in the PCA. Default is NA.}
 
-\item{PCA_propNA}{\strong{numeric} \cr
-The proportion of allowed missing NAs for a protein, before it is discarded.}
+\item{PCALabelSize}{\strong{numeric(1)} Size of data point labels in the PCA. Default is 4.}
 
-\item{PCA_scale.}{\strong{logical} \cr
-If \code{TRUE}, the data will be scaled before computing the PCA.}
+\item{PCAXlim}{\strong{numeric(2)} Limits for the x-axis in the PCA plot. Default is NULL.}
 
-\item{PCA_PCx}{\strong{numeric} \cr
-The principle component for the x-axis.}
+\item{PCAYlim}{\strong{numeric(2)} Limits for the y-axis in the PCA plot. Default is NULL.}
 
-\item{PCA_PCy}{\strong{numeric} \cr
-The principle component for the y-axis.}
-
-\item{PCA_groupvar1_name}{\strong{character} \cr
-The titles of legends for colour.}
-
-\item{PCA_alpha}{\strong{logical} \cr
-If \code{TRUE}, the data points of the PCA plot will be transparent.}
-
-\item{PCA_label}{\strong{logical} \cr
-If \code{TRUE}, the samples will be labeled.}
-
-\item{PCA_label_seed}{\strong{numeric} \cr
-The seed for the label.}
-
-\item{PCA_label_size}{\strong{numeric} \cr
-The size of the sample labels.}
-
-\item{PCA_xlim}{\strong{numeric} \cr
-The limit of the x-axis.}
-
-\item{PCA_ylim}{\strong{numeric} \cr
-The limit of the y-axis.}
-
-\item{PCA_point.size}{\strong{numeric} \cr
-The size of the data points.}
-
-\item{filetype}{\strong{character(1)} \cr Type of input file: "csv" or "tsv" or "txt" or "xlsx".}
-
-\item{intensity_columns}{\strong{integer vector} \cr
-The numbers of the intensity columns in the table.}
-
-\item{normalization_method}{\strong{character} \cr
-The method of normalization. Options are "nonorm" (no normalization), "median", "loess", "quantile" or "lts" normalization.}
-
-\item{lts_quantile}{\strong{numeric} \cr
-The quantile for the lts normalization if \code{normalization = "lts"}.}
-
-\item{na_strings}{\strong{character} \cr
-A vector containing the symbols to be recognized as missing values (with the exception of 0).}
-
-\item{zero_to_NA}{\strong{logical} \cr
-If \code{TRUE}, 0 will be treated as missing value.}
-
-\item{do_log_transformation}{\strong{logical} \cr
-If \code{TRUE}, the data will be log-transformed.}
-
-\item{log_base}{\strong{numeric} \cr
-The base used, if \code{do_log_transformation = TRUE}.}
+\item{PCAPointSize}{\strong{numeric(1)} Size of data points in the PCA. Default is 4.}
 }
 \value{
-The workflow saves several plots and excel files and returns a message log of the workflow.
+The workflow saves several plots and files and returns a message log of the workflow.
 }
 \description{
 Workflow for quality control of quantitative proteomics data
 }
 \details{
 This function performs quality control of quantitative proteomics data.
-As a first step, the data can be normalized.
-Then the following plots are generated: a valid value plot, boxplots, MA-plots and a PCA plot.
-}
-\examples{
-
-# 1. Set the character of your data path, leading to an .xlsx file.
-in_path <- "C:/Users/thisuser/Documents/dataFolder/data.xlsx"
-
-# 2. Set the integer vector of the columns, which contain the intensities.
-int_col <- 3:17
-
-# 3. Set the character of the output path, leading to a folder for the results.
-out_path <- "C:/Users/thisuser/Documents/resultsFolder/"
-
-# 4. Run the QC workflow with the parameters you set.
-\dontrun{
-result <- workflow_QC(data_path = in_path,
-                         output_path = out_path,
-                         intensity_columns = int_col) }
-
+The following plots are generated: a valid value plot, boxplots, MA-plots and a PCA plot.
 }
 \seealso{
 Functions used in this workflow:
-\code{\link[=prepareData]{prepareData()}}, \code{\link[=ValidValuePlot]{ValidValuePlot()}}, \code{\link[=Boxplots]{Boxplots()}}, \code{\link[=MA_Plots]{MA_Plots()}}, \code{\link[=PCA_Plot]{PCA_Plot()}}
+\code{\link[=prepareDataSE]{prepareDataSE()}}, \code{\link[=ValidValuePlot]{ValidValuePlot()}}, \code{\link[=Boxplots]{Boxplots()}}, \code{\link[=MA_Plots]{MA_Plots()}}, \code{\link[=PCA_Plot]{PCA_Plot()}}.
 }

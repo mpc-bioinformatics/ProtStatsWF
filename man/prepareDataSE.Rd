@@ -2,7 +2,8 @@
 % Please edit documentation in R/prepareData.R
 \name{prepareDataSE}
 \alias{prepareDataSE}
-\title{Prepare proteomics data for analysis.}
+\title{Prepare quantitative proteomics data and combine it with sample information
+(e.g., clinical data) in a SummarizedExperiment object.}
 \usage{
 prepareDataSE(
   dataPath,
@@ -20,53 +21,57 @@ prepareDataSE(
   header = TRUE,
   sheet = 1,
   zeroToNA = TRUE,
-  NAStrings = c("NA", "NaN", "Filtered", "#NV"),
+  NAStrings = c("NA", "NaN", "Filtered", "#NV", ""),
   verbose = TRUE
 )
 }
 \arguments{
-\item{dataPath}{\strong{character(1)} \cr
-The path to the data file with protein intensities.}
+\item{dataPath}{\strong{character(1)} \cr Path to the data file (xlsx, csv, tsv, or txt) containing the quantitative proteomics data. The file should have a column with protein names and columns with intensity values for each sample.}
 
-\item{intensityColumns}{\strong{integer} \cr The columns numbers containing protein intensities in the data set.}
+\item{intensityColumns}{\strong{integer} \cr Column numbers that contain the intensity values. E.g. 1:12 if the first 12 columns contain intensity values for 12 samples.}
 
-\item{proteinNameColumn}{\strong{character(1)} \cr The name of the column in the data file that contains the protein names. Default is "Protein".}
+\item{proteinNameColumn}{\strong{character(1)} \cr Column name that contains the protein names. Default is "Protein".}
 
-\item{sampleInfoPath}{\strong{character(1)} \cr The path to the sample information file with group information.
-This file must contain a column corresponding to the column names of the data file (only intensity columns).
-Further columns are optional and may give information on groups, timepoints or patient information (patient ID, age, gender etc.).}
+\item{sampleInfoPath}{\strong{character(1)} \cr Path to the file containing sample information. Default is NULL (no sample info file).}
 
-\item{sampleNameColumn}{\strong{character(1)} \cr The name of the column in the sample information file that contains the sample names.
-The sample names have to correspond to the columns names of the data file (only for intensity columns),
-but they do not necessarily have to be in the same order as the columns. They will be used to match the data file and the sample information file.}
+\item{sampleNameColumn}{\strong{character(1)} \cr Column name of the sampleInfo that contains the sample names. Default is "SampleName".}
 
-\item{doLogTrans}{\strong{logical(1)} \cr If \code{TRUE}, the data will be log-transformed.}
+\item{doLogTrans}{\strong{logical(1)} \cr Whether to perform log transformation. Default is TRUE.}
 
-\item{logBase}{\strong{numeric(1)} \cr The base for the logarithm, if \code{do_log_transformation = TRUE}. Default is 2.}
+\item{logBase}{\strong{numeric(1)} \cr Base for log transformation. Default is 2.}
 
-\item{normMethod}{\strong{character(1)} \cr The method of normalization. Options are "nonorm" (no normalization), "median", "loess", "quantile" or "lts" normalization.}
+\item{normMethod}{\strong{character(1)} \cr Normalization method to use. Default is "loess". See \code{\link[=automatedNormalization]{automatedNormalization()}} for options.}
 
-\item{ltsQuantile}{\strong{numeric(1)} The quantile for the lts normalization if \code{normalization = "lts"}.}
+\item{ltsQuantile}{\strong{numeric(1)} \cr Quantile to use for the least trimmed squares regression in the "lts" normalization method. Default is 0.8.}
 
-\item{fileType}{\strong{character(1)} \cr Type of input file: "csv" or "tsv" or "txt" or "xlsx".}
+\item{fileType}{\strong{character(1)} \cr Type of the data file. One of "xlsx", "csv", "tsv", or "txt". Default is "xlsx".}
 
-\item{sep}{\strong{character(1)} \cr The field separator, e.g. " " for blanks, "," for comma or "\\t" for tab. Default is ",".}
+\item{sep}{\strong{character(1)} \cr Separator for csv, tsv, or txt files. Default is "," (comma). Ignored for xlsx files.}
 
-\item{dec}{\strong{character(1)} \cr Decimal separator, e.g. "," for comma or "." for dot. Default is ".".}
+\item{dec}{\strong{character(1)} \cr Decimal point character for csv, tsv, or txt files. Default is "." (dot). Ignored for xlsx files.}
 
-\item{header}{\strong{logical(1)} \cr If TRUE, first line is counted as column names.}
+\item{header}{\strong{logical(1)} \cr Whether the data file has a header row. Default is TRUE. Ignored for xlsx files, where the header is always read.}
 
-\item{sheet}{\strong{integer(1)} \cr Sheet number (only needed for xlsx files, default is to use the first sheet).}
+\item{sheet}{\strong{integer(1)} \cr Sheet number to read from an xlsx file. Default is 1. Ignored for csv, tsv, or txt files.}
 
-\item{zeroToNA}{\strong{logical(1)} \cr If \code{TRUE}, 0 will be treated as missing value.}
+\item{zeroToNA}{\strong{logical(1)} \cr Whether to convert zero intensity values to NA. Default is TRUE.}
 
-\item{NAStrings}{\strong{character} \cr A vector containing the symbols to be recognized as missing values (except 0).}
+\item{NAStrings}{\strong{character} \cr Character vector of strings to interpret as NA when reading the data file. Default is c("NA", "NaN", "Filtered","#NV", "").}
 
-\item{verbose}{\strong{logical(1)} \cr If \code{TRUE}, messages about the performed steps will be printed in the console.}
+\item{verbose}{\strong{logical(1)} \cr Whether to print messages about the data processing steps. Default is TRUE.}
 }
 \value{
-A list containing the prepared data and the ids of the data as data.frames as well as the groups, number of groups and group colors.
+List with two elements:
+\itemize{
+\item SE: A SummarizedExperiment object containing the normalized intensity data in
+the assay "intensity_norm", the original intensity data in the assay "intensity",
+the protein information in rowData (all other columns in data that are not the proteinName or
+intensity columns), and the sample information in colData..
+\item D_long: A data frame in long format containing the normalized intensity values
+for each protein and sample, along with the corresponding sample information from colData.
+}
 }
 \description{
-Prepare proteomics data for analysis.
+Prepare quantitative proteomics data and combine it with sample information
+(e.g., clinical data) in a SummarizedExperiment object.
 }

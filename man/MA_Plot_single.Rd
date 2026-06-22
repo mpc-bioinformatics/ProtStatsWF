@@ -8,7 +8,7 @@ MA_Plot_single(
   sample_1,
   sample_2,
   alpha = FALSE,
-  point_color = "black",
+  pointColour = "black",
   sampling = 1,
   ...
 )
@@ -23,13 +23,13 @@ The data of the second sample.}
 \item{alpha}{\strong{logical} \cr
 If \code{TRUE}, the data points will be transparent.}
 
-\item{point_color}{\strong{character} \cr
-The color of the data points.}
-
 \item{sampling}{\strong{numeric} \cr
 The sampling rate. Useful to sample part of the data set for data sets on peptide/feature level with many data points.}
 
 \item{...}{Additional arguments for affy::ma.plot.}
+
+\item{point_color}{\strong{character} \cr
+The color of the data points.}
 }
 \value{
 Generates the MA plot for two samples.

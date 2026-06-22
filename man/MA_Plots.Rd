@@ -6,14 +6,14 @@
 \usage{
 MA_Plots(
   D,
-  output_path = NULL,
+  outPath = NULL,
   suffix = "",
   labels = 1:ncol(D),
   labels2 = colnames(D),
   maxPlots = 5000,
   alpha = FALSE,
-  plot_height = 15,
-  plot_width = 15,
+  plotHeight = 15,
+  plotWidth = 15,
   sampling = 1,
   verbose = TRUE,
   ...
@@ -22,9 +22,6 @@ MA_Plots(
 \arguments{
 \item{D}{\strong{data.frame} \cr
 The data set containing intensities of the sample.}
-
-\item{output_path}{\strong{character} \cr
-The path to a folder for the output.}
 
 \item{suffix}{\strong{character} \cr
 The suffix, with which the output file will be named. Should start with an underscore.}
@@ -41,18 +38,21 @@ The maximum number of MA plots that should be generated.}
 \item{alpha}{\strong{logical} \cr
 If \code{TRUE}, the data points will be transparent.}
 
-\item{plot_height}{\strong{numeric} \cr
-The height of the resulting MA plots.}
-
-\item{plot_width}{\strong{numeric} \cr
-The width of the resulting MA plots.}
-
 \item{sampling}{\strong{numeric} \cr
 The sampling rate. Useful to sample part of the data set for data sets on peptide/feature level with many data points.}
 
 \item{verbose}{If TRUE, messages are printed out.}
 
 \item{...}{Additional arguments for affy::ma.plot.}
+
+\item{output_path}{\strong{character} \cr
+The path to a folder for the output.}
+
+\item{plot_height}{\strong{numeric} \cr
+The height of the resulting MA plots.}
+
+\item{plot_width}{\strong{numeric} \cr
+The width of the resulting MA plots.}
 }
 \value{
 A pdf file containing the MA plots for all sample combinations.

@@ -1,41 +1,37 @@
-#' Prepare proteomics data for analysis.
+
+#' Prepare quantitative proteomics data and combine it with sample information
+#' (e.g., clinical data) in a SummarizedExperiment object.
 #'
-#' @template param_dataPath
-#' @param intensityColumns **integer** \cr The columns numbers containing protein intensities in the data set.
-#' @param proteinNameColumn **character(1)** \cr The name of the column in the data file that contains the protein names. Default is "Protein".
-#' @param sampleInfoPath **character(1)** \cr The path to the sample information file with group information.
-#'    This file must contain a column corresponding to the column names of the data file (only intensity columns).
-#'    Further columns are optional and may give information on groups, timepoints or patient information (patient ID, age, gender etc.).
-#' @param sampleNameColumn **character(1)** \cr The name of the column in the sample information file that contains the sample names.
-#'    The sample names have to correspond to the columns names of the data file (only for intensity columns),
-#'    but they do not necessarily have to be in the same order as the columns. They will be used to match the data file and the sample information file.
-# @param groupColumn **character(1)** \cr The name of the column in the sample information file that contains the group information.
-#    Will be used for colouring in the plots. If NULL, no colouring is done.
-# @param group2Column **character(1)** \cr The name of the column in the sample information file that contains a second grouping variable, e.g. timepoints.
-#    This will be used in the PCA plot for "shape" of the data points.
-# @param sampleIDColumn **character(1)** \cr The name of the column in the sample information file that contains the sample IDs.
-#    This is especially important if a paired analysis is going to be used (paired t-test, repeated measures ANOVA),
-#    as the sample IDs will be used to link the paired samples.
+#' @param dataPath **character(1)** \cr Path to the data file (xlsx, csv, tsv, or txt) containing the quantitative proteomics data. The file should have a column with protein names and columns with intensity values for each sample.
+#' @param intensityColumns **integer** \cr Column numbers that contain the intensity values. E.g. 1:12 if the first 12 columns contain intensity values for 12 samples.
+#' @param proteinNameColumn **character(1)** \cr Column name that contains the protein names. Default is "Protein".
+#' @param sampleInfoPath **character(1)** \cr Path to the file containing sample information. Default is NULL (no sample info file).
+#' @param sampleNameColumn **character(1)** \cr Column name of the sampleInfo that contains the sample names. Default is "SampleName".
+#' @param doLogTrans **logical(1)** \cr Whether to perform log transformation. Default is TRUE.
+#' @param logBase **numeric(1)** \cr Base for log transformation. Default is 2.
+#' @param normMethod **character(1)** \cr Normalization method to use. Default is "loess". See [automatedNormalization()] for options.
+#' @param ltsQuantile **numeric(1)** \cr Quantile to use for the least trimmed squares regression in the "lts" normalization method. Default is 0.8.
+#' @param fileType **character(1)** \cr Type of the data file. One of "xlsx", "csv", "tsv", or "txt". Default is "xlsx".
+#' @param sep **character(1)** \cr Separator for csv, tsv, or txt files. Default is "," (comma). Ignored for xlsx files.
+#' @param dec **character(1)** \cr Decimal point character for csv, tsv, or txt files. Default is "." (dot). Ignored for xlsx files.
+#' @param header **logical(1)** \cr Whether the data file has a header row. Default is TRUE. Ignored for xlsx files, where the header is always read.
+#' @param sheet **integer(1)** \cr Sheet number to read from an xlsx file. Default is 1. Ignored for csv, tsv, or txt files.
+#' @param zeroToNA **logical(1)** \cr Whether to convert zero intensity values to NA. Default is TRUE.
+#' @param NAStrings **character** \cr Character vector of strings to interpret as NA when reading the data file. Default is c("NA", "NaN", "Filtered","#NV", "").
+#' @param verbose **logical(1)** \cr Whether to print messages about the data processing steps. Default is TRUE.
 #'
-#' @param doLogTrans **logical(1)** \cr If \code{TRUE}, the data will be log-transformed.
-#' @param logBase **numeric(1)** \cr The base for the logarithm, if \code{do_log_transformation = TRUE}. Default is 2.
-#' @param normMethod **character(1)** \cr The method of normalization. Options are "nonorm" (no normalization), "median", "loess", "quantile" or "lts" normalization.
-#' @param ltsQuantile **numeric(1)** The quantile for the lts normalization if \code{normalization = "lts"}.
-#'
-#' @param fileType **character(1)** \cr Type of input file: "csv" or "tsv" or "txt" or "xlsx".
-#' @param sep **character(1)** \cr The field separator, e.g. " " for blanks, "," for comma or "\\t" for tab. Default is ",".
-#' @param dec **character(1)** \cr Decimal separator, e.g. "," for comma or "." for dot. Default is ".".
-#' @param header **logical(1)** \cr If TRUE, first line is counted as column names.
-#' @param sheet **integer(1)** \cr Sheet number (only needed for xlsx files, default is to use the first sheet).
-#' @param zeroToNA **logical(1)** \cr If \code{TRUE}, 0 will be treated as missing value.
-#' @param NAStrings **character** \cr A vector containing the symbols to be recognized as missing values (except 0).
-#' @param verbose **logical(1)** \cr If \code{TRUE}, messages about the performed steps will be printed in the console.
-#'
-#' @return A list containing the prepared data and the ids of the data as data.frames as well as the groups, number of groups and group colors.
+#' @returns List with two elements:
+#' \itemize{
+#'  \item SE: A SummarizedExperiment object containing the normalized intensity data in
+#'  the assay "intensity_norm", the original intensity data in the assay "intensity",
+#'  the protein information in rowData (all other columns in data that are not the proteinName or
+#'  intensity columns), and the sample information in colData..
+#'  \item D_long: A data frame in long format containing the normalized intensity values
+#'  for each protein and sample, along with the corresponding sample information from colData.
+#'  }
 #' @export
 #'
 #' @examples
-#'
 prepareDataSE <- function(dataPath,
                           intensityColumns,
                           proteinNameColumn = "Protein",
@@ -45,14 +41,13 @@ prepareDataSE <- function(dataPath,
                           logBase = 2,
                           normMethod = "loess",
                           ltsQuantile = 0.8,
-
                           fileType = "xlsx",
                           sep = ",",
                           dec = ".",
                           header = TRUE,
                           sheet = 1,
                           zeroToNA = TRUE,
-                          NAStrings = c("NA", "NaN", "Filtered","#NV"),
+                          NAStrings = c("NA", "NaN", "Filtered","#NV", ""),
                           verbose = TRUE) {
 
 
@@ -65,16 +60,18 @@ prepareDataSE <- function(dataPath,
       sep <- "\t"
     }
     D_complete <- utils::read.table(dataPath, sep = sep, header = header, dec = dec,
-                                    quote = "\"")
+                                    quote = "\"", na.strings = NAStrings)
     if (!is.null(sampleInfoPath)) {
       sampleInfo <- utils::read.table(sampleInfoPath, sep = sep, header = header, dec = dec,
-                                      quote = "\"")
+                                      quote = "\"", na.strings = NAStrings)
     }
   }
   if (fileType == "xlsx") {
-    D_complete <- openxlsx::read.xlsx(dataPath, colNames = header, sheet = sheet)
+    D_complete <- openxlsx::read.xlsx(dataPath, colNames = header, sheet = sheet,
+                                      na.strings = NAStrings)
     if (!is.null(sampleInfoPath)) {
-      sampleInfo <- openxlsx::read.xlsx(sampleInfoPath, colNames = TRUE, sheet = 1)
+      sampleInfo <- openxlsx::read.xlsx(sampleInfoPath, colNames = TRUE,
+                                        sheet = 1, na.strings = NAStrings)
     }
   }
 
@@ -194,150 +191,3 @@ pivot_longer_SE <- function(SE, cols) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#' Prepare proteomics data for analysis.
-#'
-#' @param data_path               \strong{character} \cr
-#'                                The path to an .xlsx file containing the input data.
-#' @param filetype **character(1)** \cr Type of input file: "csv" or "tsv" or "txt" or "xlsx".
-#' @param sep **character(1)** \cr The field separator, e.g. " " for blanks, "," for comma or "\\t" for tab. Default is ",".
-#' @param dec **character(1)** \cr Decimal separator, e.g. "," for comma or "." for dot. Default is ".".
-#' @param header **logical(1)** \cr If TRUE, first line is counted as column names.
-#' @param sheet **integer(1)** \cr Sheet number (only needed for xlsx files, default is to use the first sheet).
-#' @param intensity_columns       \strong{integer vector} \cr
-#'                                The numbers of the intensity columns in the table.
-#' @param na_strings              \strong{character} \cr
-#'                                A vector containing the symbols to be recognized as missing values (with the exception of 0).
-#' @param zero_to_NA              \strong{logical} \cr
-#'                                If \code{TRUE}, 0 will be treated as missing value.
-#' @param do_log_transformation   \strong{logical} \cr
-#'                                If \code{TRUE}, the data will be log-transformed.
-#' @param log_base                \strong{numeric} \cr
-#'                                The base used, if \code{do_log_transformation = TRUE}.
-#' @param use_groups              \strong{logical} \cr
-#'                                If \code{TRUE}, group information encoded in the column names is used.
-#' @param group_colours           \strong{character vector} \cr
-#'                                The hex codes for the group colors, if the data has groups. If \code{NULL}, a default color scale will be used.
-#' @param normalization           \strong{character} \cr
-#'                                The method of normalization. Options are "nonorm" (no normalization), "median", "loess", "quantile" or "lts" normalization.
-#' @param lts_quantile            \strong{numeric} \cr
-#'                                The quantile for the lts normalization if \code{normalization = "lts"}.
-#'
-#' @return A list containing the prepared data and the ids of the data as data.frames as well as the groups, number of groups and group colors.
-#' @export
-#'
-#' @examples
-#'
-
-prepareData <- function (data_path,
-                         filetype = "xlsx",
-                         sep = ",",
-                         dec = ".",
-                         header = TRUE,
-                         sheet = 1,
-                         intensity_columns,
-                         na_strings = c("NA", "NaN", "Filtered","#NV"),
-                         zero_to_NA = TRUE,
-                         do_log_transformation = TRUE, log_base = 2,
-                         use_groups = FALSE, group_colours = NULL,
-                         normalization = "loess", lts_quantile = 0.8){
-
-
-  #### read and prepare data file ####
-
-
-  if (filetype == "csv" | filetype == "txt" | filetype == "tsv") {
-    if (filetype == "csv") {
-      sep <- ","
-    } else if (filetype == "tsv") {
-      sep <- "\t"
-    }
-    D <- utils::read.table(data_path,
-                           sep = sep,
-                           header = header,
-                           dec = dec,
-                           quote = "\"")
-  }
-  if (filetype == "xlsx") {
-    D <- openxlsx::read.xlsx(data_path, colNames = header, sheet = sheet)
-  }
-
-
-  #D <- openxlsx::read.xlsx(data_path, na.strings = na_strings)
-  mess = ""
-
-  id <- D[, -intensity_columns]
-  D <- D[, intensity_columns]
-
-  if(zero_to_NA) {
-    D[D == 0] <- NA
-    mess <- paste0(mess, "Zeros set to NA. \n")
-  }
-
-  if(do_log_transformation) {
-    D <- log(D, base = log_base)
-    mess <- paste0(mess, "Log-transformation with base ", log_base ,". \n")
-  }
-
-
-  #### make data groups ####
-
-  if (use_groups) {
-    group <- factor(limma::strsplit2(colnames(D), "_")[,1])
-    mess <- paste0(mess, "Groups used. \n")
-  } else {
-    group <- NULL
-    mess <- paste0(mess, "Groups not used. \n")
-  }
-
-  nr_groups <- length(levels(group))
-
-  if (is.null(group_colours) & nr_groups >= 1) group_colours <- scales::hue_pal()(nr_groups)
-
-
-  #### normalize the data ####
-
-  D <- automatedNormalization(DATA = D, method = normalization, is_log_transformed = do_log_transformation, log_base = log_base, lts.quantile = lts_quantile)
-
-  mess <- paste0(mess, D$message)
-  D <- D$data
-
-
-  #### calculate long form ####
-
-  D_long <- tidyr::pivot_longer(data = D, cols = 1:ncol(D))
-  if (use_groups) {
-    D_long$group <- factor(limma::strsplit2(D_long$name, "_")[,1])
-  } else {
-    D_long$group <- NA
-  }
-
-  ### add column with sample number
-  if (use_groups) {
-    D_long$sample <- limma::strsplit2(D_long$name, "_")[,2]
-  } else {
-    D_long$sample <- NA
-  }
-
-  message(mess)
-
-  return (list("D" = D, "ID" = id, "D_long" = D_long, "group" = group, "number_groups" = nr_groups, "group_colors" = group_colours, "message" = mess))
-}

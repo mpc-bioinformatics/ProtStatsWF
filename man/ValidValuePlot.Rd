@@ -4,12 +4,7 @@
 \alias{ValidValuePlot}
 \title{Barplots showing the percentage of valid values for each sample.}
 \usage{
-ValidValuePlot(
-  D_long,
-  groupColumn = NULL,
-  group_colours = NULL,
-  base_size = 15
-)
+ValidValuePlot(D_long, groupColumn = NULL, groupColours = NULL, baseSize = 15)
 }
 \arguments{
 \item{D_long}{\strong{data.frame} \cr
