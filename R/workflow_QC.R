@@ -249,7 +249,7 @@ workflow_QC <- function(D,
     ma_data <- MA_Plots(D = D$SE,
                         outPath = outPath, suffix = suffix,
                         labels = 1:ncol(SummarizedExperiment::assay(D$SE)),  # TODO
-                        labels2 = colnames(SummarizedExperiment::assay(D$SE),  # TODO
+                        labels2 = colnames(SummarizedExperiment::assay(D$SE)),  # TODO
                         maxPlots = MAMaxPlots, alpha = MAAlpha,
                         plot_height = plotHeight_PCA_MA,
                         plot_width = plotWidth_PCA_MA,
