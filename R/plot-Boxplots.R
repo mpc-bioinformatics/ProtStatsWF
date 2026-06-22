@@ -31,7 +31,7 @@ Boxplots <- function(D_long,
                      method = "boxplot",
                      groupColumn = NULL,
                      groupColours = NULL,
-                     base_size = 15,
+                     baseSize = 15,
                      lwd = 0.5,
                      outlier_size = 1) {
 
@@ -53,7 +53,7 @@ Boxplots <- function(D_long,
 
 
   pl_boxplot <- pl_boxplot +
-    ggplot2::theme_bw(base_size = base_size) +
+    ggplot2::theme_bw(base_size = baseSize) +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, vjust = 1, hjust = 1)) +
     ggplot2::ylab("Log intensity") + ggplot2::xlab("Sample") +
     ggplot2::scale_x_discrete(limits = x_axis, drop = FALSE, na.translate = TRUE)
