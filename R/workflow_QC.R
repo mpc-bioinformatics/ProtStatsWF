@@ -283,7 +283,7 @@ workflow_QC <- function(D,
 
 
   ggplot2::ggsave(file.path(outPath, paste0("PCA_plot", suffix, ".", plot_device)), plot = pca_data[["plot"]],
-                  device = plot_device, height = plot_height_PCA_MA, width = plot_width_PCA_MA, dpi = plot_dpi, units = "cm")
+                  device = plotDevice, height = plot_height_PCA_MA, width = plot_width_PCA_MA, dpi = plot_dpi, units = "cm")
   utils::write.csv(x = pca_data$D_PCA_plot, file = file.path(outPath, paste0("D_PCA", suffix, ".csv")), row.names = FALSE)
   utils::write.csv(x = pca_data$filtered_D, file = file.path(outPath, paste0("PCA_data_after_imputation", suffix, ".csv")), row.names = FALSE)
 
