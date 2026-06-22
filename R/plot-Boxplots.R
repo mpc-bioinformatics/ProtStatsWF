@@ -30,7 +30,7 @@
 Boxplots <- function(D_long,
                      method = "boxplot",
                      groupColumn = NULL,
-                     group_colours = NULL,
+                     groupColours = NULL,
                      base_size = 15,
                      lwd = 0.5,
                      outlier_size = 1) {
@@ -46,7 +46,7 @@ Boxplots <- function(D_long,
   if (!is.null(groupColumn)) {
    pl_boxplot <- ggplot2::ggplot(data = D_long, mapping = ggplot2::aes(x = .sample, y = intensity_norm, fill = group)) +
      ggplot2::labs(fill = groupColumn)
-    if (!is.null(group_colours)) pl_boxplot <- pl_boxplot + ggplot2::scale_fill_manual(values = group_colours)
+    if (!is.null(groupColours)) pl_boxplot <- pl_boxplot + ggplot2::scale_fill_manual(values = groupColours)
   } else {
     pl_boxplot <- ggplot2::ggplot(data = D_long, mapping = ggplot2::aes(x = .sample, y = intensity_norm))
   }
@@ -176,11 +176,11 @@ Boxplots_candidates <- function(D,
       ggplot2::ggtitle(protein.names[i])
     
     
-    if (is.null(group_colours)) {
-      group_colours <- scales::hue_pal()(length(levels(group)))
+    if (is.null(groupColours)) {
+      groupColours <- scales::hue_pal()(length(levels(group)))
     }
-    names(group_colours) <- levels(data$group)
-    plot <- plot + ggplot2::scale_fill_manual(values = group_colours, breaks = names(group_colours), drop = FALSE)
+    names(groupColours) <- levels(data$group)
+    plot <- plot + ggplot2::scale_fill_manual(values = groupColours, breaks = names(groupColours), drop = FALSE)
     
     
     if (plot_device == "png") {
