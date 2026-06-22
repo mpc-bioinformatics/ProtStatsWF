@@ -126,7 +126,7 @@ Boxplots <- function(D_long,
 Boxplots_candidates <- function(D,
                                 protein.names,
                                 group = NULL,
-                                group_colours = NULL,
+                                groupColours = NULL,
                                 log_data = TRUE,
                                 log_base = 2,
                                 plot_device = "pdf",
@@ -175,12 +175,11 @@ Boxplots_candidates <- function(D,
       ggplot2::labs(fill = groupvar_name, y = "log2(intensity)", x = groupvar_name) +
       ggplot2::ggtitle(protein.names[i])
 
-
-    if (is.null(group_colours)) {
-      group_colours <- scales::hue_pal()(length(levels(group)))
+    if (is.null(groupColours)) {
+      groupColours <- scales::hue_pal()(length(levels(group)))
     }
-    names(group_colours) <- levels(data$group)
-    plot <- plot + ggplot2::scale_fill_manual(values = group_colours, breaks = names(group_colours), drop = FALSE)
+    names(groupColours) <- levels(data$group)
+    plot <- plot + ggplot2::scale_fill_manual(values = groupColours, breaks = names(groupColours), drop = FALSE)
 
 
     if (plot_device == "png") {

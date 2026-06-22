@@ -174,6 +174,5 @@ workflow_QC <- function(D,
   utils::write.csv(x = pca_data$D_PCA_plot, file = file.path(outPath, paste0("D_PCA", suffix, ".csv")), row.names = FALSE)
   utils::write.csv(x = pca_data$filtered_D, file = file.path(outPath, paste0("PCA_data_after_imputation", suffix, ".csv")), row.names = FALSE)
 
-
   return(invisible(NULL))
 }
