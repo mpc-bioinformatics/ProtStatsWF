@@ -8,7 +8,7 @@ Boxplots_candidates(
   D,
   protein.names,
   group = NULL,
-  group_colours = NULL,
+  groupColours = NULL,
   log_data = TRUE,
   log_base = 2,
   plot_device = "pdf",
@@ -30,9 +30,6 @@ The protein names.}
 
 \item{group}{\strong{character factor} \cr
 The group membership of the data.}
-
-\item{group_colours}{\strong{character vector} \cr
-The hex codes or colours names for the group colors.}
 
 \item{log_data}{\strong{logical} \cr
 If \code{TRUE}, the data will be log-transformed.}
@@ -63,6 +60,9 @@ The suffix for the output file.}
 
 \item{plot_NA_level}{\strong{logical} \cr
 If \code{TRUE}, data points will be plotted if they are NA.}
+
+\item{group_colours}{\strong{character vector} \cr
+The hex codes or colours names for the group colors.}
 }
 \value{
 Nothing, saves pdf or png files with boxplots to the output folder.

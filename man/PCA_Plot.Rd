@@ -34,7 +34,7 @@ PCA_Plot(
 
 \item{groupForColour}{\strong{character(1)} \cr The name of the column in the colData of the SummarizedExperiment object to be used for colouring the points in the PCA plot.}
 
-\item{colourType}{\strong{character(1)} \cr Type for colour, either "discrete" (default) or "continous".}
+\item{colourType}{\strong{character(1)} \cr Type for colour, either "discrete" (default) or "continuous".}
 
 \item{groupForShape}{\strong{character(1)} \cr The name of the column in the colData of the SummarizedExperiment object to be used for shaping the points in the PCA plot.}
 

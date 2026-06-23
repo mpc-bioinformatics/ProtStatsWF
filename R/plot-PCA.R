@@ -116,8 +116,6 @@ PCA_Plot <- function(SE,
     pl <- pl + ggplot2::geom_point(data = D_PCA, ggplot2::aes(colour = group1, shape = group2), size = pointSize, alpha = alpha)
   }
 
-  print("sdhfkyd")
-
   # version with only colour
   if (!is.null(groupForColour) & is.null(groupForShape)) {
     D_PCA <- data.frame(pred[,c(PCx,PCy)], group1 = group1, label = colnames(D))
@@ -142,7 +140,6 @@ PCA_Plot <- function(SE,
   if (!is.null(groupForColour)) pl <- pl + ggplot2::labs(colour = groupForColour)
   if (!is.null(groupForShape)) pl <- pl + ggplot2::labs(shape = groupForShape)
 
-  print(is.numeric(D_PCA$group1))
   if (!is.null(groupForColour) & (!is.null(groupColours) | is.numeric(D_PCA$group1)) & colourType == "discrete") {
     pl <- pl + ggplot2::scale_colour_manual(values = groupColours, na.value = NAValueColour)
   } else {

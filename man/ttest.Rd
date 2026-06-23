@@ -15,43 +15,40 @@ ttest(
   delog_for_FC = TRUE,
   log_base = 2,
   min_obs_per_group = 3,
-  filename = NULL,
   min_obs_per_group_ratio = NULL
 )
 }
 \arguments{
 \item{D}{\strong{data.frame} \cr
-The data set containing only protein intensities, already filtered for interesting candidates.}
+The data set containing only protein intensities.}
 
 \item{id}{\strong{data.frame} \cr
-The corresponding ID columns for the parameter D e.g. containing further columns like protein or gene names.}
+Data fram containing ID columns like protein names, gene names etc.}
 
-\item{group}{\strong{character factor} \cr
+\item{group}{\strong{factor} \cr
 The group membership of the data.}
 
-\item{sample}{\strong{character factor} \cr
-The sample membership of the data.}
+\item{sample}{\strong{factor} \cr
+The sample numbers or IDs of the samples (only used to build pairs if paired = TRUE, otherwise it is ignored).}
 
 \item{paired}{\strong{logical} \cr
-If \code{TRUE}, the test will be paired, otherwise it will be unpaired.}
+If TRUE, the test will be paired, otherwise it will be unpaired. Default is FALSE.}
 
-\item{var.equal}{\strong{logical} \cr
-If \code{TRUE}, the variances of the groups are expected to be equal.}
+\item{var.equal}{\strong{logical(1)} \cr
+If TRUE, the variances of the groups are expected to be equal. Default is FALSE.}
 
 \item{log_before_test}{\strong{logical} \cr
-If \code{TRUE}, the data will be log-transformed before the test.}
+If TRUE, the data will be log-transformed before the test. Default is TRUE. Set it to FALSE if data is already log-transformed, e.g.
+if you have already normalized it during \code{\link[=prepareDataSE]{prepareDataSE()}}.}
 
 \item{delog_for_FC}{\strong{logical} \cr
-If \code{TRUE}, the fold change will be calculated on the original scale.}
+If TRUE, the fold change will be calculated on the original scale. Default is TRUE.}
 
 \item{log_base}{\strong{numeric} \cr
-The base of the logarithm for the log-transformation.}
+The base of the logarithm for the log-transformation. Default is 2.}
 
 \item{min_obs_per_group}{\strong{integer} \cr
-The minimum number of observations per group.}
-
-\item{filename}{\strong{characte} \cr
-The name of the output file.}
+The minimum number of observations per group. For a paired ttest, this is counted as the minimum of complete pairs. Default is 3.}
 
 \item{min_obs_per_group_ratio}{\strong{numeric} \cr
 The minimum number of observations per group as a ratio (e.g, 0.8 = 80\% valid values in each group needed).}
