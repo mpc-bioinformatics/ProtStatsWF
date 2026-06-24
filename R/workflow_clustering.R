@@ -102,7 +102,7 @@ workflow_clustering <- function(data_path,
   grDevices::png(paste0(output_path, "/heatmap", suffix, "_", clust$nr_clusters, ".png"),
                  height = plot_height_heatmap,
                  width = plot_width_heatmap, units = "cm", res = plot_dpi)
-  graphics::plot(ht)
+  graphics::plot(ht$heatmap)
   grDevices::dev.off()
 
 
