@@ -89,7 +89,7 @@ workflow_clustering <- function(data_path,
   ht <- ProtStatsWF::Heatmap_with_groups(D = dataPrep$D,
                                          id = dataPrep$id,
                                          # TODO: no filtering at the moment but it may be necessary/useful depending on the data
-                                         filtermissings = ncol(D),
+                                         #filtermissings = ncol(D),
                                          cluster_rows = clust$row_dend,
                                          cluster_columns = FALSE,
                                          log_data = FALSE,
