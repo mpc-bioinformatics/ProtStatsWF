@@ -36,7 +36,8 @@ Boxplots <- function(D_long,
                      outlierSize = 1) {
 
   # select only relevant columns
-  D_long <- dplyr::select(D_long, c(".feature", ".sample", "intensity_norm", group = groupColumn))
+  D_long <- dplyr::select(D_long, c(".feature", ".sample", "intensity_norm",
+                                    group = tidyselect::all_of(groupColumn)))
 
   x_axis <- sort(unique(D_long$.sample)) # save the different states for later
   D_long <- D_long[!is.na(D_long$intensity_norm),] # remove NA values

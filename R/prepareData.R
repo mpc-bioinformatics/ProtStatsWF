@@ -2,11 +2,21 @@
 #' Prepare quantitative proteomics data and combine it with sample information
 #' (e.g., clinical data) in a SummarizedExperiment object.
 #'
-#' @param dataPath **character(1)** \cr Path to the data file (xlsx, csv, tsv, or txt) containing the quantitative proteomics data. The file should have a column with protein names and columns with intensity values for each sample.
-#' @param intensityColumns **integer** \cr Column numbers that contain the intensity values. E.g. 1:12 if the first 12 columns contain intensity values for 12 samples.
-#' @param proteinNameColumn **character(1)** \cr Column name that contains the protein names. Default is "Protein".
-#' @param sampleInfoPath **character(1)** \cr Path to the file containing sample information. Default is NULL (no sample info file).
-#' @param sampleNameColumn **character(1)** \cr Column name of the sampleInfo that contains the sample names. Default is "SampleName".
+#' @param dataPath **character(1)** \cr
+#' Path to the data file (xlsx, csv, tsv, or txt) containing the quantitative
+#' proteomics data. The file should have a column with protein names and columns
+#' with intensity values for each sample.
+#' @param intensityColumns **integer** \cr
+#' Column numbers that contain the intensity values. E.g. 1:12 if the first 12
+#' columns contain intensity values for 12 samples.
+#' @param proteinNameColumn **character(1)** \cr
+#' Column name that contains the protein names. Default is "Protein".
+#' @param sampleInfoPath **character(1)** \cr
+#' Path to the file containing sample information. Default is NULL (no sample
+#' info file).
+#' @param sampleNameColumn **character(1)** \cr
+#' Column name of the sampleInfo that contains the sample names. Default is
+#' "Sample".
 #' @param doLogTrans **logical(1)** \cr Whether to perform log transformation. Default is TRUE.
 #' @param logBase **numeric(1)** \cr Base for log transformation. Default is 2.
 #' @param normMethod **character(1)** \cr Normalization method to use. Default is "loess". See [automatedNormalization()] for options.
@@ -32,11 +42,16 @@
 #' @export
 #'
 #' @examples
+#' file_proteins <- system.file("extdata", "proteins_HCC.csv", package = "ProtStatsWF")
+#' file_clinical <- system.file("extdata", "clinical_data.csv", package = "ProtStatsWF")
+#' prepareDataSE(dataPath = file_proteins, intensityColumns = 6:43,
+#' proteinNameColumn = "Protein", sampleInfoPath = file_clinical, sampleNameColumn = "Sample",
+#' fileType = "csv")
 prepareDataSE <- function(dataPath,
                           intensityColumns,
                           proteinNameColumn = "Protein",
                           sampleInfoPath = NULL,
-                          sampleNameColumn = "SampleName",
+                          sampleNameColumn = "Sample",
                           doLogTrans = TRUE,
                           logBase = 2,
                           normMethod = "loess",
@@ -145,7 +160,7 @@ prepareDataSE <- function(dataPath,
   # TODO: this is a generic function from tidySummarizedExperiments package
   suppressMessages({
   D_long <- tidySummarizedExperiment:::pivot_longer.SummarizedExperiment(SE,
-                  cols = proteinNameColumn)
+                  cols = tidyselect::all_of(proteinNameColumn))
   })
   D_long <- dplyr::select(D_long, -c("name", "value"))
   # bring factor levels in same order as in sampleInfo

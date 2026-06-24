@@ -10,7 +10,7 @@ prepareDataSE(
   intensityColumns,
   proteinNameColumn = "Protein",
   sampleInfoPath = NULL,
-  sampleNameColumn = "SampleName",
+  sampleNameColumn = "Sample",
   doLogTrans = TRUE,
   logBase = 2,
   normMethod = "loess",
@@ -26,15 +26,25 @@ prepareDataSE(
 )
 }
 \arguments{
-\item{dataPath}{\strong{character(1)} \cr Path to the data file (xlsx, csv, tsv, or txt) containing the quantitative proteomics data. The file should have a column with protein names and columns with intensity values for each sample.}
+\item{dataPath}{\strong{character(1)} \cr
+Path to the data file (xlsx, csv, tsv, or txt) containing the quantitative
+proteomics data. The file should have a column with protein names and columns
+with intensity values for each sample.}
 
-\item{intensityColumns}{\strong{integer} \cr Column numbers that contain the intensity values. E.g. 1:12 if the first 12 columns contain intensity values for 12 samples.}
+\item{intensityColumns}{\strong{integer} \cr
+Column numbers that contain the intensity values. E.g. 1:12 if the first 12
+columns contain intensity values for 12 samples.}
 
-\item{proteinNameColumn}{\strong{character(1)} \cr Column name that contains the protein names. Default is "Protein".}
+\item{proteinNameColumn}{\strong{character(1)} \cr
+Column name that contains the protein names. Default is "Protein".}
 
-\item{sampleInfoPath}{\strong{character(1)} \cr Path to the file containing sample information. Default is NULL (no sample info file).}
+\item{sampleInfoPath}{\strong{character(1)} \cr
+Path to the file containing sample information. Default is NULL (no sample
+info file).}
 
-\item{sampleNameColumn}{\strong{character(1)} \cr Column name of the sampleInfo that contains the sample names. Default is "SampleName".}
+\item{sampleNameColumn}{\strong{character(1)} \cr
+Column name of the sampleInfo that contains the sample names. Default is
+"Sample".}
 
 \item{doLogTrans}{\strong{logical(1)} \cr Whether to perform log transformation. Default is TRUE.}
 
@@ -74,4 +84,11 @@ for each protein and sample, along with the corresponding sample information fro
 \description{
 Prepare quantitative proteomics data and combine it with sample information
 (e.g., clinical data) in a SummarizedExperiment object.
+}
+\examples{
+file_proteins <- system.file("extdata", "proteins_HCC.csv", package = "ProtStatsWF")
+file_clinical <- system.file("extdata", "clinical_data.csv", package = "ProtStatsWF")
+prepareDataSE(dataPath = file_proteins, intensityColumns = 6:43,
+proteinNameColumn = "Protein", sampleInfoPath = file_clinical, sampleNameColumn = "Sample",
+fileType = "csv")
 }

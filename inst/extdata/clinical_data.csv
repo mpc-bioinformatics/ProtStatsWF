@@ -1,0 +1,39 @@
+﻿Sample,PatientID,Group,Gender,Age,Tumor_Staging,Lymph_Nodes,Grading,Bloodvessel_status,Resection_Margin,Underlying_Liver_Disease
+HCC_1,1,HCC,Female,57,pT1,pN0,G3,V0,R0,NASH
+HCC_2,2,HCC,Male,71,pT2,pNX,G2,V0,R0,NASH
+HCC_3,3,HCC,Female,42,pT1,pNX,G3,V0,R0,NA
+HCC_4,4,HCC,Male,73,pT1,NX,G2,V0,R0,HepC
+HCC_5,5,HCC,Male,51,pT1,pN0,G1,V0,R0,NA 
+HCC_6,6,HCC,Male,21,pT2,pN1 ,G2,V1,R0, NA
+HCC_7,7,HCC,Male,71,pT1,pNX,G3,V0,R0,NASH
+HCC_8,8,HCC,Male,74,pT1,pNX,G1,V0,R0, NA
+HCC_9,9,HCC,Male,65,pT1,NX,G3,V0,R0,NASH
+HCC_10,10,HCC,Female,59,pT3a,NX,G2,V0,R0, NA
+HCC_11,11,HCC,Female,76,pT2a,NX,G3,V1,R0, NA
+HCC_12,12,HCC,Male,53,pT3a,NX,G2,V1,R0,HepC
+HCC_13,13,HCC,Male,62,pT2a,NX,G2,V1,R0,HepC
+HCC_14,14,HCC,Male,72,pT1,NA ,G1,NA ,R1,HepB/NASH
+HCC_15,15,HCC,Female,67,pT1,N0,G1,V0,R0,NASH
+HCC_16,16,HCC,Male,75,pT1,N0,G1,V0,R0,Hep B/Liver cirrhosis
+HCC_17,17,HCC,Male,57,pT2,pNX,G2,V0,R0,Liver cirrhosis/NASH
+HCC_18,18,HCC,Male,66,pT1,pNX,G2,V0,R0,Liver cirrhosis
+HCC_19,19,HCC,Female,56,pT3a,pNX,G3,V0,R0,NA 
+C_1,1,C,Female,57,,,,,,
+C_2,2,C,Male,71,,,,,,
+C_3,3,C,Female,42,,,,,,
+C_4,4,C,Male,73,,,,,,
+C_5,5,C,Male,51,,,,,,
+C_6,6,C,Male,21,,,,,,
+C_7,7,C,Male,71,,,,,,
+C_8,8,C,Male,74,,,,,,
+C_9,9,C,Male,65,,,,,,
+C_10,10,C,Female,59,,,,,,
+C_11,11,C,Female,76,,,,,,
+C_12,12,C,Male,53,,,,,,
+C_13,13,C,Male,62,,,,,,
+C_14,14,C,Male,72,,,,,,
+C_15,15,C,Female,67,,,,,,
+C_16,16,C,Male,75,,,,,,
+C_17,17,C,Male,57,,,,,,
+C_18,18,C,Male,66,,,,,,
+C_19,19,C,Female,56,,,,,,

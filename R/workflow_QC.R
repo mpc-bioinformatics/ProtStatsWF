@@ -56,7 +56,7 @@ workflow_QC <- function(D,
                         groupColours = NULL,
 
                         outPath,
-                        outType = "xlsx",
+                        outType = "xlsx",  ## TODO: does not seem to have an effect at the moment
                         suffix = "",  ## TODO: if it doesnt start with underscore, add it automatically"
                         NAOut = "NA",
                         verbose = TRUE,

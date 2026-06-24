@@ -1,91 +1,44 @@
 
-test_that("PCA plot for test_file_2 (no imputation, no shape, no colour, no labels)", {
-  dataPath <- system.file("extdata", "test_file_2.xlsx", package = "ProtStatsWF")
-  sampleInfoPath <- system.file("extdata", "test_file_1_sampleInfo.xlsx", package = "ProtStatsWF")
+test_that("Test PCA plot", {
+  file_proteins <- system.file("extdata", "proteins_HCC.csv", package = "ProtStatsWF")
+  file_clinical <- system.file("extdata", "clinical_data.csv", package = "ProtStatsWF")
+  D <- prepareDataSE(dataPath = file_proteins, intensityColumns = 6:43,
+                     proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
+                     sampleNameColumn = "Sample", fileType = "csv", verbose = FALSE)
 
-  pData <- prepareDataSE(dataPath = dataPath, intensityColumns = 3:11,
-                         proteinNameColumn = "peptide",
-                         normMethod = "median",
-                         sampleInfoPath = sampleInfoPath,
-                         verbose = FALSE)
-  pResult <- PCA_Plot(SE = pData$SE, imputationMethod = "none",
-                      verbose = FALSE)
+  PCA <- PCA_Plot(D$SE,
+                  groupForColour = "Group",
+                  colourType = "discrete",
+                  groupForShape = "Gender",
+                  assay = "intensity_norm",
 
-  vdiffr::expect_doppelganger("PCA_test_file_1", pResult$plot)
-  expect_snapshot(pResult$D_PCA_plot)
-  expect_snapshot(pResult$pca)
+                  imputeMethod = "mean",
+                  propNA = 0,
+                  scale. = TRUE,
+                  PCx = 1,
+                  PCy = 2,
+
+                  groupColours = NULL,
+                  alpha = 1,
+                  label = FALSE,
+                  labelSeed = NA,
+                  labelSize = 4,
+                  xlim = NULL,
+                  ylim = NULL,
+
+                  pointSize = 4,
+                  baseSize = 11,
+                  NAValueColour = "grey",
+                  NAValueShape = 0,
+                  verbose = FALSE
+  )
+
+  expect_snapshot(PCA$D_PCA_plot)
+  expect_snapshot(PCA$pca)
+  expect_snapshot(PCA$filtered_data)
+  expect_snapshot(PCA$loadings)
+
+  vdiffr::expect_doppelganger("PCA_test_file_1", PCA$plot)
 })
 
-
-test_that("PCA plot for test_file_2 (no imputation, shape, colour, labels)", {
-  dataPath <- system.file("extdata", "test_file_2.xlsx", package = "ProtStatsWF")
-  sampleInfoPath <- system.file("extdata", "test_file_1_sampleInfo.xlsx",
-                                package = "ProtStatsWF")
-
-  pData <- prepareDataSE(dataPath = dataPath, intensityColumns = 3:11,
-                         proteinNameColumn = "peptide",
-                         normMethod = "median",
-                         sampleInfoPath = sampleInfoPath,
-                         verbose = FALSE)
-  pResult <- PCA_Plot(SE = pData$SE, imputationMethod = "none",
-                      groupForColour = "group",
-                      groupForShape = "replicate",
-                      label = TRUE,
-                      label_seed = 123,
-                      verbose = FALSE)
-
-  vdiffr::expect_doppelganger("PCA_test_file_2", pResult$plot)
-  expect_snapshot(pResult$D_PCA_plot)
-  expect_snapshot(pResult$pca)
-})
-
-
-
-test_that("PCA plot for test_file_2 (imputation, shape, no colour, labels)", {
-  dataPath <- system.file("extdata", "test_file_2.xlsx", package = "ProtStatsWF")
-  sampleInfoPath <- system.file("extdata", "test_file_1_sampleInfo.xlsx",
-                                package = "ProtStatsWF")
-
-  pData <- prepareDataSE(dataPath = dataPath, intensityColumns = 3:11,
-                         proteinNameColumn = "peptide",
-                         normMethod = "median",
-                         sampleInfoPath = sampleInfoPath,
-                         verbose = FALSE)
-  pResult <- PCA_Plot(SE = pData$SE, imputationMethod = "mean", propNA = 0.4,
-                      groupForColour = NULL,
-                      groupForShape = "replicate",
-                      label = TRUE,
-                      label_seed = 123,
-                      verbose = FALSE)
-
-  vdiffr::expect_doppelganger("PCA_test_file_3", pResult$plot)
-  expect_snapshot(pResult$D_PCA_plot)
-  expect_snapshot(pResult$pca)
-})
-
-
-test_that("PCA plot for test_file_2 (imputation, no shape, colour, no labels, specified group colours)", {
-  dataPath <- system.file("extdata", "test_file_2.xlsx", package = "ProtStatsWF")
-  sampleInfoPath <- system.file("extdata", "test_file_1_sampleInfo.xlsx",
-                                package = "ProtStatsWF")
-
-  pData <- prepareDataSE(dataPath = dataPath, intensityColumns = 3:11,
-                         proteinNameColumn = "peptide",
-                         normMethod = "median",
-                         sampleInfoPath = sampleInfoPath,
-                         verbose = FALSE)
-  pResult <- PCA_Plot(SE = pData$SE, imputationMethod = "mean", propNA = 0.4,
-                      groupForColour = "group",
-                      groupForShape = NULL,
-                      label = FALSE,
-                      labelSeed = 123,
-                      groupColours =  c("yellow", "red", "blue"),
-                      verbose = FALSE)
-
-  vdiffr::expect_doppelganger("PCA_test_file_4", pResult$plot)
-  expect_snapshot(pResult$D_PCA_plot)
-  expect_snapshot(pResult$pca)
-})
-
-
-
+## TODO: test different colours and base_size and other settings

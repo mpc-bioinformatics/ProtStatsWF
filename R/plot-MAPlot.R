@@ -112,7 +112,7 @@ MA_Plots <- function(D,
   number_states <- max(as.integer(as.factor(colnames(D))))
   number_plots <- choose(number_states,2)
 
-  if (number_plots > maxPlots) {
+  if (number_plots > maxPlots & verbose) {
     message("Number of MA-Plots (", number_plots, ") is higher than maxPlots (", maxPlots, ").\nPlease increase maxPlots to plot all MA-plots.")
   }
 
@@ -131,7 +131,7 @@ MA_Plots <- function(D,
       # if maximum number of plots is reached, stop.
       if (num > maxPlots) {
         grDevices::dev.off()
-        message(maxPlots, " MA plots generated.")
+        if (verbose) message(maxPlots, " MA plots generated.")
       }
 
       if (is.null(labels2)) {

@@ -1,36 +1,20 @@
-# Regular ValidValue Plot for test_file_2
+# Prepare data from csv file
 
     Code
-      pResult$table
+      vvplot$table
     Output
-      # A tibble: 9 x 4
-        .sample  group  nrvalid meanvalid
-        <fct>    <chr>    <int>     <dbl>
-      1 state1_1 state1      15     0.938
-      2 state1_2 state1      14     0.875
-      3 state1_3 state1      13     0.812
-      4 state2_1 state2      15     0.938
-      5 state2_2 state2      15     0.938
-      6 state2_3 state2      16     1    
-      7 state3_1 state3      13     0.812
-      8 state3_2 state3      11     0.688
-      9 state3_3 state3      13     0.812
-
----
-
-    Code
-      pResult2$table
-    Output
-      # A tibble: 9 x 4
-        .sample  group  nrvalid meanvalid
-        <fct>    <chr>    <int>     <dbl>
-      1 state1_1 state1      15     0.938
-      2 state2_1 state2      15     0.938
-      3 state3_1 state3      13     0.812
-      4 state1_2 state1      14     0.875
-      5 state2_2 state2      15     0.938
-      6 state3_2 state3      11     0.688
-      7 state1_3 state1      13     0.812
-      8 state2_3 state2      16     1    
-      9 state3_3 state3      13     0.812
+      # A tibble: 38 x 4
+         .sample group nrvalid meanvalid
+         <fct>   <chr>   <int>     <dbl>
+       1 HCC_1   HCC      3013     0.720
+       2 HCC_2   HCC      2566     0.613
+       3 HCC_3   HCC      3150     0.753
+       4 HCC_4   HCC      2588     0.618
+       5 HCC_5   HCC      2368     0.566
+       6 HCC_6   HCC      2722     0.650
+       7 HCC_7   HCC      2813     0.672
+       8 HCC_8   HCC      2609     0.623
+       9 HCC_9   HCC      2811     0.672
+      10 HCC_10  HCC      2943     0.703
+      # i 28 more rows
 
