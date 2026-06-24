@@ -102,14 +102,14 @@ workflow_clustering <- function(data_path,
   grDevices::png(paste0(output_path, "/heatmap", suffix, "_", clust$nr_clusters, ".png"),
                  height = plot_height_heatmap,
                  width = plot_width_heatmap, units = "cm", res = plot_dpi)
-  graphics::plot(ht$heatmap)
+  graphics::plot(ht$heatmap)F
   grDevices::dev.off()
 
 
-  clusterInfo <- getClusterInfos(heatmap = ht, nr_clusters = clust$nr_clusters, D = dataPrep$D, id = dataPrep$ID)
+  clusterInfo <- getClusterInfos(heatmap = ht$heatmap, nr_clusters = clust$nr_clusters, D = dataPrep$D, id = dataPrep$ID)
   openxlsx::write.xlsx(clusterInfo, paste0(output_path, "/cluster_table", suffix, "_", clust$nr_clusters, ".xlsx"))
 
-  D_zscore <- data.frame(ht@matrix, cluster = clusterInfo$cluster)
+  D_zscore <- data.frame(ht$heatmap@matrix, cluster = clusterInfo$cluster)
 
   D_zscore2 <<- D_zscore
 
