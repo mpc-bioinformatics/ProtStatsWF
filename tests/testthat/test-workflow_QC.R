@@ -52,7 +52,7 @@ test_that("Test MA plots", {
   expect_true(file.exists(file.path(temp_dir, "D_validvalues.csv")))
   expect_true(file.exists(file.path(temp_dir, "MA_Plots.pdf")))
   expect_true(file.exists(file.path(temp_dir, "PCA_data_after_imputation.csv")))
-  expect_true(file.exists(file.path(temp_dir, "PCA_pot.pdf")))
+  expect_true(file.exists(file.path(temp_dir, "PCA_plot.pdf")))
   expect_true(file.exists(file.path(temp_dir, "valid_value_plot.pdf")))
 
 })
