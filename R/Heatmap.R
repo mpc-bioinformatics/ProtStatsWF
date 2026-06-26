@@ -38,7 +38,9 @@
 #' @param scale_data              \strong{logical} \cr
 #'                                If \code{TRUE}, the data will be scaled ( = z-scored).
 #' @param legend_name             \strong{character} \cr
-#'                                The name for legend.
+#'                                The name for legend (colour bar).
+#' @param group_name              \strong{character} \cr
+#'                                The name of the group variable, only used for the legend.
 #' @param title                   \strong{character} \cr
 #'                                The title of the plot.
 #' @param legend_colours          \strong{character} \cr
@@ -77,6 +79,7 @@ Heatmap_with_groups <- function(D,
                                 #output_path = paste0(getwd(), "//"),
                                 #suffix = NULL,
                                 legend_name = "Legend",
+                                group_name = "Group",
                                 title = "Heatmap",
                                 legend_colours = c("blue", "white", "red"),
                                 #plot_height = 20,
@@ -166,7 +169,8 @@ Heatmap_with_groups <- function(D,
     if (!is.null(groups)) {
       top_annotation = ComplexHeatmap::HeatmapAnnotation(Group = groups,
                                                          col = group_colours,
-                                                         annotation_name_gp = grid::gpar(fontsize = textsize), name = "Group",
+                                                         annotation_name_gp = grid::gpar(fontsize = textsize), #name = group_name,
+                                                         annotation_label = group_name,
                                                          annotation_legend_param = list(title_gp = grid::gpar(fontsize = textsize,
                                                                                                               fontface = "bold"),
                                                                                         labels_gp = grid::gpar(fontsize = textsize)))
@@ -183,10 +187,12 @@ Heatmap_with_groups <- function(D,
 
   ### set up hierarchical clustering
   if (is.logical(cluster_rows) && cluster_rows == TRUE) {
-    cluster_rows = stats::as.dendrogram(stats::hclust(amap::Dist(data.asmatrix, method = dist_method), method = clust_method))
+    clusters_rows <- stats::hclust(amap::Dist(data.asmatrix, method = dist_method), method = clust_method)
+    cluster_rows <- stats::as.dendrogram(clusters_rows)
   }
   if (is.logical(cluster_columns) && cluster_columns == TRUE) {
-    cluster_columns = stats::as.dendrogram(stats::hclust(amap::Dist(t(data.asmatrix), method = dist_method), method = clust_method))
+    clusters_columns <- stats::hclust(amap::Dist(t(data.asmatrix), method = dist_method), method = clust_method)
+    cluster_columns <- stats::as.dendrogram(clusters_columns)
   }
 
   #row_labels <<- row_labels
@@ -214,7 +220,7 @@ Heatmap_with_groups <- function(D,
                 column_title_gp = grid::gpar(fontsize = textsize),
                 ...)
 
-  return(ht)
+  return(list(heatmap = ht))#, clusters_columns = clusters_columns)) # clusters_rows = clusters_rows,
   #return(list("heatmap" = ht, "data_as_matrix" = cbind(id, data.asmatrix)))
 }
 

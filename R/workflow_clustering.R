@@ -89,7 +89,7 @@ workflow_clustering <- function(data_path,
   ht <- ProtStatsWF::Heatmap_with_groups(D = dataPrep$D,
                                          id = dataPrep$id,
                                          # TODO: no filtering at the moment but it may be necessary/useful depending on the data
-                                         filtermissings = ncol(D),
+                                         #filtermissings = ncol(D),
                                          cluster_rows = clust$row_dend,
                                          cluster_columns = FALSE,
                                          log_data = FALSE,
@@ -102,14 +102,14 @@ workflow_clustering <- function(data_path,
   grDevices::png(paste0(output_path, "/heatmap", suffix, "_", clust$nr_clusters, ".png"),
                  height = plot_height_heatmap,
                  width = plot_width_heatmap, units = "cm", res = plot_dpi)
-  graphics::plot(ht)
+  graphics::plot(ht$heatmap)
   grDevices::dev.off()
 
 
-  clusterInfo <- getClusterInfos(heatmap = ht, nr_clusters = clust$nr_clusters, D = dataPrep$D, id = dataPrep$ID)
+  clusterInfo <- getClusterInfos(heatmap = ht$heatmap, nr_clusters = clust$nr_clusters, D = dataPrep$D, id = dataPrep$ID)
   openxlsx::write.xlsx(clusterInfo, paste0(output_path, "/cluster_table", suffix, "_", clust$nr_clusters, ".xlsx"))
 
-  D_zscore <- data.frame(ht@matrix, cluster = clusterInfo$cluster)
+  D_zscore <- data.frame(ht$heatmap@matrix, cluster = clusterInfo$cluster)
 
   D_zscore2 <<- D_zscore
 
