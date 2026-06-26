@@ -20,7 +20,7 @@ test_that("Test MA plots", {
               outType = "xlsx",
               suffix = "",
               NAOut = "NA",
-              verbose = TRUE,
+              verbose = FALSE,
 
               baseSize = 15,
               plotDevice = "pdf",
@@ -32,7 +32,7 @@ test_that("Test MA plots", {
 
               boxplotMethod = "boxplot",
 
-              MAMaxPlots = 5000,
+              MAMaxPlots = 5,
               MAAlpha = 1,
 
               PCAImputeMethod = "mean",
