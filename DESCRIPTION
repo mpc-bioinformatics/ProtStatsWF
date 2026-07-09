@@ -44,3 +44,4 @@ Imports:
 URL: https://github.com/mpc-bioinformatics/ProtStatsWF
 BugReports: https://github.com/mpc-bioinformatics/ProtStatsWF/issues
 Config/roxygen2/version: 8.0.0
+RoxygenNote: 7.3.3

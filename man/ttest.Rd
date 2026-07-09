@@ -10,12 +10,12 @@ ttest(
   group,
   sample = NULL,
   paired = FALSE,
-  var.equal = FALSE,
-  log_before_test = TRUE,
-  delog_for_FC = TRUE,
-  log_base = 2,
-  min_obs_per_group = 3,
-  min_obs_per_group_ratio = NULL
+  varEqual = FALSE,
+  logBeforeTest = TRUE,
+  delogForFC = TRUE,
+  logBase = 2,
+  minObsPerGroup = 3,
+  minObsPerGroupRatio = NULL
 )
 }
 \arguments{
@@ -34,23 +34,23 @@ The sample numbers or IDs of the samples (only used to build pairs if paired = T
 \item{paired}{\strong{logical} \cr
 If TRUE, the test will be paired, otherwise it will be unpaired. Default is FALSE.}
 
-\item{var.equal}{\strong{logical(1)} \cr
+\item{varEqual}{\strong{logical(1)} \cr
 If TRUE, the variances of the groups are expected to be equal. Default is FALSE.}
 
-\item{log_before_test}{\strong{logical} \cr
+\item{logBeforeTest}{\strong{logical} \cr
 If TRUE, the data will be log-transformed before the test. Default is TRUE. Set it to FALSE if data is already log-transformed, e.g.
 if you have already normalized it during \code{\link[=prepareDataSE]{prepareDataSE()}}.}
 
-\item{delog_for_FC}{\strong{logical} \cr
+\item{delogForFC}{\strong{logical} \cr
 If TRUE, the fold change will be calculated on the original scale. Default is TRUE.}
 
-\item{log_base}{\strong{numeric} \cr
+\item{logBase}{\strong{numeric} \cr
 The base of the logarithm for the log-transformation. Default is 2.}
 
-\item{min_obs_per_group}{\strong{integer} \cr
+\item{minObsPerGroup}{\strong{integer} \cr
 The minimum number of observations per group. For a paired ttest, this is counted as the minimum of complete pairs. Default is 3.}
 
-\item{min_obs_per_group_ratio}{\strong{numeric} \cr
+\item{minObsPerGroupRatio}{\strong{numeric} \cr
 The minimum number of observations per group as a ratio (e.g, 0.8 = 80\% valid values in each group needed).}
 }
 \value{

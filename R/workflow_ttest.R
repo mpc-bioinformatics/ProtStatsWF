@@ -5,146 +5,153 @@
 #'
 #' @details
 #' This function performs a t-test to compare two experimental groups in a quantitative proteomics dataset.
-#' Ideally, the data should be already normalized before performing the t-test (e.g. by using the [workflow_QC()] function).
-#' It is recommended to log-transform the data before the t-test (either use already log-transformed data and \code{log_before_test = FALSE}
-#' or log-transform the data on the fly with \code{log_before_test = TRUE}).
-#' The function generates a volcano plot, a histogram of p-values and fold changes,
+#' The input \code{D} should be the list returned by [prepareDataSE()], which handles data import,
+#' log-transformation, and normalisation. Because the assay data is already log-transformed by
+#' [prepareDataSE()], \code{logBeforeTest} defaults to \code{FALSE}.
+#' The function generates a volcano plot, histograms of p-values and fold changes,
 #' boxplots of the significant candidates, and a heatmap of the significant candidates.
 #'
+#' @param D **list** Result from [prepareDataSE()] containing \code{D$SE}
+#'   (a \code{SummarizedExperiment}) and \code{D$D_long} (the data set in long format).
+#' @param groupColumn **character(1)** Column name in \code{colData(D$SE)} that contains the
+#'   group labels. Exactly two groups must be present.
+#' @param outputPath **character(1)** Path to the output folder. The folder must already exist.
+#' @param sampleColumn **character(1)** Column name in \code{colData(D$SE)} that identifies
+#'   matched samples for a paired test. Required when \code{paired = TRUE}. Default is \code{NULL}.
+#' @param assayName **character(1)** Name of the assay in \code{D$SE} to use as input data.
+#'   Default is \code{"intensity_norm"}.
+#' @param groupColours **character** Vector of colours for the two groups. Default is \code{NULL}
+#'   (default ggplot2 colour palette).
+#' @param proteinNameColumn **character(1)** Column name in \code{rowData(D$SE)} containing
+#'   protein identifiers. Default is \code{"Protein"}.
+#' @param paired **logical(1)** If \code{TRUE}, a paired test is performed. Default is \code{FALSE}.
+#' @param varEqual **logical(1)** If \code{TRUE}, variances are assumed equal. Default is \code{FALSE}.
+#' @param logBeforeTest **logical(1)** If \code{TRUE}, data will be log-transformed before
+#'   the test. Defaults to \code{FALSE} because usually data prepared with [prepareDataSE()] is already
+#'   log-transformed.
+#' @param delogForFC **logical(1)** If \code{TRUE}, fold changes are computed on the original
+#'   (de-log) scale. Default is \code{TRUE}.
+#' @param pValueZerosToMin **logical(1)** If \code{TRUE}, p-values equal to 0 are replaced
+#'   by the next smallest observed p-value. Default is \code{TRUE}.
+#' @param volcanoBaseSize **numeric(1)** Base font size for the volcano plot. Default is \code{25}.
+#' @param significantAfterFDR **logical(1)** If \code{TRUE}, only proteins significant after FDR
+#'   correction are shown in boxplots and heatmap. Default is \code{TRUE}.
+#' @param maxValidValuesOff **integer(1)** Maximum number of valid values for a protein to be
+#'   classified as "off". Default is \code{0}.
+#' @param minValidValuesOn **integer(1)** Minimum number of valid values for a protein to be
+#'   classified as "on". Default is \code{NULL} (set automatically to the smallest group size).
+#' @param suffix **character(1)** Suffix appended to all output file names. Default is \code{""}.
+#' @param plotDevice **character(1)** Output file type, e.g. \code{"pdf"} or \code{"png"}.
+#'   Default is \code{"pdf"}.
+#' @param plotHeight **numeric(1)** Plot height in cm. Default is \code{15}.
+#' @param plotWidth **numeric(1)** Plot width in cm. Default is \code{15}.
+#' @param plotDPI **integer(1)** Plot resolution in DPI. Default is \code{300}.
+#' @param verbose **logical(1)** Whether to print progress messages to the console. Default is \code{TRUE}.
 #'
-#'
-#' @param data_path              \strong{character} \cr
-#'                               The path to an .xlsx file containing the input data.
-#' @param output_path            \strong{character} \cr
-#'                               The path to the output folder.
-#' @param intensity_columns      \strong{integer vector} \cr
-#'                               The numbers of the intensity columns in the table.
-#'
-#' @param paired                 \strong{logical} \cr
-#'                               If \code{TRUE}, a paired test will be done, otherwise an unpaired test.
-#' @param var.equal              \strong{logical} \cr
-#'                               If \code{TRUE}, the variances are assumed to be equal.
-#' @param log_before_test        \strong{logical} \cr
-#'                               If \code{TRUE}, the data will be log-transformed.
-#' @param delog_for_FC           \strong{logical} \cr
-#'                               If \code{TRUE}, the fold change will be calculated without the log-transformation.
-#' @param p_value_zeros_to_min   \strong{logical} \cr
-#'                               If \code{TRUE}, then \code{p_values == 0} will be set to the next smallest value of the p-values.
-#'
-#' @param volcano_base_size      \strong{numeric} \cr
-#'                               The base size of the volcano plot.
-#'
-#'
-#' @param significant_after_FDR  \strong{logical} \cr
-#'                               If \code{TRUE}, candidates for the boxplots and heatmap need to be significant after FDR correction, otherwise all significant candidates will be used.
-#' @param max_valid_values_off   \strong{integer} \cr
-#'                               The maximum number of valid values to be an off protein.
-#' @param min_valid_values_on    \strong{integer} \cr
-#'                               The minimum number of valid values to be an on protein.
-#'
-#' @param suffix                 \strong{character} \cr
-#'                               The suffix for the output files. It needs to start with an underscore.
-#' @param plot_device            \strong{character} \cr
-#'                               The type of the output file, e.g. "pdf" or "png".
-#' @param plot_height            \strong{numeric} \cr
-#'                               The plot height in cm.
-#' @param plot_width             \strong{numeric} \cr
-#'                               The plot width in cm.
-#' @param plot_dpi               \strong{integer} \cr
-#'                               The "dots per inch" of the plot aka. the plot resolution.
-#'
-#' @param column_name_protein    \strong{character} \cr
-#'                               The column name containing the proteins.
-#'
-#'
-#' @return Returns a message log of the workflow. The log contains an overview of the settings and gives some information e.g number of significant candidates or on-off-proteins.
+#' @return A list with one element \code{"message"}: a character string log of the workflow
+#'   summarising settings and results. All output files are written to \code{outputPath}.
 #' @export
 #'
-#' @seealso [workflow_ANOVA()] in case of more than two groups in the sample.\cr
+#' @seealso [workflow_ANOVA()] for more than two groups.\cr
 #'          Functions used in this workflow:
-#'          [prepareTtestData()], [ttest()], [VolcanoPlot_ttest()], [pvalue_foldchange_histogram()],
+#'          [prepareDataSE()], [ttest()], [VolcanoPlot_ttest()], [pvalue_foldchange_histogram()],
 #'          [calculate_significance_categories_ttest()], [Boxplots_candidates()],
 #'          [Heatmap_with_groups()], [calculate_onoff()]
 #'
 #' @examples
-#'
-#' # 1. Set the character of your data path, leading to an .xlsx file.
-#' in_path <- "C:/Users/thisuser/Documents/dataFolder/data.xlsx"
-#'
-#' # 2. Set the integer vector of the columns, which contain the intensities.
-#' int_col <- 3:8
-#'
-#' # 3. Set the character of the output path, leading to a folder for the results.
-#' out_path <- "C:/Users/thisuser/Documents/resultsFolder/"
-#'
-#' # 4. Run the ttest with the parameters you set.
 #' \dontrun{
-#' result <- workflow_ttest(data_path = in_path,
-#'                          output_path = out_path,
-#'                          intensity_columns = int_col) }
+#' file_proteins <- system.file("extdata", "proteins_HCC.csv", package = "ProtStatsWF")
+#' file_clinical <- system.file("extdata", "clinical_data.csv", package = "ProtStatsWF")
 #'
+#' D <- prepareDataSE(dataPath = file_proteins, intensityColumns = 6:43,
+#'                    proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
+#'                    sampleNameColumn = "Sample", fileType = "csv")
+#'
+#' result <- workflow_ttest(D = D, groupColumn = "Group",
+#'                          outputPath = tempdir())
+#' }
 
-workflow_ttest <- function(data_path,
-                           output_path,
-                           intensity_columns,
+workflow_ttest <- function(D,
+                           groupColumn,
+                           outputPath,
+
+                           sampleColumn = NULL,
+                           assayName = "intensity_norm",
+                           groupColours = NULL,
+                           proteinNameColumn = "Protein",
 
                            paired = FALSE,
-                           var.equal = FALSE,
-                           log_before_test = TRUE,
-                           delog_for_FC = TRUE,
-                           p_value_zeros_to_min = TRUE,
+                           varEqual = FALSE,
+                           logBeforeTest = FALSE,
+                           delogForFC = TRUE,
+                           pValueZerosToMin = TRUE,
 
-                           volcano_base_size = 25,
+                           volcanoBaseSize = 25,
 
-                           significant_after_FDR = TRUE,
-                           max_valid_values_off = 0,
-                           min_valid_values_on = NULL,
+                           significantAfterFDR = TRUE,
+                           maxValidValuesOff = 0,
+                           minValidValuesOn = NULL,
 
                            suffix = "",
-                           plot_device = "pdf",
-                           plot_height = 15,
-                           plot_width = 15,
-                           plot_dpi = 300,
-
-                           column_name_protein = "Protein"
+                           plotDevice = "pdf",
+                           plotHeight = 15,
+                           plotWidth = 15,
+                           plotDPI = 300,
+                           verbose = TRUE
                            ) {
 
-  mess = ""
+  mess <- ""
 
 
-  #### Prepare Data ####
+  #### Extract data from SummarizedExperiment ####
 
-  data <- prepareTtestData(data_path = data_path , intensity_columns = intensity_columns)
+  DATA   <- as.data.frame(SummarizedExperiment::assay(D$SE, assayName))
+  ID     <- as.data.frame(SummarizedExperiment::rowData(D$SE))
+  group  <- droplevels(factor(SummarizedExperiment::colData(D$SE)[, groupColumn]))
+  sample <- if (!is.null(sampleColumn)) factor(SummarizedExperiment::colData(D$SE)[, sampleColumn]) else NULL
 
+  if (length(levels(group)) != 2) {
+    stop("workflow_ttest requires exactly 2 groups in '", groupColumn, "', but found: ",
+         paste(levels(group), collapse = ", "))
+  }
+
+  if (is.null(groupColours)) groupColours <- scales::hue_pal()(length(levels(group)))
+
+  if (!verbose) {
+    old_pbo <- pbapply::pboptions(type = "none")
+    on.exit(pbapply::pboptions(old_pbo), add = TRUE)
+  }
 
 
   #### Calculate ttest ####
 
-  test_results <<- ttest(D = data[["D"]], id = data[["ID"]],
-                        group = data[["group"]],  sample = data[["sample"]],
-                        paired = paired, var.equal = var.equal,
-                        log_before_test = log_before_test, delog_for_FC = delog_for_FC, log_base = 2,
-                        min_obs_per_group = 3, min_obs_per_group_ratio = NULL,
-                        filename = file.path(output_path, paste0("results_ttest", suffix, ".xlsx")))
+  test_results <- ttest(D = DATA, id = ID,
+                        group = group, sample = sample,
+                        paired = paired, varEqual = varEqual,
+                        logBeforeTest = logBeforeTest, delogForFC = delogForFC, logBase = 2,
+                        minObsPerGroup = 3, minObsPerGroupRatio = NULL)
+
+  openxlsx::write.xlsx(test_results,
+                       file = file.path(outputPath, paste0("results_ttest", suffix, ".xlsx")),
+                       overwrite = TRUE, keepNA = TRUE)
+  if (verbose) message(ifelse(paired, "Paired", "Unpaired"), " t-test complete. Results saved.")
 
   mess <- paste0(mess,
-                 ifelse(paired, "Paired", "Unaired"),
+                 ifelse(paired, "Paired", "Unpaired"),
                  " t-test calculated with the variance assumed to be ",
-                 ifelse(var.equal, "equal", "unequal"), ". \n",
+                 ifelse(varEqual, "equal", "unequal"), ". \n",
                  "Data was ",
-                 ifelse(log_before_test, "", "not"),
+                 ifelse(logBeforeTest, "", "not "),
                  "log-transformed before the t-test and ",
-                 ifelse(delog_for_FC, "", "not"),
+                 ifelse(delogForFC, "", "not "),
                  "de-log-transformed for the fold change. \n")
 
 
-  if(p_value_zeros_to_min){
-
+  if (pValueZerosToMin) {
     p_value_zero <- which(test_results$p == 0)
 
-    if(length(p_value_zero) > 0){
+    if (length(p_value_zero) > 0) {
       next_smallest_value <- sort(unique(test_results$p))[2]
-
       test_results$p[test_results$p == 0] <- next_smallest_value
 
       mess <- paste0(mess, "There were ", length(p_value_zero), " p_values, which were 0. ",
@@ -153,115 +160,118 @@ workflow_ttest <- function(data_path,
   }
 
 
-  fc_col_name <- paste0("FC_", levels(data[["group"]])[[1]], "_divided_by_", levels(data[["group"]])[[2]])
-
+  fc_col_name <- paste0("FC_", levels(group)[[1]], "_divided_by_", levels(group)[[2]])
 
 
   #### Create Volcano Plot ####
 
   volcano_plot <- VolcanoPlot_ttest(RES = test_results,
-                                    columnname_p = "p", columnname_padj = "p.fdr",
-                                    columnname_FC = fc_col_name, base_size = volcano_base_size)
+                                    columnNameP = "p", columnNamePadj = "p.fdr",
+                                    columnNameFC = fc_col_name, base_size = volcanoBaseSize)
 
-  ggplot2::ggsave(file.path(output_path, paste0("volcano_plot", suffix, ".", plot_device)), plot = volcano_plot,
-                  device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi)
+  ggplot2::ggsave(file.path(outputPath, paste0("volcano_plot", suffix, ".", plotDevice)),
+                  plot = volcano_plot, device = plotDevice,
+                  height = plotHeight, width = plotWidth, dpi = plotDPI)
+  if (verbose) message("Volcano plot saved.")
 
   mess <- paste0(mess, "Volcano plot calculated. \n")
 
 
+  #### Create Histograms for p-values and fold changes ####
 
-  #### Create Histogram for p-values and fold changes ####
+  histograms <- pvalue_foldchange_histogram(RES = test_results,
+                                            columnNameP = "p", columnNamePadj = "p.fdr",
+                                            columnNameFC = fc_col_name)
 
-  histograms <- ProtStatsWF::pvalue_foldchange_histogram(RES = test_results,
-                                            columnname_p = "p", columnname_padj = "p.fdr",
-                                            columnname_FC = fc_col_name)
-
-  ggplot2::ggsave(file.path(output_path, paste0("histogram_p_value", suffix, ".", plot_device)), plot = histograms[["histogram_p_value"]],
-                  device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi)
-  ggplot2::ggsave(file.path(output_path, paste0("histogram_adjusted_p_value", suffix, ".", plot_device)), plot = histograms[["histogram_adjusted_p_value"]],
-                  device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi)
-  ggplot2::ggsave(file.path(output_path, paste0("histogram_fold_change", suffix, ".", plot_device)), plot = histograms[["histogram_fold_change"]],
-                  device = plot_device, height = plot_height, width = plot_width, dpi = plot_dpi)
+  ggplot2::ggsave(file.path(outputPath, paste0("histogram_p_value", suffix, ".", plotDevice)),
+                  plot = histograms[["histogram_p_value"]],
+                  device = plotDevice, height = plotHeight, width = plotWidth, dpi = plotDPI)
+  ggplot2::ggsave(file.path(outputPath, paste0("histogram_adjusted_p_value", suffix, ".", plotDevice)),
+                  plot = histograms[["histogram_adjusted_p_value"]],
+                  device = plotDevice, height = plotHeight, width = plotWidth, dpi = plotDPI)
+  ggplot2::ggsave(file.path(outputPath, paste0("histogram_fold_change", suffix, ".", plotDevice)),
+                  plot = histograms[["histogram_fold_change"]],
+                  device = plotDevice, height = plotHeight, width = plotWidth, dpi = plotDPI)
+  if (verbose) message("p-value, adjusted p-value and fold change histograms saved.")
 
   mess <- paste0(mess, "p-value, adjusted p-value and fold change histograms calculated. \n")
 
 
   #### Get significant candidates ####
 
-  significance <- ProtStatsWF::calculate_significance_categories_ttest(p = test_results[["p"]],
-                                                          p_adj = test_results[["p.fdr"]],
+  significance <- calculate_significance_categories_ttest(p = test_results[["p"]],
+                                                          pAdj = test_results[["p.fdr"]],
                                                           fc = test_results[[fc_col_name]])
 
   candidates <- as.character(significance)
 
-  if(significant_after_FDR){
+  if (significantAfterFDR) {
     candidates <- which(candidates == "significant after FDR correction")
-  }else{
+  } else {
     candidates <- which(candidates == "significant" | candidates == "significant after FDR correction")
   }
 
   mess <- paste0(mess, "There are ", length(candidates), " candidates, which were significant",
-                 ifelse(significant_after_FDR, " after FDR correction. \n", ". \n"))
-
+                 ifelse(significantAfterFDR, " after FDR correction. \n", ". \n"))
+  if (verbose) message("Found ", length(candidates), " significant candidate",
+                       ifelse(length(candidates) == 1, "", "s"),
+                       ifelse(significantAfterFDR, " after FDR correction.", "."))
 
 
   #### Create Boxplots of Biomarker Candidates ####
 
-  ProtStatsWF::Boxplots_candidates(D = data[["D"]][candidates, ],
-                      protein.names = data[["ID"]][candidates, column_name_protein],
-                      group = data[["group"]],
+  Boxplots_candidates(D = DATA[candidates, ],
+                      proteinNames = ID[candidates, proteinNameColumn],
+                      group = group,
+                      groupColours = groupColours,
                       suffix = suffix,
-                      output_path = paste0(output_path),
-                      log_data = log_before_test)
+                      outputPath = outputPath,
+                      logData = logBeforeTest)
+  if (verbose) message("Boxplots saved.")
 
   mess <- paste0(mess, "Boxplots made for the candidates. \n")
 
 
-
   #### Create Heatmap ####
 
-  if (nrow(data[["D"]][candidates, ]) > 1) {
+  if (length(candidates) > 1) {
     set.seed(14)
-    t_heatmap <- Heatmap_with_groups(D = data[["D"]][candidates, ],
-                                     id = data[["ID"]][candidates, ],
-                                     groups = data[["group"]])
+    t_heatmap <- Heatmap_with_groups(D = DATA[candidates, ],
+                                     id = ID[candidates, ],
+                                     groups = group,
+                                     verbose = verbose)
 
-    grDevices::pdf(file.path(output_path, paste0("heatmap", suffix, ".pdf")), height = plot_height, width = plot_width)
-    graphics::plot(t_heatmap) # [["heatmap"]]
+    grDevices::pdf(file.path(outputPath, paste0("heatmap", suffix, ".pdf")),
+                   height = plotHeight, width = plotWidth)
+    ComplexHeatmap::draw(t_heatmap[["heatmap"]])
     grDevices::dev.off()
-
-    #openxlsx::write.xlsx(cbind(data[["ID"]][candidates, ], zscore = t_heatmap[["data_as_matrix"]]), paste0(output_path, "heatmap_data", suffix, ".xlsx"), overwrite = TRUE, keepNA = TRUE)
+    if (verbose) message("Heatmap saved.")
 
     mess <- paste0(mess, "Heatmap made for the candidates. \n")
   }
 
 
-  # #### calculate on/off proteins ####
-  #
-  if(is.null(min_valid_values_on)){
-    min_valid_values_on <- min(table(data[["group"]])) #length(intensity_columns)
+  #### Calculate on/off proteins ####
+
+  if (is.null(minValidValuesOn)) {
+    minValidValuesOn <- min(table(group))
   }
-  #
-  on_off <- calculate_onoff(D = data[["D"]],
-                                      id = data[["ID"]],
-                                      group = data[["group"]],
-                                      max_vv_off = max_valid_values_off,
-                                      min_vv_on = min_valid_values_on,
-                            protein_names_column = 1)
-  openxlsx::write.xlsx(on_off, file = file.path(output_path, paste0("results_onoff", suffix, ".xlsx")))
 
+  on_off <- calculate_onoff(D = DATA,
+                            id = ID,
+                            group = group,
+                            maxValidValuesOff = maxValidValuesOff,
+                            minValidValuesOn = minValidValuesOn,
+                            proteinNamesColumn = which(colnames(ID) == proteinNameColumn))
 
-  # grDevices::pdf(paste0(output_path, "on_off_heatmap", suffix, ".pdf"), height = plot_height, width = plot_width)
-  # graphics::plot(t_on_off_heatmap)
-  # grDevices::dev.off()
-  #
-  # mess <- paste0(mess, "On-Off-Heatmap made. \n", "There were ", sum(t_on_off_heatmap[["isonoff"]]), " on/off proteins.")
-
+  openxlsx::write.xlsx(on_off, file = file.path(outputPath, paste0("results_onoff", suffix, ".xlsx")),
+                       overwrite = TRUE, keepNA = TRUE)
+  if (verbose) message("On/off analysis complete. Results saved.")
 
 
   #### Save message log ####
 
-  cat(mess, file = file.path(output_path, paste0("message_log_ttest", suffix, ".txt")))
+  cat(mess, file = file.path(outputPath, paste0("message_log_ttest", suffix, ".txt")))
 
   return(list("message" = mess))
 }

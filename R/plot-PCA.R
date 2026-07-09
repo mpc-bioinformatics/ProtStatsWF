@@ -25,7 +25,7 @@
 #' @param NAValueShape **integer(1)** \cr Shape for data points with missing values in the groupForShape variable. Default is 0 (hollow square). Please see [graphics::pch()] for further information.
 #' @param verbose **logical(1)** \cr Whether to print messages during the execution of the function. Default is TRUE.
 #'
-#' @return TODO
+#' @return
 #' @export
 #'
 #' @examples

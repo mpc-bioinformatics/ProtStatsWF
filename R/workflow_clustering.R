@@ -68,11 +68,6 @@ workflow_clustering <- function(data_path,
                                 column_name_protein = "Protein",
                                 ...) {
 
-  ### TODO: What to do with NAs
-  ### TODO: what to do with constant rows (may happen for extremely low of high abundant proteins)
-
-  ### TODO: option to aggregate data by group before clustering
-
   #### Prepare Data ####
   dataPrep <- prepareTtestData(data_path = data_path , intensity_columns = intensity_columns,
                                remove_missings = TRUE)
@@ -88,12 +83,10 @@ workflow_clustering <- function(data_path,
 
   ht <- ProtStatsWF::Heatmap_with_groups(D = dataPrep$D,
                                          id = dataPrep$id,
-                                         # TODO: no filtering at the moment but it may be necessary/useful depending on the data
                                          #filtermissings = ncol(D),
                                          cluster_rows = clust$row_dend,
                                          cluster_columns = FALSE,
                                          log_data = FALSE,
-                                         ### TODO: allow omitting rows with missing values
                                          na_method = "impute",
                                          row_split = clust$nr_clusters,
                                          row_gap = grid::unit(5, "mm"),

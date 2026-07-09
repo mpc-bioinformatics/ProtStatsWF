@@ -6,26 +6,26 @@
 \usage{
 calculate_significance_categories_ttest(
   p,
-  p_adj,
+  pAdj,
   fc,
-  thres_fc = 2,
-  thres_p = 0.05
+  thresFC = 2,
+  thresP = 0.05
 )
 }
 \arguments{
 \item{p}{\strong{numeric vector} \cr
 The p-values before FDR-correction.}
 
-\item{p_adj}{\strong{numeric vector} \cr
+\item{pAdj}{\strong{numeric vector} \cr
 The p-values after FDR-correction.}
 
 \item{fc}{\strong{numeric vector} \cr
 The values of the fold changes.}
 
-\item{thres_fc}{\strong{numeric} \cr
+\item{thresFC}{\strong{numeric} \cr
 The threshold for the fold changes.}
 
-\item{thres_p}{\strong{numeric} \cr
+\item{thresP}{\strong{numeric} \cr
 The threshold for the p-values.}
 }
 \value{
@@ -35,8 +35,8 @@ A factor with the three significance categories.
 This function groups all proteins into the following three catrgories based
 on the p-values (with and without FDR correction) and fold changes:
 \enumerate{
-\item not signifcant (p > thres_p or fc < thres_fc)
-\item significant (p < thres_p and fc > thres_fc, but p_adj > thres_p)
-\item significant after FDR-correction (p_adj < thres_p and fc > thres_fc)
+\item not signifcant (p > thresP or fc < thresFC)
+\item significant (p < thresP and fc > thresFC, but pAdj > thresP)
+\item significant after FDR-correction (pAdj < thresP and fc > thresFC)
 }
 }

@@ -11,8 +11,6 @@
 #' @export
 #'
 #' @examples
-#' # TODO
-# TODO: allow csv, tsv etc as output
 exportSE <- function(SE, file) {
   
   wb <- openxlsx::createWorkbook()

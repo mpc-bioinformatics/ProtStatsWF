@@ -7,27 +7,27 @@
 Heatmap_with_groups(
   D,
   id,
-  protein_names_col = NULL,
-  na_method = "na.omit",
-  min_valid_values = 2,
+  proteinNamesCol = NULL,
+  naMethod = "na.omit",
+  minValidValues = 2,
   groups = NULL,
-  group_colours = NULL,
-  column_split = NULL,
-  cluster_column_slices = FALSE,
-  cluster_rows = TRUE,
-  cluster_columns = TRUE,
-  dist_method = "pearson",
-  clust_method = "complete",
-  symmetric_legend = TRUE,
-  scale_data = TRUE,
-  legend_name = "Legend",
-  group_name = "Group",
+  groupColours = NULL,
+  columnSplit = NULL,
+  clusterColumnSlices = FALSE,
+  clusterRows = TRUE,
+  clusterColumns = TRUE,
+  distMethod = "pearson",
+  clustMethod = "complete",
+  symmetricLegend = TRUE,
+  scaleData = TRUE,
+  legendName = "Legend",
+  groupName = "Group",
   title = "Heatmap",
-  legend_colours = c("blue", "white", "red"),
-  log_data = TRUE,
-  log_base = 2,
-  colour_scale_max = NULL,
-  textsize = 15,
+  legendColours = c("blue", "white", "red"),
+  logData = TRUE,
+  logBase = 2,
+  colourScaleMax = NULL,
+  textSize = 15,
   top_annotation = NULL,
   ...
 )
@@ -39,15 +39,15 @@ The data set containing only protein intensities, already filtered for interesti
 \item{id}{\strong{data.frame} \cr
 The corresponding ID columns for the parameter D e.g. containing further columns like protein or gene names}
 
-\item{protein_names_col}{\strong{integer} \cr
+\item{proteinNamesCol}{\strong{integer} \cr
 The column with protein or gene names, if the names should be plotted.}
 
-\item{na_method}{\strong{character} \cr
+\item{naMethod}{\strong{character} \cr
 The method with which missing values are handeled.
 Options are "na.omit" (proteins with any missing values will be removed), "impute" (missing values will be imputed) and "keep" (missing values will be kept).
 Note that clustering may not work when too many missing values are present.}
 
-\item{min_valid_values}{\strong{integer} \cr
+\item{minValidValues}{\strong{integer} \cr
 The minimum number of valid values \string{per row}.
 If a protein has less valid values, it will be filtered out.
 Note that rows with only 1 or 2 valid values may cause problems with clustering.}
@@ -55,56 +55,56 @@ Note that rows with only 1 or 2 valid values may cause problems with clustering.
 \item{groups}{\strong{character factor} \cr
 The group of the data with two or more grouping variables.}
 
-\item{group_colours}{\strong{character} \cr
+\item{groupColours}{\strong{character} \cr
 ? A named list of group colours (discrete vars) or colour functions (continuous vars)}
 
-\item{column_split}{\strong{character} \cr
+\item{columnSplit}{\strong{character} \cr
 ? The name of the column in groups, if the columns should be split.}
 
-\item{cluster_column_slices}{\strong{logical} \cr
+\item{clusterColumnSlices}{\strong{logical} \cr
 ? If \code{TRUE}, column slices will be clustered.}
 
-\item{cluster_rows}{\strong{logical or dendrogram} \cr
+\item{clusterRows}{\strong{logical or dendrogram} \cr
 If \code{TRUE}, the rows will be clustered. Can also be a dendrogram object which is used to cluster the rows.}
 
-\item{cluster_columns}{\strong{logical or dendrogram} \cr
+\item{clusterColumns}{\strong{logical or dendrogram} \cr
 If \code{TRUE}, the columns will be clustered. Can also be a dendrogram object which is used to cluster the columns.}
 
-\item{dist_method}{\strong{character} \cr
+\item{distMethod}{\strong{character} \cr
 The distance metric for clustering. Options are "pearson", "spearman" and "euclidean".}
 
-\item{clust_method}{\strong{character} \cr
+\item{clustMethod}{\strong{character} \cr
 The linkage method for clustering. Options are "complete", "single" and "average".}
 
-\item{symmetric_legend}{\strong{logical} \cr
+\item{symmetricLegend}{\strong{logical} \cr
 If \code{TRUE}, the colour code will be  symmetric.
 Note that it only make sense for z-scored data.}
 
-\item{scale_data}{\strong{logical} \cr
+\item{scaleData}{\strong{logical} \cr
 If \code{TRUE}, the data will be scaled ( = z-scored).}
 
-\item{legend_name}{\strong{character} \cr
+\item{legendName}{\strong{character} \cr
 The name for legend (colour bar).}
 
-\item{group_name}{\strong{character} \cr
+\item{groupName}{\strong{character} \cr
 The name of the group variable, only used for the legend.}
 
 \item{title}{\strong{character} \cr
 The title of the plot.}
 
-\item{legend_colours}{\strong{character} \cr
+\item{legendColours}{\strong{character} \cr
 A vector of colours for colour gradient.}
 
-\item{log_data}{\strong{logical} \cr
+\item{logData}{\strong{logical} \cr
 If \code{TRUE}, the data will be log-transformed.}
 
-\item{log_base}{\strong{integer} \cr
-The base for the log-transformation, if \code{log_data = TRUE}.}
+\item{logBase}{\strong{integer} \cr
+The base for the log-transformation, if \code{logData = TRUE}.}
 
-\item{colour_scale_max}{\strong{numeric} \cr
+\item{colourScaleMax}{\strong{numeric} \cr
 The cap value for which all greater values will receive the same color.}
 
-\item{textsize}{\strong{integer} \cr
+\item{textSize}{\strong{integer} \cr
 The size of text in the plot.}
 
 \item{...}{Further arguments to Heatmap}

@@ -103,7 +103,7 @@ ANOVA <- function(D,
 #'
 #' @return Vector with p-values and fold changes.
 #'
-#' @examples # TODO
+#' @examples
 ANOVA_standard_single_row <- function(x,
                                       group,
                                       min_obs_per_group = 3,
@@ -232,7 +232,7 @@ ANOVA_standard_single_row <- function(x,
 #'
 #' @return Vector with p-values and fold changes.
 #'
-#' @examples # TODO
+#' @examples
 ANOVA_repeatedMeasurements_single_row <- function(x,
                                                   group,
                                                   sample,
@@ -366,7 +366,7 @@ ANOVA_repeatedMeasurements_single_row <- function(x,
 #'
 #' @return Vector with p-values and fold changes.
 #'
-#' @examples # TODO
+#' @examples
 ANOVA_Welch_single_row <- function(x,
                                    group,
                                    min_obs_per_group,

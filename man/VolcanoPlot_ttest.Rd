@@ -6,25 +6,25 @@
 \usage{
 VolcanoPlot_ttest(
   RES,
-  columnname_p = "p",
-  columnname_padj = "padj",
-  columnname_FC = "FC",
-  thres_fc = 2,
-  thres_p = 0.05,
-  log_base_fc = 2,
-  log_base_p = 10,
-  is_FC_log = FALSE,
-  is_p_log = FALSE,
-  show_thres_line = TRUE,
-  groupname1 = "group1",
-  groupname2 = "group2",
-  plot_height = 15,
-  plot_width = 15,
-  plot_dpi = 300,
-  plot_device = "pdf",
-  output_path = NULL,
+  columnNameP = "p",
+  columnNamePadj = "padj",
+  columnNameFC = "FC",
+  thresFC = 2,
+  thresP = 0.05,
+  logBaseFC = 2,
+  logBaseP = 10,
+  isFCLog = FALSE,
+  isPLog = FALSE,
+  showThresLine = TRUE,
+  groupName1 = "group1",
+  groupName2 = "group2",
+  plotHeight = 15,
+  plotWidth = 15,
+  plotDPI = 300,
+  plotDevice = "pdf",
+  outputPath = NULL,
   suffix = NULL,
-  add_annotation = TRUE,
+  addAnnotation = TRUE,
   ...
 )
 }
@@ -32,62 +32,62 @@ VolcanoPlot_ttest(
 \item{RES}{\strong{data.frame} \cr
 The results from a t-test.}
 
-\item{columnname_p}{\strong{character} \cr
+\item{columnNameP}{\strong{character} \cr
 The column name for p-value.}
 
-\item{columnname_padj}{\strong{character} \cr
+\item{columnNamePadj}{\strong{character} \cr
 The columns name for adjusted p-value.}
 
-\item{columnname_FC}{\strong{character} \cr
+\item{columnNameFC}{\strong{character} \cr
 The column name for fold change.}
 
-\item{thres_fc}{\strong{numeric} \cr
+\item{thresFC}{\strong{numeric} \cr
 The threshold for fold change.}
 
-\item{thres_p}{\strong{numeric} \cr
+\item{thresP}{\strong{numeric} \cr
 The threshold for p-value.}
 
-\item{log_base_fc}{\strong{numeric} \cr
+\item{logBaseFC}{\strong{numeric} \cr
 The base for the fold changes log-transformation.}
 
-\item{log_base_p}{\strong{numeric} \cr
+\item{logBaseP}{\strong{numeric} \cr
 The base for the p-values log-transformation.}
 
-\item{is_FC_log}{\strong{logical} \cr
+\item{isFCLog}{\strong{logical} \cr
 If \code{TRUE}, fold change is already log-transformed.}
 
-\item{is_p_log}{\strong{logical} \cr
+\item{isPLog}{\strong{logical} \cr
 If \code{TRUE}, p-value is already log-transformed.}
 
-\item{show_thres_line}{\strong{logical} \cr
+\item{showThresLine}{\strong{logical} \cr
 If \code{TRUE}, threshold lines will be shown.}
 
-\item{groupname1}{\strong{character} \cr
+\item{groupName1}{\strong{character} \cr
 The name of first group.}
 
-\item{groupname2}{\strong{character} \cr
+\item{groupName2}{\strong{character} \cr
 The name of second group.}
 
-\item{plot_height}{\strong{numeric} \cr
+\item{plotHeight}{\strong{numeric} \cr
 The height of plot.}
 
-\item{plot_width}{\strong{numeric} \cr
+\item{plotWidth}{\strong{numeric} \cr
 The width of plot.}
 
-\item{plot_dpi}{\strong{integer} \cr
+\item{plotDPI}{\strong{integer} \cr
 The resolution of plot.}
 
-\item{plot_device}{\strong{character} \cr
+\item{plotDevice}{\strong{character} \cr
 The plot device that is used for the resulting plot.
 Options are "pdf" and "png".}
 
-\item{output_path}{\strong{character} \cr
+\item{outputPath}{\strong{character} \cr
 The path for output file.}
 
 \item{suffix}{\strong{character} \cr
 The suffix for output file.}
 
-\item{add_annotation}{\strong{logical} \cr
+\item{addAnnotation}{\strong{logical} \cr
 If \code{TRUE}, annotation will be added.}
 
 \item{...}{Additional arguments for the plot.}

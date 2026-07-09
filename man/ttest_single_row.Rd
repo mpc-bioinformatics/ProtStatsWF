@@ -7,13 +7,13 @@
 ttest_single_row(
   x,
   group,
-  log_before_test = TRUE,
-  delog_for_FC = TRUE,
-  min_obs_per_group = NULL,
-  min_obs_per_group_ratio = NULL,
-  log_base = 2,
+  logBeforeTest = TRUE,
+  delogForFC = TRUE,
+  minObsPerGroup = NULL,
+  minObsPerGroupRatio = NULL,
+  logBase = 2,
   row = NULL,
-  var.equal = FALSE
+  varEqual = FALSE
 )
 }
 \arguments{
@@ -23,25 +23,25 @@ The abundances of the data.}
 \item{group}{\strong{character factor} \cr
 The group membership of the data.}
 
-\item{log_before_test}{\strong{logical} \cr
+\item{logBeforeTest}{\strong{logical} \cr
 If \code{TRUE}, the data will be log-transformed before the test.}
 
-\item{delog_for_FC}{\strong{logical} \cr
+\item{delogForFC}{\strong{logical} \cr
 If \code{TRUE}, the fold change will be calculated on the original scale.}
 
-\item{min_obs_per_group}{\strong{integer} \cr
+\item{minObsPerGroup}{\strong{integer} \cr
 The minimum number of observations per group.}
 
-\item{min_obs_per_group_ratio}{\strong{numeric} \cr
+\item{minObsPerGroupRatio}{\strong{numeric} \cr
 The minimum number of observations per group as a ratio (e.g, 0.8 = 80\% valid values in each group needed).}
 
-\item{log_base}{\strong{numeric} \cr
+\item{logBase}{\strong{numeric} \cr
 The base of the logarithm for the log-transformation.}
 
 \item{row}{\strong{integer} \cr
 The row number of the data for the function call.}
 
-\item{var.equal}{\strong{logical} \cr
+\item{varEqual}{\strong{logical} \cr
 If \code{TRUE}, the variances of the groups are expected to be equal.}
 }
 \value{

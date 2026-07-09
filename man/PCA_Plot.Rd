@@ -72,7 +72,7 @@ Default is NA, which may lead to different label placement for multiple executio
 
 \item{NAValueColour}{\strong{character(1)} \cr Colour for data points with missing values in the groupForColour variable. Default is grey.}
 
-\item{NAValueShape}{\strong{integer(1)} \cr Shape for data points with missing values in the groupForShape variable. Default is 0 (hollow square). Please see \code{\link[graphics:pch]{graphics::pch()}} for further information.}
+\item{NAValueShape}{\strong{integer(1)} \cr Shape for data points with missing values in the groupForShape variable. Default is 0 (hollow square). Please see \code{\link[graphics:points]{graphics::pch()}} for further information.}
 
 \item{verbose}{\strong{logical(1)} \cr Whether to print messages during the execution of the function. Default is TRUE.}
 }

@@ -8,11 +8,11 @@
 #'                         The corresponding ID columns for the parameter D.
 #' @param group            \strong{character factor} \cr
 #'                         The groups of the data.
-#' @param max_vv_off       \strong{integer} \cr
+#' @param maxValidValuesOff             \strong{integer} \cr
 #'                         The proteins below the threshold of the maximum number of valid values are considered off proteins.
-#' @param min_vv_on        \strong{integer} \cr
+#' @param minValidValuesOn              \strong{integer} \cr
 #'                         The proteins above the threshold of the minimum number of valid values are considered on proteins.
-#' @param protein_names_column   \strong{character} \cr
+#' @param proteinNamesColumn  \strong{character} \cr
 #'                         The column name in the id dataframe containing the protein IDs used for mapping.
 #'
 #' @return A data.frame with the number of valid values per group (absolute and relative) and on/off status
@@ -23,13 +23,13 @@
 #' @examples
 #'
 
-calculate_onoff <- function(D, id, group, max_vv_off, min_vv_on, protein_names_column = 1) {
+calculate_onoff <- function(D, id, group, maxValidValuesOff, minValidValuesOn, proteinNamesColumn = 1) {
 
   group <- droplevels(group)
   nr_groups <- length(levels(group))
 
   #Gene.names <- id[, gene_names_col]
-  Protein.IDs <- id[, protein_names_column]
+  Protein.IDs <- id[, proteinNamesColumn]
 
   ## converting to long format
   D_long <- tidyr::pivot_longer(data = cbind(Protein.IDs = Protein.IDs, D), cols = colnames(D))
@@ -54,7 +54,7 @@ calculate_onoff <- function(D, id, group, max_vv_off, min_vv_on, protein_names_c
 
   ### calculate, if protein is on/off
   res_onoff <- apply(D_onoff_wide[,cols], 1, function(x) {
-    isonoff <- any(x <= max_vv_off) & any(x >= min_vv_on)
+    isonoff <- any(x <= maxValidValuesOff) & any(x >= minValidValuesOn)
     return(isonoff)
   })
 
@@ -100,8 +100,6 @@ Onoff_plus_heatmap <- function(RES_onoff,
   ## choose only the rows with on/off proteins
   RES_onoff2 <- RES_onoff[RES_onoff$isonoff, ]
 
-  #### TODO: D_onoff_wide2 ist leer, weil isonoff für alles Falsch ist
-
   validvalue_cols <- setdiff(colnames(RES_onoff2)[grep("valid_values_", colnames(RES_onoff2))], colnames(RES_onoff2)[grep("valid_values_rel_", colnames(RES_onoff2))])
 
   RES_onoff2[, protein_name_column] <- make.names(RES_onoff2[, protein_name_column], unique = TRUE)
@@ -116,11 +114,9 @@ Onoff_plus_heatmap <- function(RES_onoff,
     RES_onoff2_long$group <- stringr::str_replace(RES_onoff2_long$group, "valid_values_", "")
   }
 
-  ### TODO: level Reihenfolge der Gruppe nutzen statt alphabetisch
   #RES_onoff2_long$group <- factor(RES_onoff2_long$group, levels = levels(group))
 
 
-  ### TODO: clustering für Reihenfolge/order der Proteine?
   ord <- do.call(order, args = c(as.list(RES_onoff2[, validvalue_cols]), decreasing = TRUE))
   #cl <- hclust(dist(D_onoff_wide2[, cols], method = "manhattan"), method="complete")
 
@@ -130,7 +126,7 @@ Onoff_plus_heatmap <- function(RES_onoff,
 
   group <- Gene.names <- value <- NULL # silence notes when checking the package
 
-  pl <- ggplot2::ggplot(data = RES_onoff2_long, ggplot2::aes(x = group, y = Gene.names, fill = value)) +  ## TODO: Gene.names
+  pl <- ggplot2::ggplot(data = RES_onoff2_long, ggplot2::aes(x = group, y = Gene.names, fill = value)) +
     ggplot2::geom_tile() +  ggplot2::ylab("Gene name") + ggplot2::xlab("group") + ggplot2::theme_bw()
 
   #if (onoffGreaterThanEqual < 1 | !is.null(onoffdiff)) {

@@ -113,15 +113,11 @@ prepareDataSE <- function(dataPath,
                               log_base = logBase, lts.quantile = ltsQuantile,
                               verbose = verbose)
 
-  ### TODO: add option to save normalized data as xlsx file
   # if (outType == "xlsx") {
   #   exportSE(prepared_data$SE, file = file.path(output_path, paste0("D_norm", suffix, ".xlsx")))
   # }
 
 
-
-  ### TODO: check if all samples can be found in sampleInfo
-  ### TODO: remove additional samples from sampleInfo
 
   ## read in sample information file, if given
   if (!is.null(sampleInfoPath)) {
@@ -145,7 +141,6 @@ prepareDataSE <- function(dataPath,
   #  assays <- list(intensity = as.matrix(D))
   #}
 
-  # TODO: include metadata, e.g. about normalization method?
   #if (is.null(sampleInfo)) {
     SE <- SummarizedExperiment::SummarizedExperiment(assays = assays,
                                                      rowData = id,
@@ -157,7 +152,6 @@ prepareDataSE <- function(dataPath,
   #}
 
   ### long format:
-  # TODO: this is a generic function from tidySummarizedExperiments package
   suppressMessages({
   D_long <- tidySummarizedExperiment:::pivot_longer.SummarizedExperiment(SE,
                   cols = tidyselect::all_of(proteinNameColumn))

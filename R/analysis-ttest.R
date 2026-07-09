@@ -7,19 +7,19 @@
 #'                                  The abundances of the data.
 #' @param group                     \strong{character factor} \cr
 #'                                  The group membership of the data.
-#' @param log_before_test           \strong{logical} \cr
+#' @param logBeforeTest           \strong{logical} \cr
 #'                                  If \code{TRUE}, the data will be log-transformed before the test.
-#' @param delog_for_FC              \strong{logical} \cr
+#' @param delogForFC              \strong{logical} \cr
 #'                                  If \code{TRUE}, the fold change will be calculated on the original scale.
-#' @param min_obs_per_group         \strong{integer} \cr
+#' @param minObsPerGroup         \strong{integer} \cr
 #'                                  The minimum number of observations per group.
-#' @param min_obs_per_group_ratio   \strong{numeric} \cr
+#' @param minObsPerGroupRatio   \strong{numeric} \cr
 #'                                  The minimum number of observations per group as a ratio (e.g, 0.8 = 80% valid values in each group needed).
-#' @param log_base                  \strong{numeric} \cr
+#' @param logBase                  \strong{numeric} \cr
 #'                                  The base of the logarithm for the log-transformation.
 #' @param row                       \strong{integer} \cr
 #'                                  The row number of the data for the function call.
-#' @param var.equal                 \strong{logical} \cr
+#' @param varEqual                 \strong{logical} \cr
 #'                                  If \code{TRUE}, the variances of the groups are expected to be equal.
 #'
 #' @return A vector with the following components: mean group 1, mean group 2, test statistics, p-value, free space fpr corrected p-value, fold changes (both directions), lower and upper limit of confidence interval, number of valid values per group.
@@ -29,19 +29,19 @@
 #' @examples
 #'
 
-ttest_single_row <- function(x, group, log_before_test = TRUE, delog_for_FC = TRUE,
-                             min_obs_per_group = NULL, min_obs_per_group_ratio = NULL,
-                             log_base = 2, row = NULL, var.equal = FALSE) {
+ttest_single_row <- function(x, group, logBeforeTest = TRUE, delogForFC = TRUE,
+                             minObsPerGroup = NULL, minObsPerGroupRatio = NULL,
+                             logBase = 2, row = NULL, varEqual = FALSE) {
 
-  if (!is.null(min_obs_per_group) & !is.null(min_obs_per_group_ratio)) {
-    stop("Both min_obs_per_group and min_obs_per_group_ratio are given, please define only one of them!")
+  if (!is.null(minObsPerGroup) & !is.null(minObsPerGroupRatio)) {
+    stop("Both minObsPerGroup and minObsPerGroupRatio are given, please define only one of them!")
   }
 
 
 
   x <- unlist(unname(x))
-  if (log_before_test) {
-    abundance = log(x, base = log_base)
+  if (logBeforeTest) {
+    abundance = log(x, base = logBase)
   } else {
     abundance = x
   }
@@ -75,18 +75,18 @@ ttest_single_row <- function(x, group, log_before_test = TRUE, delog_for_FC = TR
 
   }              # ensure that both groups are still present
 
-  if(!is.null(min_obs_per_group) & any(table(tmp_na.omit$group) < min_obs_per_group)) {  # ensure that each group has enough observations
+  if(!is.null(minObsPerGroup) & any(table(tmp_na.omit$group) < minObsPerGroup)) {  # ensure that each group has enough observations
     res[12] <- 1  ### reason: not enough observations in at least one group
     return(res)
   }
-  if(!is.null(min_obs_per_group_ratio) & any(table(tmp_na.omit$group)/table(tmp$group) < min_obs_per_group_ratio)) {  # ensure that each group has enough observations
+  if(!is.null(minObsPerGroupRatio) & any(table(tmp_na.omit$group)/table(tmp$group) < minObsPerGroupRatio)) {  # ensure that each group has enough observations
     res[12] <- 1  ### reason: not enough observations in at least one group
     return(res)
   }
 
   ttest <- try({stats::t.test(x = tmp_na.omit$abundance[tmp_na.omit$group == groupnames[2]],
                        y = tmp_na.omit$abundance[tmp_na.omit$group == groupnames[1]],
-                       paired = FALSE, var.equal = var.equal)}, silent = TRUE)
+                       paired = FALSE, var.equal = varEqual)}, silent = TRUE)
 
   # it is still possible, that the ttest fails (e.g. if variance in one group is 0)
   if ("try-error" %in% class(ttest)) {warning(paste0("ttest failed for row ", row));res[12] <- 3;return(res)}  ### reason: other, e.g. var = 0
@@ -101,8 +101,8 @@ ttest_single_row <- function(x, group, log_before_test = TRUE, delog_for_FC = TR
 
 
   ### calculate fold changes
-  if (delog_for_FC) {
-    x2 <- log_base^tmp$abundance
+  if (delogForFC) {
+    x2 <- logBase^tmp$abundance
   } else {
     x2 <- tmp$abundance
   }
@@ -129,13 +129,13 @@ ttest_single_row <- function(x, group, log_before_test = TRUE, delog_for_FC = TR
 #'                                  The group membership of the data.
 #' @param sample                    \strong{character factor} \cr
 #'                                  The sample membership of the data.
-#' @param log_before_test           \strong{logical} \cr
+#' @param logBeforeTest           \strong{logical} \cr
 #'                                  If \code{TRUE}, the data will be log-transformed before the test.
-#' @param delog_for_FC              \strong{logical} \cr
+#' @param delogForFC              \strong{logical} \cr
 #'                                  If \code{TRUE}, the fold change will be calculated on the original scale.
-#' @param min_nr_pairs              \strong{integer} \cr
+#' @param minNrPairs              \strong{integer} \cr
 #'                                  The minimum number of complete sample pairs.
-#' @param log_base                  \strong{numeric} \cr
+#' @param logBase                  \strong{numeric} \cr
 #'                                  The base of the logarithm for the log-transformation.
 #' @param row                       \strong{integer} \cr
 #'                                  The row number of the data for the function call.
@@ -147,9 +147,9 @@ ttest_single_row <- function(x, group, log_before_test = TRUE, delog_for_FC = TR
 #' @examples
 #'
 
-ttest_single_row_paired <- function(x, group, sample, log_before_test = TRUE, delog_for_FC = TRUE,
-                             min_nr_pairs = NULL,
-                             log_base = 2, row = NULL) {
+ttest_single_row_paired <- function(x, group, sample, logBeforeTest = TRUE, delogForFC = TRUE,
+                             minNrPairs = NULL,
+                             logBase = 2, row = NULL) {
 
   ## throw error if the two groups do not have the same length
   if (table(group)[1] != table(group)[2]) {
@@ -158,8 +158,8 @@ ttest_single_row_paired <- function(x, group, sample, log_before_test = TRUE, de
 
   ## log-transformation
   x <- unname(x)
-  if (log_before_test) {
-    abundance = log(x, base = log_base)
+  if (logBeforeTest) {
+    abundance = log(x, base = logBase)
   } else {
     abundance = x
   }
@@ -196,7 +196,7 @@ ttest_single_row_paired <- function(x, group, sample, log_before_test = TRUE, de
   diffs <- tmp_group1$abundance - tmp_group2$abundance
   ind_complete_pairs <- which(!is.na(diffs))
 
-  if (sum(!is.na(diffs)) < min_nr_pairs) {return(res)}  # ensure that enough complete pairs are present
+  if (sum(!is.na(diffs)) < minNrPairs) {return(res)}  # ensure that enough complete pairs are present
 
   ttest <- try({stats::t.test(y = tmp_group1$abundance[ind_complete_pairs],  ## not possible to use tmp_na.omit as pairs may be shifted by omitting NAs
                        x = tmp_group2$abundance[ind_complete_pairs],
@@ -204,7 +204,6 @@ ttest_single_row_paired <- function(x, group, sample, log_before_test = TRUE, de
 
   # it is still possible, that the ttest fails (e.g. if variance in one group is 0)
   if ("try-error" %in% class(ttest)) {warning(paste0("ttest failed for row ", row));return(res)}
-  ### TODO: error message mit ausgeben
 
   res[1] <- ttest$estimate
   res[2] <- ttest$statistic
@@ -215,8 +214,8 @@ ttest_single_row_paired <- function(x, group, sample, log_before_test = TRUE, de
   res[10] <- sum(!is.na(tmp_group2$abundance))
 
   ### calculate fold changes
-  if (delog_for_FC) {
-    x2 <- log_base^tmp$abundance
+  if (delogForFC) {
+    x2 <- logBase^tmp$abundance
   } else {
     x2 <- tmp$abundance
   }
@@ -248,18 +247,18 @@ ttest_single_row_paired <- function(x, group, sample, log_before_test = TRUE, de
 #'                                  The sample numbers or IDs of the samples (only used to build pairs if paired = TRUE, otherwise it is ignored).
 #' @param paired                    **logical** \cr
 #'                                  If TRUE, the test will be paired, otherwise it will be unpaired. Default is FALSE.
-#' @param var.equal                 **logical(1)** \cr
+#' @param varEqual                 **logical(1)** \cr
 #'                                  If TRUE, the variances of the groups are expected to be equal. Default is FALSE.
-#' @param log_before_test           **logical** \cr
+#' @param logBeforeTest           **logical** \cr
 #'                                  If TRUE, the data will be log-transformed before the test. Default is TRUE. Set it to FALSE if data is already log-transformed, e.g.
 #'                                  if you have already normalized it during [prepareDataSE()].
-#' @param delog_for_FC              **logical** \cr
+#' @param delogForFC              **logical** \cr
 #'                                  If TRUE, the fold change will be calculated on the original scale. Default is TRUE.
-#' @param log_base                  **numeric** \cr
+#' @param logBase                  **numeric** \cr
 #'                                  The base of the logarithm for the log-transformation. Default is 2.
-#' @param min_obs_per_group         **integer** \cr
+#' @param minObsPerGroup         **integer** \cr
 #'                                  The minimum number of observations per group. For a paired ttest, this is counted as the minimum of complete pairs. Default is 3.
-#' @param min_obs_per_group_ratio   **numeric** \cr
+#' @param minObsPerGroupRatio   **numeric** \cr
 #'                                  The minimum number of observations per group as a ratio (e.g, 0.8 = 80% valid values in each group needed).
 #'
 #' @return A data frame containing the results of the t-test.
@@ -270,24 +269,21 @@ ttest_single_row_paired <- function(x, group, sample, log_before_test = TRUE, de
 #' @examples
 #'
 
-ttest <- function(D, id = NULL, group, sample = NULL, paired = FALSE, var.equal = FALSE,
-                  log_before_test = TRUE, delog_for_FC = TRUE, log_base = 2,
-                  min_obs_per_group = 3,
-                  min_obs_per_group_ratio = NULL) {
-
-  ### TODO: if group is not a factor, make one out of it!
-
+ttest <- function(D, id = NULL, group, sample = NULL, paired = FALSE, varEqual = FALSE,
+                  logBeforeTest = TRUE, delogForFC = TRUE, logBase = 2,
+                  minObsPerGroup = 3,
+                  minObsPerGroupRatio = NULL) {
 
   if (!paired) {
-    RES <- pbapply::pbapply(D, 1,ttest_single_row, group = group, log_before_test = log_before_test,
-                 delog_for_FC = delog_for_FC, min_obs_per_group = min_obs_per_group,
-                 log_base = log_base, var.equal = var.equal, min_obs_per_group_ratio = min_obs_per_group_ratio)
+    RES <- pbapply::pbapply(D, 1, ttest_single_row, group = group, logBeforeTest = logBeforeTest,
+                 delogForFC = delogForFC, minObsPerGroup = minObsPerGroup,
+                 logBase = logBase, varEqual = varEqual, minObsPerGroupRatio = minObsPerGroupRatio)
   }
 
   if (paired) {
-    RES <- pbapply::pbapply(D, 1, ttest_single_row_paired, group = group, log_before_test = log_before_test,
-                 delog_for_FC = delog_for_FC, min_nr_pairs = min_obs_per_group, sample = sample,
-                 log_base = log_base)
+    RES <- pbapply::pbapply(D, 1, ttest_single_row_paired, group = group, logBeforeTest = logBeforeTest,
+                 delogForFC = delogForFC, minNrPairs = minObsPerGroup, sample = sample,
+                 logBase = logBase)
   }
 
   RES <- t(RES)
@@ -295,12 +291,12 @@ ttest <- function(D, id = NULL, group, sample = NULL, paired = FALSE, var.equal 
 
   RES$p.fdr <- stats::p.adjust(RES$p, method = "fdr")
 
-  if(log_before_test){
-    D_log <- log(D, base = log_base)
+  if(logBeforeTest){
+    D_log <- log(D, base = logBase)
     colnames(D_log) <- paste0(colnames(D), "_log")
   } else {
-    if (delog_for_FC) {
-      D_delog <- log_base^D
+    if (delogForFC) {
+      D_delog <- logBase^D
       colnames(D_delog) <- paste0(colnames(D), "_delog")
     }
   }
@@ -314,10 +310,10 @@ ttest <- function(D, id = NULL, group, sample = NULL, paired = FALSE, var.equal 
   }
 
   if(!is.null(id)) {
-    if(log_before_test) {
+    if(logBeforeTest) {
       D <- cbind(id, D, D_log)
     } else {
-      if (delog_for_FC) {
+      if (delogForFC) {
         D <- cbind(id, D, D_delog)
       } else {
         D <- cbind(id, D)

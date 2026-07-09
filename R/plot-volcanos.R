@@ -66,7 +66,6 @@ VolcanoPlot <- function(p,
 
 
   ### transform p-values and fold changes and thresholds
-  ### TODO: What if p-value is exactly zero?
   transformed_FC <- log(FC, base = log_base_fc) # default: log2(FC)
   transformed_p <- -log(p, base = log_base_p) # default: -log10(p)
 
@@ -79,6 +78,8 @@ VolcanoPlot <- function(p,
 
 
   significance <- RES$significance
+  RES <- na.omit(RES) # remove NA values before plotting
+
 
   plot <- ggplot2::ggplot(data = RES, ggplot2::aes(x = transformed_FC, y = transformed_p, colour = significance)) +
     ggplot2::geom_point(alpha = alpha, show.legend = TRUE, size = point_size) +
@@ -134,48 +135,48 @@ VolcanoPlot <- function(p,
 #'
 #' @param RES               \strong{data.frame} \cr
 #'                          The results from a t-test.
-#' @param columnname_p      \strong{character} \cr
+#' @param columnNameP      \strong{character} \cr
 #'                          The column name for p-value.
-#' @param columnname_padj   \strong{character} \cr
+#' @param columnNamePadj   \strong{character} \cr
 #'                          The columns name for adjusted p-value.
-#' @param columnname_FC     \strong{character} \cr
+#' @param columnNameFC     \strong{character} \cr
 #'                          The column name for fold change.
 #'
-#' @param thres_fc          \strong{numeric} \cr
+#' @param thresFC          \strong{numeric} \cr
 #'                          The threshold for fold change.
-#' @param thres_p           \strong{numeric} \cr
+#' @param thresP           \strong{numeric} \cr
 #'                          The threshold for p-value.
-#' @param log_base_fc       \strong{numeric} \cr
+#' @param logBaseFC        \strong{numeric} \cr
 #'                          The base for the fold changes log-transformation.
-#' @param log_base_p        \strong{numeric} \cr
+#' @param logBaseP         \strong{numeric} \cr
 #'                          The base for the p-values log-transformation.
-#' @param is_FC_log         \strong{logical} \cr
+#' @param isFCLog          \strong{logical} \cr
 #'                          If \code{TRUE}, fold change is already log-transformed.
-#' @param is_p_log          \strong{logical} \cr
+#' @param isPLog           \strong{logical} \cr
 #'                          If \code{TRUE}, p-value is already log-transformed.
 #'
-#' @param show_thres_line   \strong{logical} \cr
+#' @param showThresLine    \strong{logical} \cr
 #'                          If \code{TRUE}, threshold lines will be shown.
-#' @param groupname1        \strong{character} \cr
+#' @param groupName1       \strong{character} \cr
 #'                          The name of first group.
-#' @param groupname2        \strong{character} \cr
+#' @param groupName2       \strong{character} \cr
 #'                          The name of second group.
 #'
-#' @param plot_height       \strong{numeric} \cr
+#' @param plotHeight       \strong{numeric} \cr
 #'                          The height of plot.
-#' @param plot_width        \strong{numeric} \cr
+#' @param plotWidth        \strong{numeric} \cr
 #'                          The width of plot.
-#' @param plot_dpi          \strong{integer} \cr
+#' @param plotDPI          \strong{integer} \cr
 #'                          The resolution of plot.
-#' @param plot_device       \strong{character} \cr
+#' @param plotDevice       \strong{character} \cr
 #'                          The plot device that is used for the resulting plot.
 #'                          Options are "pdf" and "png".
 #'
-#' @param output_path       \strong{character} \cr
+#' @param outputPath       \strong{character} \cr
 #'                          The path for output file.
 #' @param suffix            \strong{character} \cr
 #'                          The suffix for output file.
-#' @param add_annotation    \strong{logical} \cr
+#' @param addAnnotation    \strong{logical} \cr
 #'                          If \code{TRUE}, annotation will be added.
 #'
 #' @param ...               Additional arguments for the plot.
@@ -190,29 +191,29 @@ VolcanoPlot <- function(p,
 #'
 
 VolcanoPlot_ttest <- function(RES,
-                        columnname_p = "p",
-                        columnname_padj = "padj",
-                        columnname_FC = "FC",
+                        columnNameP = "p",
+                        columnNamePadj = "padj",
+                        columnNameFC = "FC",
 
-                        thres_fc = 2,
-                        thres_p = 0.05,
-                        log_base_fc = 2,
-                        log_base_p = 10,
-                        is_FC_log = FALSE,
-                        is_p_log = FALSE,
+                        thresFC = 2,
+                        thresP = 0.05,
+                        logBaseFC = 2,
+                        logBaseP = 10,
+                        isFCLog = FALSE,
+                        isPLog = FALSE,
 
-                        show_thres_line = TRUE,
-                        groupname1 = "group1",
-                        groupname2 = "group2",
+                        showThresLine = TRUE,
+                        groupName1 = "group1",
+                        groupName2 = "group2",
 
-                        plot_height = 15,
-                        plot_width = 15,
-                        plot_dpi = 300,
-                        plot_device="pdf",
+                        plotHeight = 15,
+                        plotWidth = 15,
+                        plotDPI = 300,
+                        plotDevice = "pdf",
 
-                        output_path = NULL,
+                        outputPath = NULL,
                         suffix = NULL,
-                        add_annotation = TRUE,
+                        addAnnotation = TRUE,
                         ...) {
 
 
@@ -220,25 +221,25 @@ VolcanoPlot_ttest <- function(RES,
   #if(getRversion() >= "2.15.1")  utils::globalVariables(c("transformed_FC", "transformed_p", "significance"), add = FALSE)
 
 
-  p <- RES[,columnname_p]
-  padj <- RES[,columnname_padj]
-  FC <- RES[,columnname_FC]
+  p <- RES[,columnNameP]
+  padj <- RES[,columnNamePadj]
+  FC <- RES[,columnNameFC]
 
-  if (is_FC_log) {
-    FC <- log_base_fc^FC
+  if (isFCLog) {
+    FC <- logBaseFC^FC
   }
-  if (is_p_log) {
-    p <- log_base_p^(-p)
-    padj <- log_base_p^(-padj)
+  if (isPLog) {
+    p <- logBaseP^(-p)
+    padj <- logBaseP^(-padj)
   }
 
 
 
   RES$significance <- calculate_significance_categories_ttest(p = p,
-                                                              p_adj = padj,
+                                                              pAdj = padj,
                                                               fc = FC,
-                                                              thres_fc = thres_fc,
-                                                              thres_p = thres_p)
+                                                              thresFC = thresFC,
+                                                              thresP = thresP)
 
 
   plot <- VolcanoPlot(p = p,
@@ -247,7 +248,6 @@ VolcanoPlot_ttest <- function(RES,
                       ...)
 
 
-  ## TODO: annotation of number of significant proteins
   # # here count the number of significant after FDR correction (>0 and <=0)
   # newX <- RES %>% filter(group %in% "significant after FDR correction")
   # lessthan0 <- 0
@@ -259,8 +259,6 @@ VolcanoPlot_ttest <- function(RES,
   #   ifelse(x > 0, greaterthan0<-greaterthan0+1, lessthan0<-lessthan0+1)
   # }
   #
-  # ### TODO: make annotation optional
-  # ### TODO: add arrows (in current solution, arrows are too low)
   # if (add_annotation) {
   #   plot <- plot +
   #     annotate("text", x= xlim[1]+ (xlim[2]/10), y=ylim[2], label= paste0(groupname1, ": " , lessthan0))+#, " \U2191")) +
@@ -406,7 +404,7 @@ VolcanoPlot_ANOVA <- function(RES,
                  label_type = "FDR",
                  ind = NULL,
                  protein_name_column = NULL,
-                 protein_names = RES$Gene.names) ### TODO: verallgemeinern
+                 protein_names = RES$Gene.names)
     }
 
     Volcano_plots[[i]] <- plot
@@ -457,8 +455,6 @@ add_labels <- function(RES_Volcano,
                        ind = NULL,
                        protein_name_column = "Gene.names",
                        protein_names = NULL) {
-  #### TODO: protein_name_column muss separat übergeben werden, weil dieSpalte nicht im Plot-Objekt vorhanden ist
-
 
   if (label_type == "FDR") {
     ind_label <- which(RES_Volcano$data$significance == "significant after FDR correction")

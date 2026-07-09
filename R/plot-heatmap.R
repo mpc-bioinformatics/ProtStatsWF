@@ -6,53 +6,55 @@
 #'                                The data set containing only protein intensities, already filtered for interesting candidates.
 #' @param id                      \strong{data.frame} \cr
 #'                                The corresponding ID columns for the parameter D e.g. containing further columns like protein or gene names
-#' @param protein_names_col       \strong{integer} \cr
+#' @param proteinNamesCol        \strong{integer} \cr
 #'                                The column with protein or gene names, if the names should be plotted.
-#' @param na_method               \strong{character} \cr
+#' @param naMethod               \strong{character} \cr
 #'                                The method with which missing values are handeled.
 #'                                Options are "na.omit" (proteins with any missing values will be removed), "impute" (missing values will be imputed) and "keep" (missing values will be kept).
 #'                                Note that clustering may not work when too many missing values are present.
-#' @param min_valid_values        \strong{integer} \cr
+#' @param minValidValues         \strong{integer} \cr
 #'                                The minimum number of valid values \string{per row}.
 #'                                If a protein has less valid values, it will be filtered out.
 #'                                Note that rows with only 1 or 2 valid values may cause problems with clustering.
 #' @param groups                  \strong{character factor} \cr
 #'                                The group of the data with two or more grouping variables.
-#' @param group_colours           \strong{character} \cr
+#' @param groupColours            \strong{character} \cr
 #'                                ? A named list of group colours (discrete vars) or colour functions (continuous vars)
-#' @param column_split            \strong{character} \cr
+#' @param columnSplit             \strong{character} \cr
 #'                                ? The name of the column in groups, if the columns should be split.
-#' @param cluster_column_slices   \strong{logical} \cr
+#' @param clusterColumnSlices    \strong{logical} \cr
 #'                                ? If \code{TRUE}, column slices will be clustered.
-#' @param cluster_rows            \strong{logical or dendrogram} \cr
+#' @param clusterRows             \strong{logical or dendrogram} \cr
 #'                                If \code{TRUE}, the rows will be clustered. Can also be a dendrogram object which is used to cluster the rows.
-#' @param cluster_columns         \strong{logical or dendrogram} \cr
+#' @param clusterColumns          \strong{logical or dendrogram} \cr
 #'                                If \code{TRUE}, the columns will be clustered. Can also be a dendrogram object which is used to cluster the columns.
-#' @param dist_method             \strong{character} \cr
+#' @param distMethod              \strong{character} \cr
 #'                                The distance metric for clustering. Options are "pearson", "spearman" and "euclidean".
-#' @param clust_method            \strong{character} \cr
+#' @param clustMethod             \strong{character} \cr
 #'                                The linkage method for clustering. Options are "complete", "single" and "average".
-#' @param symmetric_legend        \strong{logical} \cr
+#' @param symmetricLegend         \strong{logical} \cr
 #'                                If \code{TRUE}, the colour code will be  symmetric.
 #'                                Note that it only make sense for z-scored data.
-#' @param scale_data              \strong{logical} \cr
+#' @param scaleData               \strong{logical} \cr
 #'                                If \code{TRUE}, the data will be scaled ( = z-scored).
-#' @param legend_name             \strong{character} \cr
+#' @param legendName              \strong{character} \cr
 #'                                The name for legend (colour bar).
-#' @param group_name              \strong{character} \cr
+#' @param groupName               \strong{character} \cr
 #'                                The name of the group variable, only used for the legend.
 #' @param title                   \strong{character} \cr
 #'                                The title of the plot.
-#' @param legend_colours          \strong{character} \cr
+#' @param legendColours           \strong{character} \cr
 #'                                A vector of colours for colour gradient.
-#' @param log_data                \strong{logical} \cr
+#' @param logData                 \strong{logical} \cr
 #'                                If \code{TRUE}, the data will be log-transformed.
-#' @param log_base                \strong{integer} \cr
-#'                                The base for the log-transformation, if \code{log_data = TRUE}.
-#' @param colour_scale_max        \strong{numeric} \cr
+#' @param logBase                 \strong{integer} \cr
+#'                                The base for the log-transformation, if \code{logData = TRUE}.
+#' @param colourScaleMax          \strong{numeric} \cr
 #'                                The cap value for which all greater values will receive the same color.
-#' @param textsize                \strong{integer} \cr
+#' @param textSize                \strong{integer} \cr
 #'                                The size of text in the plot.
+#' @param verbose                 \strong{logical} \cr
+#'                                If \code{TRUE}, messages will be printed.
 #' @param ...                     Further arguments to Heatmap
 #'
 #' @return A heatmap of the given data.
@@ -63,74 +65,74 @@
 
 Heatmap_with_groups <- function(D,
                                 id,
-                                protein_names_col = NULL,
-                                na_method = "na.omit",
-                                min_valid_values = 2,
+                                proteinNamesCol = NULL,
+                                naMethod = "na.omit",
+                                minValidValues = 2,
                                 groups = NULL,
-                                group_colours = NULL,
-                                column_split = NULL,
-                                cluster_column_slices = FALSE,
-                                cluster_rows = TRUE,
-                                cluster_columns = TRUE,
-                                dist_method = "pearson",
-                                clust_method = "complete",
-                                symmetric_legend = TRUE,
-                                scale_data = TRUE,
+                                groupColours = NULL,
+                                columnSplit = NULL,
+                                clusterColumnSlices = FALSE,
+                                clusterRows = TRUE,
+                                clusterColumns = TRUE,
+                                distMethod = "pearson",
+                                clustMethod = "complete",
+                                symmetricLegend = TRUE,
+                                scaleData = TRUE,
                                 #output_path = paste0(getwd(), "//"),
                                 #suffix = NULL,
-                                legend_name = "Legend",
-                                group_name = "Group",
+                                legendName = "Legend",
+                                groupName = "Group",
                                 title = "Heatmap",
-                                legend_colours = c("blue", "white", "red"),
+                                legendColours = c("blue", "white", "red"),
                                 #plot_height = 20,
                                 #plot_width = 20,
                                 #plot_dpi = 300,
-                                log_data = TRUE,
-                                log_base = 2,
-                                colour_scale_max = NULL,
-                                textsize = 15,
+                                logData = TRUE,
+                                logBase = 2,
+                                colourScaleMax = NULL,
+                                textSize = 15,
                                 top_annotation = NULL,
+                                verbose = TRUE,
                                 ...) {
 
   data.asmatrix <- as.matrix(D)
 
   ### log-transformation
-  if (log_data) {
-    data.asmatrix <- log(data.asmatrix, log_base)
+  if (logData) {
+    data.asmatrix <- log(data.asmatrix, logBase)
   }
 
   ### calculation of z-scores
-  if (scale_data) {
+  if (scaleData) {
   data.asmatrix_scaled <- t(scale(t(data.asmatrix)))
   data.asmatrix <- data.asmatrix_scaled
   }
 
 
   ### remove rows with too many missing values
-  ind_row  <- rowSums(!is.na(data.asmatrix)) >= min_valid_values
+  ind_row  <- rowSums(!is.na(data.asmatrix)) >= minValidValues
   data.asmatrix <- data.asmatrix[ind_row,]
   id <- id[ind_row,, drop = FALSE]
-  message(sum(!ind_row), " rows with too many missing values removed.")
+  if (verbose) message(sum(!ind_row), " rows with too many missing values removed.")
 
   ### cap colour gradient at a maximum value (may be valuable if there are extreme outliers)
-  if (!is.null(colour_scale_max)) {
-    data.asmatrix[data.asmatrix < -colour_scale_max] <- -colour_scale_max
-    data.asmatrix[data.asmatrix > colour_scale_max] <- colour_scale_max
+  if (!is.null(colourScaleMax)) {
+    data.asmatrix[data.asmatrix < -colourScaleMax] <- -colourScaleMax
+    data.asmatrix[data.asmatrix > colourScaleMax] <- colourScaleMax
   }
 
 
   ### imputation or filter out rows with missing values
-  if (na_method == "impute") {
+  if (naMethod == "impute") {
     data.asmatrix[is.na(data.asmatrix)] <- 0
   }
 
-  if (na_method == "na.omit") {
+  if (naMethod == "na.omit") {
     #data.asmatrix_tmp <- data.asmatrix
     #rownames(data.asmatrix_tmp) <- 1:nrow(data.asmatrix_tmp)
     data.asmatrix <- stats::na.omit(data.asmatrix)
-    ind <- as.numeric(rownames(data.asmatrix))
+    # ind <- as.numeric(rownames(data.asmatrix))
 
-    ### TODO: geht kaputt weil keine rownames?
     #id <- id[ind,, drop = FALSE]
     #print(id)
 
@@ -141,7 +143,7 @@ Heatmap_with_groups <- function(D,
 
   }
 
-  if (na_method == "keep") {
+  if (naMethod == "keep") {
     data.asmatrix <- data.asmatrix
   }
 
@@ -149,14 +151,14 @@ Heatmap_with_groups <- function(D,
 
 
   ### make legend/colour gradient symmetric
-  if (symmetric_legend) {
+  if (symmetricLegend) {
     minmax <- max(abs(c(min(data.asmatrix, na.rm = TRUE), max(data.asmatrix, na.rm = TRUE))))
-    legend_colours <- circlize::colorRamp2(c(-minmax, 0, minmax), legend_colours)
+    legendColours <- circlize::colorRamp2(c(-minmax, 0, minmax), legendColours)
   }
 
   ### get row labels from id dataframe
-  if (!is.null(protein_names_col)) {
-    row_labels <- id[, protein_names_col]
+  if (!is.null(proteinNamesCol)) {
+    row_labels <- id[, proteinNamesCol]
     #row_labels <- unlist(as.vector(row_labels))
     #print(row_labels)
   } else {
@@ -168,31 +170,31 @@ Heatmap_with_groups <- function(D,
     ### top annotation for groups
     if (!is.null(groups)) {
       top_annotation = ComplexHeatmap::HeatmapAnnotation(Group = groups,
-                                                         col = group_colours,
-                                                         annotation_name_gp = grid::gpar(fontsize = textsize), #name = group_name,
-                                                         annotation_label = group_name,
-                                                         annotation_legend_param = list(title_gp = grid::gpar(fontsize = textsize,
+                                                         col = groupColours,
+                                                         annotation_name_gp = grid::gpar(fontsize = textSize), #name = groupName,
+                                                         annotation_label = groupName,
+                                                         annotation_legend_param = list(title_gp = grid::gpar(fontsize = textSize,
                                                                                                               fontface = "bold"),
-                                                                                        labels_gp = grid::gpar(fontsize = textsize)))
+                                                                                        labels_gp = grid::gpar(fontsize = textSize)))
     } else {
       top_annotation = NULL
     }
   }
 
   ### set column split
-  if (!is.null(column_split)) {
-    column_split = groups[, column_split]
+  if (!is.null(columnSplit)) {
+    columnSplit = groups[, columnSplit]
   }
 
 
   ### set up hierarchical clustering
-  if (is.logical(cluster_rows) && cluster_rows == TRUE) {
-    clusters_rows <- stats::hclust(amap::Dist(data.asmatrix, method = dist_method), method = clust_method)
-    cluster_rows <- stats::as.dendrogram(clusters_rows)
+  if (is.logical(clusterRows) && clusterRows == TRUE) {
+    clusters_rows <- stats::hclust(amap::Dist(data.asmatrix, method = distMethod), method = clustMethod)
+    clusterRows <- stats::as.dendrogram(clusters_rows)
   }
-  if (is.logical(cluster_columns) && cluster_columns == TRUE) {
-    clusters_columns <- stats::hclust(amap::Dist(t(data.asmatrix), method = dist_method), method = clust_method)
-    cluster_columns <- stats::as.dendrogram(clusters_columns)
+  if (is.logical(clusterColumns) && clusterColumns == TRUE) {
+    clusters_columns <- stats::hclust(amap::Dist(t(data.asmatrix), method = distMethod), method = clustMethod)
+    clusterColumns <- stats::as.dendrogram(clusters_columns)
   }
 
   #row_labels <<- row_labels
@@ -206,18 +208,18 @@ Heatmap_with_groups <- function(D,
 
   ht <- ComplexHeatmap::Heatmap(data.asmatrix,
                 column_title = title,
-                #name = legend_name,
-                cluster_rows = cluster_rows,
-                cluster_columns = cluster_columns,
-                cluster_column_slices = cluster_column_slices,
+                #name = legendName,
+                cluster_rows = clusterRows,
+                cluster_columns = clusterColumns,
+                cluster_column_slices = clusterColumnSlices,
                 top_annotation = top_annotation,
-                column_split = column_split,
+                column_split = columnSplit,
                 row_labels = row_labels,
-                col = legend_colours,
-                heatmap_legend_param = list(direction = "vertical", title = legend_name, title_gp = grid::gpar(fontsize = textsize, fontface = "bold"),
-                                            labels_gp = grid::gpar(fontsize = textsize)),
-                column_names_gp = grid::gpar(fontsize = textsize),
-                column_title_gp = grid::gpar(fontsize = textsize),
+                col = legendColours,
+                heatmap_legend_param = list(direction = "vertical", title = legendName, title_gp = grid::gpar(fontsize = textSize, fontface = "bold"),
+                                            labels_gp = grid::gpar(fontsize = textSize)),
+                column_names_gp = grid::gpar(fontsize = textSize),
+                column_title_gp = grid::gpar(fontsize = textSize),
                 ...)
 
   return(list(heatmap = ht))#, clusters_columns = clusters_columns)) # clusters_rows = clusters_rows,

@@ -6,23 +6,23 @@
 \usage{
 pvalue_foldchange_histogram(
   RES,
-  columnname_p = "p",
-  columnname_padj = "padj",
-  columnname_FC = "FC",
-  base_size = 15
+  columnNameP = "p",
+  columnNamePadj = "padj",
+  columnNameFC = "FC",
+  baseSize = 15
 )
 }
 \arguments{
 \item{RES}{\strong{data.frame} \cr
 The results from a t-test.}
 
-\item{columnname_p}{\strong{characte} \cr
+\item{columnNameP}{\strong{characte} \cr
 The column name for p-value.}
 
-\item{columnname_padj}{\strong{characte} \cr
+\item{columnNamePadj}{\strong{characte} \cr
 The columns name for adjusted p-value.}
 
-\item{columnname_FC}{\strong{characte} \cr
+\item{columnNameFC}{\strong{characte} \cr
 The column name for fold change.}
 }
 \value{

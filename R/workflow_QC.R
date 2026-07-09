@@ -56,8 +56,8 @@ workflow_QC <- function(D,
                         groupColours = NULL,
 
                         outPath,
-                        outType = "xlsx",  ## TODO: does not seem to have an effect at the moment
-                        suffix = "",  ## TODO: if it doesnt start with underscore, add it automatically"
+                        outType = "xlsx",
+                        suffix = "",
                         NAOut = "NA",
                         verbose = TRUE,
 
@@ -71,10 +71,10 @@ workflow_QC <- function(D,
 
                         boxplotMethod = "boxplot",
 
-                        MAMaxPlots = 5000, # TODO: if = 0, MA plost are skipped
-                        MAAlpha = 1, # TODO: give degree of alpha, not only TRUE/FALSE
+                        MAMaxPlots = 5000,
+                        MAAlpha = 1,
 
-                        PCAImputeMethod = "mean", ## TODO: none means no imputation
+                        PCAImputeMethod = "mean",
                         PCAPropNA = 0,
                         PCAScale = TRUE,
                         PCAAlpha = 1,
@@ -86,12 +86,7 @@ workflow_QC <- function(D,
                         PCAPointSize = 4
 ){
 
-# TODO: check all variables that are not used in another main function in this workflow
-
-  ### TODO: na out and other output types
-
   # prepare group colours
-  ### TODO: group colours should be a named vector if possible
   group <- SummarizedExperiment::colData(D$SE)[, groupColumn]
   nr_groups <- length(levels(group))
   if (is.null(groupColours) & nr_groups >= 1) groupColours <- scales::hue_pal()(nr_groups)
@@ -106,7 +101,6 @@ workflow_QC <- function(D,
                   plot = vv_plot$plot, device = plotDevice, height = plotHeight_BP_VV,
                   width = plotWidth_BP_VV, dpi = plotDPI, units = "cm")
 
-  ### TODO: different output file types
   utils::write.csv(x = vv_plot$table, file = file.path(outPath,
                     paste0("D_validvalues", suffix, ".csv")), row.names = FALSE)
 
@@ -133,7 +127,7 @@ workflow_QC <- function(D,
 
 
   if (MAMaxPlots > 0) {
-    ma_data <- MA_Plots(D = SummarizedExperiment::assay(D$SE),  # TODO: give SE directly, not assay
+    ma_data <- MA_Plots(D = SummarizedExperiment::assay(D$SE),
                         outPath = outPath, suffix = suffix,
                         #labels = 1:ncol(SummarizedExperiment::assay(D$SE)),
                         #labels2 = colnames(SummarizedExperiment::assay(D$SE)),
@@ -163,9 +157,9 @@ workflow_QC <- function(D,
                        labelSeed = PCALabelSeed,
                        labelSize = PCALabelSize,
                        xlim = PCAXlim, ylim = PCAYlim,
-                       pointSize = PCAPointSize, baseSize = baseSize)
+                       pointSize = PCAPointSize, baseSize = baseSize,
+                       verbose = verbose)
 
-### TODO:: extract and save loadings
   # Loadings <- as.data.frame(pca$rotation)
   # if (!is.null(id)) {
   #   Loadings <- cbind(id, Loadings)

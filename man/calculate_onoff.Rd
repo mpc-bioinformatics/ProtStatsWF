@@ -4,7 +4,7 @@
 \alias{calculate_onoff}
 \title{Calculate on/off proteins}
 \usage{
-calculate_onoff(D, id, group, max_vv_off, min_vv_on, protein_names_column = 1)
+calculate_onoff(D, id, group, maxVvOff, minVvOn, proteinNamesColumn = 1)
 }
 \arguments{
 \item{D}{\strong{data.frame} \cr
@@ -16,13 +16,13 @@ The corresponding ID columns for the parameter D.}
 \item{group}{\strong{character factor} \cr
 The groups of the data.}
 
-\item{max_vv_off}{\strong{integer} \cr
+\item{maxVvOff}{\strong{integer} \cr
 The proteins below the threshold of the maximum number of valid values are considered off proteins.}
 
-\item{min_vv_on}{\strong{integer} \cr
+\item{minVvOn}{\strong{integer} \cr
 The proteins above the threshold of the minimum number of valid values are considered on proteins.}
 
-\item{protein_names_column}{\strong{character} \cr
+\item{proteinNamesColumn}{\strong{character} \cr
 The column name in the id dataframe containing the protein IDs used for mapping.}
 }
 \value{

@@ -93,7 +93,6 @@ getClusterInfos <- function(heatmap, nr_clusters, D, id) {
   # print(dim(D))
   # print(length(cluster))
 
-  ### TODO: add z-scores to the table or generate separate table for that.
   RES_clustering <- cbind(id, cluster = cluster, D)
 
   return(RES_clustering)
@@ -117,8 +116,6 @@ getClusterInfos <- function(heatmap, nr_clusters, D, id) {
 #'
 #' @examples
 Lineplots <- function(D_zscore, cluster_colours) {
-
-  ### TODO: currently only plots without imputation. This should be changed to allow for imputation as well.
 
   nr_clusters <- max(D_zscore$cluster)
 

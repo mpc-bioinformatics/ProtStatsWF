@@ -5,117 +5,121 @@
 \title{t-test workflow}
 \usage{
 workflow_ttest(
-  data_path,
-  output_path,
-  intensity_columns,
+  D,
+  groupColumn,
+  outputPath,
+  sampleColumn = NULL,
+  assayName = "intensity_norm",
+  groupColours = NULL,
+  proteinNameColumn = "Protein",
   paired = FALSE,
-  var.equal = FALSE,
-  log_before_test = TRUE,
-  delog_for_FC = TRUE,
-  p_value_zeros_to_min = TRUE,
-  volcano_base_size = 25,
-  significant_after_FDR = TRUE,
-  max_valid_values_off = 0,
-  min_valid_values_on = NULL,
+  varEqual = FALSE,
+  logBeforeTest = FALSE,
+  delogForFC = TRUE,
+  pValueZerosToMin = TRUE,
+  volcanoBaseSize = 25,
+  significantAfterFDR = TRUE,
+  maxValidValuesOff = 0,
+  minValidValuesOn = NULL,
   suffix = "",
-  plot_device = "pdf",
-  plot_height = 15,
-  plot_width = 15,
-  plot_dpi = 300,
-  column_name_protein = "Protein"
+  plotDevice = "pdf",
+  plotHeight = 15,
+  plotWidth = 15,
+  plotDPI = 300,
+  verbose = TRUE
 )
 }
 \arguments{
-\item{data_path}{\strong{character} \cr
-The path to an .xlsx file containing the input data.}
+\item{D}{\strong{list} Result from \code{\link[=prepareDataSE]{prepareDataSE()}} containing \code{D$SE}
+(a \code{SummarizedExperiment}) and \code{D$D_long} (the data set in long format).}
 
-\item{output_path}{\strong{character} \cr
-The path to the output folder.}
+\item{groupColumn}{\strong{character(1)} Column name in \code{colData(D$SE)} that contains the
+group labels. Exactly two groups must be present.}
 
-\item{intensity_columns}{\strong{integer vector} \cr
-The numbers of the intensity columns in the table.}
+\item{outputPath}{\strong{character(1)} Path to the output folder. The folder must already exist.}
 
-\item{paired}{\strong{logical} \cr
-If \code{TRUE}, a paired test will be done, otherwise an unpaired test.}
+\item{sampleColumn}{\strong{character(1)} Column name in \code{colData(D$SE)} that identifies
+matched samples for a paired test. Required when \code{paired = TRUE}. Default is \code{NULL}.}
 
-\item{var.equal}{\strong{logical} \cr
-If \code{TRUE}, the variances are assumed to be equal.}
+\item{assayName}{\strong{character(1)} Name of the assay in \code{D$SE} to use as input data.
+Default is \code{"intensity_norm"}.}
 
-\item{log_before_test}{\strong{logical} \cr
-If \code{TRUE}, the data will be log-transformed.}
+\item{groupColours}{\strong{character} Vector of colours for the two groups. Default is \code{NULL}
+(default ggplot2 colour palette).}
 
-\item{delog_for_FC}{\strong{logical} \cr
-If \code{TRUE}, the fold change will be calculated without the log-transformation.}
+\item{proteinNameColumn}{\strong{character(1)} Column name in \code{rowData(D$SE)} containing
+protein identifiers. Default is \code{"Protein"}.}
 
-\item{p_value_zeros_to_min}{\strong{logical} \cr
-If \code{TRUE}, then \code{p_values == 0} will be set to the next smallest value of the p-values.}
+\item{paired}{\strong{logical(1)} If \code{TRUE}, a paired test is performed. Default is \code{FALSE}.}
 
-\item{volcano_base_size}{\strong{numeric} \cr
-The base size of the volcano plot.}
+\item{varEqual}{\strong{logical(1)} If \code{TRUE}, variances are assumed equal. Default is \code{FALSE}.}
 
-\item{significant_after_FDR}{\strong{logical} \cr
-If \code{TRUE}, candidates for the boxplots and heatmap need to be significant after FDR correction, otherwise all significant candidates will be used.}
+\item{logBeforeTest}{\strong{logical(1)} If \code{TRUE}, data will be log-transformed before
+the test. Defaults to \code{FALSE} because usually data prepared with \code{\link[=prepareDataSE]{prepareDataSE()}} is already
+log-transformed.}
 
-\item{max_valid_values_off}{\strong{integer} \cr
-The maximum number of valid values to be an off protein.}
+\item{delogForFC}{\strong{logical(1)} If \code{TRUE}, fold changes are computed on the original
+(de-log) scale. Default is \code{TRUE}.}
 
-\item{min_valid_values_on}{\strong{integer} \cr
-The minimum number of valid values to be an on protein.}
+\item{pValueZerosToMin}{\strong{logical(1)} If \code{TRUE}, p-values equal to 0 are replaced
+by the next smallest observed p-value. Default is \code{TRUE}.}
 
-\item{suffix}{\strong{character} \cr
-The suffix for the output files. It needs to start with an underscore.}
+\item{volcanoBaseSize}{\strong{numeric(1)} Base font size for the volcano plot. Default is \code{25}.}
 
-\item{plot_device}{\strong{character} \cr
-The type of the output file, e.g. "pdf" or "png".}
+\item{significantAfterFDR}{\strong{logical(1)} If \code{TRUE}, only proteins significant after FDR
+correction are shown in boxplots and heatmap. Default is \code{TRUE}.}
 
-\item{plot_height}{\strong{numeric} \cr
-The plot height in cm.}
+\item{maxValidValuesOff}{\strong{integer(1)} Maximum number of valid values for a protein to be
+classified as "off". Default is \code{0}.}
 
-\item{plot_width}{\strong{numeric} \cr
-The plot width in cm.}
+\item{minValidValuesOn}{\strong{integer(1)} Minimum number of valid values for a protein to be
+classified as "on". Default is \code{NULL} (set automatically to the smallest group size).}
 
-\item{plot_dpi}{\strong{integer} \cr
-The "dots per inch" of the plot aka. the plot resolution.}
+\item{suffix}{\strong{character(1)} Suffix appended to all output file names. Default is \code{""}.}
 
-\item{column_name_protein}{\strong{character} \cr
-The column name containing the proteins.}
+\item{plotDevice}{\strong{character(1)} Output file type, e.g. \code{"pdf"} or \code{"png"}.
+Default is \code{"pdf"}.}
+
+\item{plotHeight}{\strong{numeric(1)} Plot height in cm. Default is \code{15}.}
+
+\item{plotWidth}{\strong{numeric(1)} Plot width in cm. Default is \code{15}.}
+
+\item{plotDPI}{\strong{integer(1)} Plot resolution in DPI. Default is \code{300}.}
+
+\item{verbose}{\strong{logical(1)} Whether to print progress messages to the console. Default is \code{TRUE}.}
 }
 \value{
-Returns a message log of the workflow. The log contains an overview of the settings and gives some information e.g number of significant candidates or on-off-proteins.
+A list with one element \code{"message"}: a character string log of the workflow
+summarising settings and results. All output files are written to \code{outputPath}.
 }
 \description{
 Workflow for t-test analysis of quantitative proteomics data.
 }
 \details{
 This function performs a t-test to compare two experimental groups in a quantitative proteomics dataset.
-Ideally, the data should be already normalized before performing the t-test (e.g. by using the \code{\link[=workflow_QC]{workflow_QC()}} function).
-It is recommended to log-transform the data before the t-test (either use already log-transformed data and \code{log_before_test = FALSE}
-or log-transform the data on the fly with \code{log_before_test = TRUE}).
-The function generates a volcano plot, a histogram of p-values and fold changes,
+The input \code{D} should be the list returned by \code{\link[=prepareDataSE]{prepareDataSE()}}, which handles data import,
+log-transformation, and normalisation. Because the assay data is already log-transformed by
+\code{\link[=prepareDataSE]{prepareDataSE()}}, \code{logBeforeTest} defaults to \code{FALSE}.
+The function generates a volcano plot, histograms of p-values and fold changes,
 boxplots of the significant candidates, and a heatmap of the significant candidates.
 }
 \examples{
-
-# 1. Set the character of your data path, leading to an .xlsx file.
-in_path <- "C:/Users/thisuser/Documents/dataFolder/data.xlsx"
-
-# 2. Set the integer vector of the columns, which contain the intensities.
-int_col <- 3:8
-
-# 3. Set the character of the output path, leading to a folder for the results.
-out_path <- "C:/Users/thisuser/Documents/resultsFolder/"
-
-# 4. Run the ttest with the parameters you set.
 \dontrun{
-result <- workflow_ttest(data_path = in_path,
-                         output_path = out_path,
-                         intensity_columns = int_col) }
+file_proteins <- system.file("extdata", "proteins_HCC.csv", package = "ProtStatsWF")
+file_clinical <- system.file("extdata", "clinical_data.csv", package = "ProtStatsWF")
 
+D <- prepareDataSE(dataPath = file_proteins, intensityColumns = 6:43,
+                   proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
+                   sampleNameColumn = "Sample", fileType = "csv")
+
+result <- workflow_ttest(D = D, groupColumn = "Group",
+                         outputPath = tempdir())
+}
 }
 \seealso{
-\code{\link[=workflow_ANOVA]{workflow_ANOVA()}} in case of more than two groups in the sample.\cr
+\code{\link[=workflow_ANOVA]{workflow_ANOVA()}} for more than two groups.\cr
 Functions used in this workflow:
-\code{\link[=prepareTtestData]{prepareTtestData()}}, \code{\link[=ttest]{ttest()}}, \code{\link[=VolcanoPlot_ttest]{VolcanoPlot_ttest()}}, \code{\link[=pvalue_foldchange_histogram]{pvalue_foldchange_histogram()}},
+\code{\link[=prepareDataSE]{prepareDataSE()}}, \code{\link[=ttest]{ttest()}}, \code{\link[=VolcanoPlot_ttest]{VolcanoPlot_ttest()}}, \code{\link[=pvalue_foldchange_histogram]{pvalue_foldchange_histogram()}},
 \code{\link[=calculate_significance_categories_ttest]{calculate_significance_categories_ttest()}}, \code{\link[=Boxplots_candidates]{Boxplots_candidates()}},
 \code{\link[=Heatmap_with_groups]{Heatmap_with_groups()}}, \code{\link[=calculate_onoff]{calculate_onoff()}}
 }
