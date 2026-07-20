@@ -1,23 +1,6 @@
 # calculate_onoff returns consistent results
 
     Code
-      colnames(on_off)
-    Output
-       [1] "Protein"              "Gene"                 "Protein.Length"      
-       [4] "Organism"             "Description"          "valid_values_C"      
-       [7] "valid_values_HCC"     "valid_values_rel_C"   "valid_values_rel_HCC"
-      [10] "isonoff"             
-
----
-
-    Code
-      nrow(on_off)
-    Output
-      [1] 4185
-
----
-
-    Code
       on_off
     Output
                     Protein       Gene Protein.Length     Organism

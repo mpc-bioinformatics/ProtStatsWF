@@ -89,6 +89,8 @@ workflow_ttest <- function(D,
                            volcanoBaseSize = 25,
 
                            significantAfterFDR = TRUE,
+                           thresFC = 2,
+                           thresP = 0.05,
                            maxValidValuesOff = 0,
                            minValidValuesOn = NULL,
 
@@ -167,7 +169,8 @@ workflow_ttest <- function(D,
 
   volcano_plot <- VolcanoPlot_ttest(RES = test_results,
                                     columnNameP = "p", columnNamePadj = "p.fdr",
-                                    columnNameFC = fc_col_name, base_size = volcanoBaseSize)
+                                    columnNameFC = fc_col_name, base_size = volcanoBaseSize,
+                                    thresFC = thresFC, thresP = thresP)
 
   ggplot2::ggsave(file.path(outputPath, paste0("volcano_plot", suffix, ".", plotDevice)),
                   plot = volcano_plot, device = plotDevice,
@@ -201,7 +204,8 @@ workflow_ttest <- function(D,
 
   significance <- calculate_significance_categories_ttest(p = test_results[["p"]],
                                                           pAdj = test_results[["p.fdr"]],
-                                                          fc = test_results[[fc_col_name]])
+                                                          fc = test_results[[fc_col_name]],
+                                                          thresFC = thresFC, thresP = thresP)
 
   candidates <- as.character(significance)
 
@@ -220,22 +224,23 @@ workflow_ttest <- function(D,
 
   #### Create Boxplots of Biomarker Candidates ####
 
-  Boxplots_candidates(D = DATA[candidates, ],
-                      proteinNames = ID[candidates, proteinNameColumn],
-                      group = group,
-                      groupColours = groupColours,
-                      suffix = suffix,
-                      outputPath = outputPath,
-                      logData = logBeforeTest)
-  if (verbose) message("Boxplots saved.")
+  if (length(candidates) > 0) {
+    Boxplots_candidates(D = DATA[candidates, ],
+                        proteinNames = ID[candidates, proteinNameColumn],
+                        group = group,
+                        groupColours = groupColours,
+                        suffix = suffix,
+                        outputPath = outputPath,
+                        logData = logBeforeTest)
+    if (verbose) message("Boxplots saved.")
 
-  mess <- paste0(mess, "Boxplots made for the candidates. \n")
-
+    mess <- paste0(mess, "Boxplots made for the candidates. \n")
+  }
 
   #### Create Heatmap ####
 
   if (length(candidates) > 1) {
-    set.seed(14)
+    # set.seed(14)
     t_heatmap <- Heatmap_with_groups(D = DATA[candidates, ],
                                      id = ID[candidates, ],
                                      groups = group,

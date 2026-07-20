@@ -1,12 +1,7 @@
 
 test_that("Test Boxplots", {
-  file_proteins <- system.file("extdata", "proteins_HCC.csv", package = "ProtStatsWF")
-  file_clinical <- system.file("extdata", "clinical_data.csv", package = "ProtStatsWF")
-  D <- prepareDataSE(dataPath = file_proteins, intensityColumns = 6:43,
-                     proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
-                     sampleNameColumn = "Sample", fileType = "csv", verbose = FALSE)
 
-  boxplots <- Boxplots(D$D_long,
+  boxplots <- Boxplots(D_hcc$D_long,
                        method = "boxplot",
                        groupColumn = "Group",
                        groupColours = NULL,
@@ -16,7 +11,7 @@ test_that("Test Boxplots", {
   vdiffr::expect_doppelganger("Boxplots_test_file_1", boxplots)
 
 
-  boxplots2 <- Boxplots(D$D_long,
+  boxplots2 <- Boxplots(D_hcc$D_long,
                        method = "boxplot",
                        groupColumn = "Group",
                        groupColours = c("green", "yellow"),
@@ -25,7 +20,7 @@ test_that("Test Boxplots", {
                        outlierSize = 0.2)
   vdiffr::expect_doppelganger("Boxplots_test_file_2", boxplots2)
 
-  violin <- Boxplots(D$D_long,
+  violin <- Boxplots(D_hcc$D_long,
                        method = "violinplot",
                        groupColumn = "Group",
                        groupColours = NULL,

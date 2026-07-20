@@ -1,5 +1,5 @@
 test_that("Boxplots_candidates creates output PDF", {
-  skip_if(length(candidates) == 0, "No significant candidates in test data")
+  #skip_if(length(candidates) == 0, "No significant candidates in test data")
 
   temp_dir <- tempfile()
   dir.create(temp_dir)
@@ -12,7 +12,7 @@ test_that("Boxplots_candidates creates output PDF", {
 
   pdf_path <- file.path(temp_dir, "boxplots_candidates.pdf")
   expect_true(file.exists(pdf_path))
-  expect_gt(file.info(pdf_path)$size, 0) # file size > 0
+  expect_gt(file.info(pdf_path)$size, 0) # test that file size > 0
 })
 
 

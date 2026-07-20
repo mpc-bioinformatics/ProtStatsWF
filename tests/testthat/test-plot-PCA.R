@@ -1,12 +1,7 @@
 
 test_that("Test PCA plot", {
-  file_proteins <- system.file("extdata", "proteins_HCC.csv", package = "ProtStatsWF")
-  file_clinical <- system.file("extdata", "clinical_data.csv", package = "ProtStatsWF")
-  D <- prepareDataSE(dataPath = file_proteins, intensityColumns = 6:43,
-                     proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
-                     sampleNameColumn = "Sample", fileType = "csv", verbose = FALSE)
 
-  PCA <- PCA_Plot(D$SE,
+  PCA <- PCA_Plot(D_hcc$SE,
                   groupForColour = "Group",
                   colourType = "discrete",
                   groupForShape = "Gender",

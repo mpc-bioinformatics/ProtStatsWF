@@ -8,7 +8,5 @@ test_that("calculate_onoff returns consistent results", {
     proteinNamesColumn = which(colnames(ID_hcc) == "Protein")
   )
 
-  expect_snapshot(colnames(on_off))
-  expect_snapshot(nrow(on_off))
   expect_snapshot(on_off)
 })

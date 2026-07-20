@@ -116,10 +116,10 @@ MA_Plots <- function(D,
     message("Number of MA-Plots (", number_plots, ") is higher than maxPlots (", maxPlots, ").\nPlease increase maxPlots to plot all MA-plots.")
   }
 
-  num <- 0
+
   if (verbose) {
     message("Generating MA plots...")
-    pb <- utils::txtProgressBar(min = 0,max = number_plots,char = "#",style = 3)
+    pb <- utils::txtProgressBar(min = 0,max = maxPlots,char = "#",style = 3)
   }
 
   if (!is.null(outPath)) {
@@ -127,14 +127,21 @@ MA_Plots <- function(D,
     grDevices::pdf(file.path(outPath, filename), height = plotHeight/2.54, width = plotWidth/2.54)
   }
 
+
+  num <- 0
+  br <- 0 # indicator for breaking outer loop
   for (i in 1:(ncol(D) - 1)) {
+    if (br == 1) {
+      break
+    }
+
     for (j in (i + 1):ncol(D)) {
+      #print(num)
 
       # if maximum number of plots is reached, stop.
       if (num > maxPlots) {
-        grDevices::dev.off()
-        number_plots <- maxPlots
-        #if (verbose) message(maxPlots, " MA plots generated.")
+        br <- 1
+        break
       }
 
       if (is.null(labels2)) {
