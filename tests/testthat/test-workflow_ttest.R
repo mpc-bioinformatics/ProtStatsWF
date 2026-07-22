@@ -13,12 +13,19 @@ test_that("workflow_ttest runs without error on HCC data", {
 
 
   result <- workflow_ttest(D = D_hcc_small, groupColumn = "Group", outputPath = temp_dir,
-                           verbose = FALSE)
+                           verbose = FALSE, thresFC = 1, thresP = 0.6,
+                           significantAfterFDR = FALSE)
+
+  #
+  # result <- workflow_ttest(D = D_hcc_small, groupColumn = "Group", outputPath = "tmp",
+  #                          verbose = TRUE, thresFC = 1, thresP = 0.6,
+  #                          significantAfterFDR = FALSE)
+
 
   # Returns a message log
   expect_type(result, "list")
-  expect_named(result, "message")
-  expect_type(result$message, "character")
+  expect_named(result, c("test_results", "significance"))
+
 
   # Core output files are created
   expect_true(file.exists(file.path(temp_dir, "results_ttest.xlsx")))
@@ -29,11 +36,11 @@ test_that("workflow_ttest runs without error on HCC data", {
   expect_gt(file.info(file.path(temp_dir, "volcano_plot.pdf"))$size, 0) # test that file size > 0
   expect_true(file.exists(file.path(temp_dir, "histogram_p_value.pdf")))
   expect_gt(file.info(file.path(temp_dir, "histogram_p_value.pdf"))$size, 0) # test that file size > 0
-  expect_true(file.exists(file.path(temp_dir, "message_log_ttest.txt")))
-  expect_gt(file.info(file.path(temp_dir, "message_log_ttest.txt"))$size, 0) # test that file size > 0
+  expect_true(file.exists(file.path(temp_dir, "boxplots_candidates.pdf")))
+  expect_gt(file.info(file.path(temp_dir, "boxplots_candidates.pdf"))$size, 0) # test that file size > 0
 })
 
-#### TODO: test existence of boxplots candidates and heatmap (higher thresholds needed)
+#### TODO: test existence of heatmap (currently only 1 candidate without missing values)
 
 
 test_that("workflow_ttest errors with more than 2 groups", {

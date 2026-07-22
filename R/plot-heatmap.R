@@ -138,7 +138,12 @@ Heatmap_with_groups <- function(D,
 
     ### if there are no rows remaining after na.omit, throw error message
     if (nrow(data.asmatrix) == 0) {
-      stop("All rows contain at least one missing value. Heatmap cannot be created.")
+      message("All rows contain at least one missing value. Heatmap cannot be created.")
+      return(NULL)
+    }
+    if (nrow(data.asmatrix) == 1) {
+      message("Only one row remaining after removing rows with missing values. Heatmap cannot be created.")
+      return(NULL)
     }
 
   }
@@ -186,6 +191,8 @@ Heatmap_with_groups <- function(D,
     columnSplit = groups[, columnSplit]
   }
 
+
+  X <<- data.asmatrix
 
   ### set up hierarchical clustering
   if (is.logical(clusterRows) && clusterRows == TRUE) {

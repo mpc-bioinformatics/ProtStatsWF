@@ -48,10 +48,10 @@
 VolcanoPlot <- function(p,
                         FC,
                         significance_category,
-                        log_base_fc = 2,
-                        log_base_p = 10,
-                        thres_p = 0.05,
-                        thres_fc = 2,
+                        logBaseFC = 2,
+                        logBaseP = 10,
+                        thresP = 0.05,
+                        thresFC = 2,
                         colour1 = "grey",
                         colour2 = "black",
                         colour3 = "orange",
@@ -66,11 +66,12 @@ VolcanoPlot <- function(p,
 
 
   ### transform p-values and fold changes and thresholds
-  transformed_FC <- log(FC, base = log_base_fc) # default: log2(FC)
-  transformed_p <- -log(p, base = log_base_p) # default: -log10(p)
+  transformed_FC <- log(FC, base = logBaseFC) # default: log2(FC)
+  transformed_p <- -log(p, base = logBaseP) # default: -log10(p)
 
-  log_thres_p <- -log(thres_p, base = log_base_p)
-  log_thres_fc <- log(thres_fc, base = log_base_fc)
+  log_thres_fc <- log(thresFC, base = logBaseFC)
+  log_thres_p <- -log(thresP, base = logBaseP)
+
 
   RES <- data.frame(transformed_FC = transformed_FC,
                     transformed_p = transformed_p,
@@ -89,8 +90,8 @@ VolcanoPlot <- function(p,
                                  drop = FALSE,
                                  na.translate = FALSE) +
 
-    ggplot2::xlab(paste0("log",log_base_fc,"(FC)")) +
-    ggplot2::ylab(paste0("-log",log_base_p,"(p)")) +
+    ggplot2::xlab(paste0("log",logBaseFC,"(FC)")) +
+    ggplot2::ylab(paste0("-log",logBaseP,"(p)")) +
     ggplot2::guides(colour = ggplot2::guide_legend(override.aes = list(size = point_size*1.5)))
 
 
@@ -202,7 +203,7 @@ VolcanoPlot_ttest <- function(RES,
                         isFCLog = FALSE,
                         isPLog = FALSE,
 
-                        showThresLine = TRUE,
+                        showThresLine = TRUE,   ##??
                         groupName1 = "group1",
                         groupName2 = "group2",
 
@@ -245,6 +246,8 @@ VolcanoPlot_ttest <- function(RES,
   plot <- VolcanoPlot(p = p,
                       FC = FC,
                       significance_category = RES$significance,
+                      thresFC = thresFC,
+                      thresP = thresP,
                       ...)
 
 

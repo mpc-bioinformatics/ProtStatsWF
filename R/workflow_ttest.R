@@ -102,9 +102,6 @@ workflow_ttest <- function(D,
                            verbose = TRUE
                            ) {
 
-  mess <- ""
-
-
   #### Extract data from SummarizedExperiment ####
 
   DATA   <- as.data.frame(SummarizedExperiment::assay(D$SE, assayName))
@@ -138,26 +135,12 @@ workflow_ttest <- function(D,
                        overwrite = TRUE, keepNA = TRUE)
   if (verbose) message(ifelse(paired, "Paired", "Unpaired"), " t-test complete. Results saved.")
 
-  mess <- paste0(mess,
-                 ifelse(paired, "Paired", "Unpaired"),
-                 " t-test calculated with the variance assumed to be ",
-                 ifelse(varEqual, "equal", "unequal"), ". \n",
-                 "Data was ",
-                 ifelse(logBeforeTest, "", "not "),
-                 "log-transformed before the t-test and ",
-                 ifelse(delogForFC, "", "not "),
-                 "de-log-transformed for the fold change. \n")
-
-
   if (pValueZerosToMin) {
     p_value_zero <- which(test_results$p == 0)
 
     if (length(p_value_zero) > 0) {
       next_smallest_value <- sort(unique(test_results$p))[2]
       test_results$p[test_results$p == 0] <- next_smallest_value
-
-      mess <- paste0(mess, "There were ", length(p_value_zero), " p_values, which were 0. ",
-                     "They were set to the next smallest occuring value ", next_smallest_value, ". \n")
     }
   }
 
@@ -177,9 +160,6 @@ workflow_ttest <- function(D,
                   height = plotHeight, width = plotWidth, dpi = plotDPI)
   if (verbose) message("Volcano plot saved.")
 
-  mess <- paste0(mess, "Volcano plot calculated. \n")
-
-
   #### Create Histograms for p-values and fold changes ####
 
   histograms <- pvalue_foldchange_histogram(RES = test_results,
@@ -197,9 +177,6 @@ workflow_ttest <- function(D,
                   device = plotDevice, height = plotHeight, width = plotWidth, dpi = plotDPI)
   if (verbose) message("p-value, adjusted p-value and fold change histograms saved.")
 
-  mess <- paste0(mess, "p-value, adjusted p-value and fold change histograms calculated. \n")
-
-
   #### Get significant candidates ####
 
   significance <- calculate_significance_categories_ttest(p = test_results[["p"]],
@@ -214,9 +191,6 @@ workflow_ttest <- function(D,
   } else {
     candidates <- which(candidates == "significant" | candidates == "significant after FDR correction")
   }
-
-  mess <- paste0(mess, "There are ", length(candidates), " candidates, which were significant",
-                 ifelse(significantAfterFDR, " after FDR correction. \n", ". \n"))
   if (verbose) message("Found ", length(candidates), " significant candidate",
                        ifelse(length(candidates) == 1, "", "s"),
                        ifelse(significantAfterFDR, " after FDR correction.", "."))
@@ -233,8 +207,6 @@ workflow_ttest <- function(D,
                         outputPath = outputPath,
                         logData = logBeforeTest)
     if (verbose) message("Boxplots saved.")
-
-    mess <- paste0(mess, "Boxplots made for the candidates. \n")
   }
 
   #### Create Heatmap ####
@@ -246,13 +218,14 @@ workflow_ttest <- function(D,
                                      groups = group,
                                      verbose = verbose)
 
-    grDevices::pdf(file.path(outputPath, paste0("heatmap", suffix, ".pdf")),
-                   height = plotHeight, width = plotWidth)
-    ComplexHeatmap::draw(t_heatmap[["heatmap"]])
-    grDevices::dev.off()
-    if (verbose) message("Heatmap saved.")
+    if (!is.null(t_heatmap)) {
+      grDevices::pdf(file.path(outputPath, paste0("heatmap", suffix, ".pdf")),
+                     height = plotHeight, width = plotWidth)
+      ComplexHeatmap::draw(t_heatmap[["heatmap"]])
+      grDevices::dev.off()
+      if (verbose) message("Heatmap saved.")
+    }
 
-    mess <- paste0(mess, "Heatmap made for the candidates. \n")
   }
 
 
@@ -274,11 +247,7 @@ workflow_ttest <- function(D,
   if (verbose) message("On/off analysis complete. Results saved.")
 
 
-  #### Save message log ####
-
-  cat(mess, file = file.path(outputPath, paste0("message_log_ttest", suffix, ".txt")))
-
-  return(list("message" = mess))
+  return(list(test_results = test_results, significance = significance))
 }
 
 
