@@ -19,6 +19,8 @@ workflow_ttest(
   pValueZerosToMin = TRUE,
   volcanoBaseSize = 25,
   significantAfterFDR = TRUE,
+  thresFC = 2,
+  thresP = 0.05,
   maxValidValuesOff = 0,
   minValidValuesOn = NULL,
   suffix = "",

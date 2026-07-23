@@ -8,7 +8,7 @@
 #' This function performs quality control of quantitative proteomics data.
 #' The following plots are generated: a valid value plot, boxplots, MA-plots and a PCA plot.
 #'
-#' @param D **list** Result from [prepareDatSE()] containing the imported data.
+#' @param D **list** Result from [prepareDataSE()] containing the imported data.
 #' @param groupColumn **character(1)** Column name in the colData(D$SE) that contains the group
 #' information for colouring the plots. Default is NULL (no group information for colouring).
 #' @param group2Column **character(1)** Column name in the colData(D$SE) that

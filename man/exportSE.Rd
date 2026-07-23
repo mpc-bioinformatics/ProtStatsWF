@@ -21,6 +21,3 @@ the assay name. Row names of the assay matrices are included in the Excel file.
 \description{
 Export SummarizedExperiment object to an Excel file, with one assay per sheet.
 }
-\examples{
-# TODO
-}

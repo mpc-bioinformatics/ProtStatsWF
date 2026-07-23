@@ -3,7 +3,7 @@
 \name{prepareDataSE}
 \alias{prepareDataSE}
 \title{Prepare quantitative proteomics data and combine it with sample information
-(e.g., clinical data) in a SummarizedExperiment object.}
+(optional, e.g., clinical data) in a SummarizedExperiment object.}
 \usage{
 prepareDataSE(
   dataPath,
@@ -11,6 +11,7 @@ prepareDataSE(
   proteinNameColumn = "Protein",
   sampleInfoPath = NULL,
   sampleNameColumn = "Sample",
+  zeroToNA = TRUE,
   doLogTrans = TRUE,
   logBase = 2,
   normMethod = "loess",
@@ -20,55 +21,73 @@ prepareDataSE(
   dec = ".",
   header = TRUE,
   sheet = 1,
-  zeroToNA = TRUE,
   NAStrings = c("NA", "NaN", "Filtered", "#NV", ""),
   verbose = TRUE
 )
 }
 \arguments{
 \item{dataPath}{\strong{character(1)} \cr
-Path to the data file (xlsx, csv, tsv, or txt) containing the quantitative
-proteomics data. The file should have a column with protein names and columns
-with intensity values for each sample.}
+Path to the data file (xlsx, csv, tsv, or txt format) containing the
+quantitative proteomics data. The file should have at least a column with
+protein names and columns with intensity values for each sample.}
 
 \item{intensityColumns}{\strong{integer} \cr
-Column numbers that contain the intensity values. E.g. 1:12 if the first 12
-columns contain intensity values for 12 samples.}
+Column numbers in data that contain the intensity values. E.g. 1:12 if
+the first 12 columns contain intensity values for the 12 samples.}
 
 \item{proteinNameColumn}{\strong{character(1)} \cr
-Column name that contains the protein names. Default is "Protein".}
+Column name in data that contains the protein names. Default is "Protein".}
 
 \item{sampleInfoPath}{\strong{character(1)} \cr
-Path to the file containing sample information. Default is NULL (no sample
-info file).}
+Path to the file containing sample information (optional). Default is NULL
+(no sample info file).}
 
 \item{sampleNameColumn}{\strong{character(1)} \cr
 Column name of the sampleInfo that contains the sample names. Default is
-"Sample".}
+"Sample". Those names must correspond to column names in data.}
 
-\item{doLogTrans}{\strong{logical(1)} \cr Whether to perform log transformation. Default is TRUE.}
+\item{zeroToNA}{\strong{logical(1)} \cr
+If TRUE (default), zero intensity values are converted to NA.}
 
-\item{logBase}{\strong{numeric(1)} \cr Base for log transformation. Default is 2.}
+\item{doLogTrans}{\strong{logical(1)} \cr
+If TRUE (default), intensity values are log-transformed.}
 
-\item{normMethod}{\strong{character(1)} \cr Normalization method to use. Default is "loess". See \code{\link[=automatedNormalization]{automatedNormalization()}} for options.}
+\item{logBase}{\strong{numeric(1)} \cr
+Base for log transformation. Default is 2.}
 
-\item{ltsQuantile}{\strong{numeric(1)} \cr Quantile to use for the least trimmed squares regression in the "lts" normalization method. Default is 0.8.}
+\item{normMethod}{\strong{character(1)} \cr
+Normalization method, default is "loess". Options are "nonorm", "median",
+"quantile", "loess" and "lts".}
 
-\item{fileType}{\strong{character(1)} \cr Type of the data file. One of "xlsx", "csv", "tsv", or "txt". Default is "xlsx".}
+\item{ltsQuantile}{\strong{numeric(1)} \cr
+Quantile to use for the least trimmed squares regression in the "lts"
+normalization method. Default is 0.8.}
 
-\item{sep}{\strong{character(1)} \cr Separator for csv, tsv, or txt files. Default is "," (comma). Ignored for xlsx files.}
+\item{fileType}{\strong{character(1)} \cr
+Type of the data file. One of "xlsx", "csv", "tsv", or "txt".
+Default is "xlsx".}
 
-\item{dec}{\strong{character(1)} \cr Decimal point character for csv, tsv, or txt files. Default is "." (dot). Ignored for xlsx files.}
+\item{sep}{\strong{character(1)} \cr
+Separator for csv, tsv, or txt files. Default is "," (comma).
+Ignored for xlsx files.}
 
-\item{header}{\strong{logical(1)} \cr Whether the data file has a header row. Default is TRUE. Ignored for xlsx files, where the header is always read.}
+\item{dec}{\strong{character(1)} \cr
+Decimal point character for csv, tsv, or txt files. Default is "." (dot).
+Ignored for xlsx files.}
 
-\item{sheet}{\strong{integer(1)} \cr Sheet number to read from an xlsx file. Default is 1. Ignored for csv, tsv, or txt files.}
+\item{header}{\strong{logical(1)} \cr
+If TRUE (default), the first row is treated as column names. Ignored
+for xlsx files, where the header is always read.}
 
-\item{zeroToNA}{\strong{logical(1)} \cr Whether to convert zero intensity values to NA. Default is TRUE.}
+\item{sheet}{\strong{integer(1)} \cr
+Excel sheet number to read in for dataPath. Only used if fileType = "xlsx".}
 
-\item{NAStrings}{\strong{character} \cr Character vector of strings to interpret as NA when reading the data file. Default is c("NA", "NaN", "Filtered","#NV", "").}
+\item{NAStrings}{\strong{character} \cr
+Character vector of strings to interpret as NA when reading the data file.
+Default is c("NA", "NaN", "Filtered","#NV", "").}
 
-\item{verbose}{\strong{logical(1)} \cr Whether to print messages about the data processing steps. Default is TRUE.}
+\item{verbose}{\strong{logical(1)} \cr
+If TRUE (default), messages about the data processing steps are printed.}
 }
 \value{
 List with two elements:
@@ -83,7 +102,7 @@ for each protein and sample, along with the corresponding sample information fro
 }
 \description{
 Prepare quantitative proteomics data and combine it with sample information
-(e.g., clinical data) in a SummarizedExperiment object.
+(optional, e.g., clinical data) in a SummarizedExperiment object.
 }
 \examples{
 file_proteins <- system.file("extdata", "proteins_HCC.csv", package = "ProtStatsWF")

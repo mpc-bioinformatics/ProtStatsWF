@@ -3,40 +3,51 @@
 #' (optional, e.g., clinical data) in a SummarizedExperiment object.
 #'
 #' @param dataPath **character(1)** \cr
-#' Path to the data file (xlsx, csv, tsv, or txt format) containing the 
-#' quantitative proteomics data. The file should have at least a column with 
+#' Path to the data file (xlsx, csv, tsv, or txt format) containing the
+#' quantitative proteomics data. The file should have at least a column with
 #' protein names and columns with intensity values for each sample.
 #' @param intensityColumns **integer** \cr
-#' Column numbers in data that contain the intensity values. E.g. 1:12 if 
+#' Column numbers in data that contain the intensity values. E.g. 1:12 if
 #' the first 12 columns contain intensity values for the 12 samples.
 #' @param proteinNameColumn **character(1)** \cr
 #' Column name in data that contains the protein names. Default is "Protein".
 #' @param sampleInfoPath **character(1)** \cr
-#' Path to the file containing sample information (optional). Default is NULL 
+#' Path to the file containing sample information (optional). Default is NULL
 #' (no sample info file).
 #' @param sampleNameColumn **character(1)** \cr
 #' Column name of the sampleInfo that contains the sample names. Default is
 #' "Sample". Those names must correspond to column names in data.
-#' @param zeroToNA **logical(1)** \cr 
-#' If TRUE (default), zero intensity values are converted to NA. 
-#' @param doLogTrans **logical(1)** \cr 
+#' @param zeroToNA **logical(1)** \cr
+#' If TRUE (default), zero intensity values are converted to NA.
+#' @param doLogTrans **logical(1)** \cr
 #' If TRUE (default), intensity values are log-transformed.
-#' @param logBase **numeric(1)** \cr 
+#' @param logBase **numeric(1)** \cr
 #' Base for log transformation. Default is 2.
-#' @param normMethod **character(1)** \cr 
-#' Normalization method, default is "loess". Options are "nonorm", "median", 
+#' @param normMethod **character(1)** \cr
+#' Normalization method, default is "loess". Options are "nonorm", "median",
 #' "quantile", "loess" and "lts".
-#' @param ltsQuantile **numeric(1)** \cr 
-#' Quantile to use for the least trimmed squares regression in the "lts" 
+#' @param ltsQuantile **numeric(1)** \cr
+#' Quantile to use for the least trimmed squares regression in the "lts"
 #' normalization method. Default is 0.8.
-#' @param fileType **character(1)** \cr Type of the data file. One of "xlsx", "csv", "tsv", or "txt". Default is "xlsx".
-#' @param sep **character(1)** \cr Separator for csv, tsv, or txt files. Default is "," (comma). Ignored for xlsx files.
-#' @param dec **character(1)** \cr Decimal point character for csv, tsv, or txt files. Default is "." (dot). Ignored for xlsx files.
-#' @param header **logical(1)** \cr Whether the data file has a header row. Default is TRUE. Ignored for xlsx files, where the header is always read.
-#' @param sheet **integer(1)** \cr Sheet number to read from an xlsx file. Default is 1. Ignored for csv, tsv, or txt files.
-#' @param zeroToNA **logical(1)** \cr Whether to convert zero intensity values to NA. Default is TRUE.
-#' @param NAStrings **character** \cr Character vector of strings to interpret as NA when reading the data file. Default is c("NA", "NaN", "Filtered","#NV", "").
-#' @param verbose **logical(1)** \cr Whether to print messages about the data processing steps. Default is TRUE.
+#' @param fileType **character(1)** \cr
+#' Type of the data file. One of "xlsx", "csv", "tsv", or "txt".
+#' Default is "xlsx".
+#' @param sep **character(1)** \cr
+#' Separator for csv, tsv, or txt files. Default is "," (comma).
+#' Ignored for xlsx files.
+#' @param dec **character(1)** \cr
+#' Decimal point character for csv, tsv, or txt files. Default is "." (dot).
+#' Ignored for xlsx files.
+#' @param header **logical(1)** \cr
+#' If TRUE (default), the first row is treated as column names. Ignored
+#' for xlsx files, where the header is always read.
+#' @param sheet **integer(1)** \cr
+#' Excel sheet number to read in for dataPath. Only used if fileType = "xlsx".
+#' @param NAStrings **character** \cr
+#' Character vector of strings to interpret as NA when reading the data file.
+#' Default is c("NA", "NaN", "Filtered","#NV", "").
+#' @param verbose **logical(1)** \cr
+#' If TRUE (default), messages about the data processing steps are printed.
 #'
 #' @returns List with two elements:
 #' \itemize{
@@ -60,56 +71,67 @@ prepareDataSE <- function(dataPath,
                           proteinNameColumn = "Protein",
                           sampleInfoPath = NULL,
                           sampleNameColumn = "Sample",
-                          
                           zeroToNA = TRUE,
                           doLogTrans = TRUE,
                           logBase = 2,
-                          
                           normMethod = "loess",
                           ltsQuantile = 0.8,
-                          
                           fileType = "xlsx",
                           sep = ",",
                           dec = ".",
                           header = TRUE,
                           sheet = 1,
-                          
                           NAStrings = c("NA", "NaN", "Filtered","#NV", ""),
                           verbose = TRUE) {
+  checkmate::assertFileExists(dataPath)
+  if (!is.null(sampleInfoPath)) checkmate::assert(checkmate::checkFileExists(sampleInfoPath))
+  checkmate::assertFlag(zeroToNA)
+  checkmate::assertFlag(doLogTrans)
+  checkmate::assertNumeric(logBase, len = 1)
+  checkmate::assertSubset(fileType, choices = c("csv", "tsv", "txt", "xlsx"))
+  checkmate::assertCharacter(sep, len = 1)
+  checkmate::assertCharacter(dec, len = 1)
+  checkmate::assertFlag(header)
+  checkmate::assertIntegerish(sheet)
+  checkmate::assertCharacter(NAStrings)
+  checkmate::assertFlag(verbose)
 
+  filetype_data <- tools::file_ext(dataPath)
+  if (filetype_data %in% c("csv", "txt", "tsv")) {
+    D_complete <- utils::read.table(dataPath, sep = sep, header = header,
+                                    dec = dec, quote = "\"",
+                                    na.strings = NAStrings)
+  }
+  if (filetype_data == "xlsx") {
+    D_complete <- openxlsx::read.xlsx(dataPath, colNames = header, sheet = sheet,
+                                      na.strings = NAStrings)
+  }
 
-  ### import data file
-
-  if (fileType == "csv" | fileType == "txt" | fileType == "tsv") {
-    if (fileType == "csv") {
-      sep <- ","
-    } else if (fileType == "tsv") {
-      sep <- "\t"
-    }
-    D_complete <- utils::read.table(dataPath, sep = sep, header = header, dec = dec,
-                                    quote = "\"", na.strings = NAStrings)
-    if (!is.null(sampleInfoPath)) {
+  if (!is.null(sampleInfoPath)) {
+    filetype_sampleInfo <- tools::file_ext(sampleInfoPath)
+    if (filetype_sampleInfo %in% c("csv", "txt", "tsv")) {
       sampleInfo <- utils::read.table(sampleInfoPath, sep = sep, header = header, dec = dec,
                                       quote = "\"", na.strings = NAStrings)
     }
-  }
-  if (fileType == "xlsx") {
-    D_complete <- openxlsx::read.xlsx(dataPath, colNames = header, sheet = sheet,
-                                      na.strings = NAStrings)
-    if (!is.null(sampleInfoPath)) {
+    if (filetype_sampleInfo == "xlsx") {
       sampleInfo <- openxlsx::read.xlsx(sampleInfoPath, colNames = TRUE,
                                         sheet = 1, na.strings = NAStrings)
     }
+    checkmate::assertSubset(sampleNameColumn, choices = colnames(sampleInfo))
+    if (verbose) message("Sample information file read in.")
   }
 
+  checkmate::assertIntegerish(intensityColumns, any.missing = FALSE, lower = 1,
+                              upper = ncol(D_complete), max.len = ncol(D_complete),
+                              min.len = 1, unique = TRUE)
+  checkmate::assertSubset(proteinNameColumn, choices = colnames(D_complete))
+
+
   id <- D_complete[, -intensityColumns]
-  D <- D_complete[, intensityColumns] # only intensity columns
+  D <- D_complete[, intensityColumns]
   rownames(id) <- id[, proteinNameColumn]
   rownames(D) <- id[, proteinNameColumn]
 
-  #ID <<- id
-
-  ## data preprocessing (NAs, log, normalization)
   if (zeroToNA) {
     D[D == 0] <- NA
     if(verbose) message("Zeros set to NA.")
@@ -125,59 +147,33 @@ prepareDataSE <- function(dataPath,
                               log_base = logBase, lts.quantile = ltsQuantile,
                               verbose = verbose)
 
-  # if (outType == "xlsx") {
-  #   exportSE(prepared_data$SE, file = file.path(output_path, paste0("D_norm", suffix, ".xlsx")))
-  # }
-
-
-
-  ## read in sample information file, if given
   if (!is.null(sampleInfoPath)) {
-    #sampleInfo <- openxlsx::read.xlsx(sampleInfoPath, colNames = TRUE)
     ind <- match(sampleInfo[, sampleNameColumn], colnames(D))
     D_norm <- D_norm[,ind] # sort columns of D like sampleInfo
-
     D <- D[, ind]
-    if (verbose) message("Sample information file read in.")
   } else {
     sampleInfo <- data.frame(SampleName = colnames(D))
     rownames(sampleInfo) <- colnames(D)
-    if(verbose) message("No sample information file given.")
   }
 
-  #SI <<- sampleInfo
-
-  #if (normMethod != "nonorm") {
-    assays <- list(intensity_norm = as.matrix(D_norm), intensity = as.matrix(D))
-  #} else {
-  #  assays <- list(intensity = as.matrix(D))
-  #}
-
-  #if (is.null(sampleInfo)) {
-    SE <- SummarizedExperiment::SummarizedExperiment(assays = assays,
-                                                     rowData = id,
-                                                     colData = sampleInfo)
-  #} else {
-  #  SE <- SummarizedExperiment::SummarizedExperiment(assays = assays,
-  #                                                   colData = sampleInfo,
-  #                                                   rowData = id)
-  #}
-
+  assays <- list(intensity_norm = as.matrix(D_norm), intensity = as.matrix(D))
+  SE <- SummarizedExperiment::SummarizedExperiment(assays = assays,
+                                                   rowData = id,
+                                                   colData = sampleInfo)
   ### long format:
   suppressMessages({
-  D_long <- tidySummarizedExperiment:::pivot_longer.SummarizedExperiment(SE,
-                  cols = tidyselect::all_of(proteinNameColumn))
+    D_long <- tidySummarizedExperiment:::pivot_longer.SummarizedExperiment(SE,
+        cols = tidyselect::all_of(proteinNameColumn))
   })
   D_long <- dplyr::select(D_long, -c("name", "value"))
   # bring factor levels in same order as in sampleInfo
   D_long$.sample <- factor(D_long$.sample, levels = sampleInfo[, sampleNameColumn])
   D_long <- as.data.frame(D_long)
 
-  #print(sampleInfo[, sampleNameColumn])
-  #print(levels(D_long$.sample))
-
   return(list(SE = SE, D_long = D_long))
 }
+
+
 
 
 

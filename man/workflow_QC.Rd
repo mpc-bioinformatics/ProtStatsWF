@@ -37,7 +37,7 @@ workflow_QC(
 )
 }
 \arguments{
-\item{D}{\strong{list} Result from \code{\link[=prepareDatSE]{prepareDatSE()}} containing the imported data.}
+\item{D}{\strong{list} Result from \code{\link[=prepareDataSE]{prepareDataSE()}} containing the imported data.}
 
 \item{groupColumn}{\strong{character(1)} Column name in the colData(D$SE) that contains the group
 information for colouring the plots. Default is NULL (no group information for colouring).}

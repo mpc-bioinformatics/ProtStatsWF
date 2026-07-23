@@ -21,8 +21,10 @@ automatedNormalization <- function(DATA,
                                    method = "median",
                                    is_log_transformed = TRUE,
                                    log_base = 2,
-                                   lts.quantile = 0.8, 
+                                   lts.quantile = 0.8,
                                    verbose = TRUE) {
+  checkmate::assertSubset(method, choices = c("nonorm", "median", "loess", "quantile", "lts"))
+
 
   if(method == "loess" | method == "quantile" | method == "median"){
 
@@ -55,7 +57,7 @@ automatedNormalization <- function(DATA,
     DATA_norm <- vsn::vsn2(as.matrix(DATA), lts.quantile = lts.quantile)
     DATA_norm <- DATA_norm@hx
     DATA_norm <- as.data.frame(DATA_norm)
-    if (verbose) message("Data successfully lts normalized with lts.quantile = ", 
+    if (verbose) message("Data successfully lts normalized with lts.quantile = ",
                          lts.quantile, ".")
   }
 
