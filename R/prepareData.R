@@ -1,26 +1,34 @@
 
 #' Prepare quantitative proteomics data and combine it with sample information
-#' (e.g., clinical data) in a SummarizedExperiment object.
+#' (optional, e.g., clinical data) in a SummarizedExperiment object.
 #'
 #' @param dataPath **character(1)** \cr
-#' Path to the data file (xlsx, csv, tsv, or txt) containing the quantitative
-#' proteomics data. The file should have a column with protein names and columns
-#' with intensity values for each sample.
+#' Path to the data file (xlsx, csv, tsv, or txt format) containing the 
+#' quantitative proteomics data. The file should have at least a column with 
+#' protein names and columns with intensity values for each sample.
 #' @param intensityColumns **integer** \cr
-#' Column numbers that contain the intensity values. E.g. 1:12 if the first 12
-#' columns contain intensity values for 12 samples.
+#' Column numbers in data that contain the intensity values. E.g. 1:12 if 
+#' the first 12 columns contain intensity values for the 12 samples.
 #' @param proteinNameColumn **character(1)** \cr
-#' Column name that contains the protein names. Default is "Protein".
+#' Column name in data that contains the protein names. Default is "Protein".
 #' @param sampleInfoPath **character(1)** \cr
-#' Path to the file containing sample information. Default is NULL (no sample
-#' info file).
+#' Path to the file containing sample information (optional). Default is NULL 
+#' (no sample info file).
 #' @param sampleNameColumn **character(1)** \cr
 #' Column name of the sampleInfo that contains the sample names. Default is
-#' "Sample".
-#' @param doLogTrans **logical(1)** \cr Whether to perform log transformation. Default is TRUE.
-#' @param logBase **numeric(1)** \cr Base for log transformation. Default is 2.
-#' @param normMethod **character(1)** \cr Normalization method to use. Default is "loess". See [automatedNormalization()] for options.
-#' @param ltsQuantile **numeric(1)** \cr Quantile to use for the least trimmed squares regression in the "lts" normalization method. Default is 0.8.
+#' "Sample". Those names must correspond to column names in data.
+#' @param zeroToNA **logical(1)** \cr 
+#' If TRUE (default), zero intensity values are converted to NA. 
+#' @param doLogTrans **logical(1)** \cr 
+#' If TRUE (default), intensity values are log-transformed.
+#' @param logBase **numeric(1)** \cr 
+#' Base for log transformation. Default is 2.
+#' @param normMethod **character(1)** \cr 
+#' Normalization method, default is "loess". Options are "nonorm", "median", 
+#' "quantile", "loess" and "lts".
+#' @param ltsQuantile **numeric(1)** \cr 
+#' Quantile to use for the least trimmed squares regression in the "lts" 
+#' normalization method. Default is 0.8.
 #' @param fileType **character(1)** \cr Type of the data file. One of "xlsx", "csv", "tsv", or "txt". Default is "xlsx".
 #' @param sep **character(1)** \cr Separator for csv, tsv, or txt files. Default is "," (comma). Ignored for xlsx files.
 #' @param dec **character(1)** \cr Decimal point character for csv, tsv, or txt files. Default is "." (dot). Ignored for xlsx files.
@@ -52,16 +60,20 @@ prepareDataSE <- function(dataPath,
                           proteinNameColumn = "Protein",
                           sampleInfoPath = NULL,
                           sampleNameColumn = "Sample",
+                          
+                          zeroToNA = TRUE,
                           doLogTrans = TRUE,
                           logBase = 2,
+                          
                           normMethod = "loess",
                           ltsQuantile = 0.8,
+                          
                           fileType = "xlsx",
                           sep = ",",
                           dec = ".",
                           header = TRUE,
                           sheet = 1,
-                          zeroToNA = TRUE,
+                          
                           NAStrings = c("NA", "NaN", "Filtered","#NV", ""),
                           verbose = TRUE) {
 
