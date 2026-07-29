@@ -1,4 +1,5 @@
-
+#' Data preparation
+#'
 #' Prepare quantitative proteomics data and combine it with sample information
 #' (optional, e.g., clinical data) in a SummarizedExperiment object.
 #'
@@ -29,9 +30,6 @@
 #' @param ltsQuantile **numeric(1)** \cr
 #' Quantile to use for the least trimmed squares regression in the "lts"
 #' normalization method. Default is 0.8.
-#' @param fileType **character(1)** \cr
-#' Type of the data file. One of "xlsx", "csv", "tsv", or "txt".
-#' Default is "xlsx".
 #' @param sep **character(1)** \cr
 #' Separator for csv, tsv, or txt files. Default is "," (comma).
 #' Ignored for xlsx files.
@@ -51,21 +49,36 @@
 #'
 #' @returns List with two elements:
 #' \itemize{
-#'  \item SE: A SummarizedExperiment object containing the normalized intensity data in
-#'  the assay "intensity_norm", the original intensity data in the assay "intensity",
-#'  the protein information in rowData (all other columns in data that are not the proteinName or
-#'  intensity columns), and the sample information in colData..
-#'  \item D_long: A data frame in long format containing the normalized intensity values
-#'  for each protein and sample, along with the corresponding sample information from colData.
+#'  \item SE: A SummarizedExperiment object containing the normalized intensity
+#'  data in the assay "intensity_norm", the original intensity data in the assay
+#'  "intensity", the protein information in rowData (all other columns in data
+#'  that are not the proteinName or intensity columns), and the sample
+#'  information in colData.
+#'  \item D_long: A data frame in long format containing the normalized
+#'  intensity values for each protein and sample, along with the corresponding
+#'  sample information from colData.
 #'  }
 #' @export
 #'
+#' @importFrom checkmate assert assertCharacter assertFileExists assertFlag
+#' @importFrom checkmate assertIntegerish assertNumeric assertSubset
+#' @importFrom checkmate checkFileExists
+#' @importFrom dplyr left_join select
+#' @importFrom openxlsx read.xlsx
+#' @importFrom SummarizedExperiment assay colData rowData SummarizedExperiment
+#' @importFrom tidyr pivot_longer
+#' @importFrom tools file_ext
+#' @importFrom utils read.table
+#'
+#'
 #' @examples
-#' file_proteins <- system.file("extdata", "proteins_HCC.csv", package = "ProtStatsWF")
-#' file_clinical <- system.file("extdata", "clinical_data.csv", package = "ProtStatsWF")
+#' file_proteins <- system.file("extdata", "proteins_HCC.csv",
+#'   package = "ProtStatsWF")
+#' file_clinical <- system.file("extdata", "clinical_data.csv",
+#'   package = "ProtStatsWF")
 #' prepareDataSE(dataPath = file_proteins, intensityColumns = 6:43,
-#' proteinNameColumn = "Protein", sampleInfoPath = file_clinical, sampleNameColumn = "Sample",
-#' fileType = "csv")
+#'   proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
+#'   sampleNameColumn = "Sample", verbose = FALSE)
 prepareDataSE <- function(dataPath,
                           intensityColumns,
                           proteinNameColumn = "Protein",
@@ -76,7 +89,6 @@ prepareDataSE <- function(dataPath,
                           logBase = 2,
                           normMethod = "loess",
                           ltsQuantile = 0.8,
-                          fileType = "xlsx",
                           sep = ",",
                           dec = ".",
                           header = TRUE,
@@ -84,11 +96,11 @@ prepareDataSE <- function(dataPath,
                           NAStrings = c("NA", "NaN", "Filtered","#NV", ""),
                           verbose = TRUE) {
   checkmate::assertFileExists(dataPath)
-  if (!is.null(sampleInfoPath)) checkmate::assert(checkmate::checkFileExists(sampleInfoPath))
+  if (!is.null(sampleInfoPath))
+    checkmate::assert(checkmate::checkFileExists(sampleInfoPath))
   checkmate::assertFlag(zeroToNA)
   checkmate::assertFlag(doLogTrans)
   checkmate::assertNumeric(logBase, len = 1)
-  checkmate::assertSubset(fileType, choices = c("csv", "tsv", "txt", "xlsx"))
   checkmate::assertCharacter(sep, len = 1)
   checkmate::assertCharacter(dec, len = 1)
   checkmate::assertFlag(header)
@@ -97,20 +109,25 @@ prepareDataSE <- function(dataPath,
   checkmate::assertFlag(verbose)
 
   filetype_data <- tools::file_ext(dataPath)
+  checkmate::assertSubset(filetype_data,
+                          choices = c("csv", "tsv", "txt", "xlsx"))
   if (filetype_data %in% c("csv", "txt", "tsv")) {
     D_complete <- utils::read.table(dataPath, sep = sep, header = header,
                                     dec = dec, quote = "\"",
                                     na.strings = NAStrings)
   }
   if (filetype_data == "xlsx") {
-    D_complete <- openxlsx::read.xlsx(dataPath, colNames = header, sheet = sheet,
-                                      na.strings = NAStrings)
+    D_complete <- openxlsx::read.xlsx(dataPath, colNames = header,
+                                      sheet = sheet, na.strings = NAStrings)
   }
 
   if (!is.null(sampleInfoPath)) {
     filetype_sampleInfo <- tools::file_ext(sampleInfoPath)
+    checkmate::assertSubset(filetype_sampleInfo,
+                            choices = c("csv", "tsv", "txt", "xlsx"))
     if (filetype_sampleInfo %in% c("csv", "txt", "tsv")) {
-      sampleInfo <- utils::read.table(sampleInfoPath, sep = sep, header = header, dec = dec,
+      sampleInfo <- utils::read.table(sampleInfoPath, sep = sep,
+                                      header = header, dec = dec,
                                       quote = "\"", na.strings = NAStrings)
     }
     if (filetype_sampleInfo == "xlsx") {
@@ -122,10 +139,10 @@ prepareDataSE <- function(dataPath,
   }
 
   checkmate::assertIntegerish(intensityColumns, any.missing = FALSE, lower = 1,
-                              upper = ncol(D_complete), max.len = ncol(D_complete),
+                              upper = ncol(D_complete),
+                              max.len = ncol(D_complete),
                               min.len = 1, unique = TRUE)
   checkmate::assertSubset(proteinNameColumn, choices = colnames(D_complete))
-
 
   id <- D_complete[, -intensityColumns]
   D <- D_complete[, intensityColumns]
@@ -134,7 +151,7 @@ prepareDataSE <- function(dataPath,
 
   if (zeroToNA) {
     D[D == 0] <- NA
-    if(verbose) message("Zeros set to NA.")
+    if (verbose) message("Zeros set to NA.")
   }
 
   if (doLogTrans) {
@@ -160,14 +177,20 @@ prepareDataSE <- function(dataPath,
   SE <- SummarizedExperiment::SummarizedExperiment(assays = assays,
                                                    rowData = id,
                                                    colData = sampleInfo)
-  ### long format:
-  suppressMessages({
-    D_long <- tidySummarizedExperiment:::pivot_longer.SummarizedExperiment(SE,
-        cols = tidyselect::all_of(proteinNameColumn))
-  })
-  D_long <- dplyr::select(D_long, -c("name", "value"))
+  D_norm_long <- as.data.frame(SummarizedExperiment::assay(SE,
+                                                           "intensity_norm"))
+  D_norm_long$.feature <- rownames(D_norm_long)
+  D_long <- tidyr::pivot_longer(D_norm_long, cols = -".feature",
+    names_to = ".sample", values_to = "intensity_norm")
+  col_data <- as.data.frame(SummarizedExperiment::colData(SE))
+  col_data$.sample <- rownames(col_data)
+  D_long <- dplyr::left_join(D_long, col_data, by = ".sample")
+  row_data <- as.data.frame(SummarizedExperiment::rowData(SE))
+  row_data$.feature <- rownames(row_data)
+  D_long <- dplyr::left_join(D_long, row_data, by = ".feature")
   # bring factor levels in same order as in sampleInfo
-  D_long$.sample <- factor(D_long$.sample, levels = sampleInfo[, sampleNameColumn])
+  D_long$.sample <- factor(D_long$.sample,
+                           levels = sampleInfo[, sampleNameColumn])
   D_long <- as.data.frame(D_long)
 
   return(list(SE = SE, D_long = D_long))
@@ -178,15 +201,30 @@ prepareDataSE <- function(dataPath,
 
 
 
-### helper function to extract assay data and pivot to long format.
-### Also add the information from colData
-pivot_longer_SE <- function(SE, cols) {
+
+#' Pivot SE to long format
+#'
+#'helper function to extract assay data and pivot to long format.
+#'Also adds the information from colData and rowData.
+#'
+#' @param SE A SummarizedExperiment object.
+#' @param cols Columns to pivot.
+#'
+#' @importFrom dplyr left_join
+#' @importFrom SummarizedExperiment assay colData rowData
+#' @importFrom tidyr pivot_longer
+#'
+#' @returns A data frame in long format.
+#'
+#' @examples
+.pivot_longer_SE <- function(SE, cols) {
 
   # Extract assay
   D <- as.data.frame(SummarizedExperiment::assay(SE))
   D$id. <- rownames(D)
 
-  D_long <- tidyr::pivot_longer(D, -id., names_to = "sample.", values_to = "value.")
+  D_long <- tidyr::pivot_longer(D, -id., names_to = "sample.",
+                                values_to = "value.")
 
   # Add colData
   col_data <- as.data.frame(SummarizedExperiment::colData(SE))

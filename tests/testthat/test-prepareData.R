@@ -4,7 +4,7 @@ test_that("Prepare data from csv file", {
   file_clinical <- system.file("extdata", "clinical_data.csv", package = "ProtStatsWF")
   D <- prepareDataSE(dataPath = file_proteins, intensityColumns = 6:43,
                 proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
-                sampleNameColumn = "Sample", fileType = "csv", verbose = FALSE)
+                sampleNameColumn = "Sample", verbose = FALSE)
 
   expect_snapshot(D$D_long)
   expect_snapshot(D$SE)

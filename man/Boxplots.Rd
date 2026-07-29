@@ -16,38 +16,46 @@ Boxplots(
 }
 \arguments{
 \item{D_long}{\strong{data.frame} \cr
-The data set given in long format.}
+The data set given in long format. Must at least contain the columns
+".sample" (sample IDs) and "intensity_norm" (protein intensities).
+May contain additional columns that can be used for assigning samples to
+groups for colouring.}
 
-\item{method}{\strong{character} \cr
-The method used. Options are "boxplot" and "violinplot".}
+\item{method}{\strong{character(1)} \cr
+Options are "boxplot" (default) and "violinplot".}
 
-\item{groupColumn}{\strong{logical} \cr}
+\item{groupColumn}{\strong{character(1)} \cr
+Name of the column in D_long that contains the group information for the
+samples. If NULL (default), no grouping is applied.}
 
-\item{lwd}{\strong{numeric} \cr
-The line width of the boxplot.}
+\item{groupColours}{\strong{character} \cr
+Vector containing names of hex codes for the group colours (assigned in
+alphabetical order of the groups). If NULL (default), ggplot2 default
+colours are used.}
 
-\item{group_colours}{\strong{character vector} \cr
-The hex codes for the group colors.}
+\item{baseSize}{\strong{numeric(1)} \cr
+The base size of the font used for axis labels etc. Default is 15.}
 
-\item{base_size}{\strong{numeric} \cr
-The base size of the font.}
+\item{lwd}{\strong{numeric(1)} \cr
+The line width for the boxplot, default is 0.5}
 
-\item{outlier_size}{\strong{numeric} \cr
-The size of the outliers.}
+\item{outlierSize}{\strong{numeric(1)} \cr
+The point size of the outliers. Default is 1. If 0, outliers are not shown.}
 }
 \value{
-boxplots and messages
+ggplot2 object containing the boxplot figure
 }
 \description{
 Boxplots showing the distribution of intensities over all samples
 }
 \examples{
-\dontrun{
-prepared_data <- prepareData(...)
+file_proteins <- system.file("extdata", "proteins_HCC.csv",
+  package = "ProtStatsWF")
+file_clinical <- system.file("extdata", "clinical_data.csv",
+  package = "ProtStatsWF")
+D <- prepareDataSE(dataPath = file_proteins, intensityColumns = 6:43,
+  proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
+  sampleNameColumn = "Sample", verbose = FALSE)
 
-
-boxplot <- Boxplots(D_long = prepared_data[["D_long"]])
-}
-
-
+Boxplots(D_long = D$D_long, method = "boxplot", groupColumn = "Group")
 }

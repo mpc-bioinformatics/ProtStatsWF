@@ -6,7 +6,7 @@ file_clinical  <- system.file("extdata", "clinical_data.csv", package = "ProtSta
 
 D_hcc <- prepareDataSE(dataPath = file_proteins, intensityColumns = 6:43,
                        proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
-                       sampleNameColumn = "Sample", fileType = "csv", verbose = FALSE)
+                       sampleNameColumn = "Sample", verbose = FALSE)
 
 DATA_hcc  <- as.data.frame(SummarizedExperiment::assay(D_hcc$SE, "intensity_norm"))
 ID_hcc    <- as.data.frame(SummarizedExperiment::rowData(D_hcc$SE))

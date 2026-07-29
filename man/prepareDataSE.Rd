@@ -2,8 +2,7 @@
 % Please edit documentation in R/prepareData.R
 \name{prepareDataSE}
 \alias{prepareDataSE}
-\title{Prepare quantitative proteomics data and combine it with sample information
-(optional, e.g., clinical data) in a SummarizedExperiment object.}
+\title{Data preparation}
 \usage{
 prepareDataSE(
   dataPath,
@@ -16,7 +15,6 @@ prepareDataSE(
   logBase = 2,
   normMethod = "loess",
   ltsQuantile = 0.8,
-  fileType = "xlsx",
   sep = ",",
   dec = ".",
   header = TRUE,
@@ -63,10 +61,6 @@ Normalization method, default is "loess". Options are "nonorm", "median",
 Quantile to use for the least trimmed squares regression in the "lts"
 normalization method. Default is 0.8.}
 
-\item{fileType}{\strong{character(1)} \cr
-Type of the data file. One of "xlsx", "csv", "tsv", or "txt".
-Default is "xlsx".}
-
 \item{sep}{\strong{character(1)} \cr
 Separator for csv, tsv, or txt files. Default is "," (comma).
 Ignored for xlsx files.}
@@ -92,12 +86,14 @@ If TRUE (default), messages about the data processing steps are printed.}
 \value{
 List with two elements:
 \itemize{
-\item SE: A SummarizedExperiment object containing the normalized intensity data in
-the assay "intensity_norm", the original intensity data in the assay "intensity",
-the protein information in rowData (all other columns in data that are not the proteinName or
-intensity columns), and the sample information in colData..
-\item D_long: A data frame in long format containing the normalized intensity values
-for each protein and sample, along with the corresponding sample information from colData.
+\item SE: A SummarizedExperiment object containing the normalized intensity
+data in the assay "intensity_norm", the original intensity data in the assay
+"intensity", the protein information in rowData (all other columns in data
+that are not the proteinName or intensity columns), and the sample
+information in colData.
+\item D_long: A data frame in long format containing the normalized
+intensity values for each protein and sample, along with the corresponding
+sample information from colData.
 }
 }
 \description{
@@ -105,9 +101,11 @@ Prepare quantitative proteomics data and combine it with sample information
 (optional, e.g., clinical data) in a SummarizedExperiment object.
 }
 \examples{
-file_proteins <- system.file("extdata", "proteins_HCC.csv", package = "ProtStatsWF")
-file_clinical <- system.file("extdata", "clinical_data.csv", package = "ProtStatsWF")
+file_proteins <- system.file("extdata", "proteins_HCC.csv",
+  package = "ProtStatsWF")
+file_clinical <- system.file("extdata", "clinical_data.csv",
+  package = "ProtStatsWF")
 prepareDataSE(dataPath = file_proteins, intensityColumns = 6:43,
-proteinNameColumn = "Protein", sampleInfoPath = file_clinical, sampleNameColumn = "Sample",
-fileType = "csv")
+  proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
+  sampleNameColumn = "Sample", verbose = FALSE)
 }

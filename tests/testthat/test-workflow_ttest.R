@@ -5,7 +5,7 @@ test_that("workflow_ttest runs without error on HCC data", {
 
   D_hcc_small <- prepareDataSE(dataPath = file_proteins, intensityColumns = 6:43,
                          proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
-                         sampleNameColumn = "Sample", fileType = "csv", verbose = FALSE)
+                         sampleNameColumn = "Sample", verbose = FALSE)
 
   temp_dir <- tempfile(pattern = "test_dir")
   dir.create(temp_dir)
