@@ -30,7 +30,8 @@ PCA_Plot(
 )
 }
 \arguments{
-\item{SE}{\strong{SummarizedExperiment object} \cr A SummarizedExperiment object containing the proteomics data (output element SE from \link{prepareDataSE}). The assay specified by the \code{assay} parameter will be used for PCA.}
+\item{SE}{\strong{SummarizedExperiment object} \cr
+A SummarizedExperiment object containing the proteomics data (output element SE from \link{prepareDataSE}). The assay specified by the \code{assay} parameter will be used for PCA.}
 
 \item{groupForColour}{\strong{character(1)} \cr The name of the column in the colData of the SummarizedExperiment object to be used for colouring the points in the PCA plot.}
 

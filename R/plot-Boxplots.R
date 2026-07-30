@@ -1,32 +1,45 @@
 #' Boxplots showing the distribution of intensities over all samples
 #'
-#' @param D_long                  \strong{data.frame} \cr
-#'                                The data set given in long format.
-#' @param method                  \strong{character} \cr
-#'                                The method used. Options are "boxplot" and "violinplot".
-#' @param groupColumn              \strong{logical} \cr
-#' @param group_colours           \strong{character vector} \cr
-#'                                The hex codes for the group colors.
-#' @param base_size               \strong{numeric} \cr
-#'                                The base size of the font.
-#' @param lwd                     \strong{numeric} \cr
-#'                                The line width of the boxplot.
-#' @param outlier_size            \strong{numeric} \cr
-#'                                The size of the outliers.
+#' @param D_long **data.frame** \cr
+#'  The data set given in long format. Must at least contain the columns
+#'  ".sample" (sample IDs) and "intensity_norm" (protein intensities).
+#'  May contain additional columns that can be used for assigning samples to
+#'  groups for colouring.
+#' @param method **character(1)** \cr
+#'  Options are "boxplot" (default) and "violinplot".
+#' @param groupColumn **character(1)** \cr
+#'  Name of the column in D_long that contains the group information for the
+#'  samples. If NULL (default), no grouping is applied.
+#' @param groupColours **character** \cr
+#'  Vector containing names of hex codes for the group colours (assigned in
+#'  alphabetical order of the groups). If NULL (default), ggplot2 default
+#'  colours are used.
+#' @param baseSize **numeric(1)** \cr
+#'  The base size of the font used for axis labels etc. Default is 15.
+#' @param lwd **numeric(1)** \cr
+#'  The line width for the boxplot, default is 0.5
+#' @param outlierSize **numeric(1)** \cr
+#'  The point size of the outliers. Default is 1. If 0, outliers are not shown.
 #'
-#' @return boxplots and messages
+#' @return ggplot2 object containing the boxplot figure
 #' @export
 #'
+#' @importFrom dplyr select
+#' @importFrom ggplot2 aes element_text geom_boxplot geom_violin ggplot labs
+#' @importFrom ggplot2 scale_fill_manual scale_x_discrete theme theme_bw xlab
+#' @importFrom ggplot2 ylab
+#' @importFrom tidyselect all_of
+#'
 #' @examples
-#' \dontrun{
-#' prepared_data <- prepareData(...)
+#' file_proteins <- system.file("extdata", "proteins_HCC.csv",
+#'   package = "ProtStatsWF")
+#' file_clinical <- system.file("extdata", "clinical_data.csv",
+#'   package = "ProtStatsWF")
+#' D <- prepareDataSE(dataPath = file_proteins, intensityColumns = 6:43,
+#'   proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
+#'   sampleNameColumn = "Sample", verbose = FALSE)
 #'
-#'
-#' boxplot <- Boxplots(D_long = prepared_data[["D_long"]])
-#' }
-#'
-#'
-
+#' Boxplots(D_long = D$D_long, method = "boxplot", groupColumn = "Group")
 Boxplots <- function(D_long,
                      method = "boxplot",
                      groupColumn = NULL,
@@ -36,37 +49,35 @@ Boxplots <- function(D_long,
                      outlierSize = 1) {
 
   # select only relevant columns
-  D_long <- dplyr::select(D_long, c(".feature", ".sample", "intensity_norm",
+  D_long <- dplyr::select(D_long, c(".sample", "intensity_norm",
                                     group = tidyselect::all_of(groupColumn)))
-
   x_axis <- sort(unique(D_long$.sample)) # save the different states for later
   D_long <- D_long[!is.na(D_long$intensity_norm),] # remove NA values
-
-
   .sample <- intensity_norm <- group <- NULL
   if (!is.null(groupColumn)) {
-   pl_boxplot <- ggplot2::ggplot(data = D_long, mapping = ggplot2::aes(x = .sample, y = intensity_norm, fill = group)) +
+   pl_boxplot <- ggplot2::ggplot(data = D_long,
+      mapping = ggplot2::aes(x = .sample, y = intensity_norm, fill = group)) +
      ggplot2::labs(fill = groupColumn)
-    if (!is.null(groupColours)) pl_boxplot <- pl_boxplot + ggplot2::scale_fill_manual(values = groupColours)
+    if (!is.null(groupColours)) pl_boxplot <- pl_boxplot +
+        ggplot2::scale_fill_manual(values = groupColours)
   } else {
-    pl_boxplot <- ggplot2::ggplot(data = D_long, mapping = ggplot2::aes(x = .sample, y = intensity_norm))
+    pl_boxplot <- ggplot2::ggplot(data = D_long,
+      mapping = ggplot2::aes(x = .sample, y = intensity_norm))
   }
-
-
   pl_boxplot <- pl_boxplot +
     ggplot2::theme_bw(base_size = baseSize) +
-    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, vjust = 1, hjust = 1)) +
+    ggplot2::theme(axis.text.x =
+                     ggplot2::element_text(angle = 45, vjust = 1, hjust = 1)) +
     ggplot2::ylab("Log intensity") + ggplot2::xlab("Sample") +
-    ggplot2::scale_x_discrete(limits = x_axis, drop = FALSE, na.translate = TRUE)
-
-
+    ggplot2::scale_x_discrete(limits = x_axis, drop = FALSE,
+                              na.translate = TRUE)
   if (method == "violinplot") {
-    pl_boxplot <- pl_boxplot + ggplot2::geom_violin()
+    pl_boxplot <- pl_boxplot + ggplot2::geom_violin(linewidth = lwd)
   }
   if (method == "boxplot") {
-    pl_boxplot <- pl_boxplot + ggplot2::geom_boxplot(linewidth = lwd, outlier.size = outlierSize)
+    pl_boxplot <- pl_boxplot +
+      ggplot2::geom_boxplot(linewidth = lwd, outlier.size = outlierSize)
   }
-
   return(pl_boxplot)
 }
 

@@ -1,6 +1,7 @@
 #' PCA plot for proteomics data.
 #'
-#' @param SE  **SummarizedExperiment object** \cr A SummarizedExperiment object containing the proteomics data (output element SE from [prepareDataSE]). The assay specified by the `assay` parameter will be used for PCA.
+#' @param SE  **SummarizedExperiment object** \cr
+#'  A SummarizedExperiment object containing the proteomics data (output element SE from [prepareDataSE]). The assay specified by the `assay` parameter will be used for PCA.
 #' @param groupForColour  **character(1)** \cr The name of the column in the colData of the SummarizedExperiment object to be used for colouring the points in the PCA plot.
 #' @param colourType **character(1)** \cr Type for colour, either "discrete" (default) or "continuous".
 #' @param groupForShape  **character(1)** \cr The name of the column in the colData of the SummarizedExperiment object to be used for shaping the points in the PCA plot.
