@@ -4,17 +4,17 @@
 \alias{.pivot_longer_SE}
 \title{Pivot SE to long format}
 \usage{
-.pivot_longer_SE(SE, cols)
+.pivot_longer_SE(SE, cols, assay, valueName)
 }
 \arguments{
 \item{SE}{A SummarizedExperiment object.}
 
-\item{cols}{Columns to pivot.}
+\item{cols}{Columns to pivot.  ## TODO: not used at the moment}
 }
 \value{
 A data frame in long format.
 }
 \description{
-helper function to extract assay data and pivot to long format.
+Helper function to extract assay data and pivot to long format.
 Also adds the information from colData and rowData.
 }

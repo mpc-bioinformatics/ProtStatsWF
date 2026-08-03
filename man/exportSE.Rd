@@ -4,7 +4,7 @@
 \alias{exportSE}
 \title{Export SummarizedExperiment object to an Excel file, with one assay per sheet.}
 \usage{
-exportSE(SE, file)
+exportSE(SE, file, assays = NULL)
 }
 \arguments{
 \item{SE}{\strong{SummarizedExperiment object} \cr Object to be exported.

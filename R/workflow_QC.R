@@ -127,7 +127,7 @@ workflow_QC <- function(D,
 
 
   if (MAMaxPlots > 0) {
-    ma_data <- MA_Plots(D = SummarizedExperiment::assay(D$SE),
+    ma_data <- MA_Plots(D = SummarizedExperiment::assay(D$SE),  ## TODO: assay spezifizieren!
                         outPath = outPath, suffix = suffix,
                         #labels = 1:ncol(SummarizedExperiment::assay(D$SE)),
                         #labels2 = colnames(SummarizedExperiment::assay(D$SE)),

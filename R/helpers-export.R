@@ -11,16 +11,24 @@
 #' @export
 #'
 #' @examples
-exportSE <- function(SE, file) {
-  
+exportSE <- function(SE, file, assays = NULL) {
+
   wb <- openxlsx::createWorkbook()
-  
-  cData <- SummarizedExperiment::colData(SE)
-  
-  for (assay_name in SummarizedExperiment::assayNames(SE)) {
+
+  rData <- SummarizedExperiment::rowData(SE)
+
+  if (is.null(assays)) {
+    assays <- SummarizedExperiment::assayNames(SE)
+  }
+
+  for (assay_name in assays) {
     openxlsx::addWorksheet(wb, assay_name)
     mat <- as.data.frame(SummarizedExperiment::assay(SE, assay_name))
-    mat <- cbind(cData, mat)
+
+    print(nrow(rData))
+    print(nrow(mat))
+
+    mat <- cbind(rData, mat)
     openxlsx::writeData(wb, sheet = assay_name, x = mat, rowNames = TRUE,
                         keepNA = TRUE)
   }

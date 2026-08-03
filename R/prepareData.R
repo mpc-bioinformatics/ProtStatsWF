@@ -177,21 +177,13 @@ prepareDataSE <- function(dataPath,
   SE <- SummarizedExperiment::SummarizedExperiment(assays = assays,
                                                    rowData = id,
                                                    colData = sampleInfo)
-  D_norm_long <- as.data.frame(SummarizedExperiment::assay(SE,
-                                                           "intensity_norm"))
-  D_norm_long$.feature <- rownames(D_norm_long)
-  D_long <- tidyr::pivot_longer(D_norm_long, cols = -".feature",
-    names_to = ".sample", values_to = "intensity_norm")
-  col_data <- as.data.frame(SummarizedExperiment::colData(SE))
-  col_data$.sample <- rownames(col_data)
-  D_long <- dplyr::left_join(D_long, col_data, by = ".sample")
-  row_data <- as.data.frame(SummarizedExperiment::rowData(SE))
-  row_data$.feature <- rownames(row_data)
-  D_long <- dplyr::left_join(D_long, row_data, by = ".feature")
+
+
+  D_long <- .pivot_longer_SE(SE, NULL, assay = "intensity_norm", valueName = "intensity_norm")
+
   # bring factor levels in same order as in sampleInfo
   D_long$.sample <- factor(D_long$.sample,
                            levels = sampleInfo[, sampleNameColumn])
-  D_long <- as.data.frame(D_long)
 
   return(list(SE = SE, D_long = D_long))
 }
@@ -199,16 +191,13 @@ prepareDataSE <- function(dataPath,
 
 
 
-
-
-
 #' Pivot SE to long format
 #'
-#'helper function to extract assay data and pivot to long format.
-#'Also adds the information from colData and rowData.
+#' Helper function to extract assay data and pivot to long format.
+#' Also adds the information from colData and rowData.
 #'
 #' @param SE A SummarizedExperiment object.
-#' @param cols Columns to pivot.
+#' @param cols Columns to pivot.  ## TODO: not used at the moment
 #'
 #' @importFrom dplyr left_join
 #' @importFrom SummarizedExperiment assay colData rowData
@@ -217,25 +206,24 @@ prepareDataSE <- function(dataPath,
 #' @returns A data frame in long format.
 #'
 #' @examples
-.pivot_longer_SE <- function(SE, cols) {
+.pivot_longer_SE <- function(SE, cols, assay, valueName) {
 
-  # Extract assay
-  D <- as.data.frame(SummarizedExperiment::assay(SE))
-  D$id. <- rownames(D)
+  ## extract assay
+  D <- as.data.frame(SummarizedExperiment::assay(SE, assay))
+  D$.feature <- rownames(D)
 
-  D_long <- tidyr::pivot_longer(D, -id., names_to = "sample.",
-                                values_to = "value.")
+  D_long <- tidyr::pivot_longer(D, cols = -".feature",
+                                names_to = ".sample", values_to = valueName)
 
-  # Add colData
+
   col_data <- as.data.frame(SummarizedExperiment::colData(SE))
-  col_data$sample. <- rownames(col_data)
-  D_long <- dplyr::left_join(D_long, col_data, by = "sample.")
-
-  # Add rowData
+  col_data$.sample <- rownames(col_data)
+  D_long <- dplyr::left_join(D_long, col_data, by = ".sample")
   row_data <- as.data.frame(SummarizedExperiment::rowData(SE))
-  row_data$id. <- rownames(row_data)
-  D_long <- dplyr::left_join(D_long, row_data, by = "id.")
-
+  row_data$.feature <- rownames(row_data)
+  D_long <- dplyr::left_join(D_long, row_data, by = ".feature")
+  D_long <- as.data.frame(D_long)
+  return(D_long)
 }
 
 

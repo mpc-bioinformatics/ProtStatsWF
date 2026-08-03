@@ -1,13 +1,19 @@
 #' Boxplots showing the distribution of intensities over all samples
 #'
-#' @param D_long                  \strong{data.frame} \cr
-#'                                The data set given in long format.
-#' @param method                  \strong{character} \cr
-#'                                The method used. Options are "boxplot" and "violinplot".
-#' @param groupColumn              \strong{logical} \cr
-#' @param group_colours           \strong{character vector} \cr
-#'                                The hex codes for the group colors.
-#' @param base_size               \strong{numeric} \cr
+#' @param D_long **data.frame** \cr
+#' The data set given in long format, output object from the [prepareDataSE]
+#' function. Must contain at least the columns .feature, .sample and
+#' intensity_norm.
+#' @param method **character(1)** \cr
+#' Type of plot, options are "boxplot" (default) and "violinplot".
+#' @param groupColumn **character(1)** \cr
+#' Column name of D_long containing grouping information that shoul be used for
+#' colouring the boxplots.
+#' @param group_colours **character** \cr
+#' Vector of names or hexadecimal codes for colours per group. Colours will be
+#' used in alphabetical order of the groups. By default (NULL), ggplot2 standard
+#'  colours are used.
+#' @param base_size **integer(1)**             \strong{numeric} \cr
 #'                                The base size of the font.
 #' @param lwd                     \strong{numeric} \cr
 #'                                The line width of the boxplot.
@@ -36,7 +42,7 @@ Boxplots <- function(D_long,
                      outlierSize = 1) {
 
   # select only relevant columns
-  D_long <- dplyr::select(D_long, c(".feature", ".sample", "intensity_norm",
+  D_long <- dplyr::select(D_long, c(".feature", ".sample", "intensity_norm",  ### TODO: choosable colmn name!
                                     group = tidyselect::all_of(groupColumn)))
 
   x_axis <- sort(unique(D_long$.sample)) # save the different states for later
