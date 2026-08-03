@@ -1,8 +1,9 @@
 #' Boxplots showing the distribution of intensities over all samples
 #'
 #' @param D_long **data.frame** \cr
-#'  The data set given in long format. Must at least contain the columns
-#'  ".sample" (sample IDs) and "intensity_norm" (protein intensities).
+#'  The data set in long format, output object from [prepareDataSE].
+#'  Must at least contain the columns ".sample" (sample IDs) and
+#'  "intensity_norm" (protein intensities).
 #'  May contain additional columns that can be used for assigning samples to
 #'  groups for colouring.
 #' @param method **character(1)** \cr
@@ -24,6 +25,8 @@
 #' @return ggplot2 object containing the boxplot figure
 #' @export
 #'
+#' @importFrom checkmate assertCharacter assertDataFrame assertNumeric
+#' @importFrom checkmate assertSubset
 #' @importFrom dplyr select
 #' @importFrom ggplot2 aes element_text geom_boxplot geom_violin ggplot labs
 #' @importFrom ggplot2 scale_fill_manual scale_x_discrete theme theme_bw xlab
@@ -47,6 +50,14 @@ Boxplots <- function(D_long,
                      baseSize = 15,
                      lwd = 0.5,
                      outlierSize = 1) {
+  checkmate::assertDataFrame(D_long, min.cols = 2, min.rows = 1)
+  checkmate::assertSubset(method, c("boxplot", "violinplot"))
+  checkmate::assertSubset(groupColumn, choices = colnames(D_long))
+  nr_groups <- length(levels(factor(D_long[, groupColumn])))
+  checkmate::assertCharacter(groupColours, len = nr_groups, null.ok = TRUE)
+  checkmate::assertNumeric(baseSize, lower = 0)
+  checkmate::assertNumeric(lwd, lower = 0)
+  checkmate::assertNumeric(outlierSize, lower = 0)
 
   # select only relevant columns
   D_long <- dplyr::select(D_long, c(".sample", "intensity_norm",

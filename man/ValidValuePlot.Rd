@@ -2,39 +2,50 @@
 % Please edit documentation in R/plot-valid_values.R
 \name{ValidValuePlot}
 \alias{ValidValuePlot}
-\title{Barplots showing the percentage of valid values for each sample.}
+\title{Barplots showing the number of valid values for each sample.}
 \usage{
 ValidValuePlot(D_long, groupColumn = NULL, groupColours = NULL, baseSize = 15)
 }
 \arguments{
 \item{D_long}{\strong{data.frame} \cr
-The data set given in long format.}
+The data set in long format, output object from \link{prepareDataSE}.
+Must at least contain the columns ".sample" (sample IDs) and
+"intensity_norm" (protein intensities).
+May contain additional columns that can be used for assigning samples to
+groups for colouring.}
 
 \item{groupColumn}{\strong{character(1)} \cr
-Column used for colouring.}
+Name of the column in D_long that contains the group information for the
+samples. If NULL (default), no grouping is applied.}
 
-\item{group_colours}{\strong{character vector} \cr
-The hex codes for the group colors.}
+\item{groupColours}{\strong{character} \cr
+Vector containing names of hex codes for the group colours (assigned in
+alphabetical order of the groups). If NULL (default), ggplot2 default
+colours are used.}
 
-\item{base_size}{\strong{numeric} \cr
-The base size of the font.}
+\item{baseSize}{\strong{numeric(1)} \cr
+The base size of the font used for axis labels etc. Default is 15.}
 }
 \value{
-A tibble and a ggplot of the valid values.
+A list with two elements:
+\itemize{
+\item plot: ggplot2 object of the valid value plot
+\item table: table containing the plotted numbers
+}
 }
 \description{
-Barplots showing the percentage of valid values for each sample.
+Barplots showing the number of valid values for each sample.
 }
 \examples{
 
-#path <- system.file("extdata", "exampleQC.xlsx", package = "ProtStatsWF")
-#columns <- 3:11
+file_proteins <- system.file("extdata", "proteins_HCC.csv",
+  package = "ProtStatsWF")
+file_clinical <- system.file("extdata", "clinical_data.csv",
+  package = "ProtStatsWF")
+D <- prepareDataSE(dataPath = file_proteins, intensityColumns = 6:43,
+  proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
+  sampleNameColumn = "Sample", verbose = FALSE)
 
-#prepared_data <- prepareData(data_path = path, intensity_columns = columns)
-
-#vvplot <- ValidValuePlot(D_long = prepared_data[["D_long"]])
-
-#plot(vvplot[["plot"]])
-
+ValidValuePlot(D_long = D$D_long, groupColumn = "Group")
 
 }
