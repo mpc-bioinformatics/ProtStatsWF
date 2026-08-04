@@ -1,132 +1,145 @@
-#' Calculate one MA plot for proteomics data.
+#' Calculate one single MA plot for comparison of two samples
 #'
-#' @param sample_1                \strong{numeric vector} \cr
-#'                                The data of the first sample.
-#' @param sample_2                \strong{numeric vector} \cr
-#'                                The data of the second sample.
-#' @param alpha                   \strong{logical} \cr
-#'                                If \code{TRUE}, the data points will be transparent.
-#' @param point_color             \strong{character} \cr
-#'                                The color of the data points.
-#' @param sampling                \strong{numeric} \cr
-#'                                The sampling rate. Useful to sample part of the data set for data sets on peptide/feature level with many data points.
-#' @param ...                     Additional arguments for affy::ma.plot.
+#' @param sample1 **numeric** \cr
+#' Vector of intensities for the first sample.
+#' @param sample2 **numeric** \cr
+#' Vector of intensities for the second sample..
+#' @param alpha **numeric(1)** \cr
+#' Transparency factor for data points. Default is 1, no transparency.
+#' @param point_color **character** \cr
+#' The color of the data points. Either a single value (colour for all points)
+#' or vector containing a colour for each data point.
+#' @param ... \cr
+#' Additional arguments for [affy::ma.plot].
 #'
 #' @return Generates the MA plot for two samples.
 #'
-#' @seealso [MA_Plots()]
+#' @seealso [MAPlots()] for calculation of MA-Plots for a whole dataset.
+#'
+#' @importFrom affy ma.plot
+#' @importFrom scales alpha
+#' @importFrom stats na.omit
+#'
 #'
 #' @examples
-#' \dontrun{
-#' prepared_data <- prepareData(...)
-#' data <- prepared_data[["D"]]
+#' file_proteins <- system.file("extdata", "proteins_HCC.csv",
+#'   package = "ProtStatsWF")
+#' file_clinical <- system.file("extdata", "clinical_data.csv",
+#'   package = "ProtStatsWF")
+#' D <- prepareDataSE(dataPath = file_proteins, intensityColumns = 6:43,
+#'   proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
+#'   sampleNameColumn = "Sample", verbose = FALSE)
 #'
-#' s1 <- D[,1]
-#' s1 <- D[,2]
+#' Intensities <- SummarizedExperiment::assay(D$SE)
+#' s1 <- Intensities[,1]
+#' s2 <- Intensities[,2]
 #'
 #' MA_Plot_single(sample_1 = s1, sample_2 = s2)
-#'}
-#'
+MAPlotSingle <- function(sample1, sample2,
+                          alpha = 1, pointColour = "black", ...) {
 
-MA_Plot_single <- function(sample_1, sample_2,
-                          alpha = FALSE,
-                          pointColour = "black",
-                          sampling = 1,
-                          ...) {
+  if (alpha) pointColour = scales::alpha(pointColour, alpha)
 
-  if(alpha) {
-    pointColour = alpha(pointColour, 0.5)
-  }
-
-  M <- stats::na.omit(sample_1 - sample_2)
-  A <- stats::na.omit((sample_1 + sample_2)/2)
-
-  ## sample only parts of the data points for data sets with many data points
-  if (sampling < 1) {
-    ind_sample <- sample(1:length(M), size = ceiling(length(M) * sampling))
-    M <- M[ind_sample]
-    A <- A[ind_sample]
-  }
-
+  M <- stats::na.omit(sample1 - sample2)
+  A <- stats::na.omit((sample1 + sample2)/2)
 
   if (length(pointColour) > 1) {
     na.ind <- attr(M, "na.action")
     pointColour <- pointColour[-na.ind]
   }
 
-
-  affy::ma.plot(A = A, M = M, pch = 16, cex = 0.7, col = pointColour, show.statistics = FALSE, ...)
+  affy::ma.plot(A = A, M = M, pch = 16, cex = 0.7, col = pointColour,
+                show.statistics = FALSE, ...)
 }
 
 
 
 #' Calculate MA plots for proteomics data set.
 #'
-#' @param D                       \strong{data.frame} \cr
-#'                                The data set containing intensities of the sample.
-#' @param output_path             \strong{character} \cr
-#'                                The path to a folder for the output.
-#' @param suffix                  \strong{character} \cr
-#'                                The suffix, with which the output file will be named. Should start with an underscore.
-#' @param labels                  \strong{character} \cr
-#'                                The sample labels for the title of the MA-Plot.
-#' @param labels2                 \strong{character} \cr
-#'                                The second line in sample title (e.g. group membership).
-#' @param maxPlots                \strong{integer} \cr
-#'                                The maximum number of MA plots that should be generated.
-#' @param alpha                   \strong{logical} \cr
-#'                                If \code{TRUE}, the data points will be transparent.
-#' @param plot_height             \strong{numeric} \cr
-#'                                The height of the resulting MA plots.
-#' @param plot_width              \strong{numeric} \cr
-#'                                The width of the resulting MA plots.
-#' @param sampling                \strong{numeric} \cr
-#'                                The sampling rate. Useful to sample part of the data set for data sets on peptide/feature level with many data points.
-#' @param ...                     Additional arguments for affy::ma.plot.
-#' @param verbose If TRUE, messages are printed out.
+#' @param D **matrix** \cr
+#' Data set containing peptide or protein intensities in wide format.
+#' @param outputPath **character(1)** \cr
+#' Path to a folder for saving a pdf file with the MA-Plots. Folder must exist.
+#' @param suffix **character(1)** \cr
+#' Suffix for the output file. Should start with an underscore. Default is "".
+#' @param labels **character** \cr
+#' Vector containing sample labels for each sample. Default is
+#' 'as.character(1:ncol(D))', i.e. the respective column number.
+#' @param labels2 **character** \cr
+#' Vector containing a second set of sample labels which are printed as a
+#' second line. Default is 'colnames(D)', i.e. the respective column names.
+#' @param maxPlots **integer(1)** \cr
+#' The maximum number of MA plots that should be generated. Default is 5000.
+#' This setting reduces the time and amount of space needed for MA-Plots if
+#' the number of samples is high.
+#' @param alpha **numeric(1)** \cr
+#' Transparency factor for data points. Default is 1, no transparency.
+#' @param plot_height **numeric(1)** \cr
+#' The height of the resulting MA plots in cm. Default is 15.
+#' @param plot_width **numeric(1)** \cr
+#' The width of the resulting MA plots in cm. Default is 15.
+#' @param ... \cr
+#' Additional arguments for affy::ma.plot.
+#' @param verbose **logical(1)** \cr
+#' If TRUE, messages are printed out and a progress bar is shown.
 #'
 #' @return A pdf file containing the MA plots for all sample combinations.
 #' @export
 #'
-#' @seealso [MA_Plot_single()]
+#' @seealso [MAPlotSingle()] for internal function that generates a single plot.
+#'
+#' @importFrom checkmate assertCharacter assertDirectoryExists assertFlag
+#' @importFrom checkmate assertMatrix assertNumeric
+#' @importFrom grDevices dev.off pdf
+#' @importFrom utils setTxtProgressBar txtProgressBar
 #'
 #' @examples
-#' \dontrun{
-#' prepared_data <- prepareData(...)
-#' out_path <- "/Users/thisuser/Documents/resultsFolder/"
+#' file_proteins <- system.file("extdata", "proteins_HCC.csv",
+#'   package = "ProtStatsWF")
+#' file_clinical <- system.file("extdata", "clinical_data.csv",
+#'   package = "ProtStatsWF")
+#' D <- prepareDataSE(dataPath = file_proteins, intensityColumns = 6:43,
+#'   proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
+#'   sampleNameColumn = "Sample", verbose = FALSE)
 #'
-#' return_message <- MA_Plots(D = prepared_data[["D"]], output_path = out_path)
-#'}
+#' Intensities <- SummarizedExperiment::assay(D$SE)
 #'
-
-MA_Plots <- function(D,
-                    outPath = NULL, suffix = "",
-                    labels = 1:ncol(D), labels2 = colnames(D),
+#' MAPlots(Intensities)
+MAPlots <- function(D,
+                    outPath, suffix = "",
+                    labels = as.character(1:ncol(D)), labels2 = colnames(D),
                     maxPlots = 5000,
-                    alpha = FALSE,
+                    alpha = 1,
                     plotHeight = 15, plotWidth = 15,
-                    sampling = 1, verbose = TRUE,
+                    verbose = TRUE,
                     ...) {
-
+  checkmate::assertMatrix(D, min.cols = 2, min.rows = 1)
+  checkmate::assertDirectoryExists(outPath)
+  checkmate::assertCharacter(suffix, len = 1)
+  checkmate::assertCharacter(labels, len = ncol(D))
+  checkmate::assertCharacter(labels2, len = ncol(D))
+  checkmate::assertNumeric(maxPlots, lower = 0)
+  checkmate::assertNumeric(alpha, lower = 0, upper = 1)
+  checkmate::assertNumeric(plotHeight, lower = 0)
+  checkmate::assertNumeric(plotWidth, lower = 0)
+  checkmate::assertFlag(verbose)
 
   number_states <- max(as.integer(as.factor(colnames(D))))
   number_plots <- choose(number_states,2)
 
   if (number_plots > maxPlots & verbose) {
-    message("Number of MA-Plots (", number_plots, ") is higher than maxPlots (", maxPlots, ").\nPlease increase maxPlots to plot all MA-plots.")
+    message("Number of MA-Plots (", number_plots, ") is higher than maxPlots (",
+            maxPlots, ").\nIncrease maxPlots to plot all MA-plots.")
   }
-
 
   if (verbose) {
     message("Generating MA plots...")
-    pb <- utils::txtProgressBar(min = 0,max = maxPlots,char = "#",style = 3)
+    pb <- utils::txtProgressBar(min = 0, max = maxPlots, char = "#", style = 3)
   }
 
-  if (!is.null(outPath)) {
-    filename <- paste0("MA_Plots", suffix, ".pdf")
-    grDevices::pdf(file.path(outPath, filename), height = plotHeight/2.54, width = plotWidth/2.54)
-  }
-
+  filename <- paste0("MA_Plots", suffix, ".pdf")
+  grDevices::pdf(file.path(outPath, filename), height = plotHeight/2.54,
+                 width = plotWidth/2.54)
 
   num <- 0
   br <- 0 # indicator for breaking outer loop
@@ -136,8 +149,6 @@ MA_Plots <- function(D,
     }
 
     for (j in (i + 1):ncol(D)) {
-      #print(num)
-
       # if maximum number of plots is reached, stop.
       if (num > maxPlots) {
         br <- 1
@@ -153,18 +164,14 @@ MA_Plots <- function(D,
       num <- num + 1
       if (verbose) utils::setTxtProgressBar(pb, num)
 
-      MA_Plot_single(D[,i], D[, j], main = main, sampling = sampling, ...)
+      MAPlotSingle(D[,i], D[, j], main = main, ...)
     }
   }
-
-  if (!is.null(outPath)) {
-    grDevices::dev.off()
-  }
+  grDevices::dev.off()
   if (verbose) {
     close(pb)
     message(number_plots, " MA plots generated.")
   }
-
   return(invisible(NULL))
 }
 

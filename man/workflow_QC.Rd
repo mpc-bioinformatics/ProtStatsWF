@@ -111,5 +111,5 @@ The following plots are generated: a valid value plot, boxplots, MA-plots and a 
 }
 \seealso{
 Functions used in this workflow:
-\code{\link[=prepareDataSE]{prepareDataSE()}}, \code{\link[=ValidValuePlot]{ValidValuePlot()}}, \code{\link[=Boxplots]{Boxplots()}}, \code{\link[=MA_Plots]{MA_Plots()}}, \code{\link[=PCA_Plot]{PCA_Plot()}}.
+\code{\link[=prepareDataSE]{prepareDataSE()}}, \code{\link[=ValidValuePlot]{ValidValuePlot()}}, \code{\link[=Boxplots]{Boxplots()}}, \code{\link[=MAPlots]{MAPlots()}}, \code{\link[=PCA_Plot]{PCA_Plot()}}.
 }
