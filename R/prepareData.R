@@ -59,10 +59,10 @@ prepareData <- function (data_path,
                            sep = sep,
                            header = header,
                            dec = dec,
-                           quote = "\"", na.strings = na.string)
+                           quote = "\"", na.strings = na_strings)
   }
   if (filetype == "xlsx") {
-    D <- openxlsx::read.xlsx(data_path, colNames = header, sheet = sheet, na.strings = na.strings)
+    D <- openxlsx::read.xlsx(data_path, colNames = header, sheet = sheet, na.strings = na_strings)
   }
 
 
