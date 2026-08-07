@@ -9,7 +9,7 @@ test_that("Test PCA plot", {
 
                   imputeMethod = "mean",
                   propNA = 0,
-                  scale. = TRUE,
+                  scale = TRUE,
                   PCx = 1,
                   PCy = 2,
 
