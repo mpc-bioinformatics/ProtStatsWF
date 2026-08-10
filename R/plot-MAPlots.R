@@ -81,7 +81,7 @@ MAPlotSingle <- function(sample1, sample2,
 #' @param ... \cr
 #' Additional arguments for affy::ma.plot.
 #' @param verbose **logical(1)** \cr
-#' If TRUE, messages are printed out and a progress bar is shown.
+#' If TRUE (default), messages are printed out and a progress bar is shown.
 #'
 #' @return A pdf file containing the MA plots for all sample combinations.
 #' @export

@@ -48,12 +48,12 @@
   SE <- SE[index_to_keep, ]
 
   ### remove proteins/peptides with an (almost) constant value (variance near zero)
-  v <- matrixStats::rowVars(as.matrix(D))
+  v <- matrixStats::rowVars(as.matrix(SummarizedExperiment::assay(SE, assay)))
   ind_zeroVar <- (v < 1e-25)
   SE <- SE[!ind_zeroVar, ]
 
   if (nrow(SE) == 0) {
-    if (verbose) warn("No rows remained. Please increase propNA.")
+    if (verbose) warning("No rows remained. Please increase propNA.")
     return(NULL)
   }
 

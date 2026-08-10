@@ -42,7 +42,7 @@ the number of samples is high.}
 Transparency factor for data points. Default is 1, no transparency.}
 
 \item{verbose}{\strong{logical(1)} \cr
-If TRUE, messages are printed out and a progress bar is shown.}
+If TRUE (default), messages are printed out and a progress bar is shown.}
 
 \item{...}{\cr
 Additional arguments for affy::ma.plot.}

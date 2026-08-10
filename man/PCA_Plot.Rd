@@ -16,6 +16,7 @@ PCA_Plot(
   PCx = 1,
   PCy = 2,
   groupColours = NULL,
+  groupShapes = NULL,
   NAValueColour = "grey",
   NAValueShape = 0,
   alpha = 1,
@@ -73,6 +74,11 @@ The principal component to be plotted on the y-axis. Default is 2.}
 Vector of colours for the groups. Default is NULL (default ggplot2 colour
 palette will be used).}
 
+\item{groupShapes}{\strong{integer} \cr
+Vector of shapes (pch values) for the groups defined by \code{groupForShape}.
+Default is NULL (shapes 1, 2, 3, ... are used). Please see
+\code{\link[graphics:pch]{graphics::pch()}} for further information.}
+
 \item{NAValueColour}{\strong{character(1)} \cr
 Colour for data points with missing values in the groupForColour variable.
 Default is "grey".}
@@ -108,7 +114,8 @@ Limits for the x-axis. Default is NULL (automatic).}
 \item{ylim}{\strong{numeric(2)} \cr
 Limits for the y-axis. Default is NULL (automatic).}
 
-\item{verbose}{\strong{logical(1)} \cr Whether to print messages during the execution of the function. Default is TRUE.}
+\item{verbose}{\strong{logical(1)} \cr
+If TRUE (default), messages are printed out.}
 }
 \description{
 PCA plot for proteomics data.

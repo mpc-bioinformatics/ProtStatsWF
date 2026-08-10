@@ -27,6 +27,10 @@
 #' @param groupColours **character** \cr
 #' Vector of colours for the groups. Default is NULL (default ggplot2 colour
 #' palette will be used).
+#' @param groupShapes **integer** \cr
+#' Vector of shapes (pch values) for the groups defined by `groupForShape`.
+#' Default is NULL (shapes 1, 2, 3, ... are used). Please see
+#' [graphics::pch()] for further information.
 #' @param NAValueColour **character(1)** \cr
 #' Colour for data points with missing values in the groupForColour variable.
 #' Default is "grey".
@@ -52,12 +56,22 @@
 #' Limits for the x-axis. Default is NULL (automatic).
 #' @param ylim **numeric(2)** \cr
 #' Limits for the y-axis. Default is NULL (automatic).
-
-
-#' @param verbose **logical(1)** \cr Whether to print messages during the execution of the function. Default is TRUE.
+#' @param verbose **logical(1)** \cr
+#' If TRUE (default), messages are printed out.
 #'
 #' @return
 #' @export
+#'
+#' @importFrom checkmate assertCharacter assertFlag assertIntegerish assertNumeric
+#' @importFrom checkmate assertSubset assertTRUE
+#' @importFrom ggplot2 aes geom_point ggplot guide_legend guides labs
+#' @importFrom ggplot2 scale_colour_continuous scale_colour_discrete scale_colour_manual
+#' @importFrom ggplot2 scale_shape_manual theme_bw xlim xlab ylim ylab
+#' @importFrom ggrepel geom_text_repel
+#' @importFrom methods is
+#' @importFrom scales hue_pal
+#' @importFrom stats predict prcomp
+#' @importFrom SummarizedExperiment assays colData rowData
 #'
 #' @examples
 PCA_Plot <- function(SE,
@@ -71,6 +85,7 @@ PCA_Plot <- function(SE,
                      PCx = 1,
                      PCy = 2,
                      groupColours = NULL,  # TODO: what to do for continous grouping variables?
+                     groupShapes = NULL,
                      NAValueColour = "grey",
                      NAValueShape = 0,
                      alpha = 1,
@@ -83,11 +98,11 @@ PCA_Plot <- function(SE,
                      ylim = NULL,
                      verbose = TRUE
 ) {
-  checkmate::assertTRUE(is(SE, "SummarizedExperiment"))
+  checkmate::assertTRUE(methods::is(SE, "SummarizedExperiment"))
   checkmate::assertSubset(groupForColour,
                           colnames(SummarizedExperiment::colData(SE)))
   checkmate::assertSubset(colourType, c("discrete", "continuous"))
-                          colnames(SummarizedExperiment::colData(SE))
+  #                        colnames(SummarizedExperiment::colData(SE))
   checkmate::assertSubset(groupForShape,
                           colnames(SummarizedExperiment::colData(SE)))
   checkmate::assertFlag(scale)
@@ -95,6 +110,8 @@ PCA_Plot <- function(SE,
                               unique = TRUE)
   nr_groups <- length(unique(SummarizedExperiment::colData(SE)[, groupForColour]))
   checkmate::assertCharacter(groupColours, len = nr_groups, null.ok = TRUE)
+  nr_shape_groups <- if (!is.null(groupForShape)) length(unique(SummarizedExperiment::colData(SE)[, groupForShape])) else NULL
+  checkmate::assertIntegerish(groupShapes, len = nr_shape_groups, lower = 0, upper = 255, null.ok = TRUE)
   checkmate::assertCharacter(NAValueColour, len = 1, null.ok = TRUE)
   checkmate::assertIntegerish(NAValueShape, len = 1, lower = 0, upper = 255)
   checkmate::assertNumeric(alpha, lower = 0, upper = 1)
@@ -125,6 +142,11 @@ PCA_Plot <- function(SE,
     group2 <- SummarizedExperiment::colData(filteredSE)[,groupForShape]
     group2 <- factor(group2)
   }
+
+  if (is.null(groupColours) && !is.null(groupForColour) && colourType == "discrete") {
+    groupColours <- scales::hue_pal()(nr_groups)
+  }
+
   pca <- stats::prcomp(t(D), scale. = scale)
   pred <- stats::predict(pca, t(D))
   summ <- summary(pca)
@@ -134,21 +156,21 @@ PCA_Plot <- function(SE,
   D_PCA <- data.frame(pred[, c(PCx, PCy)], label = colnames(D))
   colnames(D_PCA)[1:2] <- c("PCx", "PCy")
   D_PCA <- cbind(D_PCA, SummarizedExperiment::colData(filteredSE))
-  if (!is.null(groupForColour)) D_PCA[[groupForColour]]  <- group1
+  if (!is.null(groupForColour)) D_PCA[[groupForColour]] <- group1
   if (!is.null(groupForShape))  D_PCA[[groupForShape]] <- group2
   pl <- ggplot2::ggplot(mapping = ggplot2::aes(x = PCx, y = PCy))
   pl <- pl + ggplot2::geom_point(data = D_PCA, mapping = ggplot2::aes(
       colour = if (!is.null(groupForColour)) .data[[groupForColour]] else NULL,
       shape  = if (!is.null(groupForShape)) .data[[groupForShape]] else NULL),
       size = pointSize, alpha = alpha)
-
-  if (!is.null(groupColours) | is.numeric(D_PCA[[groupForColour]]) & colourType == "discrete") {
-    pl <- pl + ggplot2::scale_colour_manual(values = groupColours, na.value = NAValueColour)
-  } else {
-    if (is.numeric(D_PCA[[groupForColour]])) {
-      pl <- pl + ggplot2::scale_colour_continuous(na.value = NAValueColour)
+  pl <- pl + ggplot2::labs(colour = groupForColour, shape  = groupForShape)
+  if (!is.null(groupForColour)) {
+    if (colourType == "discrete") {
+      pl <- pl + ggplot2::scale_colour_manual(values = groupColours, na.value = NAValueColour)
+    #} else if (is.numeric(D_PCA[[groupForColour]])) {
+    #  pl <- pl + ggplot2::scale_colour_continuous(na.value = NAValueColour)
     } else {
-      pl <- pl + ggplot2::scale_colour_discrete(na.value = NAValueColour)
+      pl <- pl + ggplot2::scale_colour_continuous(na.value = NAValueColour)
     }
   }
 
@@ -166,9 +188,11 @@ PCA_Plot <- function(SE,
     ggplot2::ylab(paste0("PC", PCy, " (", round(100*summ$importance[2,PCy], 1), "%)"))
 
   ### allow more than 6 different shapes
-  pl <- pl + ggplot2::scale_shape_manual(values = 1:nlevels(D[[groupForShape]]),
-                                             na.value = NAValueShape)
-  pl <- pl + ggplot2::xlim(xlim) + ggplot2::ylim(ylim)
+  shape_values <- if (!is.null(groupShapes)) groupShapes else seq_len(nlevels(group2))
+  pl <- pl + ggplot2::scale_shape_manual(values = shape_values,
+                                         na.value = NAValueShape)
+  if (!is.null(xlim)) pl <- pl + ggplot2::xlim(xlim)
+  if (!is.null(ylim)) pl <- pl + ggplot2::ylim(ylim)
   Loadings <- cbind(id, as.data.frame(pca$rotation))
   return(list("D_PCA_plot" = cbind(D_PCA, "Sample" = colnames(D)), "pca" = pca,
               "filteredSE" = filteredSE, "loadings" = Loadings, "plot" = pl))
