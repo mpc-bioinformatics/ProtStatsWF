@@ -45,6 +45,12 @@
 #' @return The workflow saves several plots and files and returns a message log of the workflow.
 #' @export
 #'
+#' @importFrom checkmate assertCharacter assertDirectoryExists assertList assertNumber assertSubset
+#' @importFrom ggplot2 ggsave
+#' @importFrom scales hue_pal
+#' @importFrom SummarizedExperiment assay colData
+#' @importFrom utils write.csv
+#'
 #' @seealso Functions used in this workflow:
 #'          [prepareDataSE()], [ValidValuePlot()], [Boxplots()], [MAPlots()], [PCA_Plot()].
 #'
@@ -85,6 +91,18 @@ workflow_QC <- function(D,
                         PCAYlim = NULL,
                         PCAPointSize = 4
 ){
+  checkmate::assertList(D)
+  checkmate::assertSubset(c("SE", "D_long"), names(D))
+  checkmate::assertDirectoryExists(outPath, access = "w")
+  checkmate::assertSubset(outType, c("xlsx", "csv"))
+  checkmate::assertCharacter(suffix, len = 1)
+  checkmate::assertCharacter(NAOut, len = 1)
+  checkmate::assertCharacter(plotDevice, len = 1)
+  checkmate::assertNumber(plotHeight_BP_VV, lower = 0)
+  checkmate::assertNumber(plotWidth_BP_VV, lower = 0)
+  checkmate::assertNumber(plotHeight_PCA_MA, lower = 0)
+  checkmate::assertNumber(plotWidth_PCA_MA, lower = 0)
+  checkmate::assertNumber(plotDPI, lower = 0)
 
   # prepare group colours
   group <- SummarizedExperiment::colData(D$SE)[, groupColumn]
