@@ -1,30 +1,39 @@
 #' Automated normalization of proteomics data.
 #'
-#' @param DATA                 \strong{data.frame} \cr
-#'                             The data set containing intensities of the sample.
-#' @param method               \strong{character} \cr
-#'                             The method of normalization. Options are "nonorm" (no normalization), "median", "loess", "quantile" or "lts" normalization.
-#' @param is_log_transformed   \strong{logical} \cr
-#'                             If \code{TRUE}, the data is log-transformed.
-#' @param log_base             \strong{numeric} \cr
-#'                             The base, in case the data was log-transformed.
-#' @param lts.quantile         \strong{numeric} \cr
-#'                             The quantile for the lts normalization.
-#' @param verbose If TRUE, messages are printed.
+#' @param DATA **data.frame** \cr
+#' Data set containing protein or peptide intensities of the samples and no
+#' additional columns.
+#' @param method **character(1)** \cr
+#' The method of normalization. Options are "nonorm" (no normalization),
+#' "median", "loess" (default), "quantile" or "lts" normalization.
+#' @param is_log_transformed **logical(1)** \cr
+#' Set to `TRUE`, if the data is already log-transformed. Only relevant for lts
+#' normalization.
+#' @param log_base **numeric(1)** \cr
+#' The base, in case the data was log-transformed before normalization. Default
+#' is 2.
+#' @param lts.quantile **numeric(1)** \cr
+#' The quantile for the lts normalization. For details check [vsn::vsn2].
+#' @param verbose **logical(1)** \cr
+#' If `TRUE` (default), messages are printed out.
 #'
-#' @return The normalized data as well as a message.
-#' @export
-#' @examples
+#' @return The normalized data as a data.frame.
 #'
-
-automatedNormalization <- function(DATA,
-                                   method = "median",
-                                   is_log_transformed = TRUE,
-                                   log_base = 2,
-                                   lts.quantile = 0.8,
-                                   verbose = TRUE) {
+#' @importFrom checkmate assertDataFrame assertFlag assertNumber assertSubset
+#' @importFrom limma normalizeBetweenArrays
+#' @importFrom vsn vsn2
+.normalization <- function(DATA,
+                           method = "loess",
+                           is_log_transformed = TRUE,  ##TODO: only used for lts, unclear if I can always get that info right.
+                           log_base = 2,
+                           lts.quantile = 0.8,
+                           verbose = TRUE) {
+  checkmate::assertDataFrame(DATA)
   checkmate::assertSubset(method, choices = c("nonorm", "median", "loess", "quantile", "lts"))
-
+  checkmate::assertFlag(is_log_transformed)
+  checkmate::assertNumber(log_base, lower = 1)
+  checkmate::assertNumber(lts.quantile, lower = 0, upper = 1)
+  checkmate::assertFlag(verbose)
 
   if(method == "loess" | method == "quantile" | method == "median"){
 

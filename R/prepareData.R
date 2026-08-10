@@ -21,7 +21,9 @@
 #' @param zeroToNA **logical(1)** \cr
 #' If TRUE (default), zero intensity values are converted to NA.
 #' @param doLogTrans **logical(1)** \cr
-#' If TRUE (default), intensity values are log-transformed.
+#' If TRUE (default), intensity values will be log-transformed. As it is highly
+#' recommended to log-transform proteomics intensities, only set to FALSE if the
+#' data are already log-transformed or you have a special case like TMT ratios.
 #' @param logBase **numeric(1)** \cr
 #' Base for log transformation. Default is 2.
 #' @param normMethod **character(1)** \cr
@@ -159,8 +161,8 @@ prepareDataSE <- function(dataPath,
     if (verbose) message("Log-transformation with base ", logBase, ".")
   }
 
-  D_norm <- automatedNormalization(DATA = D, method = normMethod,
-                              is_log_transformed = doLogTrans,
+  D_norm <- .normalization(DATA = D, method = normMethod,
+                              is_log_transformed = TRUE, ## we assume that data is log-transformed!
                               log_base = logBase, lts.quantile = ltsQuantile,
                               verbose = verbose)
 

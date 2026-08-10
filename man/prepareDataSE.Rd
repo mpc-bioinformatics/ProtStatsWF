@@ -48,7 +48,9 @@ Column name of the sampleInfo that contains the sample names. Default is
 If TRUE (default), zero intensity values are converted to NA.}
 
 \item{doLogTrans}{\strong{logical(1)} \cr
-If TRUE (default), intensity values are log-transformed.}
+If TRUE (default), intensity values will be log-transformed. As it is highly
+recommended to log-transform proteomics intensities, only set to FALSE if the
+data are already log-transformed or you have a special case like TMT ratios.}
 
 \item{logBase}{\strong{numeric(1)} \cr
 Base for log transformation. Default is 2.}
