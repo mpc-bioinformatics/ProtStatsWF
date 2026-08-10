@@ -25,34 +25,36 @@ wilcoxon_single_row_paired <- function(x, group, sample, delogForFC = TRUE,
                              logBase = 2, row = NULL) {
 
   ## throw error if the two groups do not have the same length
-  if (table(group)[1] != table(group)[2]) {
-    stop("Groups don't have the same size, which is required for a paired t-test.")
-  }
+  #if (table(group)[1] != table(group)[2]) {
+  #  stop("Groups don't have the same size, which is required for a paired t-test.")
+  #}
 
   ## log-transformation
   x <- unname(x)
   abundance = x
 
   tmp <- data.frame(abundance = abundance, group = group, sample = sample)
-  groupnames <- levels(droplevels(group))
+  groupnames <- levels(droplevels(group)) # S US
 
   if (length(groupnames) > 2) stop("More than 2 groups present, please use (repeated measurement) ANOVA.")
 
   ### column names for results:
-  Y <- c("test_statistic",
+  Y <- c("test_statistic", "estimate",
          "p", "p.fdr",
          paste0("n_", groupnames[1]), paste0("n_", groupnames[2]))
-  res <- rep(NA, 5)
+  res <- rep(NA, 6)
   names(res) <- Y
 
   tmp_group1 <- tmp[tmp$group == groupnames[1],]
-  tmp_group1 <- tmp_group1[order(tmp_group1$sample),]
+  tmp_group1 <<- tmp_group1[order(tmp_group1$sample),]
   tmp_group2 <- tmp[tmp$group == groupnames[2],]
-  tmp_group2 <- tmp_group2[order(tmp_group2$sample),]
+  tmp_group2 <<- tmp_group2[order(tmp_group2$sample),]
 
-  if (any(tmp_group1$sample != tmp_group2$sample)) {
-    stop("Different samples present for both groups")
-  }
+
+
+  #if (any(tmp_group1$sample != tmp_group2$sample)) {
+  # stop("Different samples present for both groups")
+  #}
 
   ## calculate differences between samples:
   diffs <- tmp_group1$abundance - tmp_group2$abundance
@@ -60,18 +62,20 @@ wilcoxon_single_row_paired <- function(x, group, sample, delogForFC = TRUE,
 
   if (sum(!is.na(diffs)) < minNrPairs) {return(res)}  # ensure that enough complete pairs are present
 
-  ttest <- try({stats::wilcox.test(y = tmp_group1$abundance[ind_complete_pairs],  ## not possible to use tmp_na.omit as pairs may be shifted by omitting NAs
-                       x = tmp_group2$abundance[ind_complete_pairs],
-                       paired = TRUE)}, silent = TRUE)
+  # estimate is calculated as x-y
+  ttest <- try({stats::wilcox.test(x = tmp_group1$abundance[ind_complete_pairs],  ## not possible to use tmp_na.omit as pairs may be shifted by omitting NAs
+                       y = tmp_group2$abundance[ind_complete_pairs],
+                       paired = TRUE, conf.int = TRUE)}, silent = TRUE)
 
   # it is still possible, that the ttest fails (e.g. if variance in one group is 0)
   if ("try-error" %in% class(ttest)) {warning(paste0("ttest failed for row ", row));return(res)}
 
   res[1] <- ttest$statistic
-  res[2] <- ttest$p.value
-  res[3] <- NA # free space for corrected p-value
-  res[4] <- sum(!is.na(tmp_group1$abundance))
-  res[5] <- sum(!is.na(tmp_group2$abundance))
+  res[2] <- ttest$estimate
+  res[3] <- ttest$p.value
+  res[4] <- NA # free space for corrected p-value
+  res[5] <- sum(!is.na(tmp_group1$abundance))
+  res[6] <- sum(!is.na(tmp_group2$abundance))
 
   return(res)
 }
@@ -148,7 +152,7 @@ wilcoxtest <- function(D, id = NULL, group, sample = NULL, paired = FALSE, varEq
   }
 
 
-  return(cbind(D, RES))
+  return(RES)
 }
 
 
