@@ -1,4 +1,4 @@
-test_that("Test MA plots", {
+test_that("Test QC workfloe", {
 
   # Create a temporary directory so no permanent files are put on a package users directory
   temp_dir <- tempfile(pattern = "test_dir")
@@ -18,10 +18,14 @@ test_that("Test MA plots", {
 
               baseSize = 15,
               plotDevice = "pdf",
-              plotHeight_BP_VV = 10,
-              plotWidth_BP_VV = 15,
-              plotHeight_PCA_MA = 15,
-              plotWidth_PCA_MA = 15,
+              plotHeight_BP = 10,
+              plotWidth_BP = 15,
+              plotHeight_VV = 10,
+              plotWidth_VV = 15,
+              plotHeight_PCA = 15,
+              plotWidth_PCA = 15,
+              plotHeight_MA = 15,
+              plotWidth_MA = 15,
               plotDPI = 300,
 
               boxplotMethod = "boxplot",
@@ -31,13 +35,10 @@ test_that("Test MA plots", {
 
               PCAImputeMethod = "mean",
               PCAPropNA = 0,
-              PCAScale = TRUE,
               PCAAlpha = 1,
               PCALabel = FALSE,
               PCALabelSeed = NA,
               PCALabelSize = 4,
-              PCAXlim = NULL,
-              PCAYlim = NULL,
               PCAPointSize = 4
   )
 

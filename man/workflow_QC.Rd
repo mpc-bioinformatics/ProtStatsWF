@@ -8,108 +8,149 @@ workflow_QC(
   D,
   groupColumn = NULL,
   group2Column = NULL,
-  groupColours = NULL,
   outPath,
   outType = "xlsx",
   suffix = "",
   NAOut = "NA",
-  verbose = TRUE,
+  groupColours = NULL,
   baseSize = 15,
   plotDevice = "pdf",
-  plotHeight_BP_VV = 10,
-  plotWidth_BP_VV = 15,
-  plotHeight_PCA_MA = 15,
-  plotWidth_PCA_MA = 15,
+  plotHeight_BP = 10,
+  plotWidth_BP = 15,
+  plotHeight_VV = 10,
+  plotWidth_VV = 15,
+  plotHeight_PCA = 15,
+  plotWidth_PCA = 15,
+  plotHeight_MA = 15,
+  plotWidth_MA = 15,
   plotDPI = 300,
   boxplotMethod = "boxplot",
   MAMaxPlots = 5000,
   MAAlpha = 1,
-  PCAImputeMethod = "mean",
+  PCAImputeMethod = "none",
   PCAPropNA = 0,
-  PCAScale = TRUE,
   PCAAlpha = 1,
   PCALabel = FALSE,
   PCALabelSeed = NA,
   PCALabelSize = 4,
-  PCAXlim = NULL,
-  PCAYlim = NULL,
-  PCAPointSize = 4
+  PCAPointSize = 4,
+  verbose = TRUE
 )
 }
 \arguments{
-\item{D}{\strong{list} Result from \code{\link[=prepareDataSE]{prepareDataSE()}} containing the imported data.}
+\item{D}{\strong{list} \cr
+Result from \code{\link[=prepareDataSE]{prepareDataSE()}} containing the imported data.}
 
-\item{groupColumn}{\strong{character(1)} Column name in the colData(D$SE) that contains the group
-information for colouring the plots. Default is NULL (no group information for colouring).}
+\item{groupColumn}{\strong{character(1)} \cr
+Name of the column that contains the group information for colouring the
+plots. Default is NULL (no group information for colouring).}
 
-\item{group2Column}{\strong{character(1)} Column name in the colData(D$SE) that
-contains a secondary group information (used in PCA_plot as shape). Default is NULL.}
+\item{group2Column}{\strong{character(1)} \cr
+Name of the column that contains a secondary group information (used only in
+PCA_plot for shape of the data points). Default is NULL.}
 
-\item{groupColours}{\strong{character} Vector of colours for the groups. Default is NULL
-(default ggplot2 colour palette will be used.)}
+\item{outPath}{\strong{character(1)} \cr
+Path to save the output files. The corresponding folder must exist.}
 
-\item{outPath}{\strong{character(1)} Path to save the output files. The corresponding folder must exist.}
+\item{outType}{\strong{character(1)} \cr
+Type of output tables. Default is "xlsx".}
 
-\item{outType}{\strong{character(1)} Type of output file. Default is xlsx.}
+\item{suffix}{\strong{character(1)} \cr
+Suffix to add to the output file names. Default is "". Should ideally start
+with an underscore "_".}
 
-\item{suffix}{\strong{character(1)} Suffix to add to the output file names. Default is "".}
+\item{NAOut}{\strong{character(1)} \cr
+String to represent missing values in the output files. Default is "NA".}
 
-\item{NAOut}{\strong{character(1)} String to represent missing values in the output files. Default is "NA".}
+\item{groupColours}{\strong{character} \cr
+Vector of colours for the groups. Default is NULL (default ggplot2 colour
+palette will be used).}
 
-\item{verbose}{\strong{logical(1)} Whether to print messages during the workflow. Default is TRUE.}
+\item{baseSize}{\strong{numeric(1)} \cr
+Base size for the plots. Default is 15.}
 
-\item{baseSize}{\strong{numeric(1)} Base size for the plots. Default is 15.}
+\item{plotDevice}{\strong{character(1)} \cr
+Device to use for saving plots. Default is "pdf".}
 
-\item{plotDevice}{\strong{character(1)} Device to use for saving plots. Default is "pdf".}
+\item{plotHeight_BP}{\strong{numeric(1)} \cr
+Height of the boxplots in cm. Default is 10.}
 
-\item{plotHeight_BP_VV}{\strong{numeric(1)} Height of the boxplot and valid value plots in cm. Default is 10.}
+\item{plotWidth_BP}{\strong{numeric(1)} \cr
+Width of the boxplots in cm. Default is 15.}
 
-\item{plotWidth_BP_VV}{\strong{numeric(1)} Width of the boxplot and valid value plots in cm. Default is 15.}
+\item{plotHeight_VV}{\strong{numeric(1)} \cr
+Height of the valid value plot in cm. Default is 10.}
 
-\item{plotHeight_PCA_MA}{\strong{numeric(1)} Height of the PCA and MA plots in cm. Default is 15.}
+\item{plotWidth_VV}{\strong{numeric(1)} \cr
+Width of the valid value plot in cm. Default is 15.}
 
-\item{plotWidth_PCA_MA}{\strong{numeric(1)} Width of the PCA and MA plots in cm. Default is 15.}
+\item{plotHeight_PCA}{\strong{numeric(1)} \cr
+Height of the PCA plot in cm. Default is 15.}
 
-\item{plotDPI}{\strong{numeric(1)} DPI for the plots. Default is 300.}
+\item{plotWidth_PCA}{\strong{numeric(1)} \cr
+Width of the PCA plot in cm. Default is 15.}
 
-\item{boxplotMethod}{\strong{character(1)} Method for boxplot. Default is "boxplot".}
+\item{plotHeight_MA}{\strong{numeric(1)} \cr
+Height of the MA plots in cm. Default is 15.}
 
-\item{MAMaxPlots}{\strong{numeric(1)} Maximum number of MA plots to be drawn. Default is 5000.}
+\item{plotWidth_MA}{\strong{numeric(1)} \cr
+Width of the MA plots in cm. Default is 15.}
 
-\item{MAAlpha}{\strong{numeric(1)} Alpha value for MA plots. Default is 1.}
+\item{plotDPI}{\strong{numeric(1)} \cr
+DPI for the plots. Default is 300.}
 
-\item{PCAImputeMethod}{\strong{character(1)} Method for missing value imputation for the PCA. Default is "mean".}
+\item{boxplotMethod}{\strong{character(1)} \cr
+Method for boxplot. Options are "boxplot" (default) and "violinplot".}
 
-\item{PCAPropNA}{\strong{numeric(1)} Allowed proportion of missing values for PCA. Default is 0.
-Proteins with more missing values will be removed from the PCA. The others will be imputed.}
+\item{MAMaxPlots}{\strong{numeric(1)} \cr
+The maximum number of MA plots that should be generated. Default is 5000.
+This setting reduces the time and amount of space needed for MA-Plots if
+the number of samples is high.}
 
-\item{PCAScale}{\strong{logical(1)} Whether to scale data for the PCA. Default is TRUE.}
+\item{MAAlpha}{\strong{numeric(1)} \cr
+Alpha value for MA plots. Default is 1 (no transparency).}
 
-\item{PCAAlpha}{\strong{numeric(1)} Alpha value (transparency) for points in the PCA. Default is 1.}
+\item{PCAImputeMethod}{\strong{character(1)} \cr
+The missing value imputation method used for PCA. Options are "mean" or
+"median" or "none" (default).}
 
-\item{PCALabel}{\strong{logical(1)} Whether to label PCA points. Default is FALSE.}
+\item{PCAPropNA}{\strong{numeric(1)} \cr
+The proportion of allowed missing values for PCA for a protein, before it is
+discarded. It is automatically set to 0 if imputeMethod is "none".}
 
-\item{PCALabelSeed}{\strong{numeric(1)} Seed for data point labels in the PCA. Default is NA.}
+\item{PCAAlpha}{\strong{numeric(1)} \cr
+Alpha value (transparency) for points in the PCA. Default is 1.}
 
-\item{PCALabelSize}{\strong{numeric(1)} Size of data point labels in the PCA. Default is 4.}
+\item{PCALabel}{\strong{logical(1)} \cr
+Whether to label PCA points. Default is FALSE.}
 
-\item{PCAXlim}{\strong{numeric(2)} Limits for the x-axis in the PCA plot. Default is NULL.}
+\item{PCALabelSeed}{\strong{numeric(1)} \cr
+Seed for random number generator used for label placement in PCA. Default is
+NA (no seed), which may lead to different label placement for multiple
+executions of this function.}
 
-\item{PCAYlim}{\strong{numeric(2)} Limits for the y-axis in the PCA plot. Default is NULL.}
+\item{PCALabelSize}{\strong{numeric(1)} \cr
+Size of data point labels in the PCA. Default is 4.}
 
-\item{PCAPointSize}{\strong{numeric(1)} Size of data points in the PCA. Default is 4.}
+\item{PCAPointSize}{\strong{numeric(1)} \cr
+Size of data points in the PCA. Default is 4.}
+
+\item{verbose}{\strong{logical(1)} \cr
+Whether to print messages during the workflow. Default is TRUE.}
 }
 \value{
-The workflow saves several plots and files and returns a message log of the workflow.
+The workflow saves several plots and tables.
 }
 \description{
 Workflow for quality control of quantitative proteomics data
 }
 \details{
 This function performs quality control of quantitative proteomics data.
-The following plots are generated: a valid value plot, boxplots, MA-plots and a PCA plot.
+The following plots are generated: a valid value plot, boxplots, MA-plots and
+a PCA plot.
 }
 \seealso{
 Functions used in this workflow:
-\code{\link[=prepareDataSE]{prepareDataSE()}}, \code{\link[=ValidValuePlot]{ValidValuePlot()}}, \code{\link[=Boxplots]{Boxplots()}}, \code{\link[=MAPlots]{MAPlots()}}, \code{\link[=PCA_Plot]{PCA_Plot()}}.
+\code{\link[=prepareDataSE]{prepareDataSE()}}, \code{\link[=ValidValuePlot]{ValidValuePlot()}}, \code{\link[=Boxplots]{Boxplots()}}, \code{\link[=MAPlots]{MAPlots()}},
+\code{\link[=PCA_Plot]{PCA_Plot()}}.
 }
