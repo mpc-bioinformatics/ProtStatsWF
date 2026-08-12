@@ -4,49 +4,81 @@
 #' Workflow for t-test analysis of quantitative proteomics data.
 #'
 #' @details
-#' This function performs a t-test to compare two experimental groups in a quantitative proteomics dataset.
-#' The input \code{D} should be the list returned by [prepareDataSE()], which handles data import,
-#' log-transformation, and normalisation. Because the assay data is already log-transformed by
+#' This function performs a t-test to compare two experimental groups in a
+#' quantitative proteomics dataset. The input \code{D} should be the list
+#' returned by [prepareDataSE()], which handles data import, log-transformation,
+#' and normalisation. Because the assay data is already log-transformed by
 #' [prepareDataSE()], \code{logBeforeTest} defaults to \code{FALSE}.
-#' The function generates a volcano plot, histograms of p-values and fold changes,
-#' boxplots of the significant candidates, and a heatmap of the significant candidates.
+#' The function generates a volcano plot, histograms of p-values and fold
+#' changes as well as boxplots and a heatmap of the significant biomarker
+#' candidates.
 #'
-#' @param D **list** Result from [prepareDataSE()] containing \code{D$SE}
-#'   (a \code{SummarizedExperiment}) and \code{D$D_long} (the data set in long format).
-#' @param groupColumn **character(1)** Column name in \code{colData(D$SE)} that contains the
-#'   group labels. Exactly two groups must be present.
-#' @param outputPath **character(1)** Path to the output folder. The folder must already exist.
-#' @param sampleColumn **character(1)** Column name in \code{colData(D$SE)} that identifies
-#'   matched samples for a paired test. Required when \code{paired = TRUE}. Default is \code{NULL}.
-#' @param assayName **character(1)** Name of the assay in \code{D$SE} to use as input data.
-#'   Default is \code{"intensity_norm"}.
-#' @param groupColours **character** Vector of colours for the two groups. Default is \code{NULL}
+#' @param D **list** \cr
+#' Result from [prepareDataSE()] containing the prepared data.
+#' @param groupColumn **character(1)** \cr
+#' Name of the column that contains the groups that are compared with a t-test.
+#' Exactly two groups must be present.
+#' @param sampleColumn **character(1)** \cr
+#' Name of the column that identifies matched samples for a paired test.
+#' Required only when \code{paired = TRUE}. Default is \code{NULL}.
+#' @param proteinNameColumn **character(1)** \cr
+#' Name of the column that contains protein identifiers (e.g. protein
+#' accessions, gene names). Default is \code{"Protein"}. This column will be
+#' used to label candidate proteins in boxplots and heatmap.
+#' @param outputPath **character(1)** \cr
+#' Path to the output folder. The folder must already exist.
+#' @param suffix **character(1)** \cr
+#' Suffix to add to the output file names. Default is "". Should ideally start
+#' with an underscore "_".
+#' @param paired **logical(1)** \cr
+#' If \code{TRUE}, a paired test is performed. Default is \code{FALSE}
+#' (unpaired t-test).
+#' @param varEqual **logical(1)** \cr
+#' If \code{TRUE}, variances in both groups are assumed equal. Default is
+#' \code{FALSE} (assuming unequal variances).
+#' @param logBeforeTest **logical(1)** \cr
+#' If \code{TRUE}, data will be log-transformed before the test. Defaults to
+#' \code{FALSE} because usually data prepared with [prepareDataSE()] is already
+#' log-transformed.
+#' @param delogForFC **logical(1)** \cr
+#' If \code{TRUE}, fold changes are computed on the original (de-log) scale.
+#' Default is \code{TRUE}.
+#' @param groupColours **character** \cr
+#' Vector of colours for the two groups. Default is \code{NULL}
 #'   (default ggplot2 colour palette).
-#' @param proteinNameColumn **character(1)** Column name in \code{rowData(D$SE)} containing
-#'   protein identifiers. Default is \code{"Protein"}.
-#' @param paired **logical(1)** If \code{TRUE}, a paired test is performed. Default is \code{FALSE}.
-#' @param varEqual **logical(1)** If \code{TRUE}, variances are assumed equal. Default is \code{FALSE}.
-#' @param logBeforeTest **logical(1)** If \code{TRUE}, data will be log-transformed before
-#'   the test. Defaults to \code{FALSE} because usually data prepared with [prepareDataSE()] is already
-#'   log-transformed.
-#' @param delogForFC **logical(1)** If \code{TRUE}, fold changes are computed on the original
-#'   (de-log) scale. Default is \code{TRUE}.
+
+### TODO: hier fehlt p-value and fold change cutoff!
+#' @param significantAfterFDR **logical(1)** \cr
+#' If \code{TRUE}, only proteins significant after FDR correction are shown in
+#' boxplots and heatmap. Default is \code{TRUE}.
 #' @param pValueZerosToMin **logical(1)** If \code{TRUE}, p-values equal to 0 are replaced
 #'   by the next smallest observed p-value. Default is \code{TRUE}.
-#' @param volcanoBaseSize **numeric(1)** Base font size for the volcano plot. Default is \code{25}.
-#' @param significantAfterFDR **logical(1)** If \code{TRUE}, only proteins significant after FDR
-#'   correction are shown in boxplots and heatmap. Default is \code{TRUE}.
+#' @param baseSize **numeric(1)** \cr
+#' Base size for the plots. Default is 15.
+# TODO: use in all plots, not only volcano!
+#'
+#'
 #' @param maxValidValuesOff **integer(1)** Maximum number of valid values for a protein to be
 #'   classified as "off". Default is \code{0}.
 #' @param minValidValuesOn **integer(1)** Minimum number of valid values for a protein to be
 #'   classified as "on". Default is \code{NULL} (set automatically to the smallest group size).
-#' @param suffix **character(1)** Suffix appended to all output file names. Default is \code{""}.
-#' @param plotDevice **character(1)** Output file type, e.g. \code{"pdf"} or \code{"png"}.
-#'   Default is \code{"pdf"}.
-#' @param plotHeight **numeric(1)** Plot height in cm. Default is \code{15}.
-#' @param plotWidth **numeric(1)** Plot width in cm. Default is \code{15}.
-#' @param plotDPI **integer(1)** Plot resolution in DPI. Default is \code{300}.
-#' @param verbose **logical(1)** Whether to print progress messages to the console. Default is \code{TRUE}.
+
+#' @param plotDevice **character(1)** \cr
+#' Device to use for saving plots. Default is "pdf".
+#' @param plotHeight **numeric(1)** \cr
+#' Plot height in cm. Default is \code{15}.
+#' @param plotWidth **numeric(1)** \cr
+#' Plot width in cm. Default is \code{15}.
+# TODO: separate height/width for different plots.
+#' @param plotDPI **integer(1)** \cr
+#' Plot resolution in DPI. Default is \code{300}.
+#' @param assayName **character(1)** \cr
+#' Name of the assay in \code{D$SE} to use as input data.
+#' Default is \code{"intensity_norm"}, which corresponds to the output of
+#' [prepareDataSE()]. Only change if you do not directly use the output from
+#' [prepareDataSE()].
+#' @param verbose **logical(1)** \cr
+#' Whether to print messages and progress bars during the workflow. Default is TRUE.
 #'
 #' @return A list with one element \code{"message"}: a character string log of the workflow
 #'   summarising settings and results. All output files are written to \code{outputPath}.

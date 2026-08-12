@@ -10,14 +10,14 @@
 #' a PCA plot.
 #'
 #' @param D **list** \cr
-#' Result from [prepareDataSE()] containing the imported data.
+#' Result from [prepareDataSE()] containing the prepared data.
 #' @param groupColumn **character(1)** \cr
 #' Name of the column that contains the group information for colouring the
 #' plots. Default is NULL (no group information for colouring).
 #' @param group2Column **character(1)** \cr
 #' Name of the column that contains a secondary group information (used only in
 #' PCA_plot for shape of the data points). Default is NULL.
-#' @param outPath **character(1)** \cr
+#' @param outputPath **character(1)** \cr
 #' Path to save the output files. The corresponding folder must exist.
 #' @param outType **character(1)** \cr
 #' Type of output tables. Default is "xlsx".
@@ -99,7 +99,7 @@ workflow_QC <- function(D,
                         groupColumn = NULL,
                         group2Column = NULL,
 
-                        outPath,
+                        outputPath,
                         outType = "xlsx",  ## TODO: does this work?
                         suffix = "",
                         NAOut = "NA", ## TODO: does this work?
@@ -131,7 +131,7 @@ workflow_QC <- function(D,
 ){
   checkmate::assertList(D)
   checkmate::assertSubset(c("SE", "D_long"), names(D))
-  checkmate::assertDirectoryExists(outPath, access = "w")
+  checkmate::assertDirectoryExists(outputPath, access = "w")
   checkmate::assertSubset(outType, c("xlsx", "csv"))
   checkmate::assertCharacter(suffix, len = 1)
   checkmate::assertCharacter(NAOut, len = 1)
@@ -157,11 +157,11 @@ workflow_QC <- function(D,
                                  groupColours = groupColours,
                                  baseSize = baseSize)
 
-  ggplot2::ggsave(file.path(outPath, paste0("valid_value_plot", suffix, ".", plotDevice)),
+  ggplot2::ggsave(file.path(outputPath, paste0("valid_value_plot", suffix, ".", plotDevice)),
                   plot = vv_plot$plot, device = plotDevice, height = plotHeight_VV,
                   width = plotWidth_VV, dpi = plotDPI, units = "cm")
 
-  utils::write.csv(x = vv_plot$table, file = file.path(outPath,
+  utils::write.csv(x = vv_plot$table, file = file.path(outputPath,
                     paste0("D_validvalues", suffix, ".csv")), row.names = FALSE)
 
 
@@ -174,7 +174,7 @@ workflow_QC <- function(D,
                            baseSize = baseSize,
                            method = boxplotMethod, lwd = 0.5)
 
-  ggplot2::ggsave(file.path(outPath, paste0("boxplot", suffix, ".", plotDevice)),
+  ggplot2::ggsave(file.path(outputPath, paste0("boxplot", suffix, ".", plotDevice)),
                   plot = boxplots, device = plotDevice, height = plotHeight_BP,
                   width = plotWidth_BP, dpi = plotDPI, units = "cm")
 
@@ -188,7 +188,7 @@ workflow_QC <- function(D,
 
   if (MAMaxPlots > 0) {
     ma_data <- MAPlots(D = SummarizedExperiment::assay(D$SE),  ### TODO: define which assay
-                        outPath = outPath, suffix = suffix,
+                        outPath = outputPath, suffix = suffix,
                         maxPlots = MAMaxPlots, alpha = MAAlpha,
                         plotHeight = plotHeight_MA,
                         plotWidth = plotWidth_MA,
@@ -223,10 +223,10 @@ workflow_QC <- function(D,
   #   Loadings <- cbind(id, Loadings)
 
 
-  ggplot2::ggsave(file.path(outPath, paste0("PCA_plot", suffix, ".", plotDevice)), plot = pca_data[["plot"]],
+  ggplot2::ggsave(file.path(outputPath, paste0("PCA_plot", suffix, ".", plotDevice)), plot = pca_data[["plot"]],
                   device = plotDevice, height = plotHeight_PCA, width = plotWidth_PCA, dpi = plotDPI, units = "cm")
-  utils::write.csv(x = pca_data$D_PCA_plot, file = file.path(outPath, paste0("D_PCA", suffix, ".csv")), row.names = FALSE)
-  utils::write.csv(x = pca_data$filtered_D, file = file.path(outPath, paste0("PCA_data_after_imputation", suffix, ".csv")), row.names = FALSE)
+  utils::write.csv(x = pca_data$D_PCA_plot, file = file.path(outputPath, paste0("D_PCA", suffix, ".csv")), row.names = FALSE)
+  utils::write.csv(x = pca_data$filtered_D, file = file.path(outputPath, paste0("PCA_data_after_imputation", suffix, ".csv")), row.names = FALSE)
 
   return(invisible(NULL))
 }

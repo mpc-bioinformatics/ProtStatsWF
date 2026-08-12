@@ -81,6 +81,7 @@
 #' prepareDataSE(dataPath = file_proteins, intensityColumns = 6:43,
 #'   proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
 #'   sampleNameColumn = "Sample", verbose = FALSE)
+# TODO: maybe re-name to "prepareData"
 prepareDataSE <- function(dataPath,
                           intensityColumns,
                           proteinNameColumn = "Protein",
