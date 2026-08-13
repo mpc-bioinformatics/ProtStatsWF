@@ -175,6 +175,8 @@ prepareDataSE <- function(dataPath,
     sampleInfo <- data.frame(SampleName = colnames(D))
     rownames(sampleInfo) <- colnames(D)
   }
+  sampleInfo[] <- lapply(sampleInfo, function(x) if (is.character(x)) factor(x) else x)
+
 
   assays <- list(intensity_norm = as.matrix(D_norm), intensity = as.matrix(D))
   SE <- SummarizedExperiment::SummarizedExperiment(assays = assays,

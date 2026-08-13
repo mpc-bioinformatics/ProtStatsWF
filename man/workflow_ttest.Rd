@@ -32,44 +32,58 @@ workflow_ttest(
 )
 }
 \arguments{
-\item{D}{\strong{list} Result from \code{\link[=prepareDataSE]{prepareDataSE()}} containing \code{D$SE}
-(a \code{SummarizedExperiment}) and \code{D$D_long} (the data set in long format).}
+\item{D}{\strong{list} \cr
+Result from \code{\link[=prepareDataSE]{prepareDataSE()}} containing the prepared data.}
 
-\item{groupColumn}{\strong{character(1)} Column name in \code{colData(D$SE)} that contains the
-group labels. Exactly two groups must be present.}
+\item{groupColumn}{\strong{character(1)} \cr
+Name of the column that contains the groups that are compared with a t-test.
+Exactly two groups must be present.}
 
-\item{outputPath}{\strong{character(1)} Path to the output folder. The folder must already exist.}
+\item{outputPath}{\strong{character(1)} \cr
+Path to the output folder. The folder must already exist.}
 
-\item{sampleColumn}{\strong{character(1)} Column name in \code{colData(D$SE)} that identifies
-matched samples for a paired test. Required when \code{paired = TRUE}. Default is \code{NULL}.}
+\item{sampleColumn}{\strong{character(1)} \cr
+Name of the column that identifies matched samples for a paired test.
+Required only when \code{paired = TRUE}. Default is \code{NULL}.}
 
-\item{assayName}{\strong{character(1)} Name of the assay in \code{D$SE} to use as input data.
-Default is \code{"intensity_norm"}.}
+\item{assayName}{\strong{character(1)} \cr
+Name of the assay in \code{D$SE} to use as input data.
+Default is \code{"intensity_norm"}, which corresponds to the output of
+\code{\link[=prepareDataSE]{prepareDataSE()}}. Only change if you do not directly use the output from
+\code{\link[=prepareDataSE]{prepareDataSE()}}.}
 
-\item{groupColours}{\strong{character} Vector of colours for the two groups. Default is \code{NULL}
+\item{groupColours}{\strong{character} \cr
+Vector of colours for the two groups. Default is \code{NULL}
 (default ggplot2 colour palette).}
 
-\item{proteinNameColumn}{\strong{character(1)} Column name in \code{rowData(D$SE)} containing
-protein identifiers. Default is \code{"Protein"}.}
+\item{proteinNameColumn}{\strong{character(1)} \cr
+Name of the column that contains protein identifiers (e.g. protein
+accessions, gene names). Default is \code{"Protein"}. This column will be
+used to label candidate proteins in boxplots and heatmap.}
 
-\item{paired}{\strong{logical(1)} If \code{TRUE}, a paired test is performed. Default is \code{FALSE}.}
+\item{paired}{\strong{logical(1)} \cr
+If \code{TRUE}, a paired test is performed. Default is \code{FALSE}
+(unpaired t-test).}
 
-\item{varEqual}{\strong{logical(1)} If \code{TRUE}, variances are assumed equal. Default is \code{FALSE}.}
+\item{varEqual}{\strong{logical(1)} \cr
+If \code{TRUE}, variances in both groups are assumed equal. Default is
+\code{FALSE} (assuming unequal variances).}
 
-\item{logBeforeTest}{\strong{logical(1)} If \code{TRUE}, data will be log-transformed before
-the test. Defaults to \code{FALSE} because usually data prepared with \code{\link[=prepareDataSE]{prepareDataSE()}} is already
+\item{logBeforeTest}{\strong{logical(1)} \cr
+If \code{TRUE}, data will be log-transformed before the test. Defaults to
+\code{FALSE} because usually data prepared with \code{\link[=prepareDataSE]{prepareDataSE()}} is already
 log-transformed.}
 
-\item{delogForFC}{\strong{logical(1)} If \code{TRUE}, fold changes are computed on the original
-(de-log) scale. Default is \code{TRUE}.}
+\item{delogForFC}{\strong{logical(1)} \cr
+If \code{TRUE}, fold changes are computed on the original (de-log) scale.
+Default is \code{TRUE}.}
 
 \item{pValueZerosToMin}{\strong{logical(1)} If \code{TRUE}, p-values equal to 0 are replaced
 by the next smallest observed p-value. Default is \code{TRUE}.}
 
-\item{volcanoBaseSize}{\strong{numeric(1)} Base font size for the volcano plot. Default is \code{25}.}
-
-\item{significantAfterFDR}{\strong{logical(1)} If \code{TRUE}, only proteins significant after FDR
-correction are shown in boxplots and heatmap. Default is \code{TRUE}.}
+\item{significantAfterFDR}{\strong{logical(1)} \cr
+If \code{TRUE}, only proteins significant after FDR correction are shown in
+boxplots and heatmap. Default is \code{TRUE}.}
 
 \item{maxValidValuesOff}{\strong{integer(1)} Maximum number of valid values for a protein to be
 classified as "off". Default is \code{0}.}
@@ -77,18 +91,27 @@ classified as "off". Default is \code{0}.}
 \item{minValidValuesOn}{\strong{integer(1)} Minimum number of valid values for a protein to be
 classified as "on". Default is \code{NULL} (set automatically to the smallest group size).}
 
-\item{suffix}{\strong{character(1)} Suffix appended to all output file names. Default is \code{""}.}
+\item{suffix}{\strong{character(1)} \cr
+Suffix to add to the output file names. Default is "". Should ideally start
+with an underscore "_".}
 
-\item{plotDevice}{\strong{character(1)} Output file type, e.g. \code{"pdf"} or \code{"png"}.
-Default is \code{"pdf"}.}
+\item{plotDevice}{\strong{character(1)} \cr
+Device to use for saving plots. Default is "pdf".}
 
-\item{plotHeight}{\strong{numeric(1)} Plot height in cm. Default is \code{15}.}
+\item{plotHeight}{\strong{numeric(1)} \cr
+Plot height in cm. Default is \code{15}.}
 
-\item{plotWidth}{\strong{numeric(1)} Plot width in cm. Default is \code{15}.}
+\item{plotWidth}{\strong{numeric(1)} \cr
+Plot width in cm. Default is \code{15}.}
 
-\item{plotDPI}{\strong{integer(1)} Plot resolution in DPI. Default is \code{300}.}
+\item{plotDPI}{\strong{integer(1)} \cr
+Plot resolution in DPI. Default is \code{300}.}
 
-\item{verbose}{\strong{logical(1)} Whether to print progress messages to the console. Default is \code{TRUE}.}
+\item{verbose}{\strong{logical(1)} \cr
+Whether to print messages and progress bars during the workflow. Default is TRUE.}
+
+\item{baseSize}{\strong{numeric(1)} \cr
+Base size for the plots. Default is 15.}
 }
 \value{
 A list with one element \code{"message"}: a character string log of the workflow
@@ -98,12 +121,14 @@ summarising settings and results. All output files are written to \code{outputPa
 Workflow for t-test analysis of quantitative proteomics data.
 }
 \details{
-This function performs a t-test to compare two experimental groups in a quantitative proteomics dataset.
-The input \code{D} should be the list returned by \code{\link[=prepareDataSE]{prepareDataSE()}}, which handles data import,
-log-transformation, and normalisation. Because the assay data is already log-transformed by
+This function performs a t-test to compare two experimental groups in a
+quantitative proteomics dataset. The input \code{D} should be the list
+returned by \code{\link[=prepareDataSE]{prepareDataSE()}}, which handles data import, log-transformation,
+and normalisation. Because the assay data is already log-transformed by
 \code{\link[=prepareDataSE]{prepareDataSE()}}, \code{logBeforeTest} defaults to \code{FALSE}.
-The function generates a volcano plot, histograms of p-values and fold changes,
-boxplots of the significant candidates, and a heatmap of the significant candidates.
+The function generates a volcano plot, histograms of p-values and fold
+changes as well as boxplots and a heatmap of the significant biomarker
+candidates.
 }
 \examples{
 \dontrun{

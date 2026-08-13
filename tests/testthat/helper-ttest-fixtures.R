@@ -12,10 +12,10 @@ DATA_hcc  <- as.data.frame(SummarizedExperiment::assay(D_hcc$SE, "intensity_norm
 ID_hcc    <- as.data.frame(SummarizedExperiment::rowData(D_hcc$SE))
 group_hcc <- droplevels(factor(SummarizedExperiment::colData(D_hcc$SE)[, "Group"]))
 
-ttest_res <- ttest(D = DATA_hcc, id = ID_hcc, group = group_hcc,
-                   sample = SummarizedExperiment::colData(D_hcc$SE)[, "PatientID"],
+ttest_res <- ttest(SE = D_hcc$SE, assay = "intensity_norm",
+                   groupColumn = "Group", sampleColumn = "PatientID",,
                    logBeforeTest = FALSE, delogForFC = TRUE, logBase = 2,
-                   minObsPerGroup = 3, paired = TRUE)
+                   minObs = 3, paired = TRUE)
 
 fc_col <- paste0("FC_", levels(group_hcc)[[1]], "_divided_by_", levels(group_hcc)[[2]])
 

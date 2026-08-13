@@ -160,7 +160,7 @@ workflow_ttest <- function(D,
                         group = group, sample = sample,
                         paired = paired, varEqual = varEqual,
                         logBeforeTest = logBeforeTest, delogForFC = delogForFC, logBase = 2,
-                        minObsPerGroup = 3, minObsPerGroupRatio = NULL)
+                        minObs = 3, minObsRatio = NULL)
 
   openxlsx::write.xlsx(test_results,
                        file = file.path(outputPath, paste0("results_ttest", suffix, ".xlsx")),

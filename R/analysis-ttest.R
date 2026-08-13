@@ -41,33 +41,37 @@
 #'
 #' @seealso [ttest()], [.ttest_single_row_paired()]
 #'
-#' @examples
-#'
-
+#' @importFrom checkmate assertNumeric assertFactor assertFlag assertNumber
+#' @importFrom checkmate assertIntegerish assertInt
+#' @importFrom stats na.omit t.test
 .ttest_single_row <- function(x, group, varEqual = FALSE, logBeforeTest = FALSE,
-                              delogForFC = TRUE, logBase = 2, minObsPerGroup = 3,
-                              minObsPerGroupRatio = NULL, row = NULL, verbose = TRUE) {
+                              delogForFC = TRUE, logBase = 2,
+                              minObs = 3, minObsRatio = NULL,
+                              row = NULL, verbose = TRUE) {
 
-  if (!is.null(minObsPerGroup) & !is.null(minObsPerGroupRatio)) {
-    stop("Both minObsPerGroup and minObsPerGroupRatio are given, please define only one of them!")
+  checkmate::assertNumeric(x)
+  checkmate::assertFactor(group, len = length(x), n.levels = 2)
+  checkmate::assertFlag(varEqual)
+  checkmate::assertFlag(logBeforeTest)
+  checkmate::assertFlag(delogForFC)
+  checkmate::assertNumber(logBase, lower = 1)
+  checkmate::assertIntegerish(minObs, null.ok = TRUE, lower = 2)
+  checkmate::assertNumber(minObsRatio, lower = 0, upper = 1, null.ok = TRUE)
+  checkmate::assertInt(row, null.ok = TRUE)
+  checkmate::assertFlag(verbose)
+
+  if (!is.null(minObs) & !is.null(minObsRatio)) {
+    stop("Both minObs and minObsRatio are given, please define only one of them!")
   }
-
-
 
   x <- unlist(unname(x))
-  if (logBeforeTest) {
-    abundance = log(x, base = logBase)
-  } else {
-    abundance = x
-  }
-
-  tmp <- data.frame(abundance = abundance, group = group)
+  if (logBeforeTest) intensity <- log(x, base = logBase) else intensity <- x
+  tmp <- data.frame(intensity = intensity, group = group)
   groupnames <- levels(droplevels(group))
-
   if (length(groupnames) > 2) stop("More than 2 groups present, please use ANOVA.")
 
   ### column names for results:
-  Y <- c(paste0("mean_", groupnames[1]),  # 1
+  cnames <- c(paste0("mean_", groupnames[1]),  # 1
          paste0("mean_", groupnames[2]),  # 2
          "test_statistic",                # 3
          "p", "p.fdr",                    # 4, 5
@@ -76,53 +80,54 @@
          "CI_lower", "CI_upper",                                       # 8, 9
          paste0("n_", groupnames[1]), paste0("n_", groupnames[2]), # 10, 11
          "NA_reason_code")                                               # 12
-  res <- rep(NA, 12)
-  names(res) <- Y
+  res <- rep(NA, length(cnames))
+  names(res) <- cnames
 
   ### drop missing values
-  tmp_na.omit <- stats::na.omit(tmp)
-  tmp_na.omit <- droplevels(tmp_na.omit)
+  tmp_na.omit <- droplevels(stats::na.omit(tmp))
 
-
-  if(length(table(tmp_na.omit$group)) < 2) { # if less than 2 groups remain
-    res[12] <- 2 ### reason: on/off protein with one group missing
+  if (length(table(tmp_na.omit$group)) < 2) { # if less than 2 groups remain
+    res[12] <- 2 ### reason: likely on/off protein with one group missing
     return(res)
-
   }              # ensure that both groups are still present
-
-  if(!is.null(minObsPerGroup) & any(table(tmp_na.omit$group) < minObsPerGroup)) {  # ensure that each group has enough observations
-    res[12] <- 1  ### reason: not enough observations in at least one group
+  if (!is.null(minObs) & any(table(tmp_na.omit$group) < minObs)) {  # ensure that each group has enough observations
+    res[12]   <- 1  ### reason: not enough observations in at least one group
     return(res)
   }
-  if(!is.null(minObsPerGroupRatio) & any(table(tmp_na.omit$group)/table(tmp$group) < minObsPerGroupRatio)) {  # ensure that each group has enough observations
-    res[12] <- 1  ### reason: not enough observations in at least one group
+  if (!is.null(minObsRatio) & any(table(tmp_na.omit$group)/table(tmp$group) < minObsRatio)) {  # ensure that each group has enough observations
+    res[12]   <- 1  ### reason: not enough observations in at least one group
     return(res)
   }
 
-  ttest <- try({stats::t.test(x = tmp_na.omit$abundance[tmp_na.omit$group == groupnames[2]],
-                       y = tmp_na.omit$abundance[tmp_na.omit$group == groupnames[1]],
-                       paired = FALSE, var.equal = varEqual)}, silent = TRUE)
+  ## TODO: abfangen, dass eine Gruppe variance = NULL hat
+
+  ttest <- try({stats::t.test(x = tmp_na.omit$intensity[tmp_na.omit$group == groupnames[2]],
+                              y = tmp_na.omit$intensity[tmp_na.omit$group == groupnames[1]],
+                              paired = FALSE, var.equal = varEqual)}, silent = TRUE)
 
   # it is still possible, that the ttest fails (e.g. if variance in one group is 0)
-  if ("try-error" %in% class(ttest)) {warning(paste0("ttest failed for row ", row));res[12] <- 3;return(res)}  ### reason: other, e.g. var = 0
+  if ("try-error" %in% class(ttest)) {
+    print(ttest)
+    #if (verbose) message("ttest failed for row ", row)
+    res[12] <- 3
+    return(res)
+  }  ### reason: other, e.g. var = 0
 
-  res[1:2] <- ttest$estimate
+  res[1:2] <- c(ttest$estimate[2], ttest$estimate[1])
   res[3] <- ttest$statistic
   res[4] <- ttest$p.value
-  res[5] <- NA # free space for corrected p-value
   res[8:9] <- ttest$conf.int
-  res[10] <- length(tmp_na.omit$abundance[tmp_na.omit$group == groupnames[1]])
-  res[11] <- length(tmp_na.omit$abundance[tmp_na.omit$group == groupnames[2]])
+  res[10] <- length(tmp_na.omit$intensity[tmp_na.omit$group == groupnames[1]])
+  res[11] <- length(tmp_na.omit$intensity[tmp_na.omit$group == groupnames[2]])
 
 
   ### calculate fold changes
-  if (delogForFC) {
-    x2 <- logBase^tmp$abundance
-  } else {
-    x2 <- tmp$abundance
-  }
+  #xFC <- ifelse(delogForFC, logBase^tmp$abundance, tmp$abundance)
 
-  res[6] <- mean(x2[tmp$group == groupnames[2]], na.rm = TRUE) / mean(x2[tmp$group == groupnames[1]], na.rm = TRUE)
+  if (delogForFC) xFC <- logBase^tmp$intensity else xFC <- tmp$intensity
+
+  res[5] <- mean(xFC[tmp$group == groupnames[2]], na.rm = TRUE) /
+    mean(xFC[tmp$group == groupnames[1]], na.rm = TRUE)
   res[7] <- 1/res[6]
 
   return(res)
@@ -139,27 +144,12 @@
 #' Paired t-test for a single row of a data set.
 #'
 #' @description
-#' Runs a paired t-test on a single row of intensity data and returns summary
-#' statistics including fold changes.
+#' Runs an paired t-test on a single row of peptide or protein intensity data
+#' and returns p-values and fold changes.
 #'
-#' @param x **numeric** \cr
-#' The abundances of the data.
-#' @param group **factor** \cr
-#' The group membership of the data. Must contain exactly two levels of equal
-#' size.
-#' @param sample **factor** \cr
-#' The sample IDs used to match pairs across groups.
-#' @param logBeforeTest **logical(1)** \cr
-#' If TRUE, the data will be log-transformed before the test. Default is TRUE.
-#' @param delogForFC **logical(1)** \cr
-#' If TRUE, the fold change will be calculated on the original scale.
-#' Default is TRUE.
-#' @param minNrPairs **integer(1)** \cr
-#' The minimum number of complete sample pairs required. Default is NULL.
-#' @param logBase **numeric(1)** \cr
-#' The base of the logarithm for the log-transformation. Default is 2.
-#' @param row **integer(1)** \cr
-#' The row number of the data, used for informative warnings. Default is NULL.
+#' @inheritParams .ttest_single_row
+#' @param minPairs **integer(1)** \cr
+#' The minimum number of complete sample pairs required. Default is 3.
 #'
 #' @return A named numeric vector with the following elements: mean difference
 #' between groups, test statistic, p-value, placeholder for FDR-corrected
@@ -168,12 +158,24 @@
 #'
 #' @seealso [ttest()], [.ttest_single_row()]
 #'
-#' @examples
-#'
+#' @importFrom checkmate assertNumeric assertFactor assertFlag assertNumber
+#' @importFrom checkmate assertIntegerish assertInt
+#' @importFrom stats t.test
+
+### TODO: minPairRel einführen, also wie viel % der pairs da sein müssen
 
 .ttest_single_row_paired <- function(x, group, sample, logBeforeTest = TRUE, delogForFC = TRUE,
-                             minNrPairs = NULL,
-                             logBase = 2, row = NULL) {
+                             minPairs = 3,
+                             logBase = 2, row = NULL, verbose = TRUE) {
+
+  checkmate::assertNumeric(x)
+  checkmate::assertFactor(group, len = length(x), n.levels = 2)
+  checkmate::assertFlag(logBeforeTest)
+  checkmate::assertFlag(delogForFC)
+  checkmate::assertNumber(logBase, lower = 1)
+  checkmate::assertIntegerish(minPairs, null.ok = TRUE, lower = 2)
+  checkmate::assertInt(row, null.ok = TRUE)
+  checkmate::assertFlag(verbose)
 
   ## throw error if the two groups do not have the same length
   if (table(group)[1] != table(group)[2]) {
@@ -181,14 +183,9 @@
   }
 
   ## log-transformation
-  x <- unname(x)
-  if (logBeforeTest) {
-    abundance = log(x, base = logBase)
-  } else {
-    abundance = x
-  }
-
-  tmp <- data.frame(abundance = abundance, group = group, sample = sample)
+  x <- unlist(unname(x))
+  if (logBeforeTest) intensity <- log(x, base = logBase) else intensity <- x
+  tmp <- data.frame(intensity = intensity, group = group, sample = sample)
   groupnames <- levels(droplevels(group))
 
   if (length(groupnames) > 2) stop("More than 2 groups present, please use (repeated measurement) ANOVA.")
@@ -214,38 +211,33 @@
     stop("Different samples present for both groups")
   }
 
-
-
   ## calculate differences between samples:
-  diffs <- tmp_group1$abundance - tmp_group2$abundance
+  diffs <- tmp_group1$intensity - tmp_group2$intensity
   ind_complete_pairs <- which(!is.na(diffs))
 
-  if (sum(!is.na(diffs)) < minNrPairs) {return(res)}  # ensure that enough complete pairs are present
+  if (sum(!is.na(diffs)) < minPairs) {return(res)}  # ensure that enough complete pairs are present
 
-  ttest <- try({stats::t.test(y = tmp_group1$abundance[ind_complete_pairs],  ## not possible to use tmp_na.omit as pairs may be shifted by omitting NAs
-                       x = tmp_group2$abundance[ind_complete_pairs],
+  ttest <- try({stats::t.test(y = tmp_group1$intensity[ind_complete_pairs],  ## not possible to use tmp_na.omit as pairs may be shifted by omitting NAs
+                       x = tmp_group2$intensity[ind_complete_pairs],
                        paired = TRUE)}, silent = TRUE)
 
   # it is still possible, that the ttest fails (e.g. if variance in one group is 0)
-  if ("try-error" %in% class(ttest)) {warning(paste0("ttest failed for row ", row));return(res)}
+  if ("try-error" %in% class(ttest)) {message(paste0("ttest failed for row ", row));return(res)}
 
   res[1] <- ttest$estimate
   res[2] <- ttest$statistic
   res[3] <- ttest$p.value
-  res[4] <- NA # free space for corrected p-value
   res[7:8] <- ttest$conf.int
-  res[9] <- sum(!is.na(tmp_group1$abundance))
-  res[10] <- sum(!is.na(tmp_group2$abundance))
+  res[9] <- sum(!is.na(tmp_group1$intensity))
+  res[10] <- sum(!is.na(tmp_group2$intensity))
 
   ### calculate fold changes
-  if (delogForFC) {
-    x2 <- logBase^tmp$abundance
-  } else {
-    x2 <- tmp$abundance
-  }
+  if (delogForFC) xFC <- logBase^tmp$intensity else xFC <- tmp$intensity
 
-  res[5] <- mean(x2[tmp$group == groupnames[2]][ind_complete_pairs], na.rm = TRUE) /
-    mean(x2[tmp$group == groupnames[1]][ind_complete_pairs], na.rm = TRUE)
+  ### TODO: maybe calculate fold change differently to account for paired design?
+
+  res[5] <- mean(xFC[tmp$group == groupnames[2]][ind_complete_pairs], na.rm = TRUE) /
+    mean(xFC[tmp$group == groupnames[1]][ind_complete_pairs], na.rm = TRUE)
   res[6] <- 1/res[5]
 
   return(res)
@@ -267,61 +259,62 @@
 #' intensities and returns a combined data frame of input data and test results
 #' with FDR-adjusted p-values.
 #'
-#' @param D **data.frame** \cr
-#' The data set containing only protein intensities (rows = proteins,
-#' columns = samples).
-#' @param id **data.frame** \cr
-#' Data frame containing ID columns such as protein names or gene names.
-#' Default is NULL.
-#' @param group **factor** \cr
-#' The group membership of the samples. Must contain exactly two levels.
-#' @param sample **factor** \cr
-#' Sample numbers or IDs used to build pairs when `paired = TRUE`. Ignored
-#' when `paired = FALSE`. Default is NULL.
+#' @param SE  **SummarizedExperiment object** \cr
+#' Data in a SummarizedExperiment object, e.g. output SE from [prepareDataSE]
+#' function.
+#' @param assay  **character(1)** \cr
+#' The name of the assay in SE containing the protein intensities that should
+#' be used for the PCA plot. Default is "intensity_norm", which uses the
+#' normalized protein intensities if the SE object was generated by
+#' [prepareDataSE].
+#' @param groupColumn **character(1)** \cr
+#' The name of the column in the colData of SE containing the groups that will
+#' be compared by the t-test. Please make sure that exactly two groups are
+#' present.
+#' @param sampleColumn **character(1)** \cr
+#' The name of the column in the colData of SE containing the sample IDs. Only
+#' necessary if `paired = TRUE`, then it will be used to match sample pairs.
 #' @param paired **logical(1)** \cr
 #' If TRUE, a paired t-test is performed, otherwise unpaired. Default is FALSE.
-#' @param varEqual **logical(1)** \cr
-#' If TRUE, equal variances are assumed (Student's t-test). Default is FALSE
-#' (Welch's t-test).
-#' @param logBeforeTest **logical(1)** \cr
-#' If TRUE, the data will be log-transformed before the test. Default is TRUE.
-#' Set to FALSE if the data are already log-transformed, e.g. after
-#' normalisation in [prepareDataSE()].
-#' @param delogForFC **logical(1)** \cr
-#' If TRUE, fold changes are calculated on the original (exponentiated) scale.
-#' Default is TRUE.
-#' @param logBase **numeric(1)** \cr
-#' The base of the logarithm for the log-transformation. Default is 2.
-#' @param minObsPerGroup **integer(1)** \cr
+#' @inheritParams .ttest_single_row varEqual logBeforeTest delogForFC logbase
+#' @param minObs **integer(1)** \cr
 #' Minimum number of observations per group. For a paired t-test this is the
 #' minimum number of complete pairs. Default is 3.
-#' @param minObsPerGroupRatio **numeric(1)** \cr
+#' @param minObsRatio **numeric(1)** \cr
 #' Minimum proportion of valid values required per group (e.g. 0.8 = 80%).
-#' Default is NULL.
+#' Currently not usable if `paired = TRUE`.
 #'
-#' @return A data frame combining the (sorted) input intensities with the
-#' per-protein t-test results including FDR-adjusted p-values.
+#' @return A data frame containing the t-test results an used protein intensity
+#' values.
 #' @export
 #'
 #' @seealso [.ttest_single_row()], [.ttest_single_row_paired()]
 #'
 #' @examples
-#'
 
-ttest <- function(D, id = NULL, group, sample = NULL, paired = FALSE, varEqual = FALSE,
+ttest <- function(SE, assay, groupColumn, sampleColumn = NULL, paired = FALSE, varEqual = FALSE,
                   logBeforeTest = TRUE, delogForFC = TRUE, logBase = 2,
-                  minObsPerGroup = 3,
-                  minObsPerGroupRatio = NULL) {
+                  minObs = 3, minObsRatio = NULL, verbose = TRUE) {
+
+  D <- SummarizedExperiment::assays(SE)[[assay]]
+  id <- SummarizedExperiment::rowData(SE)
+  group <- colData(D_hcc$SE)[,groupColumn]
+  if (!is.null(sampleColumn)) sample <- colData(D_hcc$SE)[,sampleColumn]
+
+  ### TODO: supress progress bar if verbose = FALSE!
 
   if (!paired) {
-    RES <- pbapply::pbapply(D, 1, .ttest_single_row, group = group, logBeforeTest = logBeforeTest,
-                 delogForFC = delogForFC, minObsPerGroup = minObsPerGroup,
-                 logBase = logBase, varEqual = varEqual, minObsPerGroupRatio = minObsPerGroupRatio)
+    RES <- pbapply::pbapply(D, 1, .ttest_single_row, group = group,
+                            logBeforeTest = logBeforeTest,
+                 delogForFC = delogForFC, minObs = minObs,
+                 logBase = logBase, varEqual = varEqual,
+                 minObsRatio = minObsRatio)
   }
 
   if (paired) {
-    RES <- pbapply::pbapply(D, 1, .ttest_single_row_paired, group = group, logBeforeTest = logBeforeTest,
-                 delogForFC = delogForFC, minNrPairs = minObsPerGroup, sample = sample,
+    RES <- pbapply::pbapply(D, 1, .ttest_single_row_paired, group = group,
+                            logBeforeTest = logBeforeTest,
+                 delogForFC = delogForFC, minPairs = minObs, sample = sample,
                  logBase = logBase)
   }
 
@@ -330,7 +323,7 @@ ttest <- function(D, id = NULL, group, sample = NULL, paired = FALSE, varEqual =
 
   RES$p.fdr <- stats::p.adjust(RES$p, method = "fdr")
 
-  if(logBeforeTest){
+  if (logBeforeTest) {
     D_log <- log(D, base = logBase)
     colnames(D_log) <- paste0(colnames(D), "_log")
   } else {
@@ -342,26 +335,12 @@ ttest <- function(D, id = NULL, group, sample = NULL, paired = FALSE, varEqual =
 
 
   ## sort columns in D by group and sample
-  if(!is.null(sample)) {
+  if (!is.null(sampleColumn)) {
     D <- D[,order(group, sample)]
   } else {
     D <- D[,order(group)]
   }
-
-  if(!is.null(id)) {
-    if(logBeforeTest) {
-      D <- cbind(id, D, D_log)
-    } else {
-      if (delogForFC) {
-        D <- cbind(id, D, D_delog)
-      } else {
-        D <- cbind(id, D)
-      }
-    }
-  }
-
-
-  return(cbind(D, RES))
+  return(cbind(id, RES, D))
 }
 
 

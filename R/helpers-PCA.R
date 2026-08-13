@@ -48,6 +48,8 @@
   SE <- SE[index_to_keep, ]
 
   ### remove proteins/peptides with an (almost) constant value (variance near zero)
+  X <<- as.matrix(SummarizedExperiment::assay(SE, assay))
+
   v <- matrixStats::rowVars(as.matrix(SummarizedExperiment::assay(SE, assay)))
   ind_zeroVar <- (v < 1e-25)
   SE <- SE[!ind_zeroVar, ]

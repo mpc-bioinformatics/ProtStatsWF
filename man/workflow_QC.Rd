@@ -8,7 +8,7 @@ workflow_QC(
   D,
   groupColumn = NULL,
   group2Column = NULL,
-  outPath,
+  outputPath,
   outType = "xlsx",
   suffix = "",
   NAOut = "NA",
@@ -39,7 +39,7 @@ workflow_QC(
 }
 \arguments{
 \item{D}{\strong{list} \cr
-Result from \code{\link[=prepareDataSE]{prepareDataSE()}} containing the imported data.}
+Result from \code{\link[=prepareDataSE]{prepareDataSE()}} containing the prepared data.}
 
 \item{groupColumn}{\strong{character(1)} \cr
 Name of the column that contains the group information for colouring the
@@ -49,7 +49,7 @@ plots. Default is NULL (no group information for colouring).}
 Name of the column that contains a secondary group information (used only in
 PCA_plot for shape of the data points). Default is NULL.}
 
-\item{outPath}{\strong{character(1)} \cr
+\item{outputPath}{\strong{character(1)} \cr
 Path to save the output files. The corresponding folder must exist.}
 
 \item{outType}{\strong{character(1)} \cr

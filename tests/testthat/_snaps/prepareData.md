@@ -52680,45 +52680,32 @@
       SummarizedExperiment::colData(D$SE)
     Output
       DataFrame with 38 rows and 11 columns
-                 Sample PatientID       Group      Gender       Age Tumor_Staging
-            <character> <integer> <character> <character> <integer>   <character>
-      HCC_1       HCC_1         1         HCC      Female        57           pT1
-      HCC_2       HCC_2         2         HCC        Male        71           pT2
-      HCC_3       HCC_3         3         HCC      Female        42           pT1
-      HCC_4       HCC_4         4         HCC        Male        73           pT1
-      HCC_5       HCC_5         5         HCC        Male        51           pT1
-      ...           ...       ...         ...         ...       ...           ...
-      C_15         C_15        15           C      Female        67            NA
-      C_16         C_16        16           C        Male        75            NA
-      C_17         C_17        17           C        Male        57            NA
-      C_18         C_18        18           C        Male        66            NA
-      C_19         C_19        19           C      Female        56            NA
-            Lymph_Nodes     Grading Bloodvessel_status Resection_Margin
-            <character> <character>        <character>      <character>
-      HCC_1         pN0          G3                 V0               R0
-      HCC_2         pNX          G2                 V0               R0
-      HCC_3         pNX          G3                 V0               R0
-      HCC_4          NX          G2                 V0               R0
-      HCC_5         pN0          G1                 V0               R0
-      ...           ...         ...                ...              ...
-      C_15           NA          NA                 NA               NA
-      C_16           NA          NA                 NA               NA
-      C_17           NA          NA                 NA               NA
-      C_18           NA          NA                 NA               NA
-      C_19           NA          NA                 NA               NA
-            Underlying_Liver_Disease
-                         <character>
-      HCC_1                     NASH
-      HCC_2                     NASH
-      HCC_3                       NA
-      HCC_4                     HepC
-      HCC_5                      NA 
-      ...                        ...
-      C_15                        NA
-      C_16                        NA
-      C_17                        NA
-      C_18                        NA
-      C_19                        NA
+              Sample PatientID    Group   Gender       Age Tumor_Staging Lymph_Nodes
+            <factor> <integer> <factor> <factor> <integer>      <factor>    <factor>
+      HCC_1    HCC_1         1      HCC   Female        57           pT1         pN0
+      HCC_2    HCC_2         2      HCC   Male          71           pT2         pNX
+      HCC_3    HCC_3         3      HCC   Female        42           pT1         pNX
+      HCC_4    HCC_4         4      HCC   Male          73           pT1         NX 
+      HCC_5    HCC_5         5      HCC   Male          51           pT1         pN0
+      ...        ...       ...      ...      ...       ...           ...         ...
+      C_15      C_15        15        C   Female        67            NA          NA
+      C_16      C_16        16        C   Male          75            NA          NA
+      C_17      C_17        17        C   Male          57            NA          NA
+      C_18      C_18        18        C   Male          66            NA          NA
+      C_19      C_19        19        C   Female        56            NA          NA
+             Grading Bloodvessel_status Resection_Margin Underlying_Liver_Disease
+            <factor>           <factor>         <factor>                 <factor>
+      HCC_1       G3                 V0               R0                     NASH
+      HCC_2       G2                 V0               R0                     NASH
+      HCC_3       G3                 V0               R0                     NA  
+      HCC_4       G2                 V0               R0                     HepC
+      HCC_5       G1                 V0               R0                     NA  
+      ...        ...                ...              ...                      ...
+      C_15        NA                 NA               NA                       NA
+      C_16        NA                 NA               NA                       NA
+      C_17        NA                 NA               NA                       NA
+      C_18        NA                 NA               NA                       NA
+      C_19        NA                 NA               NA                       NA
 
 ---
 
