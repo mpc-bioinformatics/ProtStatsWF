@@ -134,7 +134,8 @@ MAPlots <- function(D,
 
   if (verbose) {
     message("Generating MA plots...")
-    pb <- utils::txtProgressBar(min = 0, max = maxPlots, char = "#", style = 3)
+    pb <- utils::txtProgressBar(min = 0, max = min(maxPlots, number_plots),
+                                char = "#", style = 3)
   }
 
   filename <- paste0("MA_Plots", suffix, ".pdf")
