@@ -47,18 +47,6 @@
   index_to_keep <- mean_NA <= propNA
   SE <- SE[index_to_keep, ]
 
-  ### remove proteins/peptides with an (almost) constant value (variance near zero)
-  X <<- as.matrix(SummarizedExperiment::assay(SE, assay))
-
-  v <- matrixStats::rowVars(as.matrix(SummarizedExperiment::assay(SE, assay)))
-  ind_zeroVar <- (v < 1e-25)
-  SE <- SE[!ind_zeroVar, ]
-
-  if (nrow(SE) == 0) {
-    if (verbose) warning("No rows remained. Please increase propNA.")
-    return(NULL)
-  }
-
   ## impute missing values
   if (imputeMethod != "none") {
     D <- SummarizedExperiment::assays(SE)[[assay]]
@@ -70,6 +58,18 @@
     })))
     SummarizedExperiment::assays(SE)[[assay]] <- D
   }
+
+  ### remove proteins/peptides with an (almost) constant value (variance near zero)
+  v <- matrixStats::rowVars(as.matrix(SummarizedExperiment::assay(SE, assay)))
+  ind_zeroVar <- (v < 1e-25)
+  SE <- SE[!ind_zeroVar, ]
+
+  if (nrow(SE) == 0) {
+    if (verbose) warning("No rows remained. Please increase propNA.")
+    return(NULL)
+  }
+
+
 
   return(SE)
 }
