@@ -26,6 +26,10 @@
 #' @param min_valid_values_on    \strong{integer} \cr
 #'                               The minimum number of valid values to be an on protein.
 #'
+#' @param sortHMColumnsByGroup **logical(1)** \cr
+#' If TRUE, columns in the heatmap are sorted by group. IF FALSE (default), the
+#' order in the original data set is used.
+#'
 #' @param suffix                 \strong{character} \cr
 #'                               The suffix of the file names should have one.
 #' @param plot_device            \strong{character} \cr
@@ -86,6 +90,7 @@ workflow_ANOVA <- function(data_path,
                            significant_after_FDR = TRUE,
                            max_valid_values_off = 0,
                            min_valid_values_on = NULL,
+                           sortHMColumnsByGroup = FALSE,
 
                            suffix = "",
                            plot_device = "pdf",
@@ -228,10 +233,17 @@ workflow_ANOVA <- function(data_path,
   names(colours) <- groups
   group_colours <- list(Group = colours)
 
+  ###
+  D_HM <- data[["D"]][union_candidates, ]
+  group_HM <- data$group
+  if (sortHMColumnsByGroup) {
+    group_HM <- group_HM[order(colnames(D_HM))]
+    D_HM <- D_HM[,order(colnames(D_HM))]
+  }
 
-  t_heatmap <- Heatmap_with_groups(D = data[["D"]][union_candidates, ],
+  t_heatmap <- Heatmap_with_groups(D = D_HM,
                                    id = data[["ID"]][union_candidates, , drop = FALSE],
-                                   groups = data[["group"]],
+                                   groups = group_HM,
                                    cluster_columns = FALSE,
                                    group_colours = group_colours,
                                    na_method = "impute")
