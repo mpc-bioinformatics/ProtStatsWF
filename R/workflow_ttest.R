@@ -227,7 +227,7 @@ workflow_ttest <- function(data_path,
                                      groups = data[["group"]])
 
     grDevices::pdf(file.path(output_path, paste0("heatmap", suffix, ".pdf")), height = plot_height, width = plot_width)
-    graphics::plot(t_heatmap) # [["heatmap"]]
+    graphics::plot(t_heatmap[["heatmap"]]) # [["heatmap"]]
     grDevices::dev.off()
 
     #openxlsx::write.xlsx(cbind(data[["ID"]][candidates, ], zscore = t_heatmap[["data_as_matrix"]]), paste0(output_path, "heatmap_data", suffix, ".xlsx"), overwrite = TRUE, keepNA = TRUE)
