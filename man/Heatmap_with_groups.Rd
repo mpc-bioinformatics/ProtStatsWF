@@ -21,6 +21,7 @@ Heatmap_with_groups(
   symmetric_legend = TRUE,
   scale_data = TRUE,
   legend_name = "Legend",
+  group_name = "Group",
   title = "Heatmap",
   legend_colours = c("blue", "white", "red"),
   log_data = TRUE,
@@ -83,7 +84,10 @@ Note that it only make sense for z-scored data.}
 If \code{TRUE}, the data will be scaled ( = z-scored).}
 
 \item{legend_name}{\strong{character} \cr
-The name for legend.}
+The name for legend (colour bar).}
+
+\item{group_name}{\strong{character} \cr
+The name of the group variable, only used for the legend.}
 
 \item{title}{\strong{character} \cr
 The title of the plot.}
