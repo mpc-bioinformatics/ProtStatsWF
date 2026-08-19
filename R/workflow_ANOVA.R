@@ -236,7 +236,7 @@ workflow_ANOVA <- function(data_path,
                                    group_colours = group_colours)
 
   grDevices::pdf(file.path(output_path, paste0("heatmap", suffix, ".pdf")), height = plot_height, width = plot_width)
-  graphics::plot(t_heatmap) # [["heatmap"]]
+  graphics::plot(t_heatmap[["heatmap"]]) # [["heatmap"]]
   grDevices::dev.off()
 
   remaining_candidates <- as.integer(row.names(t_heatmap@matrix))
