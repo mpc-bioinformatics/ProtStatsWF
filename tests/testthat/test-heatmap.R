@@ -16,7 +16,9 @@ test_that("Calculate heatmap for a ttest ", {
   t_heatmap <- Heatmap_with_groups(D = data[["D"]][candidates, ],
                                    id = data[["ID"]][candidates, ],
                                    groups = data[["group"]],
-                                   group_name = "state")
+                                   group_name = "state",
+                                   na_method = "impute",
+                                   min_valid_values = 3)
 
   vdiffr::expect_doppelganger("Heatmap_ttest", t_heatmap$heatmap)#[["heatmap"]])
 

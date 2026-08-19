@@ -224,7 +224,9 @@ workflow_ttest <- function(data_path,
     set.seed(14)
     t_heatmap <- Heatmap_with_groups(D = data[["D"]][candidates, ],
                                      id = data[["ID"]][candidates, ],
-                                     groups = data[["group"]])
+                                     groups = data[["group"]],
+                                     na_method = "impute",
+                                     min_valid_values = 3)
 
     grDevices::pdf(file.path(output_path, paste0("heatmap", suffix, ".pdf")), height = plot_height, width = plot_width)
     graphics::plot(t_heatmap[["heatmap"]]) # [["heatmap"]]

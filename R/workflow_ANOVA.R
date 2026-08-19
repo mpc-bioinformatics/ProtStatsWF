@@ -233,14 +233,15 @@ workflow_ANOVA <- function(data_path,
                                    id = data[["ID"]][union_candidates, , drop = FALSE],
                                    groups = data[["group"]],
                                    cluster_columns = FALSE,
-                                   group_colours = group_colours)
+                                   group_colours = group_colours,
+                                   na_method = "impute")
 
   grDevices::pdf(file.path(output_path, paste0("heatmap", suffix, ".pdf")), height = plot_height, width = plot_width)
   graphics::plot(t_heatmap[["heatmap"]]) # [["heatmap"]]
   grDevices::dev.off()
 
-  remaining_candidates <- as.integer(row.names(t_heatmap@matrix))
-  openxlsx::write.xlsx(cbind(data[["ID"]][remaining_candidates, ], zscore = t_heatmap@matrix),
+  remaining_candidates <- as.integer(row.names(t_heatmap[["heatmap"]]@matrix))
+  openxlsx::write.xlsx(cbind(data[["ID"]][remaining_candidates, ], zscore = t_heatmap[["heatmap"]]@matrix),
                        paste0(file.path(output_path, "heatmap_data", suffix), ".xlsx"), overwrite = TRUE, keepNA = TRUE)
 
   mess <- paste0(mess, "Heatmap made for the union of all candidates. \n")
