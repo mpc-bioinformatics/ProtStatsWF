@@ -33,7 +33,7 @@ workflow_ttest(
 }
 \arguments{
 \item{D}{\strong{list} \cr
-Result from \code{\link[=prepareDataSE]{prepareDataSE()}} containing the prepared data.}
+Result from \code{\link[=prepareData]{prepareData()}} containing the prepared data.}
 
 \item{groupColumn}{\strong{character(1)} \cr
 Name of the column that contains the groups that are compared with a t-test.
@@ -49,8 +49,8 @@ Required only when \code{paired = TRUE}. Default is \code{NULL}.}
 \item{assayName}{\strong{character(1)} \cr
 Name of the assay in \code{D$SE} to use as input data.
 Default is \code{"intensity_norm"}, which corresponds to the output of
-\code{\link[=prepareDataSE]{prepareDataSE()}}. Only change if you do not directly use the output from
-\code{\link[=prepareDataSE]{prepareDataSE()}}.}
+\code{\link[=prepareData]{prepareData()}}. Only change if you do not directly use the output from
+\code{\link[=prepareData]{prepareData()}}.}
 
 \item{groupColours}{\strong{character} \cr
 Vector of colours for the two groups. Default is \code{NULL}
@@ -71,7 +71,7 @@ If \code{TRUE}, variances in both groups are assumed equal. Default is
 
 \item{logBeforeTest}{\strong{logical(1)} \cr
 If \code{TRUE}, data will be log-transformed before the test. Defaults to
-\code{FALSE} because usually data prepared with \code{\link[=prepareDataSE]{prepareDataSE()}} is already
+\code{FALSE} because usually data prepared with \code{\link[=prepareData]{prepareData()}} is already
 log-transformed.}
 
 \item{delogForFC}{\strong{logical(1)} \cr
@@ -123,9 +123,9 @@ Workflow for t-test analysis of quantitative proteomics data.
 \details{
 This function performs a t-test to compare two experimental groups in a
 quantitative proteomics dataset. The input \code{D} should be the list
-returned by \code{\link[=prepareDataSE]{prepareDataSE()}}, which handles data import, log-transformation,
+returned by \code{\link[=prepareData]{prepareData()}}, which handles data import, log-transformation,
 and normalisation. Because the assay data is already log-transformed by
-\code{\link[=prepareDataSE]{prepareDataSE()}}, \code{logBeforeTest} defaults to \code{FALSE}.
+\code{\link[=prepareData]{prepareData()}}, \code{logBeforeTest} defaults to \code{FALSE}.
 The function generates a volcano plot, histograms of p-values and fold
 changes as well as boxplots and a heatmap of the significant biomarker
 candidates.
@@ -146,7 +146,7 @@ result <- workflow_ttest(D = D, groupColumn = "Group",
 \seealso{
 \code{\link[=workflow_ANOVA]{workflow_ANOVA()}} for more than two groups.\cr
 Functions used in this workflow:
-\code{\link[=prepareDataSE]{prepareDataSE()}}, \code{\link[=ttest]{ttest()}}, \code{\link[=VolcanoPlot_ttest]{VolcanoPlot_ttest()}}, \code{\link[=pvalue_foldchange_histogram]{pvalue_foldchange_histogram()}},
+\code{\link[=prepareData]{prepareData()}}, \code{\link[=ttest]{ttest()}}, \code{\link[=VolcanoPlot_ttest]{VolcanoPlot_ttest()}}, \code{\link[=pvalue_foldchange_histogram]{pvalue_foldchange_histogram()}},
 \code{\link[=calculate_significance_categories_ttest]{calculate_significance_categories_ttest()}}, \code{\link[=Boxplots_candidates]{Boxplots_candidates()}},
 \code{\link[=Heatmap_with_groups]{Heatmap_with_groups()}}, \code{\link[=calculate_onoff]{calculate_onoff()}}
 }

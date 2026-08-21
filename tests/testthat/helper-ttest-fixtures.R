@@ -18,8 +18,7 @@ ttest_res <- ttest(SE = D_hcc$SE, assay = "intensity_norm",
                    minObs = 3, paired = TRUE)
 
 fc_col <- paste0("FC_", levels(group_hcc)[[1]], "_divided_by_", levels(group_hcc)[[2]])
-
-sig_cats   <- calculate_significance_categories_ttest(
+sig_cats   <- .calcSignCat_ttest(
   p = ttest_res$p, pAdj = ttest_res$p.fdr, fc = ttest_res[[fc_col]]
 )
 candidates <- which(as.character(sig_cats) == "significant after FDR correction")

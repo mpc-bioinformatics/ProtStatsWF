@@ -6,15 +6,15 @@
 #' @details
 #' This function performs a t-test to compare two experimental groups in a
 #' quantitative proteomics dataset. The input \code{D} should be the list
-#' returned by [prepareDataSE()], which handles data import, log-transformation,
+#' returned by [prepareData()], which handles data import, log-transformation,
 #' and normalisation. Because the assay data is already log-transformed by
-#' [prepareDataSE()], \code{logBeforeTest} defaults to \code{FALSE}.
+#' [prepareData()], \code{logBeforeTest} defaults to \code{FALSE}.
 #' The function generates a volcano plot, histograms of p-values and fold
 #' changes as well as boxplots and a heatmap of the significant biomarker
 #' candidates.
 #'
 #' @param D **list** \cr
-#' Result from [prepareDataSE()] containing the prepared data.
+#' Result from [prepareData()] containing the prepared data.
 #' @param groupColumn **character(1)** \cr
 #' Name of the column that contains the groups that are compared with a t-test.
 #' Exactly two groups must be present.
@@ -38,7 +38,7 @@
 #' \code{FALSE} (assuming unequal variances).
 #' @param logBeforeTest **logical(1)** \cr
 #' If \code{TRUE}, data will be log-transformed before the test. Defaults to
-#' \code{FALSE} because usually data prepared with [prepareDataSE()] is already
+#' \code{FALSE} because usually data prepared with [prepareData()] is already
 #' log-transformed.
 #' @param delogForFC **logical(1)** \cr
 #' If \code{TRUE}, fold changes are computed on the original (de-log) scale.
@@ -87,7 +87,7 @@
 #' @seealso [workflow_ANOVA()] for more than two groups.\cr
 #'          Functions used in this workflow:
 #'          [prepareData()], [ttest()], [VolcanoPlot_ttest()], [pvalue_foldchange_histogram()],
-#'          [calculate_significance_categories_ttest()], [Boxplots_candidates()],
+#'          [.calcSignCat_ttest()], [Boxplots_candidates()],
 #'          [Heatmap_with_groups()], [calculate_onoff()]
 #'
 #' @examples
@@ -167,11 +167,11 @@ workflow_ttest <- function(D,
   openxlsx::write.xlsx(test_results,
                        file = file.path(outputPath, paste0("results_ttest", suffix, ".xlsx")),
                        overwrite = TRUE, keepNA = TRUE)
-  if (verbose) message(ifelse(paired, "Paired", "Unpaired"), " t-test complete. Results saved.")
+  if (verbose) message(ifelse(paired, "Paired", "Unpaired"),
+                       " t-test complete. Results saved.")
 
   if (pValueZerosToMin) {
     p_value_zero <- which(test_results$p == 0)
-
     if (length(p_value_zero) > 0) {
       next_smallest_value <- sort(unique(test_results$p))[2]
       test_results$p[test_results$p == 0] <- next_smallest_value
@@ -213,10 +213,10 @@ workflow_ttest <- function(D,
 
   #### Get significant candidates ####
 
-  significance <- calculate_significance_categories_ttest(p = test_results[["p"]],
-                                                          pAdj = test_results[["p.fdr"]],
-                                                          fc = test_results[[fc_col_name]],
-                                                          thresFC = thresFC, thresP = thresP)
+  significance <- .calcSignCat_ttest(p = test_results$p,
+                                     pAdj = test_results$p.fdr,
+                                     fc = test_results[[fc_col_name]],
+                                     thresFC = thresFC, thresP = thresP)
 
   candidates <- as.character(significance)
 
@@ -233,9 +233,10 @@ workflow_ttest <- function(D,
   #### Create Boxplots of Biomarker Candidates ####
 
   if (length(candidates) > 0) {
-    Boxplots_candidates(D = DATA[candidates, ],
-                        proteinNames = ID[candidates, proteinNameColumn],
-                        group = group,
+    BoxplotsCandidates(SE = SE[candidates, ],
+                        assay = assayName,
+                        groupColumn = groupColumn,
+                        proteinNameColumn = proteinNameColumn,
                         groupColours = groupColours,
                         suffix = suffix,
                         outputPath = outputPath,

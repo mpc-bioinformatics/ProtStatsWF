@@ -39,7 +39,7 @@ workflow_QC(
 }
 \arguments{
 \item{D}{\strong{list} \cr
-Result from \code{\link[=prepareDataSE]{prepareDataSE()}} containing the prepared data.}
+Result from \code{\link[=prepareData]{prepareData()}} containing the prepared data.}
 
 \item{groupColumn}{\strong{character(1)} \cr
 Name of the column that contains the group information for colouring the
@@ -151,6 +151,6 @@ a PCA plot.
 }
 \seealso{
 Functions used in this workflow:
-\code{\link[=prepareDataSE]{prepareDataSE()}}, \code{\link[=ValidValuePlot]{ValidValuePlot()}}, \code{\link[=Boxplots]{Boxplots()}}, \code{\link[=MAPlots]{MAPlots()}},
+\code{\link[=prepareData]{prepareData()}}, \code{\link[=ValidValuePlot]{ValidValuePlot()}}, \code{\link[=Boxplots]{Boxplots()}}, \code{\link[=MAPlots]{MAPlots()}},
 \code{\link[=PCA_Plot]{PCA_Plot()}}.
 }

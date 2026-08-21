@@ -1,7 +1,7 @@
 #' Barplots showing the number of valid values for each sample.
 #'
 #' @param D_long          **data.frame** \cr
-#'  The data set in long format, output object from [prepareDataSE].
+#'  The data set in long format, output object from [prepareData].
 #'  Must at least contain the columns ".sample" (sample IDs) and
 #'  "intensity_norm" (protein intensities).
 #'  May contain additional columns that can be used for assigning samples to

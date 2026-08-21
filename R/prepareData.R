@@ -219,8 +219,6 @@ prepareData <- function(dataPath,
 #' @importFrom tidyr pivot_longer
 #'
 #' @returns A data frame in long format.
-#'
-#' @examples
 .pivot_longer_SE <- function(SE, cols) {
 
   # Extract assay

@@ -1,38 +1,52 @@
 #' Calculation of significance categories for a volcano plot for the t-test.
 #'
-#' This function groups all proteins into the following three catrgories based
+#' This function groups all proteins into the following three categories based
 #' on the p-values (with and without FDR correction) and fold changes:
-#' 1) not signifcant (p > thresP or fc < thresFC)
+#' 1) not significant (p > thresP or fc < thresFC)
 #' 2) significant (p < thresP and fc > thresFC, but pAdj > thresP)
 #' 3) significant after FDR-correction (pAdj < thresP and fc > thresFC)
 #'
-#' @param p          \strong{numeric vector} \cr
-#'                   The p-values before FDR-correction.
-#' @param pAdj       \strong{numeric vector} \cr
-#'                   The p-values after FDR-correction.
-#' @param fc         \strong{numeric vector} \cr
-#'                   The values of the fold changes.
-#' @param thresFC    \strong{numeric} \cr
-#'                   The threshold for the fold changes.
-#' @param thresP     \strong{numeric} \cr
-#'                   The threshold for the p-values.
+#' If a p-value is NA, the corresponding significance category will also be NA.
 #'
-#' @return A factor with the three significance categories.
-#' @export
+#' @param p **numeric**\cr
+#' Vector of p-values before FDR-correction.
+#' @param pAdj **numeric** \cr
+#' Vector of p-values after FDR-correction.
+#' @param fc **numeric** \cr
+#' Vector of fold changes.
+#' @param thresFC **numeric(1)** \cr
+#' Threshold for the fold changes.
+#' @param thresP **numeric(1)** \cr
+#' Threshold for the p-values.
 #'
-#' @examples
+#' @return A factor vector with the three significance categories.
 #'
+#' @importFrom checkmate assertNumeric
+#' @importFrom dplyr case_when
+.calcSignCat_ttest <- function(p, pAdj, fc, thresFC = 2, thresP = 0.05) {
 
-calculate_significance_categories_ttest <- function(p, pAdj, fc, thresFC = 2, thresP = 0.05) {
+  checkmate::assertNumeric(p, lower = 0, upper = 1)
+  checkmate::assertNumeric(pAdj, lower = 0, upper = 1, len = length(p))
+  checkmate::assertNumeric(fc, len = length(p))
+  checkmate::assertNumeric(thresFC, len = 1)
+  checkmate::assertNumeric(thresP, len = 1, lower = 0, upper = 1)
+
+  ind_sign_FDR <- (pAdj <= thresP & p <= thresP &
+                (fc >= thresFC | fc <= 1/thresFC) & !is.na(p))
+  ind_sign <- (pAdj > thresP & p <= thresP &
+                 (fc >= thresFC | fc <= 1/thresFC) & !is.na(p))
+  ind_nosign <- (p > thresP | (fc < thresFC & fc > 1/thresFC)) & !is.na(p)
 
   significance <- dplyr::case_when(
-    pAdj <= thresP & p <= thresP & (fc >= thresFC | fc <= 1/thresFC) & !is.na(p) ~ "significant after FDR correction",
-    pAdj > thresP & p <= thresP & (fc >= thresFC | fc <= 1/thresFC) & !is.na(p) ~ "significant",
-    (p > thresP | (fc < thresFC & fc > 1/thresFC)) & !is.na(p) ~ "not significant",
+    ind_sign_FDR ~ "significant after FDR correction",
+    ind_sign ~ "significant",
+    ind_nosign ~ "not significant",
     is.na(p) ~ NA_character_
   )
 
-  significance <- factor(significance, levels = c("not significant", "significant", "significant after FDR correction"))
+  significance <- factor(significance,
+   levels = c("not significant", "significant",
+              "significant after FDR correction"))
 
   return(significance)
 }
@@ -40,6 +54,14 @@ calculate_significance_categories_ttest <- function(p, pAdj, fc, thresFC = 2, th
 
 
 #' Calculate significance categories for ANOVA.
+#'
+#'
+#' This function groups all proteins into the following three categories based
+#' on the p-values (with and without FDR correction, ANOVA and posthoc) and
+#' fold changes:
+#' 1) not significant (p.anova > thresP or p_posthoc > thresPfc < thresFC)
+#' 2) significant (p < thresP and fc > thresFC, but pAdj > thresP)
+#' 3) significant after FDR-correction (pAdj < thresP and fc > thresFC)
 #'
 #' @param p_posthoc     \strong{numeric vector} \cr
 #'                      The posthoc p-values .

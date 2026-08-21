@@ -2,7 +2,7 @@
 
 export(ANOVA)
 export(Boxplots)
-export(Boxplots_candidates)
+export(BoxplotsCandidates)
 export(Heatmap_with_groups)
 export(Lineplots)
 export(MAPlots)
@@ -13,7 +13,6 @@ export(VolcanoPlot_ANOVA)
 export(VolcanoPlot_ttest)
 export(add_labels)
 export(calculate_significance_categories_ANOVA)
-export(calculate_significance_categories_ttest)
 export(clustering)
 export(exportSE)
 export(getClusterInfos)
@@ -35,6 +34,8 @@ importFrom(affy,ma.plot)
 importFrom(checkmate,
   assert,
   assertCharacter,
+  assertChoice,
+  assertCount,
   assertDataFrame,
   assertDirectoryExists,
   assertFactor,
@@ -51,6 +52,7 @@ importFrom(checkmate,
   checkFileExists
 )
 importFrom(dplyr,
+  case_when,
   group_by,
   left_join,
   select,
@@ -61,10 +63,12 @@ importFrom(ggplot2,
   element_text,
   geom_bar,
   geom_boxplot,
+  geom_jitter,
   geom_point,
   geom_violin,
   ggplot,
   ggsave,
+  ggtitle,
   guide_legend,
   guides,
   labs,
@@ -84,19 +88,26 @@ importFrom(ggplot2,
 importFrom(ggrepel,geom_text_repel)
 importFrom(grDevices,
   dev.off,
-  pdf
+  pdf,
+  png
 )
 importFrom(limma,normalizeBetweenArrays)
 importFrom(magrittr,"%>%")
 importFrom(matrixStats,rowVars)
 importFrom(methods,is)
 importFrom(openxlsx,read.xlsx)
+importFrom(pbapply,
+  pbapply,
+  setpb,
+  startpb
+)
 importFrom(scales,
   alpha,
   hue_pal
 )
 importFrom(stats,
   na.omit,
+  p.adjust,
   prcomp,
   predict,
   t.test

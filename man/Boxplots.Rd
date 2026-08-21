@@ -16,7 +16,7 @@ Boxplots(
 }
 \arguments{
 \item{D_long}{\strong{data.frame} \cr
-The data set in long format, output object from \link{prepareDataSE}.
+The data set in long format, output object from \link{prepareData}.
 Must at least contain the columns ".sample" (sample IDs) and
 "intensity_norm" (protein intensities).
 May contain additional columns that can be used for assigning samples to

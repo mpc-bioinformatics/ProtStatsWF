@@ -10,7 +10,7 @@
 #' a PCA plot.
 #'
 #' @param D **list** \cr
-#' Result from [prepareDataSE()] containing the prepared data.
+#' Result from [prepareData()] containing the prepared data.
 #' @param groupColumn **character(1)** \cr
 #' Name of the column that contains the group information for colouring the
 #' plots. Default is NULL (no group information for colouring).
@@ -91,7 +91,7 @@
 #' @importFrom utils write.csv
 #'
 #' @seealso Functions used in this workflow:
-#'          [prepareDataSE()], [ValidValuePlot()], [Boxplots()], [MAPlots()],
+#'          [prepareData()], [ValidValuePlot()], [Boxplots()], [MAPlots()],
 #'          [PCA_Plot()].
 #'
 #' @examples
