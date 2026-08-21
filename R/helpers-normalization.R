@@ -1,8 +1,8 @@
 #' Automated normalization of proteomics data.
 #'
 #' @param DATA **data.frame** \cr
-#' Data set containing protein or peptide intensities of the samples and no
-#' additional columns.
+#' Data set containing log-transformed protein or peptide intensities of the
+#' samples and no additional columns.
 #' @param method **character(1)** \cr
 #' The method of normalization. Options are "nonorm" (no normalization),
 #' "median", "loess" (default), "quantile" or "lts" normalization.
@@ -24,7 +24,7 @@
 #' @importFrom vsn vsn2
 .normalization <- function(DATA,
                            method = "loess",
-                           is_log_transformed = TRUE,  ##TODO: only used for lts, unclear if I can always get that info right.
+                           is_log_transformed = TRUE,
                            log_base = 2,
                            lts.quantile = 0.8,
                            verbose = TRUE) {
@@ -53,20 +53,20 @@
     DATA_norm <- do.call(fun, args)
     DATA_norm <- as.data.frame(DATA_norm)
 
-    if (verbose) message("Data successfully ", method ," normalized.")
+    if (verbose) message("Data ", method ," normalized.")
   }
 
   if (method == "lts") {
 
     ### reverse log-transformation, if data is log-transformed
-    if(is_log_transformed){
+    if (is_log_transformed){
       DATA <- log_base^DATA
     }
 
     DATA_norm <- vsn::vsn2(as.matrix(DATA), lts.quantile = lts.quantile)
     DATA_norm <- DATA_norm@hx
     DATA_norm <- as.data.frame(DATA_norm)
-    if (verbose) message("Data successfully lts normalized with lts.quantile = ",
+    if (verbose) message("Data lts normalized with lts.quantile = ",
                          lts.quantile, ".")
   }
 

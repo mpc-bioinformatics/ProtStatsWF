@@ -75,8 +75,8 @@
 #' @param assayName **character(1)** \cr
 #' Name of the assay in \code{D$SE} to use as input data.
 #' Default is \code{"intensity_norm"}, which corresponds to the output of
-#' [prepareDataSE()]. Only change if you do not directly use the output from
-#' [prepareDataSE()].
+#' [prepareData()]. Only change if you do not directly use the output from
+#' [prepareData()].
 #' @param verbose **logical(1)** \cr
 #' Whether to print messages and progress bars during the workflow. Default is TRUE.
 #'
@@ -86,7 +86,7 @@
 #'
 #' @seealso [workflow_ANOVA()] for more than two groups.\cr
 #'          Functions used in this workflow:
-#'          [prepareDataSE()], [ttest()], [VolcanoPlot_ttest()], [pvalue_foldchange_histogram()],
+#'          [prepareData()], [ttest()], [VolcanoPlot_ttest()], [pvalue_foldchange_histogram()],
 #'          [calculate_significance_categories_ttest()], [Boxplots_candidates()],
 #'          [Heatmap_with_groups()], [calculate_onoff()]
 #'
@@ -156,8 +156,10 @@ workflow_ttest <- function(D,
 
   #### Calculate ttest ####
 
-  test_results <- ttest(D = DATA, id = ID,
-                        group = group, sample = sample,
+  test_results <- ttest(SE = D$SE,
+                        assay = assayName,
+                        groupColumn = groupColumn,
+                        sampleColumn = sampleColumn,
                         paired = paired, varEqual = varEqual,
                         logBeforeTest = logBeforeTest, delogForFC = delogForFC, logBase = 2,
                         minObs = 3, minObsRatio = NULL)

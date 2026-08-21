@@ -84,7 +84,7 @@ PCA_Plot <- function(SE,
                      scale = TRUE,
                      PCx = 1,
                      PCy = 2,
-                     groupColours = NULL,  # TODO: what to do for continous grouping variables?
+                     groupColours = NULL,
                      groupShapes = NULL,
                      NAValueColour = "grey",
                      NAValueShape = 0,
@@ -102,7 +102,6 @@ PCA_Plot <- function(SE,
   checkmate::assertSubset(groupForColour,
                           colnames(SummarizedExperiment::colData(SE)))
   checkmate::assertSubset(colourType, c("discrete", "continuous"))
-  #                        colnames(SummarizedExperiment::colData(SE))
   checkmate::assertSubset(groupForShape,
                           colnames(SummarizedExperiment::colData(SE)))
   checkmate::assertFlag(scale)
@@ -111,7 +110,8 @@ PCA_Plot <- function(SE,
   nr_groups <- length(unique(SummarizedExperiment::colData(SE)[, groupForColour]))
   checkmate::assertCharacter(groupColours, len = nr_groups, null.ok = TRUE)
   nr_shape_groups <- if (!is.null(groupForShape)) length(unique(SummarizedExperiment::colData(SE)[, groupForShape])) else NULL
-  checkmate::assertIntegerish(groupShapes, len = nr_shape_groups, lower = 0, upper = 255, null.ok = TRUE)
+  checkmate::assertIntegerish(groupShapes, len = nr_shape_groups, lower = 0,
+                              upper = 255, null.ok = TRUE)
   checkmate::assertCharacter(NAValueColour, len = 1, null.ok = TRUE)
   checkmate::assertIntegerish(NAValueShape, len = 1, lower = 0, upper = 255)
   checkmate::assertNumeric(alpha, lower = 0, upper = 1)
@@ -167,8 +167,6 @@ PCA_Plot <- function(SE,
   if (!is.null(groupForColour)) {
     if (colourType == "discrete") {
       pl <- pl + ggplot2::scale_colour_manual(values = groupColours, na.value = NAValueColour)
-    #} else if (is.numeric(D_PCA[[groupForColour]])) {
-    #  pl <- pl + ggplot2::scale_colour_continuous(na.value = NAValueColour)
     } else {
       pl <- pl + ggplot2::scale_colour_continuous(na.value = NAValueColour)
     }

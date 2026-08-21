@@ -1,4 +1,4 @@
-test_that("Test QC workfloe", {
+test_that("Test QC workflow", {
 
   # Create a temporary directory so no permanent files are put on a package users directory
   temp_dir <- tempfile(pattern = "test_dir")
@@ -10,7 +10,7 @@ test_that("Test QC workfloe", {
               group2Column = NULL,
               groupColours = NULL,
 
-              outPath = temp_dir,
+              outputPath = temp_dir,
               outType = "xlsx",
               suffix = "",
               NAOut = "NA",

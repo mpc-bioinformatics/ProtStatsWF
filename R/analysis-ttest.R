@@ -98,9 +98,6 @@
     res[12]   <- 1  ### reason: not enough observations in at least one group
     return(res)
   }
-
-  ## TODO: abfangen, dass eine Gruppe variance = NULL hat
-
   ttest <- try({stats::t.test(x = tmp_na.omit$intensity[tmp_na.omit$group == groupnames[2]],
                               y = tmp_na.omit$intensity[tmp_na.omit$group == groupnames[1]],
                               paired = FALSE, var.equal = varEqual)}, silent = TRUE)
@@ -136,9 +133,9 @@
 
 
 
-###################################################################################################
-###################################################################################################
-###################################################################################################
+################################################################################
+################################################################################
+################################################################################
 
 
 #' Paired t-test for a single row of a data set.
@@ -161,11 +158,8 @@
 #' @importFrom checkmate assertNumeric assertFactor assertFlag assertNumber
 #' @importFrom checkmate assertIntegerish assertInt
 #' @importFrom stats t.test
-
-### TODO: minPairRel einführen, also wie viel % der pairs da sein müssen
-
-.ttest_single_row_paired <- function(x, group, sample, logBeforeTest = TRUE, delogForFC = TRUE,
-                             minPairs = 3,
+.ttest_single_row_paired <- function(x, group, sample, logBeforeTest = TRUE,
+                              delogForFC = TRUE, minPairs = 3,
                              logBase = 2, row = NULL, verbose = TRUE) {
 
   checkmate::assertNumeric(x)
@@ -234,8 +228,6 @@
   ### calculate fold changes
   if (delogForFC) xFC <- logBase^tmp$intensity else xFC <- tmp$intensity
 
-  ### TODO: maybe calculate fold change differently to account for paired design?
-
   res[5] <- mean(xFC[tmp$group == groupnames[2]][ind_complete_pairs], na.rm = TRUE) /
     mean(xFC[tmp$group == groupnames[1]][ind_complete_pairs], na.rm = TRUE)
   res[6] <- 1/res[5]
@@ -288,20 +280,33 @@
 #' values.
 #' @export
 #'
-#' @seealso [.ttest_single_row()], [.ttest_single_row_paired()]
+#' @seealso For more details see [.ttest_single_row()] for the unpaired and
+#'  [.ttest_single_row_paired()] for the paired t-test.
 #'
-#' @examples
-
-ttest <- function(SE, assay, groupColumn, sampleColumn = NULL, paired = FALSE, varEqual = FALSE,
-                  logBeforeTest = TRUE, delogForFC = TRUE, logBase = 2,
-                  minObs = 3, minObsRatio = NULL, verbose = TRUE) {
+#' @importFrom pbapply pbapply
+#' @importFrom stats p.adjust
+#' @importFrom SummarizedExperiment assays colData rowData
+#'
+#'@examples
+#'file_proteins <- system.file("extdata", "proteins_HCC.csv", package = "ProtStatsWF")
+#'file_clinical  <- system.file("extdata", "clinical_data.csv", package = "ProtStatsWF")
+#'
+#'D_hcc <- prepareData(dataPath = file_proteins, intensityColumns = 6:43,
+#'                     proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
+#'                     sampleNameColumn = "Sample", verbose = FALSE)
+#'
+#'ttest(SE = D_hcc$SE, assay = "intensity_norm",
+#'                   groupColumn = "Group", sampleColumn = "PatientID",,
+#'                   logBeforeTest = FALSE, delogForFC = TRUE, logBase = 2,
+#'                   minObs = 3, paired = TRUE)
+ttest <- function(SE, assay, groupColumn, sampleColumn = NULL, paired = FALSE,
+                  varEqual = FALSE, logBeforeTest = TRUE, delogForFC = TRUE,
+                  logBase = 2, minObs = 3, minObsRatio = NULL, verbose = TRUE) {
 
   D <- SummarizedExperiment::assays(SE)[[assay]]
   id <- SummarizedExperiment::rowData(SE)
-  group <- colData(D_hcc$SE)[,groupColumn]
-  if (!is.null(sampleColumn)) sample <- colData(D_hcc$SE)[,sampleColumn]
-
-  ### TODO: supress progress bar if verbose = FALSE!
+  group <- SummarizedExperiment::colData(D_hcc$SE)[,groupColumn]
+  if (!is.null(sampleColumn)) sample <- SummarizedExperiment::colData(D_hcc$SE)[,sampleColumn]
 
   if (!paired) {
     RES <- pbapply::pbapply(D, 1, .ttest_single_row, group = group,

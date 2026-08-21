@@ -15,8 +15,8 @@
 }
 \arguments{
 \item{DATA}{\strong{data.frame} \cr
-Data set containing protein or peptide intensities of the samples and no
-additional columns.}
+Data set containing log-transformed protein or peptide intensities of the
+samples and no additional columns.}
 
 \item{method}{\strong{character(1)} \cr
 The method of normalization. Options are "nonorm" (no normalization),
