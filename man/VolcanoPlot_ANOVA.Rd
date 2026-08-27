@@ -6,80 +6,82 @@
 \usage{
 VolcanoPlot_ANOVA(
   RES,
-  columnname_p_ANOVA = "p.anova",
-  columnname_p_ANOVA_adj = "p.anova.fdr",
-  columns_FC,
-  columns_p_posthoc,
-  log_base_fc = 2,
-  log_base_p = 10,
-  thres_p = 0.05,
-  thres_fc = 2,
+  columnNamePAnova = "p.anova",
+  columnNamePAnovaAdj = "p.anova.fdr",
+  columnsFC,
+  columnsPPosthoc,
+  logBaseFC = 2,
+  logBaseP = 10,
+  thresP = 0.05,
+  thresFC = 2,
   colour1 = "grey",
   colour2 = "black",
   colour3 = "orange",
-  symmetric_x = FALSE,
-  legend_position = "bottom",
-  base_size = NULL,
+  symmetricX = FALSE,
+  legendPosition = "bottom",
+  baseSize = NULL,
   xlim = NULL,
   ylim = NULL,
-  add_labels = FALSE
+  addLabels = FALSE
 )
 }
 \arguments{
 \item{RES}{\strong{data.frame} \cr
 The results from an ANOVA.}
 
-\item{columnname_p_ANOVA}{\strong{character} \cr
+\item{columnNamePAnova}{\strong{character(1)} \cr
 The column name for the p-values.}
 
-\item{columnname_p_ANOVA_adj}{\strong{character} \cr
+\item{columnNamePAnovaAdj}{\strong{character(1)} \cr
 The column name for the adjusted p-values.}
 
-\item{columns_FC}{\strong{integer vector} \cr
+\item{columnsFC}{\strong{integer} \cr
 The column indices of the fold changes.}
 
-\item{columns_p_posthoc}{\strong{integer vector} \cr
+\item{columnsPPosthoc}{\strong{integer} \cr
 The column indices for the posthoc p-values.}
 
-\item{log_base_fc}{\strong{numeric} \cr
-The base for the fold changes log-transformation.}
+\item{logBaseFC}{\strong{numeric(1)} \cr
+The base for the log-transformation of fold changes. Default is 2.}
 
-\item{log_base_p}{\strong{numeric} \cr
-The base for the p-values log-transformation.}
+\item{logBaseP}{\strong{numeric(1)} \cr
+The base for the log-transformation of p values. Default is 10}
 
-\item{thres_p}{\strong{numeric} \cr
-The threshold for p-value.}
+\item{thresP}{\strong{numeric(1)} \cr
+Threshold for the p-values, used to draw a horizontal line. Default is 0.05.}
 
-\item{thres_fc}{\strong{numeric} \cr
-The threshold for fold change.}
+\item{thresFC}{\strong{numeric()} \cr
+Threshold for the fold changes, used to draw two vertical lines at thresFC and
+1/thresFC. Default is 2.}
 
-\item{colour1}{\strong{character} \cr
-The color for not significant proteins.}
+\item{colour1}{\strong{character(1)} \cr
+The color for not significant proteins. Default is "grey".}
 
-\item{colour2}{\strong{character} \cr
-The color for significant proteins.}
+\item{colour2}{\strong{character(1)} \cr
+The color for significant proteins. Defaults is "black".}
 
-\item{colour3}{\strong{character} \cr
-The color for significant proteins after FDR correction.}
+\item{colour3}{\strong{character(1)} \cr
+The color for significant proteins after FDR correction. Default is "orange".}
 
-\item{symmetric_x}{\strong{logical} \cr
-If \code{TRUE}, x-axis limits will be made symmetric (not used if xlim is defined).}
+\item{symmetricX}{\strong{logical(1)} \cr
+If \code{TRUE}, x-axis limits will be made symmetric (not used if xlim is
+defined). Default is FALSE.}
 
-\item{legend_position}{\strong{character} \cr
-The positioning of the legend.
-Options are "none", "left", "right", "bottom", "top" and "inside".}
+\item{legendPosition}{\strong{character(1)} \cr
+The positioning of the legend. Options are "none", "left", "right", "bottom",
+"top" and "inside".}
 
-\item{base_size}{\strong{numeric} \cr
-The base size for theme.}
+\item{baseSize}{\strong{numeric(1)} \cr
+The base size for the theme. Default is NULL.}
 
-\item{xlim}{\strong{numeric} \cr
-The limits for x-axis.}
+\item{xlim}{\strong{numeric(2)} \cr
+The limits for x-axis. Default is NULL, i.e. will be determined automatically.}
 
-\item{ylim}{\strong{numeric} \cr
-The limits for y-axis.}
+\item{ylim}{\strong{numeric(2)} \cr
+The limits for y-axis. Default is NULL, i.e. will be determined automatically.}
 
-\item{add_labels}{\strong{logical} \cr
-If \code{TRUE}, labels will be added.}
+\item{addLabels}{\strong{logical(1)} \cr
+If \code{TRUE}, labels will be added. Default is FALSE.}
 }
 \value{
 A list of ggplots of the volcano plot from an ANOVA result.

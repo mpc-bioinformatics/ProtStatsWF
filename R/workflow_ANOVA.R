@@ -143,11 +143,11 @@ workflow_ANOVA <- function(data_path,
   }
 
   volcano_plots <- VolcanoPlot_ANOVA(RES = ANOVA_results,
-                                     columnname_p_ANOVA = "p.anova",
-                                     columnname_p_ANOVA_adj = "p.anova.fdr",
-                                     columns_FC = fc_columns,
-                                     columns_p_posthoc = p_posthoc_columns,
-                                     base_size = volcano_base_size)
+                                     columnNamePAnova = "p.anova",
+                                     columnNamePAnovaAdj = "p.anova.fdr",
+                                     columnsFC = fc_columns,
+                                     columnsPPosthoc = p_posthoc_columns,
+                                     baseSize = volcano_base_size)
 
   mess <- paste0(mess, length(volcano_plots), " volcano plots calculated. \n")
 

@@ -41,6 +41,9 @@
 #' The size of the data points. Default is 3.
 #' @param linewidth **numeric(1)** \cr
 #' The width of the threshold lines. Default is 2.
+#' @param showThresLine **logical(1)** \cr
+#' If \code{TRUE}, threshold lines are drawn at \code{thresP} and at
+#' \code{thresFC} (and its inverse). Default is TRUE.
 #'
 #' @return A ggplot object containing the volcano plot.
 #' @export
@@ -67,7 +70,8 @@ VolcanoPlot <- function(p,
                         ylim = NULL,
                         alpha = 0.5,
                         pointSize = 3,
-                        linewidth = 2) {
+                        linewidth = 2,
+                        showThresLine = TRUE) {
 
 
   ### transform p-values and fold changes and thresholds
@@ -87,7 +91,9 @@ VolcanoPlot <- function(p,
   RES <- na.omit(RES) # remove NA values before plotting
 
 
-  plot <- ggplot2::ggplot(data = RES, ggplot2::aes(x = transformed_FC, y = transformed_p, colour = significance)) +
+  plot <- ggplot2::ggplot(data = RES, ggplot2::aes(x = transformed_FC,
+                                                   y = transformed_p,
+                                                   colour = significance)) +
     ggplot2::geom_point(alpha = alpha, show.legend = TRUE, size = point_size) +
     ggplot2::scale_colour_manual(values = c("not significant" = colour1,
                                             "significant" = colour2,
@@ -100,16 +106,16 @@ VolcanoPlot <- function(p,
     ggplot2::guides(colour = ggplot2::guide_legend(override.aes = list(size = point_size*1.5)))
 
 
-  if (!is.null(base_size)) {
-    plot <- plot + ggplot2::theme_bw(base_size = base_size)
+  if (!is.null(baseSize)) {
+    plot <- plot + ggplot2::theme_bw(base_size = baseSize)
   } else {
     plot <- plot + ggplot2::theme_bw()
   }
 
-  plot <- plot + ggplot2::theme(legend.position = legend_position)
+  plot <- plot + ggplot2::theme(legend.position = legendPosition)
 
   ### if xlim is not set, use max/min FC and make it symmetric
-  if (symmetric_x) {
+  if (symmetricX) {
     xlim_tmp <- max(abs(RES$transformed_FC), na.rm = TRUE)
     xlim <- c(-xlim_tmp, xlim_tmp)
   }
@@ -121,9 +127,11 @@ VolcanoPlot <- function(p,
   }
 
   ## draw threshold lines
-  plot <- plot + ggplot2::geom_hline(yintercept = log_thres_p, linetype = "dotted", linewidth = linewidth) +
-    ggplot2::geom_vline(xintercept =  log_thres_fc, linetype = "dotted", linewidth = linewidth) +
-    ggplot2::geom_vline(xintercept = -log_thres_fc, linetype = "dotted", linewidth = linewidth)
+  if (showThresLine) {
+    plot <- plot + ggplot2::geom_hline(yintercept = log_thres_p, linetype = "dotted", linewidth = linewidth) +
+      ggplot2::geom_vline(xintercept =  log_thres_fc, linetype = "dotted", linewidth = linewidth) +
+      ggplot2::geom_vline(xintercept = -log_thres_fc, linetype = "dotted", linewidth = linewidth)
+  }
 
   return(plot)
 
@@ -139,54 +147,49 @@ VolcanoPlot <- function(p,
 
 #' Volcano plot for a t-test result.
 #'
-#' @param RES               \strong{data.frame} \cr
-#'                          The results from a t-test.
-#' @param columnNameP      \strong{character} \cr
-#'                          The column name for p-value.
-#' @param columnNamePadj   \strong{character} \cr
-#'                          The columns name for adjusted p-value.
-#' @param columnNameFC     \strong{character} \cr
-#'                          The column name for fold change.
-#'
-#' @param thresFC          \strong{numeric} \cr
-#'                          The threshold for fold change.
-#' @param thresP           \strong{numeric} \cr
-#'                          The threshold for p-value.
-#' @param logBaseFC        \strong{numeric} \cr
-#'                          The base for the fold changes log-transformation.
-#' @param logBaseP         \strong{numeric} \cr
-#'                          The base for the p-values log-transformation.
-#' @param isFCLog          \strong{logical} \cr
-#'                          If \code{TRUE}, fold change is already log-transformed.
-#' @param isPLog           \strong{logical} \cr
-#'                          If \code{TRUE}, p-value is already log-transformed.
-#'
-#' @param showThresLine    \strong{logical} \cr
-#'                          If \code{TRUE}, threshold lines will be shown.
-#' @param groupName1       \strong{character} \cr
-#'                          The name of first group.
-#' @param groupName2       \strong{character} \cr
-#'                          The name of second group.
-#'
-#' @param plotHeight       \strong{numeric} \cr
-#'                          The height of plot.
-#' @param plotWidth        \strong{numeric} \cr
-#'                          The width of plot.
-#' @param plotDPI          \strong{integer} \cr
-#'                          The resolution of plot.
-#' @param plotDevice       \strong{character} \cr
-#'                          The plot device that is used for the resulting plot.
-#'                          Options are "pdf" and "png".
-#'
-#' @param outputPath       \strong{character} \cr
-#'                          The path for output file.
-#' @param suffix            \strong{character} \cr
-#'                          The suffix for output file.
-#' @param addAnnotation    \strong{logical} \cr
-#'                          If \code{TRUE}, annotation will be added.
-#'
-#' @param ...               Additional arguments for the plot.
-#'
+#' @param RES **data.frame** \cr
+#' The results from a t-test.
+#' @param columnNameP **character(1)** \cr
+#' The column name for p-value.
+#' @param columnNamePadj **character(1)** \cr
+#' The column name for adjusted p-value.
+#' @param columnNameFC **character(1)** \cr
+#' The column name for fold change.
+#' @param thresFC **numeric(1)** \cr
+#' The threshold for fold change. Default is 2.
+#' @param thresP **numeric(1)** \cr
+#' The threshold for p-value. Default is 0.05.
+#' @param logBaseFC **numeric(1)** \cr
+#' The base for the fold changes log-transformation. Default is 2.
+#' @param logBaseP **numeric(1)** \cr
+#' The base for the p-values log-transformation. Default is 10.
+#' @param isFCLog **logical(1)** \cr
+#' If \code{TRUE}, fold change is already log-transformed. Default is FALSE.
+#' @param isPLog **logical(1)** \cr
+#' If \code{TRUE}, p-value is already log-transformed. Default is FALSE.
+#' @param groupName1 **character(1)** \cr
+#' The name of the first group. Default is "group1".
+#' @param groupName2 **character(1)** \cr
+#' The name of the second group. Default is "group2".
+#' @param plotHeight **numeric(1)** \cr
+#' The height of the plot. Default is 15.
+#' @param plotWidth **numeric(1)** \cr
+#' The width of the plot. Default is 15.
+#' @param plotDPI **integer(1)** \cr
+#' The resolution of the plot. Default is 300.
+#' @param plotDevice **character(1)** \cr
+#' The plot device that is used for the resulting plot. Options are "pdf" and
+#' "png". Default is "pdf".
+#' @param outputPath **character(1)** \cr
+#' The path for the output file. Default is NULL.
+#' @param suffix **character(1)** \cr
+#' The suffix for the output file. Default is NULL.
+#' @param addAnnotation **logical(1)** \cr
+#' If \code{TRUE}, annotation will be added. Default is TRUE.
+#' @param ... Additional arguments passed on to [VolcanoPlot()], e.g.
+#' \code{colour1}, \code{colour2}, \code{colour3}, \code{symmetricX},
+#' \code{legendPosition}, \code{baseSize}, \code{alpha}, \code{pointSize},
+#' \code{linewidth} or \code{showThresLine}.
 #'
 #' @return A ggplot object of the volcano plot from a ttest result.
 #' @export
@@ -208,7 +211,6 @@ VolcanoPlot_ttest <- function(RES,
                         isFCLog = FALSE,
                         isPLog = FALSE,
 
-                        showThresLine = TRUE,   ##??
                         groupName1 = "group1",
                         groupName2 = "group2",
 
@@ -255,29 +257,6 @@ VolcanoPlot_ttest <- function(RES,
                       thresP = thresP,
                       ...)
 
-
-  # # here count the number of significant after FDR correction (>0 and <=0)
-  # newX <- RES %>% filter(group %in% "significant after FDR correction")
-  # lessthan0 <- 0
-  # greaterthan0 <- 0
-  #
-  # newX <- t(newX$transformed_FC)
-  #
-  # for( x in newX){
-  #   ifelse(x > 0, greaterthan0<-greaterthan0+1, lessthan0<-lessthan0+1)
-  # }
-  #
-  # if (add_annotation) {
-  #   plot <- plot +
-  #     annotate("text", x= xlim[1]+ (xlim[2]/10), y=ylim[2], label= paste0(groupname1, ": " , lessthan0))+#, " \U2191")) +
-  #     annotate("text", x = xlim[2]-(xlim[2]/10),  y=ylim[2], label = paste0(groupname2 ,": " , greaterthan0))#+#, " \U2191"))
-  # }
-
-
-  #openxlsx::write.xlsx(x = RES, file=paste0(output_path,"transformedData", suffix, ".xlsx"), overwrite = TRUE,keepNA = TRUE)
-  #ggplot2::ggsave(paste0(output_path,"Volcano_Plot", suffix, ".",plot_device),
-  #       plot = plot, device = plot_device,
-  #       height = plot_height, width = plot_width, dpi = plot_dpi, units = "cm")
   return(plot = plot) # its not necessary to return the data also, they are already present in the plot object
 }
 
@@ -291,43 +270,28 @@ VolcanoPlot_ttest <- function(RES,
 
 #' Volcano Plots for an ANOVA result.
 #'
-#' @param RES                    \strong{data.frame} \cr
-#'                               The results from an ANOVA.
-#' @param columnname_p_ANOVA     \strong{character} \cr
-#'                               The column name for the p-values.
-#' @param columnname_p_ANOVA_adj \strong{character} \cr
-#'                               The column name for the adjusted p-values.
-#' @param columns_FC             \strong{integer vector} \cr
-#'                               The column indices of the fold changes.
-#' @param columns_p_posthoc      \strong{integer vector} \cr
-#'                               The column indices for the posthoc p-values.
-#' @param log_base_fc            \strong{numeric} \cr
-#'                               The base for the fold changes log-transformation.
-#' @param log_base_p             \strong{numeric} \cr
-#'                               The base for the p-values log-transformation.
-#' @param thres_p                \strong{numeric} \cr
-#'                               The threshold for p-value.
-#' @param thres_fc               \strong{numeric} \cr
-#'                               The threshold for fold change.
-#' @param colour1                \strong{character} \cr
-#'                               The color for not significant proteins.
-#' @param colour2                \strong{character} \cr
-#'                               The color for significant proteins.
-#' @param colour3                \strong{character} \cr
-#'                               The color for significant proteins after FDR correction.
-#' @param symmetric_x            \strong{logical} \cr
-#'                               If \code{TRUE}, x-axis limits will be made symmetric (not used if xlim is defined).
-#' @param legend_position        \strong{character} \cr
-#'                               The positioning of the legend.
-#'                               Options are "none", "left", "right", "bottom", "top" and "inside".
-#' @param base_size              \strong{numeric} \cr
-#'                               The base size for theme.
-#' @param xlim                   \strong{numeric} \cr
-#'                               The limits for x-axis.
-#' @param ylim                   \strong{numeric} \cr
-#'                               The limits for y-axis.
-#' @param add_labels             \strong{logical} \cr
-#'                               If \code{TRUE}, labels will be added.
+#' @param RES **data.frame** \cr
+#' The results from an ANOVA.
+#' @param columnNamePAnova **character(1)** \cr
+#' The column name for the p-values.
+#' @param columnNamePAnovaAdj **character(1)** \cr
+#' The column name for the adjusted p-values.
+#' @param columnsFC **integer** \cr
+#' The column indices of the fold changes.
+#' @param columnsPPosthoc **integer** \cr
+#' The column indices for the posthoc p-values.
+#' @param symmetricX **logical(1)** \cr
+#' If \code{TRUE}, x-axis limits will be made symmetric (not used if xlim is
+#' defined). Default is FALSE.
+#' @param baseSize **numeric(1)** \cr
+#' The base size for the theme. Default is NULL.
+#' @param addLabels **logical(1)** \cr
+#' If \code{TRUE}, labels will be added. Default is FALSE.
+#' @param ... Additional arguments passed on to [VolcanoPlot()], e.g.
+#' \code{logBaseFC}, \code{logBaseP}, \code{thresP}, \code{thresFC},
+#' \code{colour1}, \code{colour2}, \code{colour3}, \code{legendPosition},
+#' \code{xlim}, \code{ylim}, \code{alpha}, \code{pointSize}, \code{linewidth}
+#' or \code{showThresLine}.
 #'
 #' @return A list of ggplots of the volcano plot from an ANOVA result.
 #' @export
@@ -335,39 +299,30 @@ VolcanoPlot_ttest <- function(RES,
 #' @seealso [VolcanoPlot()], [VolcanoPlot_ttest()], [add_labels()]
 #' @examples
 VolcanoPlot_ANOVA <- function(RES,
-                              columnname_p_ANOVA = "p.anova",
-                              columnname_p_ANOVA_adj = "p.anova.fdr",
-                              columns_FC, # spaltennnummer
-                              columns_p_posthoc, # spaltennnummer
-                              log_base_fc = 2,
-                              log_base_p = 10,
-                              thres_p = 0.05,
-                              thres_fc = 2,
-                              colour1 = "grey",
-                              colour2 = "black",
-                              colour3 = "orange",
-                              symmetric_x = FALSE,
-                              legend_position = "bottom",
-                              base_size = NULL,
-                              xlim = NULL,
-                              ylim = NULL,
-                              add_labels = FALSE) {
+                              columnNamePAnova = "p.anova",
+                              columnNamePAnovaAdj = "p.anova.fdr",
+                              columnsFC, # spaltennnummer
+                              columnsPPosthoc, # spaltennnummer
+                              symmetricX = FALSE,
+                              baseSize = NULL,
+                              addLabels = FALSE,
+                              ...) {
 
-  nr_comparisons <- length(columns_p_posthoc)
-  if (length(columns_FC) != nr_comparisons) stop("columns_FC and columns_p_posthoc must have the same length!")
+  nr_comparisons <- length(columnsPPosthoc)
+  if (length(columnsFC) != nr_comparisons) stop("columnsFC and columnsPPosthoc must have the same length!")
 
 
-  #nr_groups <- length(columns_p_posthoc)
-  #if (length(columns_FC) != nr_groups) stop("columns_FC and columns_p_posthoc must have the same length!")
+  #nr_groups <- length(columnsPPosthoc)
+  #if (length(columnsFC) != nr_groups) stop("columnsFC and columnsPPosthoc must have the same length!")
 
-  p_anova <- RES[, columnname_p_ANOVA]
-  p_anova_adj <- RES[, columnname_p_ANOVA_adj]
-  p_anova <- RES[, columnname_p_ANOVA]
-  p_anova_adj <- RES[, columnname_p_ANOVA_adj]
+  p_anova <- RES[, columnNamePAnova]
+  p_anova_adj <- RES[, columnNamePAnovaAdj]
+  p_anova <- RES[, columnNamePAnova]
+  p_anova_adj <- RES[, columnNamePAnovaAdj]
   #nr_comparisons <- choose(n = nr_groups, k = 2) # pairwise comparisons between two groups
 
   # names of the comparisons
-  comp_names <- colnames(RES)[columns_FC]
+  comp_names <- colnames(RES)[columnsFC]
   comp_names <- substring(comp_names, 4) # remove "FC_" at beginning
   comp_names <- stringr::str_replace_all(comp_names, "devided_by_", "vs")
 
@@ -377,10 +332,10 @@ VolcanoPlot_ANOVA <- function(RES,
   Volcano_plots <- list()
   for (i in 1:nr_comparisons) {
 
-    p_posthoc <- RES[, columns_p_posthoc[i]]
-    fc <- RES[, columns_FC[i]]
-    p_posthoc <- RES[, columns_p_posthoc[i]]
-    fc <- RES[, columns_FC[i]]
+    p_posthoc <- RES[, columnsPPosthoc[i]]
+    fc <- RES[, columnsFC[i]]
+    p_posthoc <- RES[, columnsPPosthoc[i]]
+    fc <- RES[, columnsFC[i]]
 
     X <- cbind(p_anova, p_anova_adj, p_posthoc, fc)
 
@@ -392,22 +347,13 @@ VolcanoPlot_ANOVA <- function(RES,
     plot <- VolcanoPlot(p = p_posthoc,
                         FC = fc,
                         significance_category = significance,
-                        log_base_fc = log_base_fc,
-                        log_base_p = log_base_p,
-                        thres_p = thres_p,
-                        thres_fc = thres_fc,
-                        colour1 = colour1,
-                        colour2 = colour2,
-                        colour3 = colour3,
-                        symmetric_x = symmetric_x,
-                        legend_position = legend_position,
-                        base_size = base_size,
-                        xlim = xlim,
-                        ylim = ylim)
+                        symmetricX = symmetricX,
+                        baseSize = baseSize,
+                        ...)
 
     plot <- plot + ggplot2::ggtitle(comp_names[i])
 
-    if (add_labels) {
+    if (addLabels) {
       plot <- add_labels(plot,
                  label_type = "FDR",
                  ind = NULL,
@@ -439,17 +385,20 @@ VolcanoPlot_ANOVA <- function(RES,
 
 #' Add labels to a volcano plot.
 #'
-#' @param RES_Volcano           \strong{result from [VolcanoPlot()]} \cr
-#'                              A list containing the data.frame with the transformed data and the ggplot object.
-#' @param label_type            \strong{character} \cr
-#'                              The label type.
-#'                              Options are "FDR" (significant after correction) or "noFDR" (significant without correction) or "index" -> define indices to label
-#' @param protein_name_column   \strong{character} \cr
-#'                              The column name of the protein names in the RES data.frame.
-#' @param ind                   \strong{integer} \cr
-#'                              The index if the label_type is "index".
-#' @param protein_names         \strong{character vector} \cr
-#'                              The names of the proteins.
+#' @param RES_Volcano **ggplot** \cr
+#' The result from [VolcanoPlot()], [VolcanoPlot_ttest()] or
+#' [VolcanoPlot_ANOVA()], i.e. a ggplot object containing the transformed data
+#' and significance categories.
+#' @param label_type **character(1)** \cr
+#' The label type. Options are "FDR" (significant after correction), "noFDR"
+#' (significant without correction) or "index" (define indices to label via
+#' \code{ind}).
+#' @param ind **integer** \cr
+#' The indices to label if \code{label_type} is "index".
+#' @param protein_name_column **character(1)** \cr
+#' The column name of the protein names in the \code{RES_Volcano} data.
+#' @param protein_names **character** \cr
+#' The names of the proteins.
 #' @return A ggplot object with labels.
 #' @export
 #'

@@ -32,65 +32,70 @@ VolcanoPlot_ttest(
 \item{RES}{\strong{data.frame} \cr
 The results from a t-test.}
 
-\item{columnNameP}{\strong{character} \cr
+\item{columnNameP}{\strong{character(1)} \cr
 The column name for p-value.}
 
-\item{columnNamePadj}{\strong{character} \cr
-The columns name for adjusted p-value.}
+\item{columnNamePadj}{\strong{character(1)} \cr
+The column name for adjusted p-value.}
 
-\item{columnNameFC}{\strong{character} \cr
+\item{columnNameFC}{\strong{character(1)} \cr
 The column name for fold change.}
 
-\item{thresFC}{\strong{numeric} \cr
-The threshold for fold change.}
+\item{thresFC}{\strong{numeric()} \cr
+Threshold for the fold changes, used to draw two vertical lines at thresFC and
+1/thresFC. Default is 2.}
 
-\item{thresP}{\strong{numeric} \cr
-The threshold for p-value.}
+\item{thresP}{\strong{numeric(1)} \cr
+Threshold for the p-values, used to draw a horizontal line. Default is 0.05.}
 
-\item{logBaseFC}{\strong{numeric} \cr
-The base for the fold changes log-transformation.}
+\item{logBaseFC}{\strong{numeric(1)} \cr
+The base for the log-transformation of fold changes. Default is 2.}
 
-\item{logBaseP}{\strong{numeric} \cr
-The base for the p-values log-transformation.}
+\item{logBaseP}{\strong{numeric(1)} \cr
+The base for the log-transformation of p values. Default is 10}
 
-\item{isFCLog}{\strong{logical} \cr
-If \code{TRUE}, fold change is already log-transformed.}
+\item{isFCLog}{\strong{logical(1)} \cr
+If \code{TRUE}, fold change is already log-transformed. Default is FALSE.}
 
-\item{isPLog}{\strong{logical} \cr
-If \code{TRUE}, p-value is already log-transformed.}
+\item{isPLog}{\strong{logical(1)} \cr
+If \code{TRUE}, p-value is already log-transformed. Default is FALSE.}
 
-\item{showThresLine}{\strong{logical} \cr
-If \code{TRUE}, threshold lines will be shown.}
+\item{showThresLine}{\strong{logical(1)} \cr
+If \code{TRUE}, threshold lines are drawn at \code{thresP} and at
+\code{thresFC} (and its inverse). Default is TRUE.}
 
-\item{groupName1}{\strong{character} \cr
-The name of first group.}
+\item{groupName1}{\strong{character(1)} \cr
+The name of the first group. Default is "group1".}
 
-\item{groupName2}{\strong{character} \cr
-The name of second group.}
+\item{groupName2}{\strong{character(1)} \cr
+The name of the second group. Default is "group2".}
 
-\item{plotHeight}{\strong{numeric} \cr
-The height of plot.}
+\item{plotHeight}{\strong{numeric(1)} \cr
+The height of the plot. Default is 15.}
 
-\item{plotWidth}{\strong{numeric} \cr
-The width of plot.}
+\item{plotWidth}{\strong{numeric(1)} \cr
+The width of the plot. Default is 15.}
 
-\item{plotDPI}{\strong{integer} \cr
-The resolution of plot.}
+\item{plotDPI}{\strong{integer(1)} \cr
+The resolution of the plot. Default is 300.}
 
-\item{plotDevice}{\strong{character} \cr
-The plot device that is used for the resulting plot.
-Options are "pdf" and "png".}
+\item{plotDevice}{\strong{character(1)} \cr
+The plot device that is used for the resulting plot. Options are "pdf" and
+"png". Default is "pdf".}
 
-\item{outputPath}{\strong{character} \cr
-The path for output file.}
+\item{outputPath}{\strong{character(1)} \cr
+The path for the output file. Default is NULL.}
 
-\item{suffix}{\strong{character} \cr
-The suffix for output file.}
+\item{suffix}{\strong{character(1)} \cr
+The suffix for the output file. Default is NULL.}
 
-\item{addAnnotation}{\strong{logical} \cr
-If \code{TRUE}, annotation will be added.}
+\item{addAnnotation}{\strong{logical(1)} \cr
+If \code{TRUE}, annotation will be added. Default is TRUE.}
 
-\item{...}{Additional arguments for the plot.}
+\item{...}{Additional arguments passed on to \code{\link[=VolcanoPlot]{VolcanoPlot()}}, e.g.
+\code{colour1}, \code{colour2}, \code{colour3}, \code{symmetricX},
+\code{legendPosition}, \code{baseSize}, \code{alpha}, \code{pointSize} or
+\code{linewidth}.}
 }
 \value{
 A ggplot object of the volcano plot from a ttest result.
