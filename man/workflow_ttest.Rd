@@ -147,6 +147,6 @@ result <- workflow_ttest(D = D, groupColumn = "Group",
 \code{\link[=workflow_ANOVA]{workflow_ANOVA()}} for more than two groups.\cr
 Functions used in this workflow:
 \code{\link[=prepareData]{prepareData()}}, \code{\link[=ttest]{ttest()}}, \code{\link[=VolcanoPlot_ttest]{VolcanoPlot_ttest()}}, \code{\link[=pvalue_foldchange_histogram]{pvalue_foldchange_histogram()}},
-\code{\link[=calculate_significance_categories_ttest]{calculate_significance_categories_ttest()}}, \code{\link[=Boxplots_candidates]{Boxplots_candidates()}},
+\code{\link[=.calcSignCat_ttest]{.calcSignCat_ttest()}}, \code{\link[=Boxplots_candidates]{Boxplots_candidates()}},
 \code{\link[=Heatmap_with_groups]{Heatmap_with_groups()}}, \code{\link[=calculate_onoff]{calculate_onoff()}}
 }

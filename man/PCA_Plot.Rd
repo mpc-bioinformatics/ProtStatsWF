@@ -106,7 +106,7 @@ Size of the labels. Default is 4.}
 Size of data points in the PCA. Default is 4.}
 
 \item{baseSize}{\strong{numeric(1)} \cr
-Base size for the plots. Default is 15.}
+Base size for the plot. Default is 15.}
 
 \item{xlim}{\strong{numeric(2)} \cr
 Limits for the x-axis. Default is NULL (automatic).}

@@ -17,7 +17,7 @@ export(clustering)
 export(exportSE)
 export(getClusterInfos)
 export(prepareData)
-export(pvalue_foldchange_histogram)
+export(pvalueFCHistogram)
 export(ttest)
 export(workflow_ANOVA)
 export(workflow_QC)
@@ -63,6 +63,7 @@ importFrom(ggplot2,
   element_text,
   geom_bar,
   geom_boxplot,
+  geom_histogram,
   geom_jitter,
   geom_point,
   geom_violin,
