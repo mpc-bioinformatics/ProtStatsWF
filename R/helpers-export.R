@@ -15,12 +15,12 @@ exportSE <- function(SE, file) {
   
   wb <- openxlsx::createWorkbook()
   
-  cData <- SummarizedExperiment::colData(SE)
+  rData <- as.data.frame(SummarizedExperiment::rowData(SE))
   
   for (assay_name in SummarizedExperiment::assayNames(SE)) {
     openxlsx::addWorksheet(wb, assay_name)
     mat <- as.data.frame(SummarizedExperiment::assay(SE, assay_name))
-    mat <- cbind(cData, mat)
+    mat <- cbind(rData, mat)
     openxlsx::writeData(wb, sheet = assay_name, x = mat, rowNames = TRUE,
                         keepNA = TRUE)
   }

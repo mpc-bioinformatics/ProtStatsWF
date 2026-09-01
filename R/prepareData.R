@@ -78,7 +78,7 @@
 #'   package = "ProtStatsWF")
 #' file_clinical <- system.file("extdata", "clinical_data.csv",
 #'   package = "ProtStatsWF")
-#' prepareDataSE(dataPath = file_proteins, intensityColumns = 6:43,
+#' prepareData(dataPath = file_proteins, intensityColumns = 6:43,
 #'   proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
 #'   sampleNameColumn = "Sample", verbose = FALSE)
 prepareData <- function(dataPath,
