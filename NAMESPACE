@@ -25,12 +25,4 @@ export(workflow_ANOVA)
 export(workflow_QC)
 export(workflow_clustering)
 export(workflow_ttest)
-importFrom(SummarizedExperiment,assays)
-importFrom(checkmate,
-  assertFlag,
-  assertNumeric,
-  assertSubset,
-  assertTRUE
-)
 importFrom(magrittr,"%>%")
-importFrom(matrixStats,rowVars)
