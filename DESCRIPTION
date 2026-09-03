@@ -14,6 +14,8 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 Suggests: 
     BiocStyle,
+    car,
+    ComplexHeatmap (>= 2.24.1),
     knitr,
     RefManageR,
     rmarkdown,
@@ -25,10 +27,8 @@ biocViews: Software
 Imports: 
     affy,
     amap,
-    car,
     checkmate,
     circlize,
-    ComplexHeatmap (>= 2.24.1),
     dendextend,
     dplyr,
     ggplot2,

@@ -186,7 +186,7 @@ workflow_ttest <- function(D,
 
   volcano_plot <- VolcanoPlot_ttest(RES = test_results,
                                     columnNameP = "p", columnNamePadj = "p.fdr",
-                                    columnNameFC = fc_col_name, base_size = volcanoBaseSize,
+                                    columnNameFC = fc_col_name, baseSize = volcanoBaseSize,
                                     thresFC = thresFC, thresP = thresP)
 
   ggplot2::ggsave(file.path(outputPath, paste0("volcano_plot", suffix, ".", plotDevice)),
@@ -196,9 +196,9 @@ workflow_ttest <- function(D,
 
   #### Create Histograms for p-values and fold changes ####
 
-  histograms <- pvalue_foldchange_histogram(RES = test_results,
-                                            columnNameP = "p", columnNamePadj = "p.fdr",
-                                            columnNameFC = fc_col_name)
+  histograms <- pvalueFCHistogram(RES = test_results,
+                                            columnP = "p", columnPadj = "p.fdr",
+                                            columnFC = fc_col_name)
 
   ggplot2::ggsave(file.path(outputPath, paste0("histogram_p_value", suffix, ".", plotDevice)),
                   plot = histograms[["histogram_p_value"]],

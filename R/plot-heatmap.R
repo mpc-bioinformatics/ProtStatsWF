@@ -109,13 +109,18 @@ Heatmap_with_groups <- function(D,
                                 top_annotation = NULL,
                                 verbose = TRUE,
                                 ...) {
+  if (!requireNamespace("ComplexHeatmap", quietly = TRUE)) {
+    stop("Package \"ComplexHeatmap\" must be installed to plot a heatmap.",
+         call. = FALSE)
+  }
+
 
   checkmate::assertDataFrame(D, min.rows = 1, min.cols = 1)
   checkmate::assertDataFrame(id, nrows = nrow(D))
   checkmate::assertCharacter(proteinNameColumn, len = 1, null.ok = TRUE)
   checkmate::assertSubset(naMethod, c("na.omit", "impute", "keep"))
   checkmate::assertInt(minValidValues, lower = 0)
-  checkmate::assertDataFrame(groups, nrows = nrow(D), null.ok = TRUE)
+  checkmate::assertDataFrame(groups, nrows = ncol(D), null.ok = TRUE)
   checkmate::assertList(groupColours, null.ok = TRUE)
   checkmate::assertCharacter(columnSplit, len = 1, null.ok = TRUE)
   checkmate::assertFlag(clusterColumnSlices)
@@ -210,7 +215,7 @@ Heatmap_with_groups <- function(D,
   if (is.null(top_annotation)) {
     ### top annotation for groups
     if (!is.null(groups)) {
-      top_annotation = ComplexHeatmap::HeatmapAnnotation(Group = groups,
+      top_annotation = ComplexHeatmap::HeatmapAnnotation(df = groups,
                                                          col = groupColours,
                                                          annotation_name_gp = grid::gpar(fontsize = textSize), #name = groupName,
                                                          annotation_label = groupName,

@@ -375,6 +375,11 @@ ANOVA_Welch_single_row <- function(x,
                                    delog_for_FC = TRUE,
                                    min_perc_per_group = NULL) {
 
+  if (!requireNamespace("car", quietly = TRUE)) {
+    stop("Package \"car\" must be installed to use the Welch ANOVA.",
+      call. = FALSE)
+  }
+
   x <- as.numeric(unname(x))
 
   nr_groups <- length(levels(group))
