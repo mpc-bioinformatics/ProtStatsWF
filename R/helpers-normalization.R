@@ -45,7 +45,7 @@
 
     ### choose arguments for normalization function
     args <- switch(method,
-                   "loess" = list(object = DATA, method = "cyclicloess"),
+                   "loess" = list(object = DATA, method = "cyclicloess", adaptive.span = TRUE),
                    "quantile" = list(object = DATA, method = "quantile"),
                    "median" = list(object = DATA, method = "scale"))
 
