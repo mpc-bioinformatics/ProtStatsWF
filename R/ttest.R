@@ -91,7 +91,7 @@ ttest_single_row <- function(x, group, log_before_test = TRUE, delog_for_FC = TR
   # it is still possible, that the ttest fails (e.g. if variance in one group is 0)
   if ("try-error" %in% class(ttest)) {warning(paste0("ttest failed for row ", row));res[12] <- 3;return(res)}  ### reason: other, e.g. var = 0
 
-  res[1:2] <- ttest$estimate
+  res[1:2] <- c(ttest$estimate[2], ttest$estimate[1])
   res[3] <- ttest$statistic
   res[4] <- ttest$p.value
   res[5] <- NA # free space for corrected p-value
