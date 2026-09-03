@@ -7,7 +7,7 @@
 Heatmap_with_groups(
   D,
   id,
-  proteinNamesCol = NULL,
+  proteinNameColumn = NULL,
   naMethod = "na.omit",
   minValidValues = 2,
   groups = NULL,
@@ -35,63 +35,78 @@ Heatmap_with_groups(
 }
 \arguments{
 \item{D}{\strong{data.frame} \cr
-The data set containing only protein intensities, already filtered for interesting candidates.}
+The data set containing only protein intensities, already filtered for
+interesting candidates.}
 
 \item{id}{\strong{data.frame} \cr
-The corresponding ID columns for the parameter D e.g. containing further columns like protein or gene names}
+The corresponding ID columns for the parameter D e.g. containing further
+columns like protein or gene names.}
 
-\item{proteinNamesCol}{\strong{integer} \cr
-The column with protein or gene names, if the names should be plotted.}
+\item{proteinNameColumn}{\strong{character(1)} \cr
+The name of the column in \code{id} with protein or gene names, if the
+names should be plotted.}
 
-\item{naMethod}{\strong{character} \cr
-The method with which missing values are handeled.
-Options are "na.omit" (proteins with any missing values will be removed), "impute" (missing values will be imputed) and "keep" (missing values will be kept).
-Note that clustering may not work when too many missing values are present.}
+\item{naMethod}{\strong{character(1)} \cr
+The method with which missing values are handled.
+Options are "na.omit" (default, proteins with any missing values will be
+removed), "impute" (missing values will be imputed) and "keep" (missing
+values will be kept). Note that clustering may not work when too many missing
+values are present.}
 
-\item{minValidValues}{\strong{integer} \cr
-The minimum number of valid values \string{per row}.
+\item{minValidValues}{\strong{integer(1)} \cr
+The minimum number of valid values \strong{per row}.
 If a protein has less valid values, it will be filtered out.
-Note that rows with only 1 or 2 valid values may cause problems with clustering.}
+Note that rows with only 1 or 2 valid values may cause problems with
+clustering. Default is 2.}
 
-\item{groups}{\strong{character factor} \cr
-The group of the data with two or more grouping variables.}
+\item{groups}{\strong{data.frame} \cr
+Dataframe containing grouping variables, which are used for column annotations
+of the Heatmap. Default is NULL, meaning no column annotations are used.}
 
-\item{groupColours}{\strong{character} \cr
-? A named list of group colours (discrete vars) or colour functions (continuous vars)}
+\item{groupColours}{\strong{list} \cr
+A named list of group colours (discrete vars) or colour functions
+(continuous vars), used for the column annotation. Default is NULL, meaning
+that random colours will be chosen. See \link[ComplexHeatmap:HeatmapAnnotation]{ComplexHeatmap::HeatmapAnnotation}
+for details.}
 
-\item{columnSplit}{\strong{character} \cr
-? The name of the column in groups, if the columns should be split.}
+\item{columnSplit}{\strong{character} \cr  ## ????
+The name of the column in the groups dataframe by which the columns should
+be split. Default is NULL, then columns will not be splitted.}
 
-\item{clusterColumnSlices}{\strong{logical} \cr
-? If \code{TRUE}, column slices will be clustered.}
+\item{clusterColumnSlices}{\strong{logical (1)} \cr
+If \code{TRUE}, column slices will be clustered. Default is FALSE.}
 
-\item{clusterRows}{\strong{logical or dendrogram} \cr
-If \code{TRUE}, the rows will be clustered. Can also be a dendrogram object which is used to cluster the rows.}
+\item{clusterRows}{\strong{logical(1) or dendrogram} \cr
+If \code{TRUE} (default), the rows will be clustered. Can also be a dendrogram
+object which is used to cluster the rows.}
 
 \item{clusterColumns}{\strong{logical or dendrogram} \cr
-If \code{TRUE}, the columns will be clustered. Can also be a dendrogram object which is used to cluster the columns.}
+If \code{TRUE} (default), the columns will be clustered. Can also be a dendrogram
+object which is used to cluster the columns.}
 
 \item{distMethod}{\strong{character} \cr
-The distance metric for clustering. Options are "pearson", "spearman" and "euclidean".}
+The distance metric for clustering. Options are "pearson", "spearman" and
+"euclidean". Default is "pearson".}
 
 \item{clustMethod}{\strong{character} \cr
-The linkage method for clustering. Options are "complete", "single" and "average".}
+The linkage method for clustering. Options are "complete", "single" and
+"average". Default is "complete".}
 
 \item{symmetricLegend}{\strong{logical} \cr
-If \code{TRUE}, the colour code will be  symmetric.
+If \code{TRUE} (default), the colour code will be symmetric.
 Note that it only make sense for z-scored data.}
 
 \item{scaleData}{\strong{logical} \cr
-If \code{TRUE}, the data will be scaled ( = z-scored).}
+If \code{TRUE} (default), the data will be scaled ( = z-scored).}
 
-\item{legendName}{\strong{character} \cr
-The name for legend (colour bar).}
+\item{legendName}{\strong{character(1)} \cr
+The name for legend (colour bar). Default is "Legend".}
 
 \item{groupName}{\strong{character} \cr
-The name of the group variable, only used for the legend.}
+The name of the group variable, only used for the legend. Default is "Group".}
 
 \item{title}{\strong{character} \cr
-The title of the plot.}
+The main title of the plot. Default is "Heatmap".}
 
 \item{legendColours}{\strong{character} \cr
 A vector of colours for colour gradient.}

@@ -7,3 +7,5 @@ test_that("Heatmap_with_groups matches snapshot", {
 
   vdiffr::expect_doppelganger("Heatmap_with_groups_default", hm[["heatmap"]])
 })
+
+

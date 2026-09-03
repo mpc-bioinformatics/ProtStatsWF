@@ -10,19 +10,10 @@ VolcanoPlot_ANOVA(
   columnNamePAnovaAdj = "p.anova.fdr",
   columnsFC,
   columnsPPosthoc,
-  logBaseFC = 2,
-  logBaseP = 10,
-  thresP = 0.05,
-  thresFC = 2,
-  colour1 = "grey",
-  colour2 = "black",
-  colour3 = "orange",
   symmetricX = FALSE,
-  legendPosition = "bottom",
   baseSize = NULL,
-  xlim = NULL,
-  ylim = NULL,
-  addLabels = FALSE
+  addLabels = FALSE,
+  ...
 )
 }
 \arguments{
@@ -41,47 +32,21 @@ The column indices of the fold changes.}
 \item{columnsPPosthoc}{\strong{integer} \cr
 The column indices for the posthoc p-values.}
 
-\item{logBaseFC}{\strong{numeric(1)} \cr
-The base for the log-transformation of fold changes. Default is 2.}
-
-\item{logBaseP}{\strong{numeric(1)} \cr
-The base for the log-transformation of p values. Default is 10}
-
-\item{thresP}{\strong{numeric(1)} \cr
-Threshold for the p-values, used to draw a horizontal line. Default is 0.05.}
-
-\item{thresFC}{\strong{numeric()} \cr
-Threshold for the fold changes, used to draw two vertical lines at thresFC and
-1/thresFC. Default is 2.}
-
-\item{colour1}{\strong{character(1)} \cr
-The color for not significant proteins. Default is "grey".}
-
-\item{colour2}{\strong{character(1)} \cr
-The color for significant proteins. Defaults is "black".}
-
-\item{colour3}{\strong{character(1)} \cr
-The color for significant proteins after FDR correction. Default is "orange".}
-
 \item{symmetricX}{\strong{logical(1)} \cr
 If \code{TRUE}, x-axis limits will be made symmetric (not used if xlim is
 defined). Default is FALSE.}
 
-\item{legendPosition}{\strong{character(1)} \cr
-The positioning of the legend. Options are "none", "left", "right", "bottom",
-"top" and "inside".}
-
 \item{baseSize}{\strong{numeric(1)} \cr
 The base size for the theme. Default is NULL.}
 
-\item{xlim}{\strong{numeric(2)} \cr
-The limits for x-axis. Default is NULL, i.e. will be determined automatically.}
-
-\item{ylim}{\strong{numeric(2)} \cr
-The limits for y-axis. Default is NULL, i.e. will be determined automatically.}
-
 \item{addLabels}{\strong{logical(1)} \cr
 If \code{TRUE}, labels will be added. Default is FALSE.}
+
+\item{...}{Additional arguments passed on to \code{\link[=VolcanoPlot]{VolcanoPlot()}}, e.g.
+\code{logBaseFC}, \code{logBaseP}, \code{thresP}, \code{thresFC},
+\code{colour1}, \code{colour2}, \code{colour3}, \code{legendPosition},
+\code{xlim}, \code{ylim}, \code{alpha}, \code{pointSize}, \code{linewidth}
+or \code{showThresLine}.}
 }
 \value{
 A list of ggplots of the volcano plot from an ANOVA result.

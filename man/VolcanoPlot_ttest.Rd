@@ -15,15 +15,8 @@ VolcanoPlot_ttest(
   logBaseP = 10,
   isFCLog = FALSE,
   isPLog = FALSE,
-  showThresLine = TRUE,
   groupName1 = "group1",
   groupName2 = "group2",
-  plotHeight = 15,
-  plotWidth = 15,
-  plotDPI = 300,
-  plotDevice = "pdf",
-  outputPath = NULL,
-  suffix = NULL,
   addAnnotation = TRUE,
   ...
 )
@@ -41,18 +34,17 @@ The column name for adjusted p-value.}
 \item{columnNameFC}{\strong{character(1)} \cr
 The column name for fold change.}
 
-\item{thresFC}{\strong{numeric()} \cr
-Threshold for the fold changes, used to draw two vertical lines at thresFC and
-1/thresFC. Default is 2.}
+\item{thresFC}{\strong{numeric(1)} \cr
+The threshold for fold change. Default is 2.}
 
 \item{thresP}{\strong{numeric(1)} \cr
-Threshold for the p-values, used to draw a horizontal line. Default is 0.05.}
+The threshold for p-value. Default is 0.05.}
 
 \item{logBaseFC}{\strong{numeric(1)} \cr
-The base for the log-transformation of fold changes. Default is 2.}
+The base for the fold changes log-transformation. Default is 2.}
 
 \item{logBaseP}{\strong{numeric(1)} \cr
-The base for the log-transformation of p values. Default is 10}
+The base for the p-values log-transformation. Default is 10.}
 
 \item{isFCLog}{\strong{logical(1)} \cr
 If \code{TRUE}, fold change is already log-transformed. Default is FALSE.}
@@ -60,15 +52,19 @@ If \code{TRUE}, fold change is already log-transformed. Default is FALSE.}
 \item{isPLog}{\strong{logical(1)} \cr
 If \code{TRUE}, p-value is already log-transformed. Default is FALSE.}
 
-\item{showThresLine}{\strong{logical(1)} \cr
-If \code{TRUE}, threshold lines are drawn at \code{thresP} and at
-\code{thresFC} (and its inverse). Default is TRUE.}
-
 \item{groupName1}{\strong{character(1)} \cr
 The name of the first group. Default is "group1".}
 
 \item{groupName2}{\strong{character(1)} \cr
 The name of the second group. Default is "group2".}
+
+\item{addAnnotation}{\strong{logical(1)} \cr
+If \code{TRUE}, annotation will be added. Default is TRUE.}
+
+\item{...}{Additional arguments passed on to \code{\link[=VolcanoPlot]{VolcanoPlot()}}, e.g.
+\code{colour1}, \code{colour2}, \code{colour3}, \code{symmetricX},
+\code{legendPosition}, \code{baseSize}, \code{alpha}, \code{pointSize},
+\code{linewidth} or \code{showThresLine}.}
 
 \item{plotHeight}{\strong{numeric(1)} \cr
 The height of the plot. Default is 15.}
@@ -88,14 +84,6 @@ The path for the output file. Default is NULL.}
 
 \item{suffix}{\strong{character(1)} \cr
 The suffix for the output file. Default is NULL.}
-
-\item{addAnnotation}{\strong{logical(1)} \cr
-If \code{TRUE}, annotation will be added. Default is TRUE.}
-
-\item{...}{Additional arguments passed on to \code{\link[=VolcanoPlot]{VolcanoPlot()}}, e.g.
-\code{colour1}, \code{colour2}, \code{colour3}, \code{symmetricX},
-\code{legendPosition}, \code{baseSize}, \code{alpha}, \code{pointSize} or
-\code{linewidth}.}
 }
 \value{
 A ggplot object of the volcano plot from a ttest result.

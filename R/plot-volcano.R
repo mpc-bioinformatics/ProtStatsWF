@@ -50,6 +50,13 @@
 #'
 #' @seealso [VolcanoPlot_ttest()], [VolcanoPlot_ANOVA()]
 #'
+#' @importFrom checkmate assertCharacter assertFactor assertFlag assertNumber
+#' @importFrom checkmate assertNumeric assertSubset
+#' @importFrom ggplot2 aes geom_hline geom_point geom_vline ggplot guide_legend
+#' @importFrom ggplot2 guides scale_colour_manual theme theme_bw xlab xlim ylab
+#' @importFrom ggplot2 ylim
+#' @importFrom stats na.omit
+#'
 #' @examples
 #'
 
@@ -73,6 +80,27 @@ VolcanoPlot <- function(p,
                         linewidth = 2,
                         showThresLine = TRUE) {
 
+  checkmate::assertNumeric(p, lower = 0, upper = 1)
+  checkmate::assertNumeric(FC, len = length(p))
+  checkmate::assertFactor(significance_category, len = length(p),
+      levels = c("not significant", "significant", "significant after FDR correction"))
+  checkmate::assertNumber(logBaseFC, lower = 1)
+  checkmate::assertNumber(logBaseP, lower = 1)
+  checkmate::assertNumber(thresP, lower = 0, upper = 1)
+  checkmate::assertNumber(thresFC, lower = 0)
+  checkmate::assertCharacter(colour1, len = 1)
+  checkmate::assertCharacter(colour2, len = 1)
+  checkmate::assertCharacter(colour3, len = 1)
+  checkmate::assertFlag(symmetricX)
+  checkmate::assertSubset(legendPosition,
+                          c("none", "left", "right", "bottom", "top", "inside"))
+  checkmate::assertNumber(baseSize, lower = 0, null.ok = TRUE)
+  checkmate::assertNumeric(xlim, len = 2, sorted = TRUE, null.ok = TRUE)
+  checkmate::assertNumeric(ylim, len = 2, sorted = TRUE, null.ok = TRUE)
+  checkmate::assertNumber(alpha, lower = 0, upper = 1)
+  checkmate::assertNumber(pointSize, lower = 0)
+  checkmate::assertNumber(linewidth, lower = 0)
+  checkmate::assertFlag(showThresLine)
 
   ### transform p-values and fold changes and thresholds
   transformed_FC <- log(FC, base = logBaseFC) # default: log2(FC)
@@ -94,7 +122,7 @@ VolcanoPlot <- function(p,
   plot <- ggplot2::ggplot(data = RES, ggplot2::aes(x = transformed_FC,
                                                    y = transformed_p,
                                                    colour = significance)) +
-    ggplot2::geom_point(alpha = alpha, show.legend = TRUE, size = point_size) +
+    ggplot2::geom_point(alpha = alpha, show.legend = TRUE, size = pointSize) +
     ggplot2::scale_colour_manual(values = c("not significant" = colour1,
                                             "significant" = colour2,
                                             "significant after FDR correction" = colour3),
@@ -103,7 +131,7 @@ VolcanoPlot <- function(p,
 
     ggplot2::xlab(paste0("log",logBaseFC,"(FC)")) +
     ggplot2::ylab(paste0("-log",logBaseP,"(p)")) +
-    ggplot2::guides(colour = ggplot2::guide_legend(override.aes = list(size = point_size*1.5)))
+    ggplot2::guides(colour = ggplot2::guide_legend(override.aes = list(size = pointSize*1.5)))
 
 
   if (!is.null(baseSize)) {
@@ -196,6 +224,9 @@ VolcanoPlot <- function(p,
 #'
 #' @seealso [VolcanoPlot()], [VolcanoPlot_ANOVA()], [add_labels()]
 #'
+#' @importFrom checkmate assertCharacter assertDataFrame
+#' @importFrom checkmate assertFlag assertNumber assertSubset
+#'
 #' @examples
 #'
 
@@ -214,20 +245,25 @@ VolcanoPlot_ttest <- function(RES,
                         groupName1 = "group1",
                         groupName2 = "group2",
 
-                        plotHeight = 15,
-                        plotWidth = 15,
-                        plotDPI = 300,
-                        plotDevice = "pdf",
-
-                        outputPath = NULL,
-                        suffix = NULL,
                         addAnnotation = TRUE,
                         ...) {
 
-
-  # make check work
-  #if(getRversion() >= "2.15.1")  utils::globalVariables(c("transformed_FC", "transformed_p", "significance"), add = FALSE)
-
+  checkmate::assertDataFrame(RES, min.rows = 1)
+  checkmate::assertCharacter(columnNameP, len = 1)
+  checkmate::assertSubset(columnNameP, colnames(RES))
+  checkmate::assertCharacter(columnNamePadj, len = 1)
+  checkmate::assertSubset(columnNamePadj, colnames(RES))
+  checkmate::assertCharacter(columnNameFC, len = 1)
+  checkmate::assertSubset(columnNameFC, colnames(RES))
+  checkmate::assertNumber(thresFC, lower = 0)
+  checkmate::assertNumber(thresP, lower = 0, upper = 1)
+  checkmate::assertNumber(logBaseFC, lower = 1)
+  checkmate::assertNumber(logBaseP, lower = 1)
+  checkmate::assertFlag(isFCLog)
+  checkmate::assertFlag(isPLog)
+  checkmate::assertCharacter(groupName1, len = 1)
+  checkmate::assertCharacter(groupName2, len = 1)
+  checkmate::assertFlag(addAnnotation)
 
   p <- RES[,columnNameP]
   padj <- RES[,columnNamePadj]
@@ -241,14 +277,11 @@ VolcanoPlot_ttest <- function(RES,
     padj <- logBaseP^(-padj)
   }
 
-
-
-  RES$significance <- calculate_significance_categories_ttest(p = p,
-                                                              pAdj = padj,
-                                                              fc = FC,
-                                                              thresFC = thresFC,
-                                                              thresP = thresP)
-
+  RES$significance <- .calcSignCat_ttest(p = p,
+                                         pAdj = padj,
+                                         fc = FC,
+                                         thresFC = thresFC,
+                                         thresP = thresP)
 
   plot <- VolcanoPlot(p = p,
                       FC = FC,
@@ -324,7 +357,7 @@ VolcanoPlot_ANOVA <- function(RES,
   # names of the comparisons
   comp_names <- colnames(RES)[columnsFC]
   comp_names <- substring(comp_names, 4) # remove "FC_" at beginning
-  comp_names <- stringr::str_replace_all(comp_names, "devided_by_", "vs")
+  comp_names <- stringr::str_replace_all(comp_names, "divided_by_", "vs")
 
   #comp_names <- stringr::str_replace_all(comp_names, "FC_", "")
   #comp_names <- stringr::str_replace_all(comp_names, "_", " ")
