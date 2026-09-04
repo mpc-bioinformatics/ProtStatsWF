@@ -313,8 +313,8 @@ ttest <- function(SE, assay, groupColumn, sampleColumn = NULL, paired = FALSE,
 
   D <- as.data.frame(SummarizedExperiment::assays(SE)[[assay]])
   id <- as.data.frame(SummarizedExperiment::rowData(SE))
-  group <- SummarizedExperiment::colData(D_hcc$SE)[,groupColumn]
-  if (!is.null(sampleColumn)) sample <- SummarizedExperiment::colData(D_hcc$SE)[,sampleColumn]
+  group <- SummarizedExperiment::colData(SE)[,groupColumn]
+  if (!is.null(sampleColumn)) sample <- SummarizedExperiment::colData(SE)[,sampleColumn]
 
   if (!paired) {
     RES <- pbapply::pbapply(D, 1, .ttest_single_row, group = group,
