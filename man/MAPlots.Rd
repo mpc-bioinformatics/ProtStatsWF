@@ -67,13 +67,13 @@ file_proteins <- system.file("extdata", "proteins_HCC.csv",
   package = "ProtStatsWF")
 file_clinical <- system.file("extdata", "clinical_data.csv",
   package = "ProtStatsWF")
-D <- prepareDataSE(dataPath = file_proteins, intensityColumns = 6:43,
+D <- prepareData(dataPath = file_proteins, intensityColumns = 6:43,
   proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
   sampleNameColumn = "Sample", verbose = FALSE)
 
 Intensities <- SummarizedExperiment::assay(D$SE)
 
-MAPlots(Intensities)
+MAPlots(Intensities, outPath = tempdir(), verbose = FALSE)
 }
 \seealso{
 \code{\link[=MAPlotSingle]{MAPlotSingle()}} for internal function that generates a single plot.

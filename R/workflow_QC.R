@@ -95,6 +95,15 @@
 #'          [PCA_Plot()].
 #'
 #' @examples
+#' file_proteins <- system.file("extdata", "proteins_HCC.csv",
+#'   package = "ProtStatsWF")
+#' file_clinical <- system.file("extdata", "clinical_data.csv",
+#'   package = "ProtStatsWF")
+#' D_hcc <- prepareData(file_proteins, intensityColumns = 6:43,
+#'   proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
+#'   sampleNameColumn = "Sample", verbose = FALSE)
+#' \donttest{workflow_QC(D_hcc, groupColumn = "Group", outputPath = tempdir(),
+#'   MAMaxPlots = 0, verbose = FALSE)}
 workflow_QC <- function(D,
                         groupColumn = NULL,
                         group2Column = NULL,
@@ -129,6 +138,15 @@ workflow_QC <- function(D,
                         PCAPointSize = 4,
                         verbose = TRUE
 ){
+  if (MAMaxPlots > 0 && !requireNamespace("affy", quietly = TRUE)) {
+    stop("Package \"affy\" must be installed to plot MA plots.",
+      call. = FALSE)
+  }
+  if (PCALabel && !requireNamespace("ggrepel", quietly = TRUE)) {
+    stop("Package \"ggrepel\" must be installed to label the PCA points.",
+      call. = FALSE)
+  }
+
   checkmate::assertList(D)
   checkmate::assertSubset(c("SE", "D_long"), names(D))
   checkmate::assertDirectoryExists(outputPath, access = "w")

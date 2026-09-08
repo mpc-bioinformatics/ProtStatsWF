@@ -28,7 +28,6 @@
 #' @importFrom dplyr group_by select summarize
 #' @importFrom ggplot2 aes element_text geom_bar ggplot labs theme theme_bw xlab
 #' @importFrom ggplot2 ylab scale_fill_manual
-#' @importFrom magrittr %>%
 #'
 #' @examples
 #'
@@ -36,7 +35,7 @@
 #'   package = "ProtStatsWF")
 #' file_clinical <- system.file("extdata", "clinical_data.csv",
 #'   package = "ProtStatsWF")
-#' D <- prepareDataSE(dataPath = file_proteins, intensityColumns = 6:43,
+#' D <- prepareData(dataPath = file_proteins, intensityColumns = 6:43,
 #'   proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
 #'   sampleNameColumn = "Sample", verbose = FALSE)
 #'
@@ -57,8 +56,8 @@ ValidValuePlot <- function(D_long,
   sample_levels <- levels(D_long_sel$.sample)
   #### calculate valid value table ####
   .sample <- group <- intensity_norm <- nrvalid <- NULL  # initialize variables
-  valid_value_table <- D_long_sel %>%
-    dplyr::group_by(.sample, group) %>%
+  valid_value_table <- D_long_sel |>
+    dplyr::group_by(.sample, group) |>
     dplyr::summarize(nrvalid = sum(!is.na(intensity_norm)),
                      meanvalid = mean(!is.na(intensity_norm)), .groups = 'drop')
   valid_value_table$.sample <- factor(valid_value_table$.sample,

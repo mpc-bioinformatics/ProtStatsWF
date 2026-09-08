@@ -58,7 +58,14 @@
 #' @importFrom stats na.omit
 #'
 #' @examples
-#'
+#' p <- c(0.001, 0.02, 0.4)
+#' FC <- c(2.5, 0.4, 1.1)
+#' significance <- factor(
+#'   c("significant after FDR correction", "significant", "not significant"),
+#'   levels = c("not significant", "significant",
+#'     "significant after FDR correction")
+#' )
+#' VolcanoPlot(p, FC, significance)
 
 VolcanoPlot <- function(p,
                         FC,
@@ -228,7 +235,18 @@ VolcanoPlot <- function(p,
 #' @importFrom checkmate assertFlag assertNumber assertSubset
 #'
 #' @examples
-#'
+#' file_proteins <- system.file("extdata", "proteins_HCC.csv",
+#'   package = "ProtStatsWF")
+#' file_clinical <- system.file("extdata", "clinical_data.csv",
+#'   package = "ProtStatsWF")
+#' D_hcc <- prepareData(file_proteins, intensityColumns = 6:43,
+#'   proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
+#'   sampleNameColumn = "Sample", verbose = FALSE)
+#' ttest_res <- ttest(D_hcc$SE, assay = "intensity_norm", groupColumn = "Group",
+#'   sampleColumn = "PatientID", paired = TRUE, logBeforeTest = FALSE,
+#'   verbose = FALSE)
+#' VolcanoPlot_ttest(ttest_res, columnNamePadj = "p.fdr",
+#'   columnNameFC = grep("^FC_", names(ttest_res), value = TRUE)[1])
 
 VolcanoPlot_ttest <- function(RES,
                         columnNameP = "p",
@@ -331,6 +349,11 @@ VolcanoPlot_ttest <- function(RES,
 #'
 #' @seealso [VolcanoPlot()], [VolcanoPlot_ttest()], [add_labels()]
 #' @examples
+#' anova_res <- data.frame(
+#'   p.anova = c(0.01, 0.3), p.anova.fdr = c(0.02, 0.3),
+#'   p.posthoc_A_vs_B = c(0.01, 0.2), FC_A_divided_by_B = c(2.5, 1.1)
+#' )
+#' VolcanoPlot_ANOVA(anova_res, columnsFC = 4, columnsPPosthoc = 3)
 VolcanoPlot_ANOVA <- function(RES,
                               columnNamePAnova = "p.anova",
                               columnNamePAnovaAdj = "p.anova.fdr",
@@ -357,7 +380,7 @@ VolcanoPlot_ANOVA <- function(RES,
   # names of the comparisons
   comp_names <- colnames(RES)[columnsFC]
   comp_names <- substring(comp_names, 4) # remove "FC_" at beginning
-  comp_names <- stringr::str_replace_all(comp_names, "divided_by_", "vs")
+  comp_names <- gsub("divided_by_", "vs", comp_names, fixed = TRUE)
 
   #comp_names <- stringr::str_replace_all(comp_names, "FC_", "")
   #comp_names <- stringr::str_replace_all(comp_names, "_", " ")
@@ -438,13 +461,27 @@ VolcanoPlot_ANOVA <- function(RES,
 #' @seealso [VolcanoPlot()], [VolcanoPlot_ttest()], [VolcanoPlot_ANOVA()]
 #'
 #' @examples
-#'
+#' volcano_plot <- VolcanoPlot(
+#'   p = c(0.001, 0.3), FC = c(2.5, 1.1),
+#'   significance_category = factor(
+#'     c("significant after FDR correction", "not significant"),
+#'     levels = c("not significant", "significant",
+#'       "significant after FDR correction")
+#'   )
+#' )
+#' \donttest{add_labels(volcano_plot, label_type = "index", ind = 1,
+#'   protein_names = c("Protein A", "Protein B"))}
 
 add_labels <- function(RES_Volcano,
                        label_type = "FDR",
                        ind = NULL,
                        protein_name_column = "Gene.names",
                        protein_names = NULL) {
+
+  if (!requireNamespace("ggrepel", quietly = TRUE)) {
+    stop("Package \"ggrepel\" must be installed to label the points.",
+      call. = FALSE)
+  }
 
   if (label_type == "FDR") {
     ind_label <- which(RES_Volcano$data$significance == "significant after FDR correction")

@@ -81,37 +81,58 @@
 #' @importFrom checkmate checkClass checkFlag
 #'
 #' @examples
-#'
+#' file_proteins <- system.file("extdata", "proteins_HCC.csv",
+#'   package = "ProtStatsWF")
+#' file_clinical <- system.file("extdata", "clinical_data.csv",
+#'   package = "ProtStatsWF")
+#' D_hcc <- prepareData(file_proteins, intensityColumns = 6:43,
+#'   proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
+#'   sampleNameColumn = "Sample", verbose = FALSE)
+#' heatmap(
+#'   D = as.data.frame(SummarizedExperiment::assay(D_hcc$SE, "intensity_norm"))[1:20, ],
+#'   id = as.data.frame(SummarizedExperiment::rowData(D_hcc$SE))[1:20, ],
+#'   proteinNameColumn = "Protein", logData = FALSE, verbose = FALSE
+#' )
 
-Heatmap_with_groups <- function(D,
-                                id,
-                                proteinNameColumn = NULL,
-                                naMethod = "na.omit",
-                                minValidValues = 2,
-                                groups = NULL,
-                                groupColours = NULL,
-                                columnSplit = NULL,
-                                clusterColumnSlices = FALSE,
-                                clusterRows = TRUE,
-                                clusterColumns = TRUE,
-                                distMethod = "pearson",
-                                clustMethod = "complete",
-                                symmetricLegend = TRUE,
-                                scaleData = TRUE,
-                                legendName = "Legend",
-                                groupName = "Group",
-                                title = "Heatmap",
-                                legendColours = c("blue", "white", "red"),
-                                logData = TRUE,
-                                logBase = 2,
-                                colourScaleMax = NULL,
-                                textSize = 15,
-                                top_annotation = NULL,
-                                verbose = TRUE,
-                                ...) {
+heatmap <- function(D,
+                    id,
+                    proteinNameColumn = NULL,
+                    naMethod = "na.omit",
+                    minValidValues = 2,
+                    groups = NULL,
+                    groupColours = NULL,
+                    columnSplit = NULL,
+                    clusterColumnSlices = FALSE,
+                    clusterRows = TRUE,
+                    clusterColumns = TRUE,
+                    distMethod = "pearson",
+                    clustMethod = "complete",
+                    symmetricLegend = TRUE,
+                    scaleData = TRUE,
+                    legendName = "Legend",
+                    groupName = "Group",
+                    title = "Heatmap",
+                    legendColours = c("blue", "white", "red"),
+                    logData = TRUE,
+                    logBase = 2,
+                    colourScaleMax = NULL,
+                    textSize = 15,
+                    top_annotation = NULL,
+                    verbose = TRUE,
+                    ...) {
   if (!requireNamespace("ComplexHeatmap", quietly = TRUE)) {
     stop("Package \"ComplexHeatmap\" must be installed to plot a heatmap.",
          call. = FALSE)
+  }
+  if (symmetricLegend && !requireNamespace("circlize", quietly = TRUE)) {
+    stop("Package \"circlize\" must be installed to use a symmetric legend.",
+      call. = FALSE)
+  }
+  if (((is.logical(clusterRows) && clusterRows == TRUE) ||
+       (is.logical(clusterColumns) && clusterColumns == TRUE)) &&
+      !requireNamespace("amap", quietly = TRUE)) {
+    stop("Package \"amap\" must be installed to cluster rows or columns.",
+      call. = FALSE)
   }
 
 
@@ -182,11 +203,11 @@ Heatmap_with_groups <- function(D,
 
     ### if there are no rows remaining after na.omit, throw error message
     if (nrow(data.asmatrix) == 0) {
-      message("All rows contain at least one missing value. Heatmap cannot be created.")
+      if (verbose) message("All rows contain at least one missing value. Heatmap cannot be created.")
       return(NULL)
     }
     if (nrow(data.asmatrix) == 1) {
-      message("Only one row remaining after removing rows with missing values. Heatmap cannot be created.")
+      if (verbose) message("Only one row remaining after removing rows with missing values. Heatmap cannot be created.")
       return(NULL)
     }
 

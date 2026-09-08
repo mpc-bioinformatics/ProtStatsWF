@@ -18,7 +18,8 @@ BoxplotsCandidates(
   plotDPI = 200,
   outputPath = NULL,
   suffix = NULL,
-  plotNALevel = FALSE
+  plotNALevel = FALSE,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -70,6 +71,9 @@ with an underscore "_".}
 \item{plotNALevel}{\strong{logical(1)} \cr
 If \code{TRUE}, data points will be plotted if the group variable is NA.
 Default is FALSE, so data points with missing group variable will be omitted.}
+
+\item{verbose}{\strong{logical(1)} \cr
+Whether to print a progress bar. Default is TRUE.}
 }
 \value{
 Nothing, saves pdf or png files with boxplots to the output folder.
@@ -78,26 +82,21 @@ Nothing, saves pdf or png files with boxplots to the output folder.
 Boxplots for biomarker candidates including the data point (jitter).
 }
 \examples{
-file_proteins <- system.file("extdata", "proteins_HCC.csv", package = "ProtStatsWF")
-file_clinical  <- system.file("extdata", "clinical_data.csv", package = "ProtStatsWF")
+file_proteins <- system.file("extdata", "proteins_HCC.csv",
+  package = "ProtStatsWF")
+file_clinical <- system.file("extdata", "clinical_data.csv",
+  package = "ProtStatsWF")
 
 D_hcc <- prepareData(dataPath = file_proteins, intensityColumns = 6:43,
-                    proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
-                    sampleNameColumn = "Sample", verbose = FALSE)
+  proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
+  sampleNameColumn = "Sample", verbose = FALSE)
 
-ttest(SE = D_hcc$SE, assay = "intensity_norm",
-                  groupColumn = "Group", sampleColumn = "PatientID",,
-                  logBeforeTest = FALSE, delogForFC = TRUE, logBase = 2,
-                  minObs = 3, paired = TRUE)
-fc_col <- paste0("FC_", levels(group_hcc)[[1]], "_divided_by_", levels(group_hcc)[[2]])
-sig_cats   <- .calcSignCat_ttest(
- p = ttest_res$p, pAdj = ttest_res$p.fdr, fc = ttest_res[[fc_col]]
-)
-candidates <- which(as.character(sig_cats) == "significant after FDR correction")
-
-Boxplots_candidates(SE = SE[candidates, ],
-assay = assayName,
-groupColumn = groupColumn,
-proteinNameColumn = proteinNameColumn,
-outputPath = getwd())
+ttest_res <- ttest(D_hcc$SE, assay = "intensity_norm",
+  groupColumn = "Group", sampleColumn = "PatientID", paired = TRUE,
+  logBeforeTest = FALSE, verbose = FALSE)
+fc_col <- grep("^FC_", names(ttest_res), value = TRUE)[1]
+candidates <- which(ttest_res$p.fdr < 0.05 & !is.na(ttest_res$p.fdr))
+BoxplotsCandidates(D_hcc$SE[candidates, ], assay = "intensity_norm",
+  groupColumn = "Group", proteinNameColumn = "Protein", outputPath = tempdir(),
+  verbose = FALSE)
 }

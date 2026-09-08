@@ -45,3 +45,9 @@ fold changes:
 \item significant after FDR-correction (pAdj < thresP and fc > thresFC)
 }
 }
+\examples{
+calculate_significance_categories_ANOVA(
+  p_posthoc = c(0.01, 0.2), p_anova_adj = c(0.02, 0.2),
+  p_anova = c(0.01, 0.1), fc = c(2.5, 1.2)
+)
+}

@@ -13,41 +13,36 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 Suggests: 
+    affy,
+    amap,
     BiocStyle,
     car,
-    ComplexHeatmap (>= 2.24.1),
+    circlize,
+    dendextend,
+    ggrepel,
     knitr,
+    multcomp,
+    nlme,
     RefManageR,
     rmarkdown,
     sessioninfo,
     testthat,
-    vdiffr
+    vdiffr,
+    vsn
 Config/testthat/edition: 3
 biocViews: Software
 Imports: 
-    affy,
-    amap,
     checkmate,
-    circlize,
-    dendextend,
+    ComplexHeatmap (>= 2.24.1),
     dplyr,
     ggplot2,
-    ggrepel,
-    gtools,
     limma (>= 3.62.0),
-    magrittr,
-    matrixStats,
-    multcomp,
-    nlme,
+    methods,
     openxlsx,
     pbapply,
-    reshape2,
     scales,
-    stringr,
     SummarizedExperiment,
-    tidyr,
-    tidyselect,
-    vsn
+    tidyr
 URL: https://github.com/mpc-bioinformatics/ProtStatsWF
 BugReports: https://github.com/mpc-bioinformatics/ProtStatsWF/issues
 Config/roxygen2/version: 8.1.0

@@ -15,7 +15,7 @@
 #'                               If \code{TRUE}, the data will be log-transformed.
 #' @param delog_for_FC           \strong{logical} \cr
 #'                               If \code{TRUE}, the fold change will be calculated without the log-transformation.
-#' @param min_obs_per_group
+#' @param min_obs_per_group   Minimum number of observations per group.
 #' @param p_value_zeros_to_min   \strong{logical} \cr
 #'                               If \code{TRUE}, then \code{p_values == 0} will be set to the next smallest value of the p-values.
 #'
@@ -43,28 +43,20 @@
 #'
 #' @seealso [workflow_ttest()] in case of only two groups in the sample.\cr
 #'          Functions used in this workflow:
-#'          [prepareData()], [ttest()], [VolcanoPlot_ttest()], [pvalue_foldchange_histogram()],
-#'          [.calcSignCat_ttest()], [Boxplots_candidates()],
-#'          [Heatmap_with_groups()], [calculate_onoff()]
+#'          [prepareData()], [ttest()], [VolcanoPlot_ttest()], [pvalueFCHistogram()],
+#'          [.calcSignCat_ttest()], [BoxplotsCandidates()],
+#'          [heatmap()], [calculate_onoff()]
 #'
 #'
 #' @examples
 #'
 #'
-#' # 1. Set the character of your data path, leading to an .xlsx file.
-#' in_path <- "C:/Users/thisuser/Documents/dataFolder/data.xlsx"
-#'
-#' # 2. Set the integer vector of the columns, which contain the intensities.
-#' int_col <- 3:17
-#'
-#' # 3. Set the character of the output path, leading to a folder for the results.
-#' out_path <- "C:/Users/thisuser/Documents/resultsFolder/"
-#'
-#' # 4. Run the ANOVA with the parameters you set.
 #' \dontrun{
-#' result <- workflow_ANOVA(data_path = in_path,
-#'                          output_path = out_path,
-#'                          intensity_columns = int_col) }
+#' workflow_ANOVA(
+#'   data_path = system.file("extdata", "proteins_HCC.csv", package = "ProtStatsWF"),
+#'   output_path = tempdir(), intensity_columns = 6:43
+#' )
+#' }
 #'
 
 
@@ -94,6 +86,23 @@ workflow_ANOVA <- function(data_path,
                            plot_dpi = 300,
 
                            volcano_base_size = 25) {
+
+  if (paired && (!requireNamespace("nlme", quietly = TRUE) || !requireNamespace("multcomp", quietly = TRUE))) {
+    stop("Packages \"nlme\" and \"multcomp\" must be installed to use the repeated measures ANOVA.",
+      call. = FALSE)
+  }
+  if (!paired && !var.equal && !requireNamespace("car", quietly = TRUE)) {
+    stop("Package \"car\" must be installed to use the Welch ANOVA.",
+      call. = FALSE)
+  }
+  if (!requireNamespace("amap", quietly = TRUE)) {
+    stop("Package \"amap\" must be installed to cluster the heatmap.",
+      call. = FALSE)
+  }
+  if (!requireNamespace("circlize", quietly = TRUE)) {
+    stop("Package \"circlize\" must be installed for the heatmap legend.",
+      call. = FALSE)
+  }
 
   mess = ""
 
@@ -229,7 +238,7 @@ workflow_ANOVA <- function(data_path,
   group_colours <- list(Group = colours)
 
 
-  t_heatmap <- Heatmap_with_groups(D = data[["D"]][union_candidates, ],
+  t_heatmap <- heatmap(D = data[["D"]][union_candidates, ],
                                    id = data[["ID"]][union_candidates, , drop = FALSE],
                                    groups = data[["group"]],
                                    cluster_columns = FALSE,

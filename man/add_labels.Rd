@@ -38,6 +38,18 @@ A ggplot object with labels.
 \description{
 Add labels to a volcano plot.
 }
+\examples{
+volcano_plot <- VolcanoPlot(
+  p = c(0.001, 0.3), FC = c(2.5, 1.1),
+  significance_category = factor(
+    c("significant after FDR correction", "not significant"),
+    levels = c("not significant", "significant",
+      "significant after FDR correction")
+  )
+)
+\donttest{add_labels(volcano_plot, label_type = "index", ind = 1,
+  protein_names = c("Protein A", "Protein B"))}
+}
 \seealso{
 \code{\link[=VolcanoPlot]{VolcanoPlot()}}, \code{\link[=VolcanoPlot_ttest]{VolcanoPlot_ttest()}}, \code{\link[=VolcanoPlot_ANOVA]{VolcanoPlot_ANOVA()}}
 }

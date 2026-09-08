@@ -117,6 +117,19 @@ Limits for the y-axis. Default is NULL (automatic).}
 \item{verbose}{\strong{logical(1)} \cr
 If TRUE (default), messages are printed out.}
 }
+\value{
+A list containing the ggplot object, plotted data, and PCA result.
+}
 \description{
 PCA plot for proteomics data.
+}
+\examples{
+file_proteins <- system.file("extdata", "proteins_HCC.csv",
+  package = "ProtStatsWF")
+file_clinical <- system.file("extdata", "clinical_data.csv",
+  package = "ProtStatsWF")
+D_hcc <- prepareData(file_proteins, intensityColumns = 6:43,
+  proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
+  sampleNameColumn = "Sample", verbose = FALSE)
+PCA_Plot(D_hcc$SE, groupForColour = "Group", verbose = FALSE)
 }

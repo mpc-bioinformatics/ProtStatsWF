@@ -18,6 +18,8 @@ workflow_ttest(
   delogForFC = TRUE,
   pValueZerosToMin = TRUE,
   volcanoBaseSize = 25,
+  histogramBaseSize = 15,
+  heatmapTextSize = 15,
   significantAfterFDR = TRUE,
   thresFC = 2,
   thresP = 0.05,
@@ -25,8 +27,14 @@ workflow_ttest(
   minValidValuesOn = NULL,
   suffix = "",
   plotDevice = "pdf",
-  plotHeight = 15,
-  plotWidth = 15,
+  plotHeight_Volcano = 15,
+  plotWidth_Volcano = 15,
+  plotHeight_Histogram = 15,
+  plotWidth_Histogram = 15,
+  plotHeight_Boxplot = 15,
+  plotWidth_Boxplot = 15,
+  plotHeight_Heatmap = 15,
+  plotWidth_Heatmap = 15,
   plotDPI = 300,
   verbose = TRUE
 )
@@ -81,9 +89,24 @@ Default is \code{TRUE}.}
 \item{pValueZerosToMin}{\strong{logical(1)} If \code{TRUE}, p-values equal to 0 are replaced
 by the next smallest observed p-value. Default is \code{TRUE}.}
 
+\item{volcanoBaseSize}{\strong{numeric(1)} \cr
+Base size for the volcano plot. Default is 25.}
+
+\item{histogramBaseSize}{\strong{numeric(1)} \cr
+Base size for the p-value and fold change histograms. Default is 15.}
+
+\item{heatmapTextSize}{\strong{numeric(1)} \cr
+Text size for the heatmap. Default is 15.}
+
 \item{significantAfterFDR}{\strong{logical(1)} \cr
 If \code{TRUE}, only proteins significant after FDR correction are shown in
 boxplots and heatmap. Default is \code{TRUE}.}
+
+\item{thresFC}{\strong{numeric(1)} \cr
+Fold change threshold used to classify a candidate as significant. Default is 2.}
+
+\item{thresP}{\strong{numeric(1)} \cr
+P-value threshold used to classify a candidate as significant. Default is 0.05.}
 
 \item{maxValidValuesOff}{\strong{integer(1)} Maximum number of valid values for a protein to be
 classified as "off". Default is \code{0}.}
@@ -98,20 +121,35 @@ with an underscore "_".}
 \item{plotDevice}{\strong{character(1)} \cr
 Device to use for saving plots. Default is "pdf".}
 
-\item{plotHeight}{\strong{numeric(1)} \cr
-Plot height in cm. Default is \code{15}.}
+\item{plotHeight_Volcano}{\strong{numeric(1)} \cr
+Height of the volcano plot in cm. Default is \code{15}.}
 
-\item{plotWidth}{\strong{numeric(1)} \cr
-Plot width in cm. Default is \code{15}.}
+\item{plotWidth_Volcano}{\strong{numeric(1)} \cr
+Width of the volcano plot in cm. Default is \code{15}.}
+
+\item{plotHeight_Histogram}{\strong{numeric(1)} \cr
+Height of the p-value and fold change histograms in cm. Default is \code{15}.}
+
+\item{plotWidth_Histogram}{\strong{numeric(1)} \cr
+Width of the p-value and fold change histograms in cm. Default is \code{15}.}
+
+\item{plotHeight_Boxplot}{\strong{numeric(1)} \cr
+Height of the boxplots of biomarker candidates in cm. Default is \code{15}.}
+
+\item{plotWidth_Boxplot}{\strong{numeric(1)} \cr
+Width of the boxplots of biomarker candidates in cm. Default is \code{15}.}
+
+\item{plotHeight_Heatmap}{\strong{numeric(1)} \cr
+Height of the heatmap in cm. Default is \code{15}.}
+
+\item{plotWidth_Heatmap}{\strong{numeric(1)} \cr
+Width of the heatmap in cm. Default is \code{15}.}
 
 \item{plotDPI}{\strong{integer(1)} \cr
 Plot resolution in DPI. Default is \code{300}.}
 
 \item{verbose}{\strong{logical(1)} \cr
 Whether to print messages and progress bars during the workflow. Default is TRUE.}
-
-\item{baseSize}{\strong{numeric(1)} \cr
-Base size for the plots. Default is 15.}
 }
 \value{
 A list with one element \code{"message"}: a character string log of the workflow
@@ -146,7 +184,7 @@ result <- workflow_ttest(D = D, groupColumn = "Group",
 \seealso{
 \code{\link[=workflow_ANOVA]{workflow_ANOVA()}} for more than two groups.\cr
 Functions used in this workflow:
-\code{\link[=prepareData]{prepareData()}}, \code{\link[=ttest]{ttest()}}, \code{\link[=VolcanoPlot_ttest]{VolcanoPlot_ttest()}}, \code{\link[=pvalue_foldchange_histogram]{pvalue_foldchange_histogram()}},
-\code{\link[=.calcSignCat_ttest]{.calcSignCat_ttest()}}, \code{\link[=Boxplots_candidates]{Boxplots_candidates()}},
-\code{\link[=Heatmap_with_groups]{Heatmap_with_groups()}}, \code{\link[=calculate_onoff]{calculate_onoff()}}
+\code{\link[=prepareData]{prepareData()}}, \code{\link[=ttest]{ttest()}}, \code{\link[=VolcanoPlot_ttest]{VolcanoPlot_ttest()}}, \code{\link[=pvalueFCHistogram]{pvalueFCHistogram()}},
+\code{\link[=.calcSignCat_ttest]{.calcSignCat_ttest()}}, \code{\link[=BoxplotsCandidates]{BoxplotsCandidates()}},
+\code{\link[=heatmap]{heatmap()}}, \code{\link[=calculate_onoff]{calculate_onoff()}}
 }

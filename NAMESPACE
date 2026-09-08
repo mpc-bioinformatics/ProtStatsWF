@@ -3,7 +3,6 @@
 export(ANOVA)
 export(Boxplots)
 export(BoxplotsCandidates)
-export(Heatmap_with_groups)
 export(Lineplots)
 export(MAPlots)
 export(PCA_Plot)
@@ -16,6 +15,7 @@ export(calculate_significance_categories_ANOVA)
 export(clustering)
 export(exportSE)
 export(getClusterInfos)
+export(heatmap)
 export(prepareData)
 export(pvalueFCHistogram)
 export(ttest)
@@ -23,6 +23,7 @@ export(workflow_ANOVA)
 export(workflow_QC)
 export(workflow_clustering)
 export(workflow_ttest)
+importFrom(ComplexHeatmap,draw)
 importFrom(SummarizedExperiment,
   SummarizedExperiment,
   assay,
@@ -30,11 +31,11 @@ importFrom(SummarizedExperiment,
   colData,
   rowData
 )
-importFrom(affy,ma.plot)
 importFrom(checkmate,
   assert,
   assertCharacter,
   assertChoice,
+  assertClass,
   assertCount,
   assertDataFrame,
   assertDirectoryExists,
@@ -90,19 +91,20 @@ importFrom(ggplot2,
   ylab,
   ylim
 )
-importFrom(ggrepel,geom_text_repel)
 importFrom(grDevices,
   dev.off,
   pdf,
   png
 )
 importFrom(limma,normalizeBetweenArrays)
-importFrom(magrittr,"%>%")
-importFrom(matrixStats,rowVars)
 importFrom(methods,is)
-importFrom(openxlsx,read.xlsx)
+importFrom(openxlsx,
+  read.xlsx,
+  write.xlsx
+)
 importFrom(pbapply,
   pbapply,
+  pboptions,
   setpb,
   startpb
 )
@@ -118,7 +120,6 @@ importFrom(stats,
   t.test
 )
 importFrom(tidyr,pivot_longer)
-importFrom(tidyselect,all_of)
 importFrom(tools,file_ext)
 importFrom(utils,
   read.table,
@@ -126,4 +127,3 @@ importFrom(utils,
   txtProgressBar,
   write.csv
 )
-importFrom(vsn,vsn2)

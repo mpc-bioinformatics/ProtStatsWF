@@ -149,6 +149,17 @@ This function performs quality control of quantitative proteomics data.
 The following plots are generated: a valid value plot, boxplots, MA-plots and
 a PCA plot.
 }
+\examples{
+file_proteins <- system.file("extdata", "proteins_HCC.csv",
+  package = "ProtStatsWF")
+file_clinical <- system.file("extdata", "clinical_data.csv",
+  package = "ProtStatsWF")
+D_hcc <- prepareData(file_proteins, intensityColumns = 6:43,
+  proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
+  sampleNameColumn = "Sample", verbose = FALSE)
+\donttest{workflow_QC(D_hcc, groupColumn = "Group", outputPath = tempdir(),
+  MAMaxPlots = 0, verbose = FALSE)}
+}
 \seealso{
 Functions used in this workflow:
 \code{\link[=prepareData]{prepareData()}}, \code{\link[=ValidValuePlot]{ValidValuePlot()}}, \code{\link[=Boxplots]{Boxplots()}}, \code{\link[=MAPlots]{MAPlots()}},

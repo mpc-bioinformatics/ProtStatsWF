@@ -205,46 +205,46 @@ prepareData <- function(dataPath,
 
 
 
-
-#' Pivot SE to long format
-#'
-#'helper function to extract assay data and pivot to long format.
-#'Also adds the information from colData and rowData.
-#'
-#' @param SE A SummarizedExperiment object.
-#' @param cols Columns to pivot.
-#'
-#' @importFrom dplyr left_join
-#' @importFrom SummarizedExperiment assay colData rowData
-#' @importFrom tidyr pivot_longer
-#'
-#' @returns A data frame in long format.
-.pivot_longer_SE <- function(SE, cols) {
-
-  # Extract assay
-  D <- as.data.frame(SummarizedExperiment::assay(SE))
-  D$id. <- rownames(D)
-
-  D_long <- tidyr::pivot_longer(D, -id., names_to = "sample.",
-                                values_to = "value.")
-
-  # Add colData
-  col_data <- as.data.frame(SummarizedExperiment::colData(SE))
-  col_data$sample. <- rownames(col_data)
-  D_long <- dplyr::left_join(D_long, col_data, by = "sample.")
-
-  # Add rowData
-  row_data <- as.data.frame(SummarizedExperiment::rowData(SE))
-  row_data$id. <- rownames(row_data)
-  D_long <- dplyr::left_join(D_long, row_data, by = "id.")
-
-}
-
-
-
-
-
-
-
-
-
+#' 
+#' #' Pivot SE to long format
+#' #'
+#' #'helper function to extract assay data and pivot to long format.
+#' #'Also adds the information from colData and rowData.
+#' #'
+#' #' @param SE A SummarizedExperiment object.
+#' #' @param cols Columns to pivot.
+#' #'
+#' #' @importFrom dplyr left_join
+#' #' @importFrom SummarizedExperiment assay colData rowData
+#' #' @importFrom tidyr pivot_longer
+#' #'
+#' #' @returns A data frame in long format.
+#' .pivotLongerSE <- function(SE, cols) {
+#' 
+#'   # Extract assay
+#'   D <- as.data.frame(SummarizedExperiment::assay(SE))
+#'   D$id. <- rownames(D)
+#' 
+#'   D_long <- tidyr::pivot_longer(D, -id., names_to = "sample.",
+#'                                 values_to = "value.")
+#' 
+#'   # Add colData
+#'   col_data <- as.data.frame(SummarizedExperiment::colData(SE))
+#'   col_data$sample. <- rownames(col_data)
+#'   D_long <- dplyr::left_join(D_long, col_data, by = "sample.")
+#' 
+#'   # Add rowData
+#'   row_data <- as.data.frame(SummarizedExperiment::rowData(SE))
+#'   row_data$id. <- rownames(row_data)
+#'   D_long <- dplyr::left_join(D_long, row_data, by = "id.")
+#' 
+#' }
+#' 
+#' 
+#' 
+#' 
+#' 
+#' 
+#' 
+#' 
+#' 

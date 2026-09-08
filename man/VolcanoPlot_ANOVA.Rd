@@ -54,6 +54,13 @@ A list of ggplots of the volcano plot from an ANOVA result.
 \description{
 Volcano Plots for an ANOVA result.
 }
+\examples{
+anova_res <- data.frame(
+  p.anova = c(0.01, 0.3), p.anova.fdr = c(0.02, 0.3),
+  p.posthoc_A_vs_B = c(0.01, 0.2), FC_A_divided_by_B = c(2.5, 1.1)
+)
+VolcanoPlot_ANOVA(anova_res, columnsFC = 4, columnsPPosthoc = 3)
+}
 \seealso{
 \code{\link[=VolcanoPlot]{VolcanoPlot()}}, \code{\link[=VolcanoPlot_ttest]{VolcanoPlot_ttest()}}, \code{\link[=add_labels]{add_labels()}}
 }

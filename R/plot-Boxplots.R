@@ -31,14 +31,13 @@
 #' @importFrom ggplot2 aes element_text geom_boxplot geom_violin ggplot labs
 #' @importFrom ggplot2 scale_fill_manual scale_x_discrete theme theme_bw xlab
 #' @importFrom ggplot2 ylab
-#' @importFrom tidyselect all_of
 #'
 #' @examples
 #' file_proteins <- system.file("extdata", "proteins_HCC.csv",
 #'   package = "ProtStatsWF")
 #' file_clinical <- system.file("extdata", "clinical_data.csv",
 #'   package = "ProtStatsWF")
-#' D <- prepareDataSE(dataPath = file_proteins, intensityColumns = 6:43,
+#' D <- prepareData(dataPath = file_proteins, intensityColumns = 6:43,
 #'   proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
 #'   sampleNameColumn = "Sample", verbose = FALSE)
 #'
@@ -61,7 +60,7 @@ Boxplots <- function(D_long,
 
   # select only relevant columns
   D_long <- dplyr::select(D_long, c(".sample", "intensity_norm",
-                                    group = tidyselect::all_of(groupColumn)))
+                                    group = dplyr::all_of(groupColumn)))
   x_axis <- sort(unique(D_long$.sample)) # save the different states for later
   D_long <- D_long[!is.na(D_long$intensity_norm),] # remove NA values
   .sample <- intensity_norm <- group <- NULL

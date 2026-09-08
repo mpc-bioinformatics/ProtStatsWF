@@ -38,6 +38,8 @@
 #' @param plotNALevel **logical(1)** \cr
 #' If \code{TRUE}, data points will be plotted if the group variable is NA.
 #' Default is FALSE, so data points with missing group variable will be omitted.
+#' @param verbose **logical(1)** \cr
+#' Whether to print a progress bar. Default is TRUE.
 #'
 #' @return Nothing, saves pdf or png files with boxplots to the output folder.
 #' @export
@@ -48,34 +50,29 @@
 #' @importFrom ggplot2 scale_fill_manual theme theme_bw
 #' @importFrom grDevices dev.off pdf png
 #' @importFrom methods is
-#' @importFrom pbapply setpb startpb
+#' @importFrom pbapply pboptions setpb startpb
 #' @importFrom scales hue_pal
 #' @importFrom stats na.omit
 #' @importFrom SummarizedExperiment assays colData rowData
 #'
 #' @examples
-#'file_proteins <- system.file("extdata", "proteins_HCC.csv", package = "ProtStatsWF")
-#'file_clinical  <- system.file("extdata", "clinical_data.csv", package = "ProtStatsWF")
+#' file_proteins <- system.file("extdata", "proteins_HCC.csv",
+#'   package = "ProtStatsWF")
+#' file_clinical <- system.file("extdata", "clinical_data.csv",
+#'   package = "ProtStatsWF")
 #'
-#'D_hcc <- prepareData(dataPath = file_proteins, intensityColumns = 6:43,
-#'                     proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
-#'                     sampleNameColumn = "Sample", verbose = FALSE)
+#' D_hcc <- prepareData(dataPath = file_proteins, intensityColumns = 6:43,
+#'   proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
+#'   sampleNameColumn = "Sample", verbose = FALSE)
 #'
-#'ttest(SE = D_hcc$SE, assay = "intensity_norm",
-#'                   groupColumn = "Group", sampleColumn = "PatientID",,
-#'                   logBeforeTest = FALSE, delogForFC = TRUE, logBase = 2,
-#'                   minObs = 3, paired = TRUE)
-#' fc_col <- paste0("FC_", levels(group_hcc)[[1]], "_divided_by_", levels(group_hcc)[[2]])
-#' sig_cats   <- .calcSignCat_ttest(
-#'  p = ttest_res$p, pAdj = ttest_res$p.fdr, fc = ttest_res[[fc_col]]
-#')
-#'candidates <- which(as.character(sig_cats) == "significant after FDR correction")
-#'
-#' Boxplots_candidates(SE = SE[candidates, ],
-#' assay = assayName,
-#' groupColumn = groupColumn,
-#' proteinNameColumn = proteinNameColumn,
-#' outputPath = getwd())
+#' ttest_res <- ttest(D_hcc$SE, assay = "intensity_norm",
+#'   groupColumn = "Group", sampleColumn = "PatientID", paired = TRUE,
+#'   logBeforeTest = FALSE, verbose = FALSE)
+#' fc_col <- grep("^FC_", names(ttest_res), value = TRUE)[1]
+#' candidates <- which(ttest_res$p.fdr < 0.05 & !is.na(ttest_res$p.fdr))
+#' BoxplotsCandidates(D_hcc$SE[candidates, ], assay = "intensity_norm",
+#'   groupColumn = "Group", proteinNameColumn = "Protein", outputPath = tempdir(),
+#'   verbose = FALSE)
 BoxplotsCandidates <- function(SE,
                                 assay,
                                 groupColumn,
@@ -89,7 +86,8 @@ BoxplotsCandidates <- function(SE,
                                 plotDPI = 200,
                                 outputPath = NULL,
                                 suffix = NULL,
-                                plotNALevel = FALSE) {
+                                plotNALevel = FALSE,
+                                verbose = TRUE) {
 
   checkmate::assertTRUE(methods::is(SE, "SummarizedExperiment"))
   checkmate::assertSubset(assay, names(SummarizedExperiment::assays(SE)))
@@ -98,6 +96,7 @@ BoxplotsCandidates <- function(SE,
   nr_groups <- length(unique(SummarizedExperiment::colData(SE)[, groupColumn]))
   checkmate::assertCharacter(groupColours, len = nr_groups, null.ok = TRUE)
   checkmate::assertFlag(logData)
+  checkmate::assertFlag(verbose)
   checkmate::assertNumber(logBase, lower = 1)
   checkmate::assertChoice(plotDevice, c("pdf", "png"))
   checkmate::assertNumber(plotHeight, lower = 0)
@@ -116,9 +115,9 @@ BoxplotsCandidates <- function(SE,
 
   D <- as.data.frame(SummarizedExperiment::assays(SE)[[assay]])
   id <- SummarizedExperiment::rowData(SE)
-  group <- SummarizedExperiment::colData(D_hcc$SE)[,groupColumn]
+  group <- SummarizedExperiment::colData(SE)[,groupColumn]
 
-  pb <- pbapply::startpb(min = 0, max = nrow(D))
+  pb <- if (verbose) pbapply::startpb(min = 0, max = nrow(D)) else NULL
   for (i in seq_along(nrow(D))) {
 
     # prepare data for single protein
@@ -156,7 +155,7 @@ BoxplotsCandidates <- function(SE,
     }
     plot(plot)
     if (plotDevice == "png" & !is.null(outputPath)) grDevices::dev.off()
-    pbapply::setpb(pb, i)
+    if (verbose) pbapply::setpb(pb, i)
   }
 
   if (plotDevice == "pdf" & !is.null(outputPath)) grDevices::dev.off()

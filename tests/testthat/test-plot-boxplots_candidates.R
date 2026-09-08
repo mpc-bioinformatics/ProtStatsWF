@@ -8,7 +8,8 @@ test_that("Boxplots_candidates creates output PDF", {
                       assay = "intensity_norm",
                       groupColumn = "Group",
                       proteinNameColumn = "Protein",
-                      outputPath = temp_dir)
+                      outputPath = temp_dir,
+                      verbose = FALSE)
 
 
   pdf_path <- file.path(temp_dir, "boxplots_candidates.pdf")

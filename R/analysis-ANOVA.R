@@ -23,12 +23,29 @@
 #'                             The minimum number of observations per group.
 #' @param min_perc_per_group   \strong{integer} \cr
 #'                             The minimum ratio of observations per group as an alternative to min_obs_per_group.
+#' @param verbose              \strong{logical(1)} \cr
+#'                             Whether to print messages and a progress bar. Default is TRUE.
 #'
 #' @return A data.frame with p-values and fold changes
 #' @export
 #'
-#' @examples
+#' @importFrom checkmate assertFlag
+#' @importFrom pbapply pbapply pboptions
 #'
+#' @examples
+# file_proteins <- system.file("extdata", "proteins_HCC.csv",
+#   package = "ProtStatsWF")
+# file_clinical <- system.file("extdata", "clinical_data.csv",
+#   package = "ProtStatsWF")
+# D_hcc <- prepareData(file_proteins, intensityColumns = 6:43,
+#   proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
+#   sampleNameColumn = "Sample", verbose = FALSE)
+# ANOVA(
+#   D = as.data.frame(SummarizedExperiment::assay(D_hcc$SE, "intensity_norm")),
+#   id = as.data.frame(SummarizedExperiment::rowData(D_hcc$SE)),
+#   group = factor(SummarizedExperiment::colData(D_hcc$SE)[, "Group"]),
+#   log_before_test = FALSE, verbose = FALSE
+# )
 
 ANOVA <- function(D,
                   id = NULL,
@@ -40,13 +57,28 @@ ANOVA <- function(D,
                   delog_for_FC = TRUE,
                   log_base = 2,
                   min_obs_per_group = 3,
-                  min_perc_per_group = NULL) {
+                  min_perc_per_group = NULL,
+                  verbose = TRUE) {
 
+  if (paired && (!requireNamespace("nlme", quietly = TRUE) || !requireNamespace("multcomp", quietly = TRUE))) {
+    stop("Packages \"nlme\" and \"multcomp\" must be installed to use the repeated measures ANOVA.",
+      call. = FALSE)
+  }
+  if (!paired && !var.equal && !requireNamespace("car", quietly = TRUE)) {
+    stop("Package \"car\" must be installed to use the Welch ANOVA.",
+      call. = FALSE)
+  }
+
+  checkmate::assertFlag(verbose)
   if (!is.null(min_obs_per_group) & !is.null(min_perc_per_group)) stop("Please specify only one of min_obs_per_group or min_perc_per_group.")
 
+  if (!verbose) {
+    old_pbo <- pbapply::pboptions(type = "none")
+    on.exit(pbapply::pboptions(old_pbo), add = TRUE)
+  }
 
   if (paired) {
-    print("Repeated Measures ANOVA")
+    if (verbose) print("Repeated Measures ANOVA")
     ### repeated measures ANOVA
     RES <- pbapply::pbapply(D, 1, ANOVA_repeatedMeasurements_single_row, group = group, sample = sample,
                    log_before_test = log_before_test,
@@ -56,14 +88,14 @@ ANOVA <- function(D,
   } else {
     if (var.equal) {
       #### Standard ANOVA (equeal variances
-      print("Standard ANOVA")
+      if (verbose) print("Standard ANOVA")
       RES <- pbapply::pbapply(D, 1, ANOVA_standard_single_row, group = group, log_before_test = log_before_test,
                    delog_for_FC = delog_for_FC, min_obs_per_group = min_obs_per_group,
                    min_perc_per_group = min_perc_per_group,
                    log_base = log_base)
     } else {
       ### Welch ANOVA (unequal variances)
-      print("Welch ANOVA")
+      if (verbose) print("Welch ANOVA")
       RES <- pbapply::pbapply(D, 1, ANOVA_Welch_single_row, group = group, log_before_test = log_before_test,
                      delog_for_FC = delog_for_FC, min_obs_per_group = min_obs_per_group,
                      min_perc_per_group = min_perc_per_group,
@@ -102,8 +134,6 @@ ANOVA <- function(D,
 #' @param min_perc_per_group Numeric indicating the minimum ratio of observations per group.
 #'
 #' @return Vector with p-values and fold changes.
-#'
-#' @examples
 ANOVA_standard_single_row <- function(x,
                                       group,
                                       min_obs_per_group = 3,
@@ -117,7 +147,7 @@ ANOVA_standard_single_row <- function(x,
   nr_groups <- length(levels(group))
   groups <- factor(levels(group), levels = levels(group))
 
-  comparisons <- gtools::combinations(n = nr_groups, r = 2)
+  comparisons <- t(utils::combn(nr_groups, 2))
   comparisons_char <- matrix(data = NA_character_, nrow = nrow(comparisons), ncol = ncol(comparisons))
   for (i in 1:nr_groups) {
     comparisons_char[comparisons == i] <- as.character(groups[i])
@@ -231,8 +261,6 @@ ANOVA_standard_single_row <- function(x,
 #' @param min_perc_per_group Numeric indicating the minimum ratio of observations per group.
 #'
 #' @return Vector with p-values and fold changes.
-#'
-#' @examples
 ANOVA_repeatedMeasurements_single_row <- function(x,
                                                   group,
                                                   sample,
@@ -241,6 +269,11 @@ ANOVA_repeatedMeasurements_single_row <- function(x,
                                                   log_base = 2,
                                                   delog_for_FC = TRUE,
                                                   min_perc_per_group = NULL) {
+  if (!requireNamespace("nlme", quietly = TRUE) || !requireNamespace("multcomp", quietly = TRUE)) {
+    stop("Packages \"nlme\" and \"multcomp\" must be installed to use the repeated measures ANOVA.",
+      call. = FALSE)
+  }
+
   x <- as.numeric(unname(x))
 
   nr_groups <- length(levels(group))
@@ -248,7 +281,7 @@ ANOVA_repeatedMeasurements_single_row <- function(x,
 
   h <- 2 + 3*choose(nr_groups, 2)
 
-  comparisons <- gtools::combinations(n = nr_groups, r = 2)
+  comparisons <- t(utils::combn(nr_groups, 2))
   comparisons_char <- matrix(data = NA_character_, nrow = nrow(comparisons), ncol = ncol(comparisons))
   for (i in 1:nr_groups) {
     comparisons_char[comparisons == i] <- as.character(groups[i])
@@ -365,8 +398,6 @@ ANOVA_repeatedMeasurements_single_row <- function(x,
 #' @param min_perc_per_group Numeric indicating the minimum ratio of observations per group.
 #'
 #' @return Vector with p-values and fold changes.
-#'
-#' @examples
 ANOVA_Welch_single_row <- function(x,
                                    group,
                                    min_obs_per_group,
@@ -385,7 +416,7 @@ ANOVA_Welch_single_row <- function(x,
   nr_groups <- length(levels(group))
   groups <- factor(levels(group), levels = levels(group))
 
-  comparisons <- gtools::combinations(n = nr_groups, r = 2)
+  comparisons <- t(utils::combn(nr_groups, 2))
   comparisons_char <- matrix(data = NA_character_, nrow = nrow(comparisons), ncol = ncol(comparisons))
   for (i in 1:nr_groups) {
     comparisons_char[comparisons == i] <- as.character(groups[i])

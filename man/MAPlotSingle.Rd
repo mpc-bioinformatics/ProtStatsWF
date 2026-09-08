@@ -34,7 +34,7 @@ file_proteins <- system.file("extdata", "proteins_HCC.csv",
   package = "ProtStatsWF")
 file_clinical <- system.file("extdata", "clinical_data.csv",
   package = "ProtStatsWF")
-D <- prepareDataSE(dataPath = file_proteins, intensityColumns = 6:43,
+D <- prepareData(dataPath = file_proteins, intensityColumns = 6:43,
   proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
   sampleNameColumn = "Sample", verbose = FALSE)
 
@@ -42,7 +42,7 @@ Intensities <- SummarizedExperiment::assay(D$SE)
 s1 <- Intensities[,1]
 s2 <- Intensities[,2]
 
-MA_Plot_single(sample_1 = s1, sample_2 = s2)
+MAPlotSingle(sample1 = s1, sample2 = s2)
 }
 \seealso{
 \code{\link[=MAPlots]{MAPlots()}} for calculation of MA-Plots for a whole dataset.

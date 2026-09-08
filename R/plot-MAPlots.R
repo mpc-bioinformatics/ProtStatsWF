@@ -16,7 +16,6 @@
 #'
 #' @seealso [MAPlots()] for calculation of MA-Plots for a whole dataset.
 #'
-#' @importFrom affy ma.plot
 #' @importFrom scales alpha
 #' @importFrom stats na.omit
 #'
@@ -26,7 +25,7 @@
 #'   package = "ProtStatsWF")
 #' file_clinical <- system.file("extdata", "clinical_data.csv",
 #'   package = "ProtStatsWF")
-#' D <- prepareDataSE(dataPath = file_proteins, intensityColumns = 6:43,
+#' D <- prepareData(dataPath = file_proteins, intensityColumns = 6:43,
 #'   proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
 #'   sampleNameColumn = "Sample", verbose = FALSE)
 #'
@@ -34,9 +33,14 @@
 #' s1 <- Intensities[,1]
 #' s2 <- Intensities[,2]
 #'
-#' MA_Plot_single(sample_1 = s1, sample_2 = s2)
+#' MAPlotSingle(sample1 = s1, sample2 = s2)
 MAPlotSingle <- function(sample1, sample2,
                           alpha = 1, pointColour = "black", ...) {
+
+  if (!requireNamespace("affy", quietly = TRUE)) {
+    stop("Package \"affy\" must be installed to plot an MA plot.",
+      call. = FALSE)
+  }
 
   if (alpha) pointColour = scales::alpha(pointColour, alpha)
 
@@ -98,13 +102,13 @@ MAPlotSingle <- function(sample1, sample2,
 #'   package = "ProtStatsWF")
 #' file_clinical <- system.file("extdata", "clinical_data.csv",
 #'   package = "ProtStatsWF")
-#' D <- prepareDataSE(dataPath = file_proteins, intensityColumns = 6:43,
+#' D <- prepareData(dataPath = file_proteins, intensityColumns = 6:43,
 #'   proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
 #'   sampleNameColumn = "Sample", verbose = FALSE)
 #'
 #' Intensities <- SummarizedExperiment::assay(D$SE)
 #'
-#' MAPlots(Intensities)
+#' MAPlots(Intensities, outPath = tempdir(), verbose = FALSE)
 MAPlots <- function(D,
                     outPath, suffix = "",
                     labels = as.character(1:ncol(D)), labels2 = colnames(D),
@@ -113,6 +117,11 @@ MAPlots <- function(D,
                     plotHeight = 15, plotWidth = 15,
                     verbose = TRUE,
                     ...) {
+  if (!requireNamespace("affy", quietly = TRUE)) {
+    stop("Package \"affy\" must be installed to plot an MA plot.",
+      call. = FALSE)
+  }
+
   checkmate::assertMatrix(D, min.cols = 2, min.rows = 1)
   checkmate::assertDirectoryExists(outPath)
   checkmate::assertCharacter(suffix, len = 1)

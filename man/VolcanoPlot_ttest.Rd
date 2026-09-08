@@ -91,6 +91,20 @@ A ggplot object of the volcano plot from a ttest result.
 \description{
 Volcano plot for a t-test result.
 }
+\examples{
+file_proteins <- system.file("extdata", "proteins_HCC.csv",
+  package = "ProtStatsWF")
+file_clinical <- system.file("extdata", "clinical_data.csv",
+  package = "ProtStatsWF")
+D_hcc <- prepareData(file_proteins, intensityColumns = 6:43,
+  proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
+  sampleNameColumn = "Sample", verbose = FALSE)
+ttest_res <- ttest(D_hcc$SE, assay = "intensity_norm", groupColumn = "Group",
+  sampleColumn = "PatientID", paired = TRUE, logBeforeTest = FALSE,
+  verbose = FALSE)
+VolcanoPlot_ttest(ttest_res, columnNamePadj = "p.fdr",
+  columnNameFC = grep("^FC_", names(ttest_res), value = TRUE)[1])
+}
 \seealso{
 \code{\link[=VolcanoPlot]{VolcanoPlot()}}, \code{\link[=VolcanoPlot_ANOVA]{VolcanoPlot_ANOVA()}}, \code{\link[=add_labels]{add_labels()}}
 }

@@ -96,6 +96,16 @@ A ggplot object containing the volcano plot.
 \description{
 Simple volcano plot from p-value, fold change and significance category
 }
+\examples{
+p <- c(0.001, 0.02, 0.4)
+FC <- c(2.5, 0.4, 1.1)
+significance <- factor(
+  c("significant after FDR correction", "significant", "not significant"),
+  levels = c("not significant", "significant",
+    "significant after FDR correction")
+)
+VolcanoPlot(p, FC, significance)
+}
 \seealso{
 \code{\link[=VolcanoPlot_ttest]{VolcanoPlot_ttest()}}, \code{\link[=VolcanoPlot_ANOVA]{VolcanoPlot_ANOVA()}}
 }

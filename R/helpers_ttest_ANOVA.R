@@ -80,7 +80,10 @@
 #' @export
 #'
 #' @examples
-#'
+#' calculate_significance_categories_ANOVA(
+#'   p_posthoc = c(0.01, 0.2), p_anova_adj = c(0.02, 0.2),
+#'   p_anova = c(0.01, 0.1), fc = c(2.5, 1.2)
+#' )
 
 calculate_significance_categories_ANOVA <- function(p_posthoc, p_anova_adj, p_anova, fc, thres_fc=2, thres_p=0.05) {
 

@@ -48,6 +48,8 @@ If \code{TRUE}, the data will be log-transformed.}
 \item{delog_for_FC}{\strong{logical} \cr
 If \code{TRUE}, the fold change will be calculated without the log-transformation.}
 
+\item{min_obs_per_group}{Minimum number of observations per group.}
+
 \item{p_value_zeros_to_min}{\strong{logical} \cr
 If \code{TRUE}, then \code{p_values == 0} will be set to the next smallest value of the p-values.}
 
@@ -84,26 +86,18 @@ The workflow for ANOVA of quantitative proteomics data
 \examples{
 
 
-# 1. Set the character of your data path, leading to an .xlsx file.
-in_path <- "C:/Users/thisuser/Documents/dataFolder/data.xlsx"
-
-# 2. Set the integer vector of the columns, which contain the intensities.
-int_col <- 3:17
-
-# 3. Set the character of the output path, leading to a folder for the results.
-out_path <- "C:/Users/thisuser/Documents/resultsFolder/"
-
-# 4. Run the ANOVA with the parameters you set.
 \dontrun{
-result <- workflow_ANOVA(data_path = in_path,
-                         output_path = out_path,
-                         intensity_columns = int_col) }
+workflow_ANOVA(
+  data_path = system.file("extdata", "proteins_HCC.csv", package = "ProtStatsWF"),
+  output_path = tempdir(), intensity_columns = 6:43
+)
+}
 
 }
 \seealso{
 \code{\link[=workflow_ttest]{workflow_ttest()}} in case of only two groups in the sample.\cr
 Functions used in this workflow:
-\code{\link[=prepareData]{prepareData()}}, \code{\link[=ttest]{ttest()}}, \code{\link[=VolcanoPlot_ttest]{VolcanoPlot_ttest()}}, \code{\link[=pvalue_foldchange_histogram]{pvalue_foldchange_histogram()}},
-\code{\link[=.calcSignCat_ttest]{.calcSignCat_ttest()}}, \code{\link[=Boxplots_candidates]{Boxplots_candidates()}},
-\code{\link[=Heatmap_with_groups]{Heatmap_with_groups()}}, \code{\link[=calculate_onoff]{calculate_onoff()}}
+\code{\link[=prepareData]{prepareData()}}, \code{\link[=ttest]{ttest()}}, \code{\link[=VolcanoPlot_ttest]{VolcanoPlot_ttest()}}, \code{\link[=pvalueFCHistogram]{pvalueFCHistogram()}},
+\code{\link[=.calcSignCat_ttest]{.calcSignCat_ttest()}}, \code{\link[=BoxplotsCandidates]{BoxplotsCandidates()}},
+\code{\link[=heatmap]{heatmap()}}, \code{\link[=calculate_onoff]{calculate_onoff()}}
 }

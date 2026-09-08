@@ -37,18 +37,19 @@ adjusted p-values and fold changes each.
 Generates histograms for p-values, adjusted p-values and fold changes.
 }
 \examples{
-file_proteins <- system.file("extdata", "proteins_HCC.csv", package = "ProtStatsWF")
-file_clinical  <- system.file("extdata", "clinical_data.csv", package = "ProtStatsWF")
+file_proteins <- system.file("extdata", "proteins_HCC.csv",
+  package = "ProtStatsWF")
+file_clinical <- system.file("extdata", "clinical_data.csv",
+  package = "ProtStatsWF")
 
 D_hcc <- prepareData(dataPath = file_proteins, intensityColumns = 6:43,
-                    proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
-                    sampleNameColumn = "Sample", verbose = FALSE)
+  proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
+  sampleNameColumn = "Sample", verbose = FALSE)
 
-RES <- ttest(SE = D_hcc$SE, assay = "intensity_norm",
-                  groupColumn = "Group", sampleColumn = "PatientID",,
-                  logBeforeTest = FALSE, delogForFC = TRUE, logBase = 2,
-                  minObs = 3, paired = TRUE)
+RES <- ttest(D_hcc$SE, assay = "intensity_norm",
+  groupColumn = "Group", sampleColumn = "PatientID", paired = TRUE,
+  logBeforeTest = FALSE, verbose = FALSE)
 
-pvalueFCHistogram(RES, columnNameP = "p", columnNamePadj = "padj",
-columnNameFC = "FC")
+pvalueFCHistogram(RES, columnP = "p", columnPadj = "p.fdr",
+  columnFC = grep("^FC_", names(RES), value = TRUE)[1])
 }

@@ -25,7 +25,6 @@
 #' If TRUE, messages are printed out.
 #'
 #' @importFrom checkmate assertFlag assertNumeric assertSubset assertTRUE
-#' @importFrom matrixStats rowVars
 #' @importFrom SummarizedExperiment assays
 #'
 #'
@@ -60,7 +59,7 @@
   }
 
   ### remove proteins/peptides with an (almost) constant value (variance near zero)
-  v <- matrixStats::rowVars(as.matrix(SummarizedExperiment::assay(SE, assay)))
+  v <- apply(as.matrix(SummarizedExperiment::assay(SE, assay)), 1, stats::var)
   ind_zeroVar <- (v < 1e-25)
   SE <- SE[!ind_zeroVar, ]
 

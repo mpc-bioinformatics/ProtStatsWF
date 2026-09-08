@@ -41,13 +41,19 @@
 #'                              The plot resolution for the heatmap.
 #' @param column_name_protein \strong{character(1)} \cr
 #'                              The name of the column containing the protein identifiers.
-#' @param ... Additional parameters passed to \code{\link[ProtStatsWF]{Heatmap_with_groups}}.
+#' @param ... Additional parameters passed to \code{\link[ProtStatsWF]{heatmap}}.
 #'
 #' @returns Nothing, but saves a heatmap, a set of lineplots (one per cluster)
 #' and a cluster table to the output folder.
 #' @export
 #'
 #' @examples
+#' \donttest{
+#' workflow_clustering(
+#'   data_path = system.file("extdata", "proteins_HCC.csv", package = "ProtStatsWF"),
+#'   output_path = tempdir(), intensity_columns = 6:43, nr_clusters = 3
+#' )
+#' }
 workflow_clustering <- function(data_path,
                                 output_path,
                                 intensity_columns,
@@ -68,6 +74,19 @@ workflow_clustering <- function(data_path,
                                 column_name_protein = "Protein",
                                 ...) {
 
+  if (!requireNamespace("amap", quietly = TRUE)) {
+    stop("Package \"amap\" must be installed to perform the clustering.",
+      call. = FALSE)
+  }
+  if (!requireNamespace("dendextend", quietly = TRUE)) {
+    stop("Package \"dendextend\" must be installed to determine the number of clusters, colour the dendrogram, or get the cluster information.",
+      call. = FALSE)
+  }
+  if (!requireNamespace("circlize", quietly = TRUE)) {
+    stop("Package \"circlize\" must be installed for the heatmap legend.",
+      call. = FALSE)
+  }
+
   #### Prepare Data ####
   dataPrep <- prepareTtestData(data_path = data_path , intensity_columns = intensity_columns,
                                remove_missings = TRUE)
@@ -81,7 +100,7 @@ workflow_clustering <- function(data_path,
              colour_dend = colour_dend)
 
 
-  ht <- ProtStatsWF::Heatmap_with_groups(D = dataPrep$D,
+  ht <- heatmap(D = dataPrep$D,
                                          id = dataPrep$id,
                                          #filtermissings = ncol(D),
                                          cluster_rows = clust$row_dend,

@@ -59,7 +59,7 @@
 #' @param verbose **logical(1)** \cr
 #' If TRUE (default), messages are printed out.
 #'
-#' @return
+#' @return A list containing the ggplot object, plotted data, and PCA result.
 #' @export
 #'
 #' @importFrom checkmate assertCharacter assertFlag assertIntegerish assertNumeric
@@ -67,13 +67,20 @@
 #' @importFrom ggplot2 aes geom_point ggplot guide_legend guides labs
 #' @importFrom ggplot2 scale_colour_continuous scale_colour_discrete scale_colour_manual
 #' @importFrom ggplot2 scale_shape_manual theme_bw xlim xlab ylim ylab
-#' @importFrom ggrepel geom_text_repel
 #' @importFrom methods is
 #' @importFrom scales hue_pal
 #' @importFrom stats predict prcomp
 #' @importFrom SummarizedExperiment assays colData rowData
 #'
 #' @examples
+#' file_proteins <- system.file("extdata", "proteins_HCC.csv",
+#'   package = "ProtStatsWF")
+#' file_clinical <- system.file("extdata", "clinical_data.csv",
+#'   package = "ProtStatsWF")
+#' D_hcc <- prepareData(file_proteins, intensityColumns = 6:43,
+#'   proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
+#'   sampleNameColumn = "Sample", verbose = FALSE)
+#' PCA_Plot(D_hcc$SE, groupForColour = "Group", verbose = FALSE)
 PCA_Plot <- function(SE,
                      assay = "intensity_norm",
                      groupForColour = NULL,
@@ -98,6 +105,11 @@ PCA_Plot <- function(SE,
                      ylim = NULL,
                      verbose = TRUE
 ) {
+  if (label && !requireNamespace("ggrepel", quietly = TRUE)) {
+    stop("Package \"ggrepel\" must be installed to label the points.",
+      call. = FALSE)
+  }
+
   checkmate::assertTRUE(methods::is(SE, "SummarizedExperiment"))
   checkmate::assertSubset(groupForColour,
                           colnames(SummarizedExperiment::colData(SE)))
@@ -147,6 +159,7 @@ PCA_Plot <- function(SE,
     groupColours <- scales::hue_pal()(nr_groups)
   }
 
+  .data <- NULL
   pca <- stats::prcomp(t(D), scale. = scale)
   pred <- stats::predict(pca, t(D))
   summ <- summary(pca)
