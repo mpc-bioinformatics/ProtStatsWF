@@ -42,6 +42,20 @@ necessary if \code{paired = TRUE}, then it will be used to match sample pairs.}
 \item{paired}{\strong{logical(1)} \cr
 If TRUE, a paired t-test is performed, otherwise unpaired. Default is FALSE.}
 
+\item{varEqual}{\strong{logical(1)} \cr
+If TRUE, equal variances are assumed (Student's t-test). Default is FALSE
+(Welch's t-test).}
+
+\item{logBeforeTest}{\strong{logical(1)} \cr
+If TRUE, the data will be log-transformed before the t-test. Default is FALSE.}
+
+\item{delogForFC}{\strong{logical(1)} \cr
+If TRUE, the fold change will be calculated on the original scale.
+Default is TRUE.}
+
+\item{logBase}{\strong{numeric(1)} \cr
+The base of the logarithm for the log-transformation. Default is 2.}
+
 \item{minObs}{\strong{integer(1)} \cr
 Minimum number of observations per group. For a paired t-test this is the
 minimum number of complete pairs. Default is 3.}
@@ -60,17 +74,16 @@ intensities and returns a combined data frame of input data and test results
 with FDR-adjusted p-values.
 }
 \examples{
-file_proteins <- system.file("extdata", "proteins_HCC.csv", package = "ProtStatsWF")
-file_clinical  <- system.file("extdata", "clinical_data.csv", package = "ProtStatsWF")
-
-D_hcc <- prepareData(dataPath = file_proteins, intensityColumns = 6:43,
-                    proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
-                    sampleNameColumn = "Sample", verbose = FALSE)
-
-ttest(SE = D_hcc$SE, assay = "intensity_norm",
-                  groupColumn = "Group", sampleColumn = "PatientID",,
-                  logBeforeTest = FALSE, delogForFC = TRUE, logBase = 2,
-                  minObs = 3, paired = TRUE)
+file_proteins <- system.file("extdata", "proteins_HCC.csv",
+  package = "ProtStatsWF")
+file_clinical <- system.file("extdata", "clinical_data.csv",
+  package = "ProtStatsWF")
+D_hcc <- prepareData(file_proteins, intensityColumns = 6:43,
+  proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
+  sampleNameColumn = "Sample", verbose = FALSE)
+ttest(D_hcc$SE, assay = "intensity_norm", groupColumn = "Group",
+  sampleColumn = "PatientID", paired = TRUE, logBeforeTest = FALSE,
+  verbose = FALSE)
 }
 \seealso{
 For more details see \code{\link[=.ttest_single_row]{.ttest_single_row()}} for the unpaired and

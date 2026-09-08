@@ -1,11 +1,11 @@
-test_that("Heatmap_with_groups matches snapshot", {
+test_that("default heatmap matches snapshot", {
 
   set.seed(14) # because ComplexHeatmap uses randomly chosen colours
-  hm <- Heatmap_with_groups(D = DATA_hcc[candidates, ],
+  hm <- heatmap(D = DATA_hcc[candidates, ],
                              id = ID_hcc[candidates, ],
                              groups = data.frame(group = group_hcc), verbose = FALSE)
 
-  vdiffr::expect_doppelganger("Heatmap_with_groups_default", hm[["heatmap"]])
+  vdiffr::expect_doppelganger("default_heatmap", hm[["heatmap"]])
 })
 
 

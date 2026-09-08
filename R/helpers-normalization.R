@@ -21,13 +21,17 @@
 #'
 #' @importFrom checkmate assertDataFrame assertFlag assertNumber assertSubset
 #' @importFrom limma normalizeBetweenArrays
-#' @importFrom vsn vsn2
 .normalization <- function(DATA,
                            method = "loess",
                            is_log_transformed = TRUE,
                            log_base = 2,
                            lts.quantile = 0.8,
                            verbose = TRUE) {
+  if (method == "lts" && !requireNamespace("vsn", quietly = TRUE)) {
+    stop("Package \"vsn\" must be installed to use the lts normalization.",
+      call. = FALSE)
+  }
+
   checkmate::assertDataFrame(DATA)
   checkmate::assertSubset(method, choices = c("nonorm", "median", "loess", "quantile", "lts"))
   checkmate::assertFlag(is_log_transformed)

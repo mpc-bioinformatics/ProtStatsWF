@@ -15,7 +15,8 @@ ANOVA(
   delog_for_FC = TRUE,
   log_base = 2,
   min_obs_per_group = 3,
-  min_perc_per_group = NULL
+  min_perc_per_group = NULL,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -51,6 +52,9 @@ The minimum number of observations per group.}
 
 \item{min_perc_per_group}{\strong{integer} \cr
 The minimum ratio of observations per group as an alternative to min_obs_per_group.}
+
+\item{verbose}{\strong{logical(1)} \cr
+Whether to print messages and a progress bar. Default is TRUE.}
 }
 \value{
 A data.frame with p-values and fold changes

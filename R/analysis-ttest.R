@@ -123,7 +123,7 @@
 
   if (delogForFC) xFC <- logBase^tmp$intensity else xFC <- tmp$intensity
 
-  res[5] <- mean(xFC[tmp$group == groupnames[2]], na.rm = TRUE) /
+  res[6] <- mean(xFC[tmp$group == groupnames[2]], na.rm = TRUE) /
     mean(xFC[tmp$group == groupnames[1]], na.rm = TRUE)
   res[7] <- 1/res[6]
 
@@ -216,7 +216,7 @@
                        paired = TRUE)}, silent = TRUE)
 
   # it is still possible, that the ttest fails (e.g. if variance in one group is 0)
-  if ("try-error" %in% class(ttest)) {message(paste0("ttest failed for row ", row));return(res)}
+  if ("try-error" %in% class(ttest)) {if (verbose) message(paste0("ttest failed for row ", row));return(res)}
 
   res[1] <- ttest$estimate
   res[2] <- ttest$statistic
@@ -268,7 +268,7 @@
 #' necessary if `paired = TRUE`, then it will be used to match sample pairs.
 #' @param paired **logical(1)** \cr
 #' If TRUE, a paired t-test is performed, otherwise unpaired. Default is FALSE.
-#' @inheritParams .ttest_single_row varEqual logBeforeTest delogForFC logbase
+#' @inheritParams .ttest_single_row varEqual logBeforeTest delogForFC logBase
 #' @param minObs **integer(1)** \cr
 #' Minimum number of observations per group. For a paired t-test this is the
 #' minimum number of complete pairs. Default is 3.
@@ -285,22 +285,21 @@
 #'
 #' @importFrom checkmate assertTRUE assertSubset assertFlag
 #' @importFrom methods is
-#' @importFrom pbapply pbapply
+#' @importFrom pbapply pbapply pboptions
 #' @importFrom stats p.adjust
 #' @importFrom SummarizedExperiment assays colData rowData
 #'
-#'@examples
-#'file_proteins <- system.file("extdata", "proteins_HCC.csv", package = "ProtStatsWF")
-#'file_clinical  <- system.file("extdata", "clinical_data.csv", package = "ProtStatsWF")
-#'
-#'D_hcc <- prepareData(dataPath = file_proteins, intensityColumns = 6:43,
-#'                     proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
-#'                     sampleNameColumn = "Sample", verbose = FALSE)
-#'
-#'ttest(SE = D_hcc$SE, assay = "intensity_norm",
-#'                   groupColumn = "Group", sampleColumn = "PatientID",,
-#'                   logBeforeTest = FALSE, delogForFC = TRUE, logBase = 2,
-#'                   minObs = 3, paired = TRUE)
+#' @examples
+#' file_proteins <- system.file("extdata", "proteins_HCC.csv",
+#'   package = "ProtStatsWF")
+#' file_clinical <- system.file("extdata", "clinical_data.csv",
+#'   package = "ProtStatsWF")
+#' D_hcc <- prepareData(file_proteins, intensityColumns = 6:43,
+#'   proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
+#'   sampleNameColumn = "Sample", verbose = FALSE)
+#' ttest(D_hcc$SE, assay = "intensity_norm", groupColumn = "Group",
+#'   sampleColumn = "PatientID", paired = TRUE, logBeforeTest = FALSE,
+#'   verbose = FALSE)
 ttest <- function(SE, assay, groupColumn, sampleColumn = NULL, paired = FALSE,
                   varEqual = FALSE, logBeforeTest = TRUE, delogForFC = TRUE,
                   logBase = 2, minObs = 3, minObsRatio = NULL, verbose = TRUE) {
@@ -310,11 +309,17 @@ ttest <- function(SE, assay, groupColumn, sampleColumn = NULL, paired = FALSE,
   checkmate::assertSubset(groupColumn, colnames(SummarizedExperiment::colData(SE)))
   checkmate::assertSubset(sampleColumn, colnames(SummarizedExperiment::colData(SE)))
   checkmate::assertFlag(paired)
+  checkmate::assertFlag(verbose)
+
+  if (!verbose) {
+    old_pbo <- pbapply::pboptions(type = "none")
+    on.exit(pbapply::pboptions(old_pbo), add = TRUE)
+  }
 
   D <- as.data.frame(SummarizedExperiment::assays(SE)[[assay]])
   id <- as.data.frame(SummarizedExperiment::rowData(SE))
-  group <- SummarizedExperiment::colData(D_hcc$SE)[,groupColumn]
-  if (!is.null(sampleColumn)) sample <- SummarizedExperiment::colData(D_hcc$SE)[,sampleColumn]
+  group <- SummarizedExperiment::colData(SE)[, groupColumn]
+  if (!is.null(sampleColumn)) sample <- SummarizedExperiment::colData(SE)[, sampleColumn]
 
   if (!paired) {
     RES <- pbapply::pbapply(D, 1, .ttest_single_row, group = group,
