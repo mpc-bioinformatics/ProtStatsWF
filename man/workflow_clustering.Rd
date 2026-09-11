@@ -87,11 +87,3 @@ and a cluster table to the output folder.
 Workflow that clusters proteins for similar patterns over the samples and
 produces a heatmap and lineplots
 }
-\examples{
-\donttest{
-workflow_clustering(
-  data_path = system.file("extdata", "proteins_HCC.csv", package = "ProtStatsWF"),
-  output_path = tempdir(), intensity_columns = 6:43, nr_clusters = 3
-)
-}
-}

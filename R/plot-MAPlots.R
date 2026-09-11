@@ -6,7 +6,7 @@
 #' Vector of intensities for the second sample..
 #' @param alpha **numeric(1)** \cr
 #' Transparency factor for data points. Default is 1, no transparency.
-#' @param point_color **character** \cr
+#' @param pointColour **character** \cr
 #' The color of the data points. Either a single value (colour for all points)
 #' or vector containing a colour for each data point.
 #' @param ... \cr
@@ -33,8 +33,8 @@
 #' s1 <- Intensities[,1]
 #' s2 <- Intensities[,2]
 #'
-#' MAPlotSingle(sample1 = s1, sample2 = s2)
-MAPlotSingle <- function(sample1, sample2,
+#' ProtStatsWF:::.MAPlotSingle(sample1 = s1, sample2 = s2)
+.MAPlotSingle <- function(sample1, sample2,
                           alpha = 1, pointColour = "black", ...) {
 
   if (!requireNamespace("affy", quietly = TRUE)) {
@@ -78,9 +78,9 @@ MAPlotSingle <- function(sample1, sample2,
 #' the number of samples is high.
 #' @param alpha **numeric(1)** \cr
 #' Transparency factor for data points. Default is 1, no transparency.
-#' @param plot_height **numeric(1)** \cr
+#' @param plotHeight **numeric(1)** \cr
 #' The height of the resulting MA plots in cm. Default is 15.
-#' @param plot_width **numeric(1)** \cr
+#' @param plotWidth **numeric(1)** \cr
 #' The width of the resulting MA plots in cm. Default is 15.
 #' @param ... \cr
 #' Additional arguments for affy::ma.plot.
@@ -90,7 +90,7 @@ MAPlotSingle <- function(sample1, sample2,
 #' @return A pdf file containing the MA plots for all sample combinations.
 #' @export
 #'
-#' @seealso [MAPlotSingle()] for internal function that generates a single plot.
+#' @seealso [.MAPlotSingle()] for internal function that generates a single plot.
 #'
 #' @importFrom checkmate assertCharacter assertDirectoryExists assertFlag
 #' @importFrom checkmate assertMatrix assertNumeric
@@ -108,9 +108,9 @@ MAPlotSingle <- function(sample1, sample2,
 #'
 #' Intensities <- SummarizedExperiment::assay(D$SE)
 #'
-#' MAPlots(Intensities, outPath = tempdir(), verbose = FALSE)
+#' MAPlots(Intensities[,1:5], outputPath = tempdir(), verbose = FALSE)
 MAPlots <- function(D,
-                    outPath, suffix = "",
+                    outputPath, suffix = "",
                     labels = as.character(1:ncol(D)), labels2 = colnames(D),
                     maxPlots = 5000,
                     alpha = 1,
@@ -123,7 +123,7 @@ MAPlots <- function(D,
   }
 
   checkmate::assertMatrix(D, min.cols = 2, min.rows = 1)
-  checkmate::assertDirectoryExists(outPath)
+  checkmate::assertDirectoryExists(outputPath)
   checkmate::assertCharacter(suffix, len = 1)
   checkmate::assertCharacter(labels, len = ncol(D))
   checkmate::assertCharacter(labels2, len = ncol(D))
@@ -148,7 +148,7 @@ MAPlots <- function(D,
   }
 
   filename <- paste0("MA_Plots", suffix, ".pdf")
-  grDevices::pdf(file.path(outPath, filename), height = plotHeight/2.54,
+  grDevices::pdf(file.path(outputPath, filename), height = plotHeight/2.54,
                  width = plotWidth/2.54)
 
   num <- 0
@@ -174,7 +174,7 @@ MAPlots <- function(D,
       num <- num + 1
       if (verbose) utils::setTxtProgressBar(pb, num)
 
-      MAPlotSingle(D[,i], D[, j], main = main, ...)
+      .MAPlotSingle(D[,i], D[, j], main = main, ...)
     }
   }
   grDevices::dev.off()

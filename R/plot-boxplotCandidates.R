@@ -78,8 +78,6 @@ BoxplotsCandidates <- function(SE,
                                 groupColumn,
                                 proteinNameColumn,
                                 groupColours = NULL,
-                                logData = TRUE,
-                                logBase = 2,
                                 plotDevice = "pdf",
                                 plotHeight = 15,
                                 plotWidth = 15,
@@ -95,9 +93,7 @@ BoxplotsCandidates <- function(SE,
   checkmate::assertSubset(proteinNameColumn, colnames(SummarizedExperiment::rowData(SE)))
   nr_groups <- length(unique(SummarizedExperiment::colData(SE)[, groupColumn]))
   checkmate::assertCharacter(groupColours, len = nr_groups, null.ok = TRUE)
-  checkmate::assertFlag(logData)
   checkmate::assertFlag(verbose)
-  checkmate::assertNumber(logBase, lower = 1)
   checkmate::assertChoice(plotDevice, c("pdf", "png"))
   checkmate::assertNumber(plotHeight, lower = 0)
   checkmate::assertNumber(plotWidth, lower = 0)

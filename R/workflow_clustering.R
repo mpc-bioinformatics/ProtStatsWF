@@ -48,12 +48,6 @@
 #' @export
 #'
 #' @examples
-#' \donttest{
-#' workflow_clustering(
-#'   data_path = system.file("extdata", "proteins_HCC.csv", package = "ProtStatsWF"),
-#'   output_path = tempdir(), intensity_columns = 6:43, nr_clusters = 3
-#' )
-#' }
 workflow_clustering <- function(data_path,
                                 output_path,
                                 intensity_columns,

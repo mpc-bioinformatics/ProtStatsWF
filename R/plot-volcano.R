@@ -69,7 +69,7 @@
 
 VolcanoPlot <- function(p,
                         FC,
-                        significance_category,
+                        significanceCategories,
                         logBaseFC = 2,
                         logBaseP = 10,
                         thresP = 0.05,
@@ -89,7 +89,7 @@ VolcanoPlot <- function(p,
 
   checkmate::assertNumeric(p, lower = 0, upper = 1)
   checkmate::assertNumeric(FC, len = length(p))
-  checkmate::assertFactor(significance_category, len = length(p),
+  checkmate::assertFactor(significanceCategories, len = length(p),
       levels = c("not significant", "significant", "significant after FDR correction"))
   checkmate::assertNumber(logBaseFC, lower = 1)
   checkmate::assertNumber(logBaseP, lower = 1)
@@ -119,7 +119,7 @@ VolcanoPlot <- function(p,
 
   RES <- data.frame(transformed_FC = transformed_FC,
                     transformed_p = transformed_p,
-                    significance = significance_category)
+                    significance = significanceCategories)
 
 
   significance <- RES$significance
@@ -206,19 +206,6 @@ VolcanoPlot <- function(p,
 #' The name of the first group. Default is "group1".
 #' @param groupName2 **character(1)** \cr
 #' The name of the second group. Default is "group2".
-#' @param plotHeight **numeric(1)** \cr
-#' The height of the plot. Default is 15.
-#' @param plotWidth **numeric(1)** \cr
-#' The width of the plot. Default is 15.
-#' @param plotDPI **integer(1)** \cr
-#' The resolution of the plot. Default is 300.
-#' @param plotDevice **character(1)** \cr
-#' The plot device that is used for the resulting plot. Options are "pdf" and
-#' "png". Default is "pdf".
-#' @param outputPath **character(1)** \cr
-#' The path for the output file. Default is NULL.
-#' @param suffix **character(1)** \cr
-#' The suffix for the output file. Default is NULL.
 #' @param addAnnotation **logical(1)** \cr
 #' If \code{TRUE}, annotation will be added. Default is TRUE.
 #' @param ... Additional arguments passed on to [VolcanoPlot()], e.g.
@@ -303,7 +290,7 @@ VolcanoPlot_ttest <- function(RES,
 
   plot <- VolcanoPlot(p = p,
                       FC = FC,
-                      significance_category = RES$significance,
+                      significanceCategories = RES$significance,
                       thresFC = thresFC,
                       thresP = thresP,
                       ...)
@@ -402,7 +389,7 @@ VolcanoPlot_ANOVA <- function(RES,
 
     plot <- VolcanoPlot(p = p_posthoc,
                         FC = fc,
-                        significance_category = significance,
+                        significanceCategories = significance,
                         symmetricX = symmetricX,
                         baseSize = baseSize,
                         ...)
@@ -461,17 +448,6 @@ VolcanoPlot_ANOVA <- function(RES,
 #' @seealso [VolcanoPlot()], [VolcanoPlot_ttest()], [VolcanoPlot_ANOVA()]
 #'
 #' @examples
-#' volcano_plot <- VolcanoPlot(
-#'   p = c(0.001, 0.3), FC = c(2.5, 1.1),
-#'   significance_category = factor(
-#'     c("significant after FDR correction", "not significant"),
-#'     levels = c("not significant", "significant",
-#'       "significant after FDR correction")
-#'   )
-#' )
-#' \donttest{add_labels(volcano_plot, label_type = "index", ind = 1,
-#'   protein_names = c("Protein A", "Protein B"))}
-
 add_labels <- function(RES_Volcano,
                        label_type = "FDR",
                        ind = NULL,

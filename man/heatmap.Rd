@@ -28,7 +28,7 @@ heatmap(
   logBase = 2,
   colourScaleMax = NULL,
   textSize = 15,
-  top_annotation = NULL,
+  topAnnotation = NULL,
   verbose = TRUE,
   ...
 )
@@ -122,6 +122,11 @@ The cap value for which all greater values will receive the same color.}
 
 \item{textSize}{\strong{integer} \cr
 The size of text in the plot.}
+
+\item{topAnnotation}{\strong{HeatmapAnnotation} \cr
+A HeatmapAnnotation object for the top annotation of the heatmap.
+If NULL (default), the top annotation will be created from the groups dataframe.
+For further information see \link[ComplexHeatmap:HeatmapAnnotation]{ComplexHeatmap::HeatmapAnnotation}.}
 
 \item{verbose}{\strong{logical} \cr
 If \code{TRUE}, messages will be printed.}

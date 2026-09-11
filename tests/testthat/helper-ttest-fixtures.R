@@ -13,7 +13,7 @@ ID_hcc    <- as.data.frame(SummarizedExperiment::rowData(D_hcc$SE))
 group_hcc <- droplevels(factor(SummarizedExperiment::colData(D_hcc$SE)[, "Group"]))
 
 ttest_res <- ttest(SE = D_hcc$SE, assay = "intensity_norm",
-                   groupColumn = "Group", sampleColumn = "PatientID",,
+                   groupColumn = "Group", sampleColumn = "PatientID",
                    logBeforeTest = FALSE, delogForFC = TRUE, logBase = 2,
                    minObs = 3, paired = TRUE, verbose = FALSE)
 

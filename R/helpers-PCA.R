@@ -7,7 +7,7 @@
 #' Additionally, proteins with almost constant values (and therefor a variance
 #' near zero are removed).
 #'
-#' @param **SummarizedExperiment object** \cr
+#' @param SE **SummarizedExperiment object** \cr
 #' Data in a SummarizedExperiment object, e.g. output SE from [prepareData]
 #' function.
 #' @param assay **character(1)** \cr

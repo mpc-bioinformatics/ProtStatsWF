@@ -39,23 +39,23 @@ Default is TRUE.}
 \item{logBase}{\strong{numeric(1)} \cr
 The base of the logarithm for the log-transformation. Default is 2.}
 
+\item{minObs}{\strong{integer(1)} \cr
+The minimum number of valid values per group to calculate the test for this
+peptide or protein. If fewer valid values are present, NA is reported as
+a result. Default is 3.}
+
+\item{minObsRatio}{\strong{numeric(1)} \cr
+The minimum proportion of valid values required per group (e.g. 0.8 = 80\%
+valid values in each group required). This is an alternative to
+\code{minObsPerGroup}, especially when groups sizes are unbalanced. If you
+use this setting, please set \code{minObsPerGroup = NULL}.}
+
 \item{row}{\strong{integer(1)} \cr
 The current row number of the data, used for informative warnings.
 Default is NULL.}
 
 \item{verbose}{\strong{logical(1)} \cr
 If TRUE (default), messages are printed out.}
-
-\item{minObsPerGroup}{\strong{integer(1)} \cr
-The minimum number of valid values per group to calculate the test for this
-peptide or protein. If fewer valid values are present, NA is reported as
-a result. Default is 3.}
-
-\item{minObsPerGroupRatio}{\strong{numeric(1)} \cr
-The minimum proportion of valid values required per group (e.g. 0.8 = 80\%
-valid values in each group required). This is an alternative to
-\code{minObsPerGroup}, especially when groups sizes are unbalanced. If you
-use this setting, please set \code{minObsPerGroup = NULL}.}
 }
 \value{
 A named numeric vector with the following elements: mean of group 1,

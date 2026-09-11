@@ -20,14 +20,3 @@ A list of ggplot2 objects, each containing the lineplot for one cluster.
 \description{
 Generate Lineplots for each cluster.
 }
-\examples{
-file_proteins <- system.file("extdata", "proteins_HCC.csv",
-  package = "ProtStatsWF")
-D_hcc <- prepareData(file_proteins, intensityColumns = 6:43,
-  proteinNameColumn = "Protein", verbose = FALSE)
-D_zscore <- as.data.frame(t(scale(t(
-  SummarizedExperiment::assay(D_hcc$SE, "intensity_norm")[1:20, ]
-))))
-D_zscore$cluster <- rep(1:2, each = 10)
-Lineplots(D_zscore, cluster_colours = c("#F8766D", "#00BFC4"))
-}

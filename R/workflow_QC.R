@@ -206,7 +206,7 @@ workflow_QC <- function(D,
 
   if (MAMaxPlots > 0) {
     ma_data <- MAPlots(D = SummarizedExperiment::assay(D$SE),  ### TODO: define which assay
-                        outPath = outputPath, suffix = suffix,
+                        outputPath = outputPath, suffix = suffix,
                         maxPlots = MAMaxPlots, alpha = MAAlpha,
                         plotHeight = plotHeight_MA,
                         plotWidth = plotWidth_MA,

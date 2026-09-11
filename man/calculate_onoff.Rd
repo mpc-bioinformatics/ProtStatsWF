@@ -38,19 +38,3 @@ A data.frame with the number of valid values per group (absolute and relative) a
 \description{
 Calculate on/off proteins
 }
-\examples{
-file_proteins <- system.file("extdata", "proteins_HCC.csv",
-  package = "ProtStatsWF")
-file_clinical <- system.file("extdata", "clinical_data.csv",
-  package = "ProtStatsWF")
-D_hcc <- prepareData(file_proteins, intensityColumns = 6:43,
-  proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
-  sampleNameColumn = "Sample", verbose = FALSE)
-calculate_onoff(
-  D = as.data.frame(SummarizedExperiment::assay(D_hcc$SE, "intensity_norm")),
-  id = as.data.frame(SummarizedExperiment::rowData(D_hcc$SE)),
-  group = factor(SummarizedExperiment::colData(D_hcc$SE)[, "Group"]),
-  maxValidValuesOff = 0, minValidValuesOn = 3,
-  proteinNamesColumn = "Protein"
-)
-}

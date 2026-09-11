@@ -65,25 +65,6 @@ If \code{TRUE}, annotation will be added. Default is TRUE.}
 \code{colour1}, \code{colour2}, \code{colour3}, \code{symmetricX},
 \code{legendPosition}, \code{baseSize}, \code{alpha}, \code{pointSize},
 \code{linewidth} or \code{showThresLine}.}
-
-\item{plotHeight}{\strong{numeric(1)} \cr
-The height of the plot. Default is 15.}
-
-\item{plotWidth}{\strong{numeric(1)} \cr
-The width of the plot. Default is 15.}
-
-\item{plotDPI}{\strong{integer(1)} \cr
-The resolution of the plot. Default is 300.}
-
-\item{plotDevice}{\strong{character(1)} \cr
-The plot device that is used for the resulting plot. Options are "pdf" and
-"png". Default is "pdf".}
-
-\item{outputPath}{\strong{character(1)} \cr
-The path for the output file. Default is NULL.}
-
-\item{suffix}{\strong{character(1)} \cr
-The suffix for the output file. Default is NULL.}
 }
 \value{
 A ggplot object of the volcano plot from a ttest result.

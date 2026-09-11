@@ -90,23 +90,6 @@ clustering <- function(D,
 #' @export
 #'
 #' @examples
-#' file_proteins <- system.file("extdata", "proteins_HCC.csv",
-#'   package = "ProtStatsWF")
-#' D_hcc <- prepareData(file_proteins, intensityColumns = 6:43,
-#'   proteinNameColumn = "Protein", verbose = FALSE)
-#' intensities <- as.data.frame(
-#'   SummarizedExperiment::assay(D_hcc$SE, "intensity_norm")
-#' )[1:20, ]
-#' cluster_result <- clustering(intensities, nr_clusters = 3)
-#' heatmap_result <- heatmap(
-#'   D = intensities,
-#'   id = as.data.frame(SummarizedExperiment::rowData(D_hcc$SE))[1:20, ],
-#'   clusterRows = cluster_result$row_dend, logData = FALSE, verbose = FALSE
-#' )
-#' getClusterInfos(heatmap_result$heatmap, cluster_result$nr_clusters,
-#'   D = intensities,
-#'   id = as.data.frame(SummarizedExperiment::rowData(D_hcc$SE))[1:20, ]
-#' )
 getClusterInfos <- function(heatmap, nr_clusters, D, id) {
   if (!requireNamespace("dendextend", quietly = TRUE)) {
     stop("Package \"dendextend\" must be installed to get the cluster information.",
@@ -148,15 +131,6 @@ getClusterInfos <- function(heatmap, nr_clusters, D, id) {
 #' @export
 #'
 #' @examples
-#' file_proteins <- system.file("extdata", "proteins_HCC.csv",
-#'   package = "ProtStatsWF")
-#' D_hcc <- prepareData(file_proteins, intensityColumns = 6:43,
-#'   proteinNameColumn = "Protein", verbose = FALSE)
-#' D_zscore <- as.data.frame(t(scale(t(
-#'   SummarizedExperiment::assay(D_hcc$SE, "intensity_norm")[1:20, ]
-#' ))))
-#' D_zscore$cluster <- rep(1:2, each = 10)
-#' Lineplots(D_zscore, cluster_colours = c("#F8766D", "#00BFC4"))
 Lineplots <- function(D_zscore, cluster_colours) {
 
   nr_clusters <- max(D_zscore$cluster)

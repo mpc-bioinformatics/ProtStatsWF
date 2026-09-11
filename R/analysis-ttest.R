@@ -19,11 +19,11 @@
 #' Default is TRUE.
 #' @param logBase **numeric(1)** \cr
 #' The base of the logarithm for the log-transformation. Default is 2.
-#' @param minObsPerGroup **integer(1)** \cr
+#' @param minObs **integer(1)** \cr
 #' The minimum number of valid values per group to calculate the test for this
 #' peptide or protein. If fewer valid values are present, NA is reported as
 #' a result. Default is 3.
-#' @param minObsPerGroupRatio **numeric(1)** \cr
+#' @param minObsRatio **numeric(1)** \cr
 #' The minimum proportion of valid values required per group (e.g. 0.8 = 80%
 #' valid values in each group required). This is an alternative to
 #' \code{minObsPerGroup}, especially when groups sizes are unbalanced. If you
@@ -145,6 +145,9 @@
 #' and returns p-values and fold changes.
 #'
 #' @inheritParams .ttest_single_row
+#' @param sample **factor** \cr
+#' Vector containing the sample IDs, to build the pairs needed for the paired
+#' t-test. Must be the same length as \code{x}.
 #' @param minPairs **integer(1)** \cr
 #' The minimum number of complete sample pairs required. Default is 3.
 #'
@@ -164,6 +167,7 @@
 
   checkmate::assertNumeric(x)
   checkmate::assertFactor(group, len = length(x), n.levels = 2)
+  checkmate::assertFactor(sample, len = length(x))
   checkmate::assertFlag(logBeforeTest)
   checkmate::assertFlag(delogForFC)
   checkmate::assertNumber(logBase, lower = 1)
@@ -275,6 +279,8 @@
 #' @param minObsRatio **numeric(1)** \cr
 #' Minimum proportion of valid values required per group (e.g. 0.8 = 80%).
 #' Currently not usable if `paired = TRUE`.
+#' @param verbose **logical** \cr
+#' If \code{TRUE}, messages will be printed.
 #'
 #' @return A data frame containing the t-test results an used protein intensity
 #' values.
@@ -330,6 +336,7 @@ ttest <- function(SE, assay, groupColumn, sampleColumn = NULL, paired = FALSE,
   }
 
   if (paired) {
+    sample <- as.factor(sample)
     RES <- pbapply::pbapply(D, 1, .ttest_single_row_paired, group = group,
                             logBeforeTest = logBeforeTest,
                  delogForFC = delogForFC, minPairs = minObs, sample = sample,

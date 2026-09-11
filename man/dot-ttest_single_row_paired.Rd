@@ -24,6 +24,10 @@ Vector of peptide or protein intensities.}
 Vector containing the group membership of the samples. Must contain exactly
 two factor levels and the same length as \code{x}.}
 
+\item{sample}{\strong{factor} \cr
+Vector containing the sample IDs, to build the pairs needed for the paired
+t-test. Must be the same length as \code{x}.}
+
 \item{logBeforeTest}{\strong{logical(1)} \cr
 If TRUE, the data will be log-transformed before the t-test. Default is FALSE.}
 

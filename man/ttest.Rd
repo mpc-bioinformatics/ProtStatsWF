@@ -63,6 +63,9 @@ minimum number of complete pairs. Default is 3.}
 \item{minObsRatio}{\strong{numeric(1)} \cr
 Minimum proportion of valid values required per group (e.g. 0.8 = 80\%).
 Currently not usable if \code{paired = TRUE}.}
+
+\item{verbose}{\strong{logical} \cr
+If \code{TRUE}, messages will be printed.}
 }
 \value{
 A data frame containing the t-test results an used protein intensity

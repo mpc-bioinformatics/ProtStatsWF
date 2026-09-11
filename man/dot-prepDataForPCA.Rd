@@ -13,6 +13,10 @@
 )
 }
 \arguments{
+\item{SE}{\strong{SummarizedExperiment object} \cr
+Data in a SummarizedExperiment object, e.g. output SE from \link{prepareData}
+function.}
+
 \item{assay}{\strong{character(1)} \cr
 The name of the assay in SE containing the protein intensities that should
 be used for the PCA plot. Default is "intensity_norm", which uses the
@@ -29,10 +33,6 @@ discarded. It is automatically set to 0 if imputeMethod is "none".}
 
 \item{verbose}{\strong{logical(1)} \cr
 If TRUE, messages are printed out.}
-
-\item{**SummarizedExperiment}{object** \cr
-Data in a SummarizedExperiment object, e.g. output SE from \link{prepareData}
-function.}
 }
 \value{
 SummarizedExperiment object with the filtered data.

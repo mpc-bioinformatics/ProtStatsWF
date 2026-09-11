@@ -6,7 +6,7 @@
 \usage{
 MAPlots(
   D,
-  outPath,
+  outputPath,
   suffix = "",
   labels = as.character(1:ncol(D)),
   labels2 = colnames(D),
@@ -21,6 +21,9 @@ MAPlots(
 \arguments{
 \item{D}{\strong{matrix} \cr
 Data set containing peptide or protein intensities in wide format.}
+
+\item{outputPath}{\strong{character(1)} \cr
+Path to a folder for saving a pdf file with the MA-Plots. Folder must exist.}
 
 \item{suffix}{\strong{character(1)} \cr
 Suffix for the output file. Should start with an underscore. Default is "".}
@@ -41,20 +44,17 @@ the number of samples is high.}
 \item{alpha}{\strong{numeric(1)} \cr
 Transparency factor for data points. Default is 1, no transparency.}
 
+\item{plotHeight}{\strong{numeric(1)} \cr
+The height of the resulting MA plots in cm. Default is 15.}
+
+\item{plotWidth}{\strong{numeric(1)} \cr
+The width of the resulting MA plots in cm. Default is 15.}
+
 \item{verbose}{\strong{logical(1)} \cr
 If TRUE (default), messages are printed out and a progress bar is shown.}
 
 \item{...}{\cr
 Additional arguments for affy::ma.plot.}
-
-\item{outputPath}{\strong{character(1)} \cr
-Path to a folder for saving a pdf file with the MA-Plots. Folder must exist.}
-
-\item{plot_height}{\strong{numeric(1)} \cr
-The height of the resulting MA plots in cm. Default is 15.}
-
-\item{plot_width}{\strong{numeric(1)} \cr
-The width of the resulting MA plots in cm. Default is 15.}
 }
 \value{
 A pdf file containing the MA plots for all sample combinations.
@@ -73,8 +73,8 @@ D <- prepareData(dataPath = file_proteins, intensityColumns = 6:43,
 
 Intensities <- SummarizedExperiment::assay(D$SE)
 
-MAPlots(Intensities, outPath = tempdir(), verbose = FALSE)
+MAPlots(Intensities[,1:5], outputPath = tempdir(), verbose = FALSE)
 }
 \seealso{
-\code{\link[=MAPlotSingle]{MAPlotSingle()}} for internal function that generates a single plot.
+\code{\link[=.MAPlotSingle]{.MAPlotSingle()}} for internal function that generates a single plot.
 }

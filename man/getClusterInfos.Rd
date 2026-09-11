@@ -25,22 +25,3 @@ A data.frame containing the cluster assignment for each protein along with the o
 \description{
 Get cluster information from heatmap
 }
-\examples{
-file_proteins <- system.file("extdata", "proteins_HCC.csv",
-  package = "ProtStatsWF")
-D_hcc <- prepareData(file_proteins, intensityColumns = 6:43,
-  proteinNameColumn = "Protein", verbose = FALSE)
-intensities <- as.data.frame(
-  SummarizedExperiment::assay(D_hcc$SE, "intensity_norm")
-)[1:20, ]
-cluster_result <- clustering(intensities, nr_clusters = 3)
-heatmap_result <- heatmap(
-  D = intensities,
-  id = as.data.frame(SummarizedExperiment::rowData(D_hcc$SE))[1:20, ],
-  clusterRows = cluster_result$row_dend, logData = FALSE, verbose = FALSE
-)
-getClusterInfos(heatmap_result$heatmap, cluster_result$nr_clusters,
-  D = intensities,
-  id = as.data.frame(SummarizedExperiment::rowData(D_hcc$SE))[1:20, ]
-)
-}

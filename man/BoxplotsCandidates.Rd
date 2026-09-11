@@ -10,8 +10,6 @@ BoxplotsCandidates(
   groupColumn,
   proteinNameColumn,
   groupColours = NULL,
-  logData = TRUE,
-  logBase = 2,
   plotDevice = "pdf",
   plotHeight = 15,
   plotWidth = 15,

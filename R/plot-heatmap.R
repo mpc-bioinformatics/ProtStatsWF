@@ -68,6 +68,10 @@
 #' The cap value for which all greater values will receive the same color.
 #' @param textSize **integer** \cr
 #' The size of text in the plot.
+#' @param topAnnotation **HeatmapAnnotation** \cr
+#' A HeatmapAnnotation object for the top annotation of the heatmap.
+#' If NULL (default), the top annotation will be created from the groups dataframe.
+#' For further information see [ComplexHeatmap::HeatmapAnnotation].
 #' @param verbose **logical** \cr
 #' If \code{TRUE}, messages will be printed.
 #' @param ... Further arguments to Heatmap
@@ -117,7 +121,7 @@ heatmap <- function(D,
                     logBase = 2,
                     colourScaleMax = NULL,
                     textSize = 15,
-                    top_annotation = NULL,
+                    topAnnotation = NULL,
                     verbose = TRUE,
                     ...) {
   if (!requireNamespace("ComplexHeatmap", quietly = TRUE)) {
@@ -199,10 +203,18 @@ heatmap <- function(D,
   }
 
   if (naMethod == "na.omit") {
-    data.asmatrix <- stats::na.omit(data.asmatrix)
+    nrowD <- nrow(data.asmatrix)
+    anyNAs <- apply(data.asmatrix, 1, function(x) any(is.na(x)))
+    data.asmatrix <- data.asmatrix[!anyNAs, , drop = FALSE]
+    id <- id[!anyNAs,, drop = FALSE]
 
+    # print(data.asmatrix)
+    # print(sum(!anyNAs))
+    # 
+    # print(nrow(data.asmatrix))
+    
     ### if there are no rows remaining after na.omit, throw error message
-    if (nrow(data.asmatrix) == 0) {
+    if (sum(!anyNAs) == 0) {
       if (verbose) message("All rows contain at least one missing value. Heatmap cannot be created.")
       return(NULL)
     }
@@ -233,10 +245,10 @@ heatmap <- function(D,
   }
 
 
-  if (is.null(top_annotation)) {
+  if (is.null(topAnnotation)) {
     ### top annotation for groups
     if (!is.null(groups)) {
-      top_annotation = ComplexHeatmap::HeatmapAnnotation(df = groups,
+      topAnnotation = ComplexHeatmap::HeatmapAnnotation(df = groups,
                                                          col = groupColours,
                                                          annotation_name_gp = grid::gpar(fontsize = textSize), #name = groupName,
                                                          annotation_label = groupName,
@@ -244,7 +256,7 @@ heatmap <- function(D,
                                                                                                               fontface = "bold"),
                                                                                         labels_gp = grid::gpar(fontsize = textSize)))
     } else {
-      top_annotation = NULL
+      topAnnotation = NULL
     }
   }
 
@@ -263,13 +275,17 @@ heatmap <- function(D,
     clusterColumns <- stats::as.dendrogram(clusters_columns)
   }
 
+  #print(row_labels)
+  
+  #data.asmatrix2 <<- data.asmatrix
+  
   ht <- ComplexHeatmap::Heatmap(data.asmatrix,
                 column_title = title,
                 #name = legendName,
                 cluster_rows = clusterRows,
                 cluster_columns = clusterColumns,
                 cluster_column_slices = clusterColumnSlices,
-                top_annotation = top_annotation,
+                top_annotation = topAnnotation,
                 column_split = columnSplit,
                 row_labels = row_labels,
                 col = legendColours,
