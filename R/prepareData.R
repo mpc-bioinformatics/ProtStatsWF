@@ -170,6 +170,7 @@ prepareData <- function(dataPath,
     ind <- match(sampleInfo[, sampleNameColumn], colnames(D))
     if (anyNA(ind)) {
       ind <- na.omit(ind)
+      sampleInfo <- sampleInfo[!is.na(ind),]
       warning("SampleInfo describes samples that are not present in the data set. \n",
               "Those will be skipped, please check plots for completeness.")
     }
