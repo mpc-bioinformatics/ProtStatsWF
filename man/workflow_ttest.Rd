@@ -16,6 +16,7 @@ workflow_ttest(
   varEqual = FALSE,
   logBeforeTest = FALSE,
   delogForFC = TRUE,
+  minObs = 3,
   pValueZerosToMin = TRUE,
   volcanoBaseSize = 25,
   histogramBaseSize = 15,
@@ -86,7 +87,12 @@ log-transformed.}
 If \code{TRUE}, fold changes are computed on the original (de-log) scale.
 Default is \code{TRUE}.}
 
-\item{pValueZerosToMin}{\strong{logical(1)} If \code{TRUE}, p-values equal to 0 are replaced
+\item{minObs}{\strong{integer(1)} \cr
+Minimum number of observations per group. For a paired t-test this is the
+minimum number of complete pairs. Default is 3.}
+
+\item{pValueZerosToMin}{\strong{logical(1)}
+If \code{TRUE}, p-values equal to 0 are replaced
 by the next smallest observed p-value. Default is \code{TRUE}.}
 
 \item{volcanoBaseSize}{\strong{numeric(1)} \cr

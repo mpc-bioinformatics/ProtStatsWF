@@ -18,18 +18,23 @@
 #' @param groupColumn **character(1)** \cr
 #' Name of the column that contains the groups that are compared with a t-test.
 #' Exactly two groups must be present.
+#' @param outputPath **character(1)** \cr
+#' Path to the output folder. The folder must already exist.
 #' @param sampleColumn **character(1)** \cr
 #' Name of the column that identifies matched samples for a paired test.
 #' Required only when \code{paired = TRUE}. Default is \code{NULL}.
+#' @param assayName **character(1)** \cr
+#' Name of the assay in \code{D$SE} to use as input data.
+#' Default is \code{"intensity_norm"}, which corresponds to the output of
+#' [prepareData()]. Only change if you do not directly use the output from
+#' [prepareData()].
+#' @param groupColours **character** \cr
+#' Vector of colours for the two groups. Default is \code{NULL}
+#'   (default ggplot2 colour palette).
 #' @param proteinNameColumn **character(1)** \cr
 #' Name of the column that contains protein identifiers (e.g. protein
 #' accessions, gene names). Default is \code{"Protein"}. This column will be
 #' used to label candidate proteins in boxplots and heatmap.
-#' @param outputPath **character(1)** \cr
-#' Path to the output folder. The folder must already exist.
-#' @param suffix **character(1)** \cr
-#' Suffix to add to the output file names. Default is "". Should ideally start
-#' with an underscore "_".
 #' @param paired **logical(1)** \cr
 #' If \code{TRUE}, a paired test is performed. Default is \code{FALSE}
 #' (unpaired t-test).
@@ -43,9 +48,18 @@
 #' @param delogForFC **logical(1)** \cr
 #' If \code{TRUE}, fold changes are computed on the original (de-log) scale.
 #' Default is \code{TRUE}.
-#' @param groupColours **character** \cr
-#' Vector of colours for the two groups. Default is \code{NULL}
-#'   (default ggplot2 colour palette).
+#' @param minObs **integer(1)** \cr
+#' Minimum number of observations per group. For a paired t-test this is the
+#' minimum number of complete pairs. Default is 3.
+#' @param pValueZerosToMin **logical(1)**
+#' If \code{TRUE}, p-values equal to 0 are replaced
+#' by the next smallest observed p-value. Default is \code{TRUE}.
+#' @param volcanoBaseSize **numeric(1)** \cr
+#' Base size for the volcano plot. Default is 25.
+#' @param histogramBaseSize **numeric(1)** \cr
+#' Base size for the p-value and fold change histograms. Default is 15.
+#' @param heatmapTextSize **numeric(1)** \cr
+#' Text size for the heatmap. Default is 15.
 #' @param significantAfterFDR **logical(1)** \cr
 #' If \code{TRUE}, only proteins significant after FDR correction are shown in
 #' boxplots and heatmap. Default is \code{TRUE}.
@@ -53,18 +67,13 @@
 #' Fold change threshold used to classify a candidate as significant. Default is 2.
 #' @param thresP **numeric(1)** \cr
 #' P-value threshold used to classify a candidate as significant. Default is 0.05.
-#' @param pValueZerosToMin **logical(1)** If \code{TRUE}, p-values equal to 0 are replaced
-#'   by the next smallest observed p-value. Default is \code{TRUE}.
-#' @param volcanoBaseSize **numeric(1)** \cr
-#' Base size for the volcano plot. Default is 25.
-#' @param histogramBaseSize **numeric(1)** \cr
-#' Base size for the p-value and fold change histograms. Default is 15.
-#' @param heatmapTextSize **numeric(1)** \cr
-#' Text size for the heatmap. Default is 15.
 #' @param maxValidValuesOff **integer(1)** Maximum number of valid values for a protein to be
 #'   classified as "off". Default is \code{0}.
 #' @param minValidValuesOn **integer(1)** Minimum number of valid values for a protein to be
 #'   classified as "on". Default is \code{NULL} (set automatically to the smallest group size).
+#' @param suffix **character(1)** \cr
+#' Suffix to add to the output file names. Default is "". Should ideally start
+#' with an underscore "_".
 #' @param plotDevice **character(1)** \cr
 #' Device to use for saving plots. Default is "pdf".
 #' @param plotHeight_Volcano **numeric(1)** \cr
@@ -85,11 +94,6 @@
 #' Width of the heatmap in cm. Default is \code{15}.
 #' @param plotDPI **integer(1)** \cr
 #' Plot resolution in DPI. Default is \code{300}.
-#' @param assayName **character(1)** \cr
-#' Name of the assay in \code{D$SE} to use as input data.
-#' Default is \code{"intensity_norm"}, which corresponds to the output of
-#' [prepareData()]. Only change if you do not directly use the output from
-#' [prepareData()].
 #' @param verbose **logical(1)** \cr
 #' Whether to print messages and progress bars during the workflow. Default is TRUE.
 #'
@@ -139,6 +143,7 @@ workflow_ttest <- function(D,
                            varEqual = FALSE,
                            logBeforeTest = FALSE,
                            delogForFC = TRUE,
+                           minObs = 3,
                            pValueZerosToMin = TRUE,
 
                            volcanoBaseSize = 25,
@@ -240,7 +245,7 @@ workflow_ttest <- function(D,
                         sampleColumn = sampleColumn,
                         paired = paired, varEqual = varEqual,
                         logBeforeTest = logBeforeTest, delogForFC = delogForFC, logBase = 2,
-                        minObs = 3, minObsRatio = NULL, verbose = verbose)
+                        minObs = minObs, minObsRatio = NULL, verbose = verbose)
 
   openxlsx::write.xlsx(test_results,
                        file = file.path(outputPath, paste0("results_ttest", suffix, ".xlsx")),
