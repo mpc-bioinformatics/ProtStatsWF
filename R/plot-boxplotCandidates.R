@@ -114,7 +114,7 @@ BoxplotsCandidates <- function(SE,
   group <- SummarizedExperiment::colData(SE)[,groupColumn]
 
   pb <- if (verbose) pbapply::startpb(min = 0, max = nrow(D)) else NULL
-  for (i in seq_along(nrow(D))) {
+  for (i in 1:nrow(D)) {
 
     # prepare data for single protein
     data <- data.frame(value = unlist(D[i,]), group = group)

@@ -161,7 +161,7 @@ prepareData <- function(dataPath,
     if (verbose) message("Log-transformation with base ", logBase, ".")
   }
 
-  D_norm <- ProtStatsWF:::.normalization(DATA = D, method = normMethod,
+  D_norm <- .normalization(DATA = D, method = normMethod,
                               is_log_transformed = TRUE, ## we assume that data is log-transformed!
                               log_base = logBase, lts.quantile = ltsQuantile,
                               verbose = verbose)

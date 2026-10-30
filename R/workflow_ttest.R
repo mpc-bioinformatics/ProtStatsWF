@@ -55,7 +55,7 @@
 #' If \code{TRUE}, p-values equal to 0 are replaced
 #' by the next smallest observed p-value. Default is \code{TRUE}.
 #' @param volcanoBaseSize **numeric(1)** \cr
-#' Base size for the volcano plot. Default is 25.
+#' Base size for the volcano plot. Default is 15.
 #' @param histogramBaseSize **numeric(1)** \cr
 #' Base size for the p-value and fold change histograms. Default is 15.
 #' @param heatmapTextSize **numeric(1)** \cr
@@ -77,9 +77,9 @@
 #' @param plotDevice **character(1)** \cr
 #' Device to use for saving plots. Default is "pdf".
 #' @param plotHeight_Volcano **numeric(1)** \cr
-#' Height of the volcano plot in cm. Default is \code{15}.
+#' Height of the volcano plot in cm. Default is \code{25}.
 #' @param plotWidth_Volcano **numeric(1)** \cr
-#' Width of the volcano plot in cm. Default is \code{15}.
+#' Width of the volcano plot in cm. Default is \code{25}.
 #' @param plotHeight_Histogram **numeric(1)** \cr
 #' Height of the p-value and fold change histograms in cm. Default is \code{15}.
 #' @param plotWidth_Histogram **numeric(1)** \cr
@@ -146,7 +146,7 @@ workflow_ttest <- function(D,
                            minObs = 3,
                            pValueZerosToMin = TRUE,
 
-                           volcanoBaseSize = 25,
+                           volcanoBaseSize = 15,
                            histogramBaseSize = 15,
                            heatmapTextSize = 15,
 
@@ -158,8 +158,8 @@ workflow_ttest <- function(D,
 
                            suffix = "",
                            plotDevice = "pdf",
-                           plotHeight_Volcano = 15,
-                           plotWidth_Volcano = 15,
+                           plotHeight_Volcano = 25,
+                           plotWidth_Volcano = 25,
                            plotHeight_Histogram = 15,
                            plotWidth_Histogram = 15,
                            plotHeight_Boxplot = 15,
@@ -306,6 +306,7 @@ workflow_ttest <- function(D,
 
   candidates <- as.character(significance)
 
+
   if (significantAfterFDR) {
     candidates <- which(candidates == "significant after FDR correction")
   } else {
@@ -314,7 +315,6 @@ workflow_ttest <- function(D,
   if (verbose) message("Found ", length(candidates), " significant candidate",
                        ifelse(length(candidates) == 1, "", "s"),
                        ifelse(significantAfterFDR, " after FDR correction.", "."))
-
 
   #### Create Boxplots of Biomarker Candidates ####
 
