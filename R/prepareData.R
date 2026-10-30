@@ -168,6 +168,12 @@ prepareData <- function(dataPath,
 
   if (!is.null(sampleInfoPath)) {
     ind <- match(sampleInfo[, sampleNameColumn], colnames(D))
+    if (anyNA(ind)) {
+      ind <- na.omit(ind)
+      warning("SampleInfo describes samples that are not present in the data set. \n",
+              "Those will be skipped, please check plots for completeness.")
+    }
+
     D_norm <- D_norm[,ind] # sort columns of D like sampleInfo
     D <- D[, ind]
   } else {
@@ -205,7 +211,7 @@ prepareData <- function(dataPath,
 
 
 
-#' 
+#'
 #' #' Pivot SE to long format
 #' #'
 #' #'helper function to extract assay data and pivot to long format.
@@ -220,31 +226,31 @@ prepareData <- function(dataPath,
 #' #'
 #' #' @returns A data frame in long format.
 #' .pivotLongerSE <- function(SE, cols) {
-#' 
+#'
 #'   # Extract assay
 #'   D <- as.data.frame(SummarizedExperiment::assay(SE))
 #'   D$id. <- rownames(D)
-#' 
+#'
 #'   D_long <- tidyr::pivot_longer(D, -id., names_to = "sample.",
 #'                                 values_to = "value.")
-#' 
+#'
 #'   # Add colData
 #'   col_data <- as.data.frame(SummarizedExperiment::colData(SE))
 #'   col_data$sample. <- rownames(col_data)
 #'   D_long <- dplyr::left_join(D_long, col_data, by = "sample.")
-#' 
+#'
 #'   # Add rowData
 #'   row_data <- as.data.frame(SummarizedExperiment::rowData(SE))
 #'   row_data$id. <- rownames(row_data)
 #'   D_long <- dplyr::left_join(D_long, row_data, by = "id.")
-#' 
+#'
 #' }
-#' 
-#' 
-#' 
-#' 
-#' 
-#' 
-#' 
-#' 
-#' 
+#'
+#'
+#'
+#'
+#'
+#'
+#'
+#'
+#'
