@@ -161,7 +161,7 @@ prepareData <- function(dataPath,
     if (verbose) message("Log-transformation with base ", logBase, ".")
   }
 
-  D_norm <- .normalization(DATA = D, method = normMethod,
+  D_norm <- ProtStatsWF:::.normalization(DATA = D, method = normMethod,
                               is_log_transformed = TRUE, ## we assume that data is log-transformed!
                               log_base = logBase, lts.quantile = ltsQuantile,
                               verbose = verbose)
@@ -169,8 +169,8 @@ prepareData <- function(dataPath,
   if (!is.null(sampleInfoPath)) {
     ind <- match(sampleInfo[, sampleNameColumn], colnames(D))
     if (anyNA(ind)) {
-      ind <- na.omit(ind)
       sampleInfo <- sampleInfo[!is.na(ind),]
+      ind <- na.omit(ind)
       warning("SampleInfo describes samples that are not present in the data set. \n",
               "Those will be skipped, please check plots for completeness.")
     }
@@ -185,6 +185,12 @@ prepareData <- function(dataPath,
 
 
   assays <- list(intensity_norm = as.matrix(D_norm), intensity = as.matrix(D))
+
+  assays2 <<- assays
+  rowData2 <<- id
+  colData2 <<- sampleInfo
+
+
   SE <- SummarizedExperiment::SummarizedExperiment(assays = assays,
                                                    rowData = id,
                                                    colData = sampleInfo)

@@ -52740,3 +52740,1518 @@
       Q9Y6X9               ATPase MORC2
       Q9Y6Y8     SEC23-interacting pr..
 
+# Test prepareData if sampleInfo describes data not present in dataset
+
+    Code
+      D$D_long
+    Output
+            .feature .sample intensity_norm Sample PatientID Group Gender Age
+      1       P00711   HCC_1             NA  HCC_1         1   HCC Female  57
+      2       P00711   HCC_2       19.37729  HCC_2         2   HCC   Male  71
+      3       P00711   HCC_3             NA  HCC_3         3   HCC Female  42
+      4       P00711   HCC_4             NA  HCC_4         4   HCC   Male  73
+      5       P00711   HCC_5             NA  HCC_5         5   HCC   Male  51
+      6       P00711   HCC_6             NA  HCC_6         6   HCC   Male  21
+      7       P00711   HCC_7             NA  HCC_7         7   HCC   Male  71
+      8       P00711   HCC_8             NA  HCC_8         8   HCC   Male  74
+      9       P00711   HCC_9             NA  HCC_9         9   HCC   Male  65
+      10      P00711  HCC_10             NA HCC_10        10   HCC Female  59
+      11      P00711  HCC_11             NA HCC_11        11   HCC Female  76
+      12      P00711  HCC_12             NA HCC_12        12   HCC   Male  53
+      13      P00711  HCC_14             NA HCC_14        14   HCC   Male  72
+      14      P00711  HCC_15             NA HCC_15        15   HCC Female  67
+      15      P00711  HCC_16             NA HCC_16        16   HCC   Male  75
+      16      P00711  HCC_17             NA HCC_17        17   HCC   Male  57
+      17      P00711  HCC_18             NA HCC_18        18   HCC   Male  66
+      18      P00711  HCC_19             NA HCC_19        19   HCC Female  56
+      19      P00711     C_1       20.47019    C_1         1     C Female  57
+      20      P00711     C_3             NA    C_3         3     C Female  42
+      21      P00711     C_4             NA    C_4         4     C   Male  73
+      22      P00711     C_5             NA    C_5         5     C   Male  51
+      23      P00711     C_6             NA    C_6         6     C   Male  21
+      24      P00711     C_7       20.28291    C_7         7     C   Male  71
+      25      P00711     C_8             NA    C_8         8     C   Male  74
+      26      P00711     C_9             NA    C_9         9     C   Male  65
+      27      P00711    C_10             NA   C_10        10     C Female  59
+      28      P00711    C_11             NA   C_11        11     C Female  76
+      29      P00711    C_12             NA   C_12        12     C   Male  53
+      30      P00711    C_13             NA   C_13        13     C   Male  62
+      31      P00711    C_14             NA   C_14        14     C   Male  72
+      32      P00711    C_15             NA   C_15        15     C Female  67
+      33      P00711    C_16             NA   C_16        16     C   Male  75
+      34      P00711    C_17             NA   C_17        17     C   Male  57
+      35      P00711    C_18             NA   C_18        18     C   Male  66
+      36      P00711    C_19             NA   C_19        19     C Female  56
+      37      P00761   HCC_1       24.18369  HCC_1         1   HCC Female  57
+      38      P00761   HCC_2       24.15892  HCC_2         2   HCC   Male  71
+      39      P00761   HCC_3       24.18048  HCC_3         3   HCC Female  42
+      40      P00761   HCC_4       24.22779  HCC_4         4   HCC   Male  73
+      41      P00761   HCC_5       24.19871  HCC_5         5   HCC   Male  51
+      42      P00761   HCC_6       24.19447  HCC_6         6   HCC   Male  21
+      43      P00761   HCC_7       24.17879  HCC_7         7   HCC   Male  71
+      44      P00761   HCC_8       23.91857  HCC_8         8   HCC   Male  74
+      45      P00761   HCC_9       24.17850  HCC_9         9   HCC   Male  65
+      46      P00761  HCC_10       24.17181 HCC_10        10   HCC Female  59
+      47      P00761  HCC_11       24.17222 HCC_11        11   HCC Female  76
+      48      P00761  HCC_12       24.13271 HCC_12        12   HCC   Male  53
+      49      P00761  HCC_14       24.14564 HCC_14        14   HCC   Male  72
+      50      P00761  HCC_15       24.20149 HCC_15        15   HCC Female  67
+      51      P00761  HCC_16       24.17149 HCC_16        16   HCC   Male  75
+      52      P00761  HCC_17       24.17820 HCC_17        17   HCC   Male  57
+      53      P00761  HCC_18       24.21315 HCC_18        18   HCC   Male  66
+      54      P00761  HCC_19       24.43364 HCC_19        19   HCC Female  56
+      55      P00761     C_1       24.14925    C_1         1     C Female  57
+      56      P00761     C_3       24.18430    C_3         3     C Female  42
+      57      P00761     C_4       24.38515    C_4         4     C   Male  73
+      58      P00761     C_5       24.16591    C_5         5     C   Male  51
+      59      P00761     C_6       24.12626    C_6         6     C   Male  21
+      60      P00761     C_7       24.18985    C_7         7     C   Male  71
+      61      P00761     C_8       24.34355    C_8         8     C   Male  74
+      62      P00761     C_9       24.00416    C_9         9     C   Male  65
+      63      P00761    C_10       24.23767   C_10        10     C Female  59
+      64      P00761    C_11       24.13879   C_11        11     C Female  76
+      65      P00761    C_12       24.16805   C_12        12     C   Male  53
+      66      P00761    C_13       24.16616   C_13        13     C   Male  62
+      67      P00761    C_14       24.23171   C_14        14     C   Male  72
+      68      P00761    C_15       24.17076   C_15        15     C Female  67
+      69      P00761    C_16       24.17692   C_16        16     C   Male  75
+      70      P00761    C_17       24.24191   C_17        17     C   Male  57
+      71      P00761    C_18       24.17951   C_18        18     C   Male  66
+      72      P00761    C_19       24.22991   C_19        19     C Female  56
+      73      P02666   HCC_1             NA  HCC_1         1   HCC Female  57
+      74      P02666   HCC_2             NA  HCC_2         2   HCC   Male  71
+      75      P02666   HCC_3             NA  HCC_3         3   HCC Female  42
+      76      P02666   HCC_4             NA  HCC_4         4   HCC   Male  73
+      77      P02666   HCC_5             NA  HCC_5         5   HCC   Male  51
+      78      P02666   HCC_6             NA  HCC_6         6   HCC   Male  21
+      79      P02666   HCC_7             NA  HCC_7         7   HCC   Male  71
+      80      P02666   HCC_8             NA  HCC_8         8   HCC   Male  74
+      81      P02666   HCC_9             NA  HCC_9         9   HCC   Male  65
+      82      P02666  HCC_10             NA HCC_10        10   HCC Female  59
+      83      P02666  HCC_11             NA HCC_11        11   HCC Female  76
+      84      P02666  HCC_12             NA HCC_12        12   HCC   Male  53
+      85      P02666  HCC_14             NA HCC_14        14   HCC   Male  72
+      86      P02666  HCC_15             NA HCC_15        15   HCC Female  67
+      87      P02666  HCC_16             NA HCC_16        16   HCC   Male  75
+      88      P02666  HCC_17             NA HCC_17        17   HCC   Male  57
+      89      P02666  HCC_18             NA HCC_18        18   HCC   Male  66
+      90      P02666  HCC_19             NA HCC_19        19   HCC Female  56
+      91      P02666     C_1             NA    C_1         1     C Female  57
+      92      P02666     C_3             NA    C_3         3     C Female  42
+      93      P02666     C_4             NA    C_4         4     C   Male  73
+      94      P02666     C_5             NA    C_5         5     C   Male  51
+      95      P02666     C_6             NA    C_6         6     C   Male  21
+      96      P02666     C_7             NA    C_7         7     C   Male  71
+      97      P02666     C_8             NA    C_8         8     C   Male  74
+      98      P02666     C_9             NA    C_9         9     C   Male  65
+      99      P02666    C_10             NA   C_10        10     C Female  59
+      100     P02666    C_11             NA   C_11        11     C Female  76
+      101     P02666    C_12             NA   C_12        12     C   Male  53
+      102     P02666    C_13             NA   C_13        13     C   Male  62
+      103     P02666    C_14             NA   C_14        14     C   Male  72
+      104     P02666    C_15             NA   C_15        15     C Female  67
+      105     P02666    C_16             NA   C_16        16     C   Male  75
+      106     P02666    C_17             NA   C_17        17     C   Male  57
+      107     P02666    C_18             NA   C_18        18     C   Male  66
+      108     P02666    C_19             NA   C_19        19     C Female  56
+      109     P02769   HCC_1       20.72309  HCC_1         1   HCC Female  57
+      110     P02769   HCC_2       21.08148  HCC_2         2   HCC   Male  71
+      111     P02769   HCC_3             NA  HCC_3         3   HCC Female  42
+      112     P02769   HCC_4             NA  HCC_4         4   HCC   Male  73
+      113     P02769   HCC_5       20.61288  HCC_5         5   HCC   Male  51
+      114     P02769   HCC_6       20.64786  HCC_6         6   HCC   Male  21
+      115     P02769   HCC_7             NA  HCC_7         7   HCC   Male  71
+      116     P02769   HCC_8       22.13238  HCC_8         8   HCC   Male  74
+      117     P02769   HCC_9       20.79129  HCC_9         9   HCC   Male  65
+      118     P02769  HCC_10       20.87812 HCC_10        10   HCC Female  59
+      119     P02769  HCC_11       20.86596 HCC_11        11   HCC Female  76
+      120     P02769  HCC_12       21.35795 HCC_12        12   HCC   Male  53
+      121     P02769  HCC_14       23.17792 HCC_14        14   HCC   Male  72
+      122     P02769  HCC_15       20.60045 HCC_15        15   HCC Female  67
+      123     P02769  HCC_16       20.85089 HCC_16        16   HCC   Male  75
+      124     P02769  HCC_17       19.01746 HCC_17        17   HCC   Male  57
+      125     P02769  HCC_18       20.49197 HCC_18        18   HCC   Male  66
+      126     P02769  HCC_19       19.15691 HCC_19        19   HCC Female  56
+      127     P02769     C_1       22.73299    C_1         1     C Female  57
+      128     P02769     C_3       20.77391    C_3         3     C Female  42
+      129     P02769     C_4       19.76251    C_4         4     C   Male  73
+      130     P02769     C_5       20.89359    C_5         5     C   Male  51
+      131     P02769     C_6       21.00034    C_6         6     C   Male  21
+      132     P02769     C_7       23.70933    C_7         7     C   Male  71
+      133     P02769     C_8       20.02950    C_8         8     C   Male  74
+      134     P02769     C_9       21.22430    C_9         9     C   Male  65
+      135     P02769    C_10       20.89632   C_10        10     C Female  59
+      136     P02769    C_11       21.13827   C_11        11     C Female  76
+      137     P02769    C_12       20.79129   C_12        12     C   Male  53
+      138     P02769    C_13       16.63388   C_13        13     C   Male  62
+      139     P02769    C_14       20.42065   C_14        14     C   Male  72
+      140     P02769    C_15       20.85021   C_15        15     C Female  67
+      141     P02769    C_16             NA   C_16        16     C   Male  75
+      142     P02769    C_17       20.53107   C_17        17     C   Male  57
+      143     P02769    C_18       20.78008   C_18        18     C   Male  66
+      144     P02769    C_19       20.33274   C_19        19     C Female  56
+      145 A0A075B6I0   HCC_1             NA  HCC_1         1   HCC Female  57
+      146 A0A075B6I0   HCC_2             NA  HCC_2         2   HCC   Male  71
+      147 A0A075B6I0   HCC_3       16.38111  HCC_3         3   HCC Female  42
+      148 A0A075B6I0   HCC_4       16.18440  HCC_4         4   HCC   Male  73
+      149 A0A075B6I0   HCC_5             NA  HCC_5         5   HCC   Male  51
+      150 A0A075B6I0   HCC_6       16.41863  HCC_6         6   HCC   Male  21
+      151 A0A075B6I0   HCC_7             NA  HCC_7         7   HCC   Male  71
+      152 A0A075B6I0   HCC_8       16.77349  HCC_8         8   HCC   Male  74
+      153 A0A075B6I0   HCC_9       16.38827  HCC_9         9   HCC   Male  65
+      154 A0A075B6I0  HCC_10             NA HCC_10        10   HCC Female  59
+      155 A0A075B6I0  HCC_11             NA HCC_11        11   HCC Female  76
+      156 A0A075B6I0  HCC_12             NA HCC_12        12   HCC   Male  53
+      157 A0A075B6I0  HCC_14       16.43665 HCC_14        14   HCC   Male  72
+      158 A0A075B6I0  HCC_15             NA HCC_15        15   HCC Female  67
+      159 A0A075B6I0  HCC_16             NA HCC_16        16   HCC   Male  75
+      160 A0A075B6I0  HCC_17       16.39222 HCC_17        17   HCC   Male  57
+      161 A0A075B6I0  HCC_18             NA HCC_18        18   HCC   Male  66
+      162 A0A075B6I0  HCC_19       15.89193 HCC_19        19   HCC Female  56
+      163 A0A075B6I0     C_1       16.45388    C_1         1     C Female  57
+      164 A0A075B6I0     C_3       16.40697    C_3         3     C Female  42
+      165 A0A075B6I0     C_4       16.18102    C_4         4     C   Male  73
+      166 A0A075B6I0     C_5             NA    C_5         5     C   Male  51
+      167 A0A075B6I0     C_6       16.49638    C_6         6     C   Male  21
+      168 A0A075B6I0     C_7       16.30113    C_7         7     C   Male  71
+      169 A0A075B6I0     C_8       16.13083    C_8         8     C   Male  74
+      170 A0A075B6I0     C_9       16.90958    C_9         9     C   Male  65
+      171 A0A075B6I0    C_10       15.97741   C_10        10     C Female  59
+      172 A0A075B6I0    C_11             NA   C_11        11     C Female  76
+      173 A0A075B6I0    C_12             NA   C_12        12     C   Male  53
+      174 A0A075B6I0    C_13       16.44560   C_13        13     C   Male  62
+      175 A0A075B6I0    C_14       16.43045   C_14        14     C   Male  72
+      176 A0A075B6I0    C_15             NA   C_15        15     C Female  67
+      177 A0A075B6I0    C_16             NA   C_16        16     C   Male  75
+      178 A0A075B6I0    C_17       16.21284   C_17        17     C   Male  57
+      179 A0A075B6I0    C_18             NA   C_18        18     C   Male  66
+      180 A0A075B6I0    C_19             NA   C_19        19     C Female  56
+      181 A0A075B6I9   HCC_1             NA  HCC_1         1   HCC Female  57
+      182 A0A075B6I9   HCC_2             NA  HCC_2         2   HCC   Male  71
+      183 A0A075B6I9   HCC_3             NA  HCC_3         3   HCC Female  42
+      184 A0A075B6I9   HCC_4       17.00493  HCC_4         4   HCC   Male  73
+      185 A0A075B6I9   HCC_5             NA  HCC_5         5   HCC   Male  51
+      186 A0A075B6I9   HCC_6             NA  HCC_6         6   HCC   Male  21
+      187 A0A075B6I9   HCC_7             NA  HCC_7         7   HCC   Male  71
+      188 A0A075B6I9   HCC_8             NA  HCC_8         8   HCC   Male  74
+      189 A0A075B6I9   HCC_9             NA  HCC_9         9   HCC   Male  65
+      190 A0A075B6I9  HCC_10       17.03627 HCC_10        10   HCC Female  59
+      191 A0A075B6I9  HCC_11             NA HCC_11        11   HCC Female  76
+      192 A0A075B6I9  HCC_12             NA HCC_12        12   HCC   Male  53
+      193 A0A075B6I9  HCC_14             NA HCC_14        14   HCC   Male  72
+      194 A0A075B6I9  HCC_15             NA HCC_15        15   HCC Female  67
+      195 A0A075B6I9  HCC_16             NA HCC_16        16   HCC   Male  75
+      196 A0A075B6I9  HCC_17             NA HCC_17        17   HCC   Male  57
+      197 A0A075B6I9  HCC_18             NA HCC_18        18   HCC   Male  66
+      198 A0A075B6I9  HCC_19             NA HCC_19        19   HCC Female  56
+      199 A0A075B6I9     C_1             NA    C_1         1     C Female  57
+      200 A0A075B6I9     C_3             NA    C_3         3     C Female  42
+      201 A0A075B6I9     C_4             NA    C_4         4     C   Male  73
+      202 A0A075B6I9     C_5             NA    C_5         5     C   Male  51
+      203 A0A075B6I9     C_6             NA    C_6         6     C   Male  21
+      204 A0A075B6I9     C_7             NA    C_7         7     C   Male  71
+      205 A0A075B6I9     C_8             NA    C_8         8     C   Male  74
+      206 A0A075B6I9     C_9             NA    C_9         9     C   Male  65
+      207 A0A075B6I9    C_10             NA   C_10        10     C Female  59
+      208 A0A075B6I9    C_11             NA   C_11        11     C Female  76
+      209 A0A075B6I9    C_12             NA   C_12        12     C   Male  53
+      210 A0A075B6I9    C_13             NA   C_13        13     C   Male  62
+      211 A0A075B6I9    C_14             NA   C_14        14     C   Male  72
+      212 A0A075B6I9    C_15             NA   C_15        15     C Female  67
+      213 A0A075B6I9    C_16             NA   C_16        16     C   Male  75
+      214 A0A075B6I9    C_17             NA   C_17        17     C   Male  57
+      215 A0A075B6I9    C_18             NA   C_18        18     C   Male  66
+      216 A0A075B6I9    C_19             NA   C_19        19     C Female  56
+      217 A0A075B6K5   HCC_1       20.12094  HCC_1         1   HCC Female  57
+      218 A0A075B6K5   HCC_2             NA  HCC_2         2   HCC   Male  71
+      219 A0A075B6K5   HCC_3       19.75659  HCC_3         3   HCC Female  42
+      220 A0A075B6K5   HCC_4       19.39707  HCC_4         4   HCC   Male  73
+      221 A0A075B6K5   HCC_5       20.22195  HCC_5         5   HCC   Male  51
+      222 A0A075B6K5   HCC_6       20.09741  HCC_6         6   HCC   Male  21
+      223 A0A075B6K5   HCC_7       19.72223  HCC_7         7   HCC   Male  71
+      224 A0A075B6K5   HCC_8       17.70680  HCC_8         8   HCC   Male  74
+      225 A0A075B6K5   HCC_9       20.49857  HCC_9         9   HCC   Male  65
+      226 A0A075B6K5  HCC_10       19.37787 HCC_10        10   HCC Female  59
+      227 A0A075B6K5  HCC_11       19.38579 HCC_11        11   HCC Female  76
+      228 A0A075B6K5  HCC_12       16.85439 HCC_12        12   HCC   Male  53
+      229 A0A075B6K5  HCC_14       19.58668 HCC_14        14   HCC   Male  72
+      230 A0A075B6K5  HCC_15       20.33977 HCC_15        15   HCC Female  67
+      231 A0A075B6K5  HCC_16       19.26050 HCC_16        16   HCC   Male  75
+      232 A0A075B6K5  HCC_17       20.20804 HCC_17        17   HCC   Male  57
+      233 A0A075B6K5  HCC_18       20.79800 HCC_18        18   HCC   Male  66
+      234 A0A075B6K5  HCC_19       21.48002 HCC_19        19   HCC Female  56
+      235 A0A075B6K5     C_1       19.23696    C_1         1     C Female  57
+      236 A0A075B6K5     C_3       19.44642    C_3         3     C Female  42
+      237 A0A075B6K5     C_4       20.74057    C_4         4     C   Male  73
+      238 A0A075B6K5     C_5       19.51791    C_5         5     C   Male  51
+      239 A0A075B6K5     C_6       19.71396    C_6         6     C   Male  21
+      240 A0A075B6K5     C_7       19.41266    C_7         7     C   Male  71
+      241 A0A075B6K5     C_8       20.35133    C_8         8     C   Male  74
+      242 A0A075B6K5     C_9       19.74507    C_9         9     C   Male  65
+      243 A0A075B6K5    C_10       19.12823   C_10        10     C Female  59
+      244 A0A075B6K5    C_11       18.27408   C_11        11     C Female  76
+      245 A0A075B6K5    C_12       19.77002   C_12        12     C   Male  53
+      246 A0A075B6K5    C_13       19.87473   C_13        13     C   Male  62
+      247 A0A075B6K5    C_14       20.35992   C_14        14     C   Male  72
+      248 A0A075B6K5    C_15       19.62340   C_15        15     C Female  67
+      249 A0A075B6K5    C_16       20.01679   C_16        16     C   Male  75
+      250 A0A075B6K5    C_17       20.05114   C_17        17     C   Male  57
+      251 A0A075B6K5    C_18       19.90970   C_18        18     C   Male  66
+      252 A0A075B6K5    C_19       21.70003   C_19        19     C Female  56
+      253 A0A075B6R9   HCC_1       18.59903  HCC_1         1   HCC Female  57
+      254 A0A075B6R9   HCC_2       18.79667  HCC_2         2   HCC   Male  71
+      255 A0A075B6R9   HCC_3       18.70821  HCC_3         3   HCC Female  42
+      256 A0A075B6R9   HCC_4       18.98647  HCC_4         4   HCC   Male  73
+      257 A0A075B6R9   HCC_5       17.96523  HCC_5         5   HCC   Male  51
+      258 A0A075B6R9   HCC_6       18.49407  HCC_6         6   HCC   Male  21
+      259 A0A075B6R9   HCC_7       18.97444  HCC_7         7   HCC   Male  71
+      260 A0A075B6R9   HCC_8       19.31705  HCC_8         8   HCC   Male  74
+      261 A0A075B6R9   HCC_9       17.70347  HCC_9         9   HCC   Male  65
+      262 A0A075B6R9  HCC_10       19.12698 HCC_10        10   HCC Female  59
+      263 A0A075B6R9  HCC_11       18.75203 HCC_11        11   HCC Female  76
+      264 A0A075B6R9  HCC_12       19.27887 HCC_12        12   HCC   Male  53
+      265 A0A075B6R9  HCC_14       18.58058 HCC_14        14   HCC   Male  72
+      266 A0A075B6R9  HCC_15       18.89264 HCC_15        15   HCC Female  67
+      267 A0A075B6R9  HCC_16       18.75740 HCC_16        16   HCC   Male  75
+      268 A0A075B6R9  HCC_17       18.69522 HCC_17        17   HCC   Male  57
+      269 A0A075B6R9  HCC_18       18.85997 HCC_18        18   HCC   Male  66
+      270 A0A075B6R9  HCC_19       18.74577 HCC_19        19   HCC Female  56
+      271 A0A075B6R9     C_1       18.44188    C_1         1     C Female  57
+      272 A0A075B6R9     C_3       19.32725    C_3         3     C Female  42
+      273 A0A075B6R9     C_4       19.39719    C_4         4     C   Male  73
+      274 A0A075B6R9     C_5       19.14971    C_5         5     C   Male  51
+      275 A0A075B6R9     C_6       17.90091    C_6         6     C   Male  21
+      276 A0A075B6R9     C_7       18.98072    C_7         7     C   Male  71
+      277 A0A075B6R9     C_8       19.77716    C_8         8     C   Male  74
+      278 A0A075B6R9     C_9       17.99099    C_9         9     C   Male  65
+      279 A0A075B6R9    C_10       19.17365   C_10        10     C Female  59
+      280 A0A075B6R9    C_11       19.22009   C_11        11     C Female  76
+      281 A0A075B6R9    C_12       16.71171   C_12        12     C   Male  53
+      282 A0A075B6R9    C_13       18.46861   C_13        13     C   Male  62
+      283 A0A075B6R9    C_14       18.93024   C_14        14     C   Male  72
+      284 A0A075B6R9    C_15       18.92128   C_15        15     C Female  67
+      285 A0A075B6R9    C_16       17.11074   C_16        16     C   Male  75
+      286 A0A075B6R9    C_17       18.49396   C_17        17     C   Male  57
+      287 A0A075B6R9    C_18             NA   C_18        18     C   Male  66
+      288 A0A075B6R9    C_19       18.08713   C_19        19     C Female  56
+      289 A0A075B6S5   HCC_1             NA  HCC_1         1   HCC Female  57
+      290 A0A075B6S5   HCC_2             NA  HCC_2         2   HCC   Male  71
+      291 A0A075B6S5   HCC_3       17.86544  HCC_3         3   HCC Female  42
+      292 A0A075B6S5   HCC_4       19.08272  HCC_4         4   HCC   Male  73
+      293 A0A075B6S5   HCC_5       18.64030  HCC_5         5   HCC   Male  51
+      294 A0A075B6S5   HCC_6             NA  HCC_6         6   HCC   Male  21
+      295 A0A075B6S5   HCC_7       18.13586  HCC_7         7   HCC   Male  71
+      296 A0A075B6S5   HCC_8       17.40962  HCC_8         8   HCC   Male  74
+      297 A0A075B6S5   HCC_9             NA  HCC_9         9   HCC   Male  65
+      298 A0A075B6S5  HCC_10             NA HCC_10        10   HCC Female  59
+      299 A0A075B6S5  HCC_11             NA HCC_11        11   HCC Female  76
+      300 A0A075B6S5  HCC_12             NA HCC_12        12   HCC   Male  53
+      301 A0A075B6S5  HCC_14             NA HCC_14        14   HCC   Male  72
+      302 A0A075B6S5  HCC_15       17.92259 HCC_15        15   HCC Female  67
+      303 A0A075B6S5  HCC_16       18.29260 HCC_16        16   HCC   Male  75
+      304 A0A075B6S5  HCC_17       18.28552 HCC_17        17   HCC   Male  57
+      305 A0A075B6S5  HCC_18       17.89131 HCC_18        18   HCC   Male  66
+      306 A0A075B6S5  HCC_19       18.96462 HCC_19        19   HCC Female  56
+      307 A0A075B6S5     C_1       18.38823    C_1         1     C Female  57
+      308 A0A075B6S5     C_3       18.27604    C_3         3     C Female  42
+      309 A0A075B6S5     C_4       17.92261    C_4         4     C   Male  73
+      310 A0A075B6S5     C_5       18.06121    C_5         5     C   Male  51
+      311 A0A075B6S5     C_6             NA    C_6         6     C   Male  21
+      312 A0A075B6S5     C_7             NA    C_7         7     C   Male  71
+      313 A0A075B6S5     C_8       18.03874    C_8         8     C   Male  74
+      314 A0A075B6S5     C_9       17.84737    C_9         9     C   Male  65
+      315 A0A075B6S5    C_10       18.92857   C_10        10     C Female  59
+      316 A0A075B6S5    C_11       18.17160   C_11        11     C Female  76
+      317 A0A075B6S5    C_12       18.89617   C_12        12     C   Male  53
+      318 A0A075B6S5    C_13       18.29792   C_13        13     C   Male  62
+      319 A0A075B6S5    C_14       17.81190   C_14        14     C   Male  72
+      320 A0A075B6S5    C_15       18.19050   C_15        15     C Female  67
+      321 A0A075B6S5    C_16       19.23647   C_16        16     C   Male  75
+      322 A0A075B6S5    C_17       18.97786   C_17        17     C   Male  57
+      323 A0A075B6S5    C_18       18.30594   C_18        18     C   Male  66
+      324 A0A075B6S5    C_19       18.41437   C_19        19     C Female  56
+          Tumor_Staging Lymph_Nodes Grading Bloodvessel_status Resection_Margin
+      1             pT1         pN0      G3                 V0               R0
+      2             pT2         pNX      G2                 V0               R0
+      3             pT1         pNX      G3                 V0               R0
+      4             pT1          NX      G2                 V0               R0
+      5             pT1         pN0      G1                 V0               R0
+      6             pT2        pN1       G2                 V1               R0
+      7             pT1         pNX      G3                 V0               R0
+      8             pT1         pNX      G1                 V0               R0
+      9             pT1          NX      G3                 V0               R0
+      10           pT3a          NX      G2                 V0               R0
+      11           pT2a          NX      G3                 V1               R0
+      12           pT3a          NX      G2                 V1               R0
+      13            pT1         NA       G1                NA                R1
+      14            pT1          N0      G1                 V0               R0
+      15            pT1          N0      G1                 V0               R0
+      16            pT2         pNX      G2                 V0               R0
+      17            pT1         pNX      G2                 V0               R0
+      18           pT3a         pNX      G3                 V0               R0
+      19           <NA>        <NA>    <NA>               <NA>             <NA>
+      20           <NA>        <NA>    <NA>               <NA>             <NA>
+      21           <NA>        <NA>    <NA>               <NA>             <NA>
+      22           <NA>        <NA>    <NA>               <NA>             <NA>
+      23           <NA>        <NA>    <NA>               <NA>             <NA>
+      24           <NA>        <NA>    <NA>               <NA>             <NA>
+      25           <NA>        <NA>    <NA>               <NA>             <NA>
+      26           <NA>        <NA>    <NA>               <NA>             <NA>
+      27           <NA>        <NA>    <NA>               <NA>             <NA>
+      28           <NA>        <NA>    <NA>               <NA>             <NA>
+      29           <NA>        <NA>    <NA>               <NA>             <NA>
+      30           <NA>        <NA>    <NA>               <NA>             <NA>
+      31           <NA>        <NA>    <NA>               <NA>             <NA>
+      32           <NA>        <NA>    <NA>               <NA>             <NA>
+      33           <NA>        <NA>    <NA>               <NA>             <NA>
+      34           <NA>        <NA>    <NA>               <NA>             <NA>
+      35           <NA>        <NA>    <NA>               <NA>             <NA>
+      36           <NA>        <NA>    <NA>               <NA>             <NA>
+      37            pT1         pN0      G3                 V0               R0
+      38            pT2         pNX      G2                 V0               R0
+      39            pT1         pNX      G3                 V0               R0
+      40            pT1          NX      G2                 V0               R0
+      41            pT1         pN0      G1                 V0               R0
+      42            pT2        pN1       G2                 V1               R0
+      43            pT1         pNX      G3                 V0               R0
+      44            pT1         pNX      G1                 V0               R0
+      45            pT1          NX      G3                 V0               R0
+      46           pT3a          NX      G2                 V0               R0
+      47           pT2a          NX      G3                 V1               R0
+      48           pT3a          NX      G2                 V1               R0
+      49            pT1         NA       G1                NA                R1
+      50            pT1          N0      G1                 V0               R0
+      51            pT1          N0      G1                 V0               R0
+      52            pT2         pNX      G2                 V0               R0
+      53            pT1         pNX      G2                 V0               R0
+      54           pT3a         pNX      G3                 V0               R0
+      55           <NA>        <NA>    <NA>               <NA>             <NA>
+      56           <NA>        <NA>    <NA>               <NA>             <NA>
+      57           <NA>        <NA>    <NA>               <NA>             <NA>
+      58           <NA>        <NA>    <NA>               <NA>             <NA>
+      59           <NA>        <NA>    <NA>               <NA>             <NA>
+      60           <NA>        <NA>    <NA>               <NA>             <NA>
+      61           <NA>        <NA>    <NA>               <NA>             <NA>
+      62           <NA>        <NA>    <NA>               <NA>             <NA>
+      63           <NA>        <NA>    <NA>               <NA>             <NA>
+      64           <NA>        <NA>    <NA>               <NA>             <NA>
+      65           <NA>        <NA>    <NA>               <NA>             <NA>
+      66           <NA>        <NA>    <NA>               <NA>             <NA>
+      67           <NA>        <NA>    <NA>               <NA>             <NA>
+      68           <NA>        <NA>    <NA>               <NA>             <NA>
+      69           <NA>        <NA>    <NA>               <NA>             <NA>
+      70           <NA>        <NA>    <NA>               <NA>             <NA>
+      71           <NA>        <NA>    <NA>               <NA>             <NA>
+      72           <NA>        <NA>    <NA>               <NA>             <NA>
+      73            pT1         pN0      G3                 V0               R0
+      74            pT2         pNX      G2                 V0               R0
+      75            pT1         pNX      G3                 V0               R0
+      76            pT1          NX      G2                 V0               R0
+      77            pT1         pN0      G1                 V0               R0
+      78            pT2        pN1       G2                 V1               R0
+      79            pT1         pNX      G3                 V0               R0
+      80            pT1         pNX      G1                 V0               R0
+      81            pT1          NX      G3                 V0               R0
+      82           pT3a          NX      G2                 V0               R0
+      83           pT2a          NX      G3                 V1               R0
+      84           pT3a          NX      G2                 V1               R0
+      85            pT1         NA       G1                NA                R1
+      86            pT1          N0      G1                 V0               R0
+      87            pT1          N0      G1                 V0               R0
+      88            pT2         pNX      G2                 V0               R0
+      89            pT1         pNX      G2                 V0               R0
+      90           pT3a         pNX      G3                 V0               R0
+      91           <NA>        <NA>    <NA>               <NA>             <NA>
+      92           <NA>        <NA>    <NA>               <NA>             <NA>
+      93           <NA>        <NA>    <NA>               <NA>             <NA>
+      94           <NA>        <NA>    <NA>               <NA>             <NA>
+      95           <NA>        <NA>    <NA>               <NA>             <NA>
+      96           <NA>        <NA>    <NA>               <NA>             <NA>
+      97           <NA>        <NA>    <NA>               <NA>             <NA>
+      98           <NA>        <NA>    <NA>               <NA>             <NA>
+      99           <NA>        <NA>    <NA>               <NA>             <NA>
+      100          <NA>        <NA>    <NA>               <NA>             <NA>
+      101          <NA>        <NA>    <NA>               <NA>             <NA>
+      102          <NA>        <NA>    <NA>               <NA>             <NA>
+      103          <NA>        <NA>    <NA>               <NA>             <NA>
+      104          <NA>        <NA>    <NA>               <NA>             <NA>
+      105          <NA>        <NA>    <NA>               <NA>             <NA>
+      106          <NA>        <NA>    <NA>               <NA>             <NA>
+      107          <NA>        <NA>    <NA>               <NA>             <NA>
+      108          <NA>        <NA>    <NA>               <NA>             <NA>
+      109           pT1         pN0      G3                 V0               R0
+      110           pT2         pNX      G2                 V0               R0
+      111           pT1         pNX      G3                 V0               R0
+      112           pT1          NX      G2                 V0               R0
+      113           pT1         pN0      G1                 V0               R0
+      114           pT2        pN1       G2                 V1               R0
+      115           pT1         pNX      G3                 V0               R0
+      116           pT1         pNX      G1                 V0               R0
+      117           pT1          NX      G3                 V0               R0
+      118          pT3a          NX      G2                 V0               R0
+      119          pT2a          NX      G3                 V1               R0
+      120          pT3a          NX      G2                 V1               R0
+      121           pT1         NA       G1                NA                R1
+      122           pT1          N0      G1                 V0               R0
+      123           pT1          N0      G1                 V0               R0
+      124           pT2         pNX      G2                 V0               R0
+      125           pT1         pNX      G2                 V0               R0
+      126          pT3a         pNX      G3                 V0               R0
+      127          <NA>        <NA>    <NA>               <NA>             <NA>
+      128          <NA>        <NA>    <NA>               <NA>             <NA>
+      129          <NA>        <NA>    <NA>               <NA>             <NA>
+      130          <NA>        <NA>    <NA>               <NA>             <NA>
+      131          <NA>        <NA>    <NA>               <NA>             <NA>
+      132          <NA>        <NA>    <NA>               <NA>             <NA>
+      133          <NA>        <NA>    <NA>               <NA>             <NA>
+      134          <NA>        <NA>    <NA>               <NA>             <NA>
+      135          <NA>        <NA>    <NA>               <NA>             <NA>
+      136          <NA>        <NA>    <NA>               <NA>             <NA>
+      137          <NA>        <NA>    <NA>               <NA>             <NA>
+      138          <NA>        <NA>    <NA>               <NA>             <NA>
+      139          <NA>        <NA>    <NA>               <NA>             <NA>
+      140          <NA>        <NA>    <NA>               <NA>             <NA>
+      141          <NA>        <NA>    <NA>               <NA>             <NA>
+      142          <NA>        <NA>    <NA>               <NA>             <NA>
+      143          <NA>        <NA>    <NA>               <NA>             <NA>
+      144          <NA>        <NA>    <NA>               <NA>             <NA>
+      145           pT1         pN0      G3                 V0               R0
+      146           pT2         pNX      G2                 V0               R0
+      147           pT1         pNX      G3                 V0               R0
+      148           pT1          NX      G2                 V0               R0
+      149           pT1         pN0      G1                 V0               R0
+      150           pT2        pN1       G2                 V1               R0
+      151           pT1         pNX      G3                 V0               R0
+      152           pT1         pNX      G1                 V0               R0
+      153           pT1          NX      G3                 V0               R0
+      154          pT3a          NX      G2                 V0               R0
+      155          pT2a          NX      G3                 V1               R0
+      156          pT3a          NX      G2                 V1               R0
+      157           pT1         NA       G1                NA                R1
+      158           pT1          N0      G1                 V0               R0
+      159           pT1          N0      G1                 V0               R0
+      160           pT2         pNX      G2                 V0               R0
+      161           pT1         pNX      G2                 V0               R0
+      162          pT3a         pNX      G3                 V0               R0
+      163          <NA>        <NA>    <NA>               <NA>             <NA>
+      164          <NA>        <NA>    <NA>               <NA>             <NA>
+      165          <NA>        <NA>    <NA>               <NA>             <NA>
+      166          <NA>        <NA>    <NA>               <NA>             <NA>
+      167          <NA>        <NA>    <NA>               <NA>             <NA>
+      168          <NA>        <NA>    <NA>               <NA>             <NA>
+      169          <NA>        <NA>    <NA>               <NA>             <NA>
+      170          <NA>        <NA>    <NA>               <NA>             <NA>
+      171          <NA>        <NA>    <NA>               <NA>             <NA>
+      172          <NA>        <NA>    <NA>               <NA>             <NA>
+      173          <NA>        <NA>    <NA>               <NA>             <NA>
+      174          <NA>        <NA>    <NA>               <NA>             <NA>
+      175          <NA>        <NA>    <NA>               <NA>             <NA>
+      176          <NA>        <NA>    <NA>               <NA>             <NA>
+      177          <NA>        <NA>    <NA>               <NA>             <NA>
+      178          <NA>        <NA>    <NA>               <NA>             <NA>
+      179          <NA>        <NA>    <NA>               <NA>             <NA>
+      180          <NA>        <NA>    <NA>               <NA>             <NA>
+      181           pT1         pN0      G3                 V0               R0
+      182           pT2         pNX      G2                 V0               R0
+      183           pT1         pNX      G3                 V0               R0
+      184           pT1          NX      G2                 V0               R0
+      185           pT1         pN0      G1                 V0               R0
+      186           pT2        pN1       G2                 V1               R0
+      187           pT1         pNX      G3                 V0               R0
+      188           pT1         pNX      G1                 V0               R0
+      189           pT1          NX      G3                 V0               R0
+      190          pT3a          NX      G2                 V0               R0
+      191          pT2a          NX      G3                 V1               R0
+      192          pT3a          NX      G2                 V1               R0
+      193           pT1         NA       G1                NA                R1
+      194           pT1          N0      G1                 V0               R0
+      195           pT1          N0      G1                 V0               R0
+      196           pT2         pNX      G2                 V0               R0
+      197           pT1         pNX      G2                 V0               R0
+      198          pT3a         pNX      G3                 V0               R0
+      199          <NA>        <NA>    <NA>               <NA>             <NA>
+      200          <NA>        <NA>    <NA>               <NA>             <NA>
+      201          <NA>        <NA>    <NA>               <NA>             <NA>
+      202          <NA>        <NA>    <NA>               <NA>             <NA>
+      203          <NA>        <NA>    <NA>               <NA>             <NA>
+      204          <NA>        <NA>    <NA>               <NA>             <NA>
+      205          <NA>        <NA>    <NA>               <NA>             <NA>
+      206          <NA>        <NA>    <NA>               <NA>             <NA>
+      207          <NA>        <NA>    <NA>               <NA>             <NA>
+      208          <NA>        <NA>    <NA>               <NA>             <NA>
+      209          <NA>        <NA>    <NA>               <NA>             <NA>
+      210          <NA>        <NA>    <NA>               <NA>             <NA>
+      211          <NA>        <NA>    <NA>               <NA>             <NA>
+      212          <NA>        <NA>    <NA>               <NA>             <NA>
+      213          <NA>        <NA>    <NA>               <NA>             <NA>
+      214          <NA>        <NA>    <NA>               <NA>             <NA>
+      215          <NA>        <NA>    <NA>               <NA>             <NA>
+      216          <NA>        <NA>    <NA>               <NA>             <NA>
+      217           pT1         pN0      G3                 V0               R0
+      218           pT2         pNX      G2                 V0               R0
+      219           pT1         pNX      G3                 V0               R0
+      220           pT1          NX      G2                 V0               R0
+      221           pT1         pN0      G1                 V0               R0
+      222           pT2        pN1       G2                 V1               R0
+      223           pT1         pNX      G3                 V0               R0
+      224           pT1         pNX      G1                 V0               R0
+      225           pT1          NX      G3                 V0               R0
+      226          pT3a          NX      G2                 V0               R0
+      227          pT2a          NX      G3                 V1               R0
+      228          pT3a          NX      G2                 V1               R0
+      229           pT1         NA       G1                NA                R1
+      230           pT1          N0      G1                 V0               R0
+      231           pT1          N0      G1                 V0               R0
+      232           pT2         pNX      G2                 V0               R0
+      233           pT1         pNX      G2                 V0               R0
+      234          pT3a         pNX      G3                 V0               R0
+      235          <NA>        <NA>    <NA>               <NA>             <NA>
+      236          <NA>        <NA>    <NA>               <NA>             <NA>
+      237          <NA>        <NA>    <NA>               <NA>             <NA>
+      238          <NA>        <NA>    <NA>               <NA>             <NA>
+      239          <NA>        <NA>    <NA>               <NA>             <NA>
+      240          <NA>        <NA>    <NA>               <NA>             <NA>
+      241          <NA>        <NA>    <NA>               <NA>             <NA>
+      242          <NA>        <NA>    <NA>               <NA>             <NA>
+      243          <NA>        <NA>    <NA>               <NA>             <NA>
+      244          <NA>        <NA>    <NA>               <NA>             <NA>
+      245          <NA>        <NA>    <NA>               <NA>             <NA>
+      246          <NA>        <NA>    <NA>               <NA>             <NA>
+      247          <NA>        <NA>    <NA>               <NA>             <NA>
+      248          <NA>        <NA>    <NA>               <NA>             <NA>
+      249          <NA>        <NA>    <NA>               <NA>             <NA>
+      250          <NA>        <NA>    <NA>               <NA>             <NA>
+      251          <NA>        <NA>    <NA>               <NA>             <NA>
+      252          <NA>        <NA>    <NA>               <NA>             <NA>
+      253           pT1         pN0      G3                 V0               R0
+      254           pT2         pNX      G2                 V0               R0
+      255           pT1         pNX      G3                 V0               R0
+      256           pT1          NX      G2                 V0               R0
+      257           pT1         pN0      G1                 V0               R0
+      258           pT2        pN1       G2                 V1               R0
+      259           pT1         pNX      G3                 V0               R0
+      260           pT1         pNX      G1                 V0               R0
+      261           pT1          NX      G3                 V0               R0
+      262          pT3a          NX      G2                 V0               R0
+      263          pT2a          NX      G3                 V1               R0
+      264          pT3a          NX      G2                 V1               R0
+      265           pT1         NA       G1                NA                R1
+      266           pT1          N0      G1                 V0               R0
+      267           pT1          N0      G1                 V0               R0
+      268           pT2         pNX      G2                 V0               R0
+      269           pT1         pNX      G2                 V0               R0
+      270          pT3a         pNX      G3                 V0               R0
+      271          <NA>        <NA>    <NA>               <NA>             <NA>
+      272          <NA>        <NA>    <NA>               <NA>             <NA>
+      273          <NA>        <NA>    <NA>               <NA>             <NA>
+      274          <NA>        <NA>    <NA>               <NA>             <NA>
+      275          <NA>        <NA>    <NA>               <NA>             <NA>
+      276          <NA>        <NA>    <NA>               <NA>             <NA>
+      277          <NA>        <NA>    <NA>               <NA>             <NA>
+      278          <NA>        <NA>    <NA>               <NA>             <NA>
+      279          <NA>        <NA>    <NA>               <NA>             <NA>
+      280          <NA>        <NA>    <NA>               <NA>             <NA>
+      281          <NA>        <NA>    <NA>               <NA>             <NA>
+      282          <NA>        <NA>    <NA>               <NA>             <NA>
+      283          <NA>        <NA>    <NA>               <NA>             <NA>
+      284          <NA>        <NA>    <NA>               <NA>             <NA>
+      285          <NA>        <NA>    <NA>               <NA>             <NA>
+      286          <NA>        <NA>    <NA>               <NA>             <NA>
+      287          <NA>        <NA>    <NA>               <NA>             <NA>
+      288          <NA>        <NA>    <NA>               <NA>             <NA>
+      289           pT1         pN0      G3                 V0               R0
+      290           pT2         pNX      G2                 V0               R0
+      291           pT1         pNX      G3                 V0               R0
+      292           pT1          NX      G2                 V0               R0
+      293           pT1         pN0      G1                 V0               R0
+      294           pT2        pN1       G2                 V1               R0
+      295           pT1         pNX      G3                 V0               R0
+      296           pT1         pNX      G1                 V0               R0
+      297           pT1          NX      G3                 V0               R0
+      298          pT3a          NX      G2                 V0               R0
+      299          pT2a          NX      G3                 V1               R0
+      300          pT3a          NX      G2                 V1               R0
+      301           pT1         NA       G1                NA                R1
+      302           pT1          N0      G1                 V0               R0
+      303           pT1          N0      G1                 V0               R0
+      304           pT2         pNX      G2                 V0               R0
+      305           pT1         pNX      G2                 V0               R0
+      306          pT3a         pNX      G3                 V0               R0
+      307          <NA>        <NA>    <NA>               <NA>             <NA>
+      308          <NA>        <NA>    <NA>               <NA>             <NA>
+      309          <NA>        <NA>    <NA>               <NA>             <NA>
+      310          <NA>        <NA>    <NA>               <NA>             <NA>
+      311          <NA>        <NA>    <NA>               <NA>             <NA>
+      312          <NA>        <NA>    <NA>               <NA>             <NA>
+      313          <NA>        <NA>    <NA>               <NA>             <NA>
+      314          <NA>        <NA>    <NA>               <NA>             <NA>
+      315          <NA>        <NA>    <NA>               <NA>             <NA>
+      316          <NA>        <NA>    <NA>               <NA>             <NA>
+      317          <NA>        <NA>    <NA>               <NA>             <NA>
+      318          <NA>        <NA>    <NA>               <NA>             <NA>
+      319          <NA>        <NA>    <NA>               <NA>             <NA>
+      320          <NA>        <NA>    <NA>               <NA>             <NA>
+      321          <NA>        <NA>    <NA>               <NA>             <NA>
+      322          <NA>        <NA>    <NA>               <NA>             <NA>
+      323          <NA>        <NA>    <NA>               <NA>             <NA>
+      324          <NA>        <NA>    <NA>               <NA>             <NA>
+          Underlying_Liver_Disease    Protein      Gene Protein.Length     Organism
+      1                       NASH     P00711     LALBA            142   Bos taurus
+      2                       NASH     P00711     LALBA            142   Bos taurus
+      3                       <NA>     P00711     LALBA            142   Bos taurus
+      4                       HepC     P00711     LALBA            142   Bos taurus
+      5                        NA      P00711     LALBA            142   Bos taurus
+      6                         NA     P00711     LALBA            142   Bos taurus
+      7                       NASH     P00711     LALBA            142   Bos taurus
+      8                         NA     P00711     LALBA            142   Bos taurus
+      9                       NASH     P00711     LALBA            142   Bos taurus
+      10                        NA     P00711     LALBA            142   Bos taurus
+      11                        NA     P00711     LALBA            142   Bos taurus
+      12                      HepC     P00711     LALBA            142   Bos taurus
+      13                 HepB/NASH     P00711     LALBA            142   Bos taurus
+      14                      NASH     P00711     LALBA            142   Bos taurus
+      15     Hep B/Liver cirrhosis     P00711     LALBA            142   Bos taurus
+      16      Liver cirrhosis/NASH     P00711     LALBA            142   Bos taurus
+      17           Liver cirrhosis     P00711     LALBA            142   Bos taurus
+      18                       NA      P00711     LALBA            142   Bos taurus
+      19                      <NA>     P00711     LALBA            142   Bos taurus
+      20                      <NA>     P00711     LALBA            142   Bos taurus
+      21                      <NA>     P00711     LALBA            142   Bos taurus
+      22                      <NA>     P00711     LALBA            142   Bos taurus
+      23                      <NA>     P00711     LALBA            142   Bos taurus
+      24                      <NA>     P00711     LALBA            142   Bos taurus
+      25                      <NA>     P00711     LALBA            142   Bos taurus
+      26                      <NA>     P00711     LALBA            142   Bos taurus
+      27                      <NA>     P00711     LALBA            142   Bos taurus
+      28                      <NA>     P00711     LALBA            142   Bos taurus
+      29                      <NA>     P00711     LALBA            142   Bos taurus
+      30                      <NA>     P00711     LALBA            142   Bos taurus
+      31                      <NA>     P00711     LALBA            142   Bos taurus
+      32                      <NA>     P00711     LALBA            142   Bos taurus
+      33                      <NA>     P00711     LALBA            142   Bos taurus
+      34                      <NA>     P00711     LALBA            142   Bos taurus
+      35                      <NA>     P00711     LALBA            142   Bos taurus
+      36                      <NA>     P00711     LALBA            142   Bos taurus
+      37                      NASH     P00761      <NA>            231   Sus scrofa
+      38                      NASH     P00761      <NA>            231   Sus scrofa
+      39                      <NA>     P00761      <NA>            231   Sus scrofa
+      40                      HepC     P00761      <NA>            231   Sus scrofa
+      41                       NA      P00761      <NA>            231   Sus scrofa
+      42                        NA     P00761      <NA>            231   Sus scrofa
+      43                      NASH     P00761      <NA>            231   Sus scrofa
+      44                        NA     P00761      <NA>            231   Sus scrofa
+      45                      NASH     P00761      <NA>            231   Sus scrofa
+      46                        NA     P00761      <NA>            231   Sus scrofa
+      47                        NA     P00761      <NA>            231   Sus scrofa
+      48                      HepC     P00761      <NA>            231   Sus scrofa
+      49                 HepB/NASH     P00761      <NA>            231   Sus scrofa
+      50                      NASH     P00761      <NA>            231   Sus scrofa
+      51     Hep B/Liver cirrhosis     P00761      <NA>            231   Sus scrofa
+      52      Liver cirrhosis/NASH     P00761      <NA>            231   Sus scrofa
+      53           Liver cirrhosis     P00761      <NA>            231   Sus scrofa
+      54                       NA      P00761      <NA>            231   Sus scrofa
+      55                      <NA>     P00761      <NA>            231   Sus scrofa
+      56                      <NA>     P00761      <NA>            231   Sus scrofa
+      57                      <NA>     P00761      <NA>            231   Sus scrofa
+      58                      <NA>     P00761      <NA>            231   Sus scrofa
+      59                      <NA>     P00761      <NA>            231   Sus scrofa
+      60                      <NA>     P00761      <NA>            231   Sus scrofa
+      61                      <NA>     P00761      <NA>            231   Sus scrofa
+      62                      <NA>     P00761      <NA>            231   Sus scrofa
+      63                      <NA>     P00761      <NA>            231   Sus scrofa
+      64                      <NA>     P00761      <NA>            231   Sus scrofa
+      65                      <NA>     P00761      <NA>            231   Sus scrofa
+      66                      <NA>     P00761      <NA>            231   Sus scrofa
+      67                      <NA>     P00761      <NA>            231   Sus scrofa
+      68                      <NA>     P00761      <NA>            231   Sus scrofa
+      69                      <NA>     P00761      <NA>            231   Sus scrofa
+      70                      <NA>     P00761      <NA>            231   Sus scrofa
+      71                      <NA>     P00761      <NA>            231   Sus scrofa
+      72                      <NA>     P00761      <NA>            231   Sus scrofa
+      73                      NASH     P02666      CSN2            224   Bos taurus
+      74                      NASH     P02666      CSN2            224   Bos taurus
+      75                      <NA>     P02666      CSN2            224   Bos taurus
+      76                      HepC     P02666      CSN2            224   Bos taurus
+      77                       NA      P02666      CSN2            224   Bos taurus
+      78                        NA     P02666      CSN2            224   Bos taurus
+      79                      NASH     P02666      CSN2            224   Bos taurus
+      80                        NA     P02666      CSN2            224   Bos taurus
+      81                      NASH     P02666      CSN2            224   Bos taurus
+      82                        NA     P02666      CSN2            224   Bos taurus
+      83                        NA     P02666      CSN2            224   Bos taurus
+      84                      HepC     P02666      CSN2            224   Bos taurus
+      85                 HepB/NASH     P02666      CSN2            224   Bos taurus
+      86                      NASH     P02666      CSN2            224   Bos taurus
+      87     Hep B/Liver cirrhosis     P02666      CSN2            224   Bos taurus
+      88      Liver cirrhosis/NASH     P02666      CSN2            224   Bos taurus
+      89           Liver cirrhosis     P02666      CSN2            224   Bos taurus
+      90                       NA      P02666      CSN2            224   Bos taurus
+      91                      <NA>     P02666      CSN2            224   Bos taurus
+      92                      <NA>     P02666      CSN2            224   Bos taurus
+      93                      <NA>     P02666      CSN2            224   Bos taurus
+      94                      <NA>     P02666      CSN2            224   Bos taurus
+      95                      <NA>     P02666      CSN2            224   Bos taurus
+      96                      <NA>     P02666      CSN2            224   Bos taurus
+      97                      <NA>     P02666      CSN2            224   Bos taurus
+      98                      <NA>     P02666      CSN2            224   Bos taurus
+      99                      <NA>     P02666      CSN2            224   Bos taurus
+      100                     <NA>     P02666      CSN2            224   Bos taurus
+      101                     <NA>     P02666      CSN2            224   Bos taurus
+      102                     <NA>     P02666      CSN2            224   Bos taurus
+      103                     <NA>     P02666      CSN2            224   Bos taurus
+      104                     <NA>     P02666      CSN2            224   Bos taurus
+      105                     <NA>     P02666      CSN2            224   Bos taurus
+      106                     <NA>     P02666      CSN2            224   Bos taurus
+      107                     <NA>     P02666      CSN2            224   Bos taurus
+      108                     <NA>     P02666      CSN2            224   Bos taurus
+      109                     NASH     P02769       ALB            607   Bos taurus
+      110                     NASH     P02769       ALB            607   Bos taurus
+      111                     <NA>     P02769       ALB            607   Bos taurus
+      112                     HepC     P02769       ALB            607   Bos taurus
+      113                      NA      P02769       ALB            607   Bos taurus
+      114                       NA     P02769       ALB            607   Bos taurus
+      115                     NASH     P02769       ALB            607   Bos taurus
+      116                       NA     P02769       ALB            607   Bos taurus
+      117                     NASH     P02769       ALB            607   Bos taurus
+      118                       NA     P02769       ALB            607   Bos taurus
+      119                       NA     P02769       ALB            607   Bos taurus
+      120                     HepC     P02769       ALB            607   Bos taurus
+      121                HepB/NASH     P02769       ALB            607   Bos taurus
+      122                     NASH     P02769       ALB            607   Bos taurus
+      123    Hep B/Liver cirrhosis     P02769       ALB            607   Bos taurus
+      124     Liver cirrhosis/NASH     P02769       ALB            607   Bos taurus
+      125          Liver cirrhosis     P02769       ALB            607   Bos taurus
+      126                      NA      P02769       ALB            607   Bos taurus
+      127                     <NA>     P02769       ALB            607   Bos taurus
+      128                     <NA>     P02769       ALB            607   Bos taurus
+      129                     <NA>     P02769       ALB            607   Bos taurus
+      130                     <NA>     P02769       ALB            607   Bos taurus
+      131                     <NA>     P02769       ALB            607   Bos taurus
+      132                     <NA>     P02769       ALB            607   Bos taurus
+      133                     <NA>     P02769       ALB            607   Bos taurus
+      134                     <NA>     P02769       ALB            607   Bos taurus
+      135                     <NA>     P02769       ALB            607   Bos taurus
+      136                     <NA>     P02769       ALB            607   Bos taurus
+      137                     <NA>     P02769       ALB            607   Bos taurus
+      138                     <NA>     P02769       ALB            607   Bos taurus
+      139                     <NA>     P02769       ALB            607   Bos taurus
+      140                     <NA>     P02769       ALB            607   Bos taurus
+      141                     <NA>     P02769       ALB            607   Bos taurus
+      142                     <NA>     P02769       ALB            607   Bos taurus
+      143                     <NA>     P02769       ALB            607   Bos taurus
+      144                     <NA>     P02769       ALB            607   Bos taurus
+      145                     NASH A0A075B6I0  IGLV8-61            122 Homo sapiens
+      146                     NASH A0A075B6I0  IGLV8-61            122 Homo sapiens
+      147                     <NA> A0A075B6I0  IGLV8-61            122 Homo sapiens
+      148                     HepC A0A075B6I0  IGLV8-61            122 Homo sapiens
+      149                      NA  A0A075B6I0  IGLV8-61            122 Homo sapiens
+      150                       NA A0A075B6I0  IGLV8-61            122 Homo sapiens
+      151                     NASH A0A075B6I0  IGLV8-61            122 Homo sapiens
+      152                       NA A0A075B6I0  IGLV8-61            122 Homo sapiens
+      153                     NASH A0A075B6I0  IGLV8-61            122 Homo sapiens
+      154                       NA A0A075B6I0  IGLV8-61            122 Homo sapiens
+      155                       NA A0A075B6I0  IGLV8-61            122 Homo sapiens
+      156                     HepC A0A075B6I0  IGLV8-61            122 Homo sapiens
+      157                HepB/NASH A0A075B6I0  IGLV8-61            122 Homo sapiens
+      158                     NASH A0A075B6I0  IGLV8-61            122 Homo sapiens
+      159    Hep B/Liver cirrhosis A0A075B6I0  IGLV8-61            122 Homo sapiens
+      160     Liver cirrhosis/NASH A0A075B6I0  IGLV8-61            122 Homo sapiens
+      161          Liver cirrhosis A0A075B6I0  IGLV8-61            122 Homo sapiens
+      162                      NA  A0A075B6I0  IGLV8-61            122 Homo sapiens
+      163                     <NA> A0A075B6I0  IGLV8-61            122 Homo sapiens
+      164                     <NA> A0A075B6I0  IGLV8-61            122 Homo sapiens
+      165                     <NA> A0A075B6I0  IGLV8-61            122 Homo sapiens
+      166                     <NA> A0A075B6I0  IGLV8-61            122 Homo sapiens
+      167                     <NA> A0A075B6I0  IGLV8-61            122 Homo sapiens
+      168                     <NA> A0A075B6I0  IGLV8-61            122 Homo sapiens
+      169                     <NA> A0A075B6I0  IGLV8-61            122 Homo sapiens
+      170                     <NA> A0A075B6I0  IGLV8-61            122 Homo sapiens
+      171                     <NA> A0A075B6I0  IGLV8-61            122 Homo sapiens
+      172                     <NA> A0A075B6I0  IGLV8-61            122 Homo sapiens
+      173                     <NA> A0A075B6I0  IGLV8-61            122 Homo sapiens
+      174                     <NA> A0A075B6I0  IGLV8-61            122 Homo sapiens
+      175                     <NA> A0A075B6I0  IGLV8-61            122 Homo sapiens
+      176                     <NA> A0A075B6I0  IGLV8-61            122 Homo sapiens
+      177                     <NA> A0A075B6I0  IGLV8-61            122 Homo sapiens
+      178                     <NA> A0A075B6I0  IGLV8-61            122 Homo sapiens
+      179                     <NA> A0A075B6I0  IGLV8-61            122 Homo sapiens
+      180                     <NA> A0A075B6I0  IGLV8-61            122 Homo sapiens
+      181                     NASH A0A075B6I9  IGLV7-46            117 Homo sapiens
+      182                     NASH A0A075B6I9  IGLV7-46            117 Homo sapiens
+      183                     <NA> A0A075B6I9  IGLV7-46            117 Homo sapiens
+      184                     HepC A0A075B6I9  IGLV7-46            117 Homo sapiens
+      185                      NA  A0A075B6I9  IGLV7-46            117 Homo sapiens
+      186                       NA A0A075B6I9  IGLV7-46            117 Homo sapiens
+      187                     NASH A0A075B6I9  IGLV7-46            117 Homo sapiens
+      188                       NA A0A075B6I9  IGLV7-46            117 Homo sapiens
+      189                     NASH A0A075B6I9  IGLV7-46            117 Homo sapiens
+      190                       NA A0A075B6I9  IGLV7-46            117 Homo sapiens
+      191                       NA A0A075B6I9  IGLV7-46            117 Homo sapiens
+      192                     HepC A0A075B6I9  IGLV7-46            117 Homo sapiens
+      193                HepB/NASH A0A075B6I9  IGLV7-46            117 Homo sapiens
+      194                     NASH A0A075B6I9  IGLV7-46            117 Homo sapiens
+      195    Hep B/Liver cirrhosis A0A075B6I9  IGLV7-46            117 Homo sapiens
+      196     Liver cirrhosis/NASH A0A075B6I9  IGLV7-46            117 Homo sapiens
+      197          Liver cirrhosis A0A075B6I9  IGLV7-46            117 Homo sapiens
+      198                      NA  A0A075B6I9  IGLV7-46            117 Homo sapiens
+      199                     <NA> A0A075B6I9  IGLV7-46            117 Homo sapiens
+      200                     <NA> A0A075B6I9  IGLV7-46            117 Homo sapiens
+      201                     <NA> A0A075B6I9  IGLV7-46            117 Homo sapiens
+      202                     <NA> A0A075B6I9  IGLV7-46            117 Homo sapiens
+      203                     <NA> A0A075B6I9  IGLV7-46            117 Homo sapiens
+      204                     <NA> A0A075B6I9  IGLV7-46            117 Homo sapiens
+      205                     <NA> A0A075B6I9  IGLV7-46            117 Homo sapiens
+      206                     <NA> A0A075B6I9  IGLV7-46            117 Homo sapiens
+      207                     <NA> A0A075B6I9  IGLV7-46            117 Homo sapiens
+      208                     <NA> A0A075B6I9  IGLV7-46            117 Homo sapiens
+      209                     <NA> A0A075B6I9  IGLV7-46            117 Homo sapiens
+      210                     <NA> A0A075B6I9  IGLV7-46            117 Homo sapiens
+      211                     <NA> A0A075B6I9  IGLV7-46            117 Homo sapiens
+      212                     <NA> A0A075B6I9  IGLV7-46            117 Homo sapiens
+      213                     <NA> A0A075B6I9  IGLV7-46            117 Homo sapiens
+      214                     <NA> A0A075B6I9  IGLV7-46            117 Homo sapiens
+      215                     <NA> A0A075B6I9  IGLV7-46            117 Homo sapiens
+      216                     <NA> A0A075B6I9  IGLV7-46            117 Homo sapiens
+      217                     NASH A0A075B6K5   IGLV3-9            115 Homo sapiens
+      218                     NASH A0A075B6K5   IGLV3-9            115 Homo sapiens
+      219                     <NA> A0A075B6K5   IGLV3-9            115 Homo sapiens
+      220                     HepC A0A075B6K5   IGLV3-9            115 Homo sapiens
+      221                      NA  A0A075B6K5   IGLV3-9            115 Homo sapiens
+      222                       NA A0A075B6K5   IGLV3-9            115 Homo sapiens
+      223                     NASH A0A075B6K5   IGLV3-9            115 Homo sapiens
+      224                       NA A0A075B6K5   IGLV3-9            115 Homo sapiens
+      225                     NASH A0A075B6K5   IGLV3-9            115 Homo sapiens
+      226                       NA A0A075B6K5   IGLV3-9            115 Homo sapiens
+      227                       NA A0A075B6K5   IGLV3-9            115 Homo sapiens
+      228                     HepC A0A075B6K5   IGLV3-9            115 Homo sapiens
+      229                HepB/NASH A0A075B6K5   IGLV3-9            115 Homo sapiens
+      230                     NASH A0A075B6K5   IGLV3-9            115 Homo sapiens
+      231    Hep B/Liver cirrhosis A0A075B6K5   IGLV3-9            115 Homo sapiens
+      232     Liver cirrhosis/NASH A0A075B6K5   IGLV3-9            115 Homo sapiens
+      233          Liver cirrhosis A0A075B6K5   IGLV3-9            115 Homo sapiens
+      234                      NA  A0A075B6K5   IGLV3-9            115 Homo sapiens
+      235                     <NA> A0A075B6K5   IGLV3-9            115 Homo sapiens
+      236                     <NA> A0A075B6K5   IGLV3-9            115 Homo sapiens
+      237                     <NA> A0A075B6K5   IGLV3-9            115 Homo sapiens
+      238                     <NA> A0A075B6K5   IGLV3-9            115 Homo sapiens
+      239                     <NA> A0A075B6K5   IGLV3-9            115 Homo sapiens
+      240                     <NA> A0A075B6K5   IGLV3-9            115 Homo sapiens
+      241                     <NA> A0A075B6K5   IGLV3-9            115 Homo sapiens
+      242                     <NA> A0A075B6K5   IGLV3-9            115 Homo sapiens
+      243                     <NA> A0A075B6K5   IGLV3-9            115 Homo sapiens
+      244                     <NA> A0A075B6K5   IGLV3-9            115 Homo sapiens
+      245                     <NA> A0A075B6K5   IGLV3-9            115 Homo sapiens
+      246                     <NA> A0A075B6K5   IGLV3-9            115 Homo sapiens
+      247                     <NA> A0A075B6K5   IGLV3-9            115 Homo sapiens
+      248                     <NA> A0A075B6K5   IGLV3-9            115 Homo sapiens
+      249                     <NA> A0A075B6K5   IGLV3-9            115 Homo sapiens
+      250                     <NA> A0A075B6K5   IGLV3-9            115 Homo sapiens
+      251                     <NA> A0A075B6K5   IGLV3-9            115 Homo sapiens
+      252                     <NA> A0A075B6K5   IGLV3-9            115 Homo sapiens
+      253                     NASH A0A075B6R9 IGKV2D-24            120 Homo sapiens
+      254                     NASH A0A075B6R9 IGKV2D-24            120 Homo sapiens
+      255                     <NA> A0A075B6R9 IGKV2D-24            120 Homo sapiens
+      256                     HepC A0A075B6R9 IGKV2D-24            120 Homo sapiens
+      257                      NA  A0A075B6R9 IGKV2D-24            120 Homo sapiens
+      258                       NA A0A075B6R9 IGKV2D-24            120 Homo sapiens
+      259                     NASH A0A075B6R9 IGKV2D-24            120 Homo sapiens
+      260                       NA A0A075B6R9 IGKV2D-24            120 Homo sapiens
+      261                     NASH A0A075B6R9 IGKV2D-24            120 Homo sapiens
+      262                       NA A0A075B6R9 IGKV2D-24            120 Homo sapiens
+      263                       NA A0A075B6R9 IGKV2D-24            120 Homo sapiens
+      264                     HepC A0A075B6R9 IGKV2D-24            120 Homo sapiens
+      265                HepB/NASH A0A075B6R9 IGKV2D-24            120 Homo sapiens
+      266                     NASH A0A075B6R9 IGKV2D-24            120 Homo sapiens
+      267    Hep B/Liver cirrhosis A0A075B6R9 IGKV2D-24            120 Homo sapiens
+      268     Liver cirrhosis/NASH A0A075B6R9 IGKV2D-24            120 Homo sapiens
+      269          Liver cirrhosis A0A075B6R9 IGKV2D-24            120 Homo sapiens
+      270                      NA  A0A075B6R9 IGKV2D-24            120 Homo sapiens
+      271                     <NA> A0A075B6R9 IGKV2D-24            120 Homo sapiens
+      272                     <NA> A0A075B6R9 IGKV2D-24            120 Homo sapiens
+      273                     <NA> A0A075B6R9 IGKV2D-24            120 Homo sapiens
+      274                     <NA> A0A075B6R9 IGKV2D-24            120 Homo sapiens
+      275                     <NA> A0A075B6R9 IGKV2D-24            120 Homo sapiens
+      276                     <NA> A0A075B6R9 IGKV2D-24            120 Homo sapiens
+      277                     <NA> A0A075B6R9 IGKV2D-24            120 Homo sapiens
+      278                     <NA> A0A075B6R9 IGKV2D-24            120 Homo sapiens
+      279                     <NA> A0A075B6R9 IGKV2D-24            120 Homo sapiens
+      280                     <NA> A0A075B6R9 IGKV2D-24            120 Homo sapiens
+      281                     <NA> A0A075B6R9 IGKV2D-24            120 Homo sapiens
+      282                     <NA> A0A075B6R9 IGKV2D-24            120 Homo sapiens
+      283                     <NA> A0A075B6R9 IGKV2D-24            120 Homo sapiens
+      284                     <NA> A0A075B6R9 IGKV2D-24            120 Homo sapiens
+      285                     <NA> A0A075B6R9 IGKV2D-24            120 Homo sapiens
+      286                     <NA> A0A075B6R9 IGKV2D-24            120 Homo sapiens
+      287                     <NA> A0A075B6R9 IGKV2D-24            120 Homo sapiens
+      288                     <NA> A0A075B6R9 IGKV2D-24            120 Homo sapiens
+      289                     NASH A0A075B6S5  IGKV1-27            117 Homo sapiens
+      290                     NASH A0A075B6S5  IGKV1-27            117 Homo sapiens
+      291                     <NA> A0A075B6S5  IGKV1-27            117 Homo sapiens
+      292                     HepC A0A075B6S5  IGKV1-27            117 Homo sapiens
+      293                      NA  A0A075B6S5  IGKV1-27            117 Homo sapiens
+      294                       NA A0A075B6S5  IGKV1-27            117 Homo sapiens
+      295                     NASH A0A075B6S5  IGKV1-27            117 Homo sapiens
+      296                       NA A0A075B6S5  IGKV1-27            117 Homo sapiens
+      297                     NASH A0A075B6S5  IGKV1-27            117 Homo sapiens
+      298                       NA A0A075B6S5  IGKV1-27            117 Homo sapiens
+      299                       NA A0A075B6S5  IGKV1-27            117 Homo sapiens
+      300                     HepC A0A075B6S5  IGKV1-27            117 Homo sapiens
+      301                HepB/NASH A0A075B6S5  IGKV1-27            117 Homo sapiens
+      302                     NASH A0A075B6S5  IGKV1-27            117 Homo sapiens
+      303    Hep B/Liver cirrhosis A0A075B6S5  IGKV1-27            117 Homo sapiens
+      304     Liver cirrhosis/NASH A0A075B6S5  IGKV1-27            117 Homo sapiens
+      305          Liver cirrhosis A0A075B6S5  IGKV1-27            117 Homo sapiens
+      306                      NA  A0A075B6S5  IGKV1-27            117 Homo sapiens
+      307                     <NA> A0A075B6S5  IGKV1-27            117 Homo sapiens
+      308                     <NA> A0A075B6S5  IGKV1-27            117 Homo sapiens
+      309                     <NA> A0A075B6S5  IGKV1-27            117 Homo sapiens
+      310                     <NA> A0A075B6S5  IGKV1-27            117 Homo sapiens
+      311                     <NA> A0A075B6S5  IGKV1-27            117 Homo sapiens
+      312                     <NA> A0A075B6S5  IGKV1-27            117 Homo sapiens
+      313                     <NA> A0A075B6S5  IGKV1-27            117 Homo sapiens
+      314                     <NA> A0A075B6S5  IGKV1-27            117 Homo sapiens
+      315                     <NA> A0A075B6S5  IGKV1-27            117 Homo sapiens
+      316                     <NA> A0A075B6S5  IGKV1-27            117 Homo sapiens
+      317                     <NA> A0A075B6S5  IGKV1-27            117 Homo sapiens
+      318                     <NA> A0A075B6S5  IGKV1-27            117 Homo sapiens
+      319                     <NA> A0A075B6S5  IGKV1-27            117 Homo sapiens
+      320                     <NA> A0A075B6S5  IGKV1-27            117 Homo sapiens
+      321                     <NA> A0A075B6S5  IGKV1-27            117 Homo sapiens
+      322                     <NA> A0A075B6S5  IGKV1-27            117 Homo sapiens
+      323                     <NA> A0A075B6S5  IGKV1-27            117 Homo sapiens
+      324                     <NA> A0A075B6S5  IGKV1-27            117 Homo sapiens
+                                                          Description
+      1                                             Alpha-lactalbumin
+      2                                             Alpha-lactalbumin
+      3                                             Alpha-lactalbumin
+      4                                             Alpha-lactalbumin
+      5                                             Alpha-lactalbumin
+      6                                             Alpha-lactalbumin
+      7                                             Alpha-lactalbumin
+      8                                             Alpha-lactalbumin
+      9                                             Alpha-lactalbumin
+      10                                            Alpha-lactalbumin
+      11                                            Alpha-lactalbumin
+      12                                            Alpha-lactalbumin
+      13                                            Alpha-lactalbumin
+      14                                            Alpha-lactalbumin
+      15                                            Alpha-lactalbumin
+      16                                            Alpha-lactalbumin
+      17                                            Alpha-lactalbumin
+      18                                            Alpha-lactalbumin
+      19                                            Alpha-lactalbumin
+      20                                            Alpha-lactalbumin
+      21                                            Alpha-lactalbumin
+      22                                            Alpha-lactalbumin
+      23                                            Alpha-lactalbumin
+      24                                            Alpha-lactalbumin
+      25                                            Alpha-lactalbumin
+      26                                            Alpha-lactalbumin
+      27                                            Alpha-lactalbumin
+      28                                            Alpha-lactalbumin
+      29                                            Alpha-lactalbumin
+      30                                            Alpha-lactalbumin
+      31                                            Alpha-lactalbumin
+      32                                            Alpha-lactalbumin
+      33                                            Alpha-lactalbumin
+      34                                            Alpha-lactalbumin
+      35                                            Alpha-lactalbumin
+      36                                            Alpha-lactalbumin
+      37                                                      Trypsin
+      38                                                      Trypsin
+      39                                                      Trypsin
+      40                                                      Trypsin
+      41                                                      Trypsin
+      42                                                      Trypsin
+      43                                                      Trypsin
+      44                                                      Trypsin
+      45                                                      Trypsin
+      46                                                      Trypsin
+      47                                                      Trypsin
+      48                                                      Trypsin
+      49                                                      Trypsin
+      50                                                      Trypsin
+      51                                                      Trypsin
+      52                                                      Trypsin
+      53                                                      Trypsin
+      54                                                      Trypsin
+      55                                                      Trypsin
+      56                                                      Trypsin
+      57                                                      Trypsin
+      58                                                      Trypsin
+      59                                                      Trypsin
+      60                                                      Trypsin
+      61                                                      Trypsin
+      62                                                      Trypsin
+      63                                                      Trypsin
+      64                                                      Trypsin
+      65                                                      Trypsin
+      66                                                      Trypsin
+      67                                                      Trypsin
+      68                                                      Trypsin
+      69                                                      Trypsin
+      70                                                      Trypsin
+      71                                                      Trypsin
+      72                                                      Trypsin
+      73                                                  Beta-casein
+      74                                                  Beta-casein
+      75                                                  Beta-casein
+      76                                                  Beta-casein
+      77                                                  Beta-casein
+      78                                                  Beta-casein
+      79                                                  Beta-casein
+      80                                                  Beta-casein
+      81                                                  Beta-casein
+      82                                                  Beta-casein
+      83                                                  Beta-casein
+      84                                                  Beta-casein
+      85                                                  Beta-casein
+      86                                                  Beta-casein
+      87                                                  Beta-casein
+      88                                                  Beta-casein
+      89                                                  Beta-casein
+      90                                                  Beta-casein
+      91                                                  Beta-casein
+      92                                                  Beta-casein
+      93                                                  Beta-casein
+      94                                                  Beta-casein
+      95                                                  Beta-casein
+      96                                                  Beta-casein
+      97                                                  Beta-casein
+      98                                                  Beta-casein
+      99                                                  Beta-casein
+      100                                                 Beta-casein
+      101                                                 Beta-casein
+      102                                                 Beta-casein
+      103                                                 Beta-casein
+      104                                                 Beta-casein
+      105                                                 Beta-casein
+      106                                                 Beta-casein
+      107                                                 Beta-casein
+      108                                                 Beta-casein
+      109                                                     Albumin
+      110                                                     Albumin
+      111                                                     Albumin
+      112                                                     Albumin
+      113                                                     Albumin
+      114                                                     Albumin
+      115                                                     Albumin
+      116                                                     Albumin
+      117                                                     Albumin
+      118                                                     Albumin
+      119                                                     Albumin
+      120                                                     Albumin
+      121                                                     Albumin
+      122                                                     Albumin
+      123                                                     Albumin
+      124                                                     Albumin
+      125                                                     Albumin
+      126                                                     Albumin
+      127                                                     Albumin
+      128                                                     Albumin
+      129                                                     Albumin
+      130                                                     Albumin
+      131                                                     Albumin
+      132                                                     Albumin
+      133                                                     Albumin
+      134                                                     Albumin
+      135                                                     Albumin
+      136                                                     Albumin
+      137                                                     Albumin
+      138                                                     Albumin
+      139                                                     Albumin
+      140                                                     Albumin
+      141                                                     Albumin
+      142                                                     Albumin
+      143                                                     Albumin
+      144                                                     Albumin
+      145                         Immunoglobulin lambda variable 8-61
+      146                         Immunoglobulin lambda variable 8-61
+      147                         Immunoglobulin lambda variable 8-61
+      148                         Immunoglobulin lambda variable 8-61
+      149                         Immunoglobulin lambda variable 8-61
+      150                         Immunoglobulin lambda variable 8-61
+      151                         Immunoglobulin lambda variable 8-61
+      152                         Immunoglobulin lambda variable 8-61
+      153                         Immunoglobulin lambda variable 8-61
+      154                         Immunoglobulin lambda variable 8-61
+      155                         Immunoglobulin lambda variable 8-61
+      156                         Immunoglobulin lambda variable 8-61
+      157                         Immunoglobulin lambda variable 8-61
+      158                         Immunoglobulin lambda variable 8-61
+      159                         Immunoglobulin lambda variable 8-61
+      160                         Immunoglobulin lambda variable 8-61
+      161                         Immunoglobulin lambda variable 8-61
+      162                         Immunoglobulin lambda variable 8-61
+      163                         Immunoglobulin lambda variable 8-61
+      164                         Immunoglobulin lambda variable 8-61
+      165                         Immunoglobulin lambda variable 8-61
+      166                         Immunoglobulin lambda variable 8-61
+      167                         Immunoglobulin lambda variable 8-61
+      168                         Immunoglobulin lambda variable 8-61
+      169                         Immunoglobulin lambda variable 8-61
+      170                         Immunoglobulin lambda variable 8-61
+      171                         Immunoglobulin lambda variable 8-61
+      172                         Immunoglobulin lambda variable 8-61
+      173                         Immunoglobulin lambda variable 8-61
+      174                         Immunoglobulin lambda variable 8-61
+      175                         Immunoglobulin lambda variable 8-61
+      176                         Immunoglobulin lambda variable 8-61
+      177                         Immunoglobulin lambda variable 8-61
+      178                         Immunoglobulin lambda variable 8-61
+      179                         Immunoglobulin lambda variable 8-61
+      180                         Immunoglobulin lambda variable 8-61
+      181                         Immunoglobulin lambda variable 7-46
+      182                         Immunoglobulin lambda variable 7-46
+      183                         Immunoglobulin lambda variable 7-46
+      184                         Immunoglobulin lambda variable 7-46
+      185                         Immunoglobulin lambda variable 7-46
+      186                         Immunoglobulin lambda variable 7-46
+      187                         Immunoglobulin lambda variable 7-46
+      188                         Immunoglobulin lambda variable 7-46
+      189                         Immunoglobulin lambda variable 7-46
+      190                         Immunoglobulin lambda variable 7-46
+      191                         Immunoglobulin lambda variable 7-46
+      192                         Immunoglobulin lambda variable 7-46
+      193                         Immunoglobulin lambda variable 7-46
+      194                         Immunoglobulin lambda variable 7-46
+      195                         Immunoglobulin lambda variable 7-46
+      196                         Immunoglobulin lambda variable 7-46
+      197                         Immunoglobulin lambda variable 7-46
+      198                         Immunoglobulin lambda variable 7-46
+      199                         Immunoglobulin lambda variable 7-46
+      200                         Immunoglobulin lambda variable 7-46
+      201                         Immunoglobulin lambda variable 7-46
+      202                         Immunoglobulin lambda variable 7-46
+      203                         Immunoglobulin lambda variable 7-46
+      204                         Immunoglobulin lambda variable 7-46
+      205                         Immunoglobulin lambda variable 7-46
+      206                         Immunoglobulin lambda variable 7-46
+      207                         Immunoglobulin lambda variable 7-46
+      208                         Immunoglobulin lambda variable 7-46
+      209                         Immunoglobulin lambda variable 7-46
+      210                         Immunoglobulin lambda variable 7-46
+      211                         Immunoglobulin lambda variable 7-46
+      212                         Immunoglobulin lambda variable 7-46
+      213                         Immunoglobulin lambda variable 7-46
+      214                         Immunoglobulin lambda variable 7-46
+      215                         Immunoglobulin lambda variable 7-46
+      216                         Immunoglobulin lambda variable 7-46
+      217                          Immunoglobulin lambda variable 3-9
+      218                          Immunoglobulin lambda variable 3-9
+      219                          Immunoglobulin lambda variable 3-9
+      220                          Immunoglobulin lambda variable 3-9
+      221                          Immunoglobulin lambda variable 3-9
+      222                          Immunoglobulin lambda variable 3-9
+      223                          Immunoglobulin lambda variable 3-9
+      224                          Immunoglobulin lambda variable 3-9
+      225                          Immunoglobulin lambda variable 3-9
+      226                          Immunoglobulin lambda variable 3-9
+      227                          Immunoglobulin lambda variable 3-9
+      228                          Immunoglobulin lambda variable 3-9
+      229                          Immunoglobulin lambda variable 3-9
+      230                          Immunoglobulin lambda variable 3-9
+      231                          Immunoglobulin lambda variable 3-9
+      232                          Immunoglobulin lambda variable 3-9
+      233                          Immunoglobulin lambda variable 3-9
+      234                          Immunoglobulin lambda variable 3-9
+      235                          Immunoglobulin lambda variable 3-9
+      236                          Immunoglobulin lambda variable 3-9
+      237                          Immunoglobulin lambda variable 3-9
+      238                          Immunoglobulin lambda variable 3-9
+      239                          Immunoglobulin lambda variable 3-9
+      240                          Immunoglobulin lambda variable 3-9
+      241                          Immunoglobulin lambda variable 3-9
+      242                          Immunoglobulin lambda variable 3-9
+      243                          Immunoglobulin lambda variable 3-9
+      244                          Immunoglobulin lambda variable 3-9
+      245                          Immunoglobulin lambda variable 3-9
+      246                          Immunoglobulin lambda variable 3-9
+      247                          Immunoglobulin lambda variable 3-9
+      248                          Immunoglobulin lambda variable 3-9
+      249                          Immunoglobulin lambda variable 3-9
+      250                          Immunoglobulin lambda variable 3-9
+      251                          Immunoglobulin lambda variable 3-9
+      252                          Immunoglobulin lambda variable 3-9
+      253 Probable non-functional immunoglobulin kappa variable 2D-24
+      254 Probable non-functional immunoglobulin kappa variable 2D-24
+      255 Probable non-functional immunoglobulin kappa variable 2D-24
+      256 Probable non-functional immunoglobulin kappa variable 2D-24
+      257 Probable non-functional immunoglobulin kappa variable 2D-24
+      258 Probable non-functional immunoglobulin kappa variable 2D-24
+      259 Probable non-functional immunoglobulin kappa variable 2D-24
+      260 Probable non-functional immunoglobulin kappa variable 2D-24
+      261 Probable non-functional immunoglobulin kappa variable 2D-24
+      262 Probable non-functional immunoglobulin kappa variable 2D-24
+      263 Probable non-functional immunoglobulin kappa variable 2D-24
+      264 Probable non-functional immunoglobulin kappa variable 2D-24
+      265 Probable non-functional immunoglobulin kappa variable 2D-24
+      266 Probable non-functional immunoglobulin kappa variable 2D-24
+      267 Probable non-functional immunoglobulin kappa variable 2D-24
+      268 Probable non-functional immunoglobulin kappa variable 2D-24
+      269 Probable non-functional immunoglobulin kappa variable 2D-24
+      270 Probable non-functional immunoglobulin kappa variable 2D-24
+      271 Probable non-functional immunoglobulin kappa variable 2D-24
+      272 Probable non-functional immunoglobulin kappa variable 2D-24
+      273 Probable non-functional immunoglobulin kappa variable 2D-24
+      274 Probable non-functional immunoglobulin kappa variable 2D-24
+      275 Probable non-functional immunoglobulin kappa variable 2D-24
+      276 Probable non-functional immunoglobulin kappa variable 2D-24
+      277 Probable non-functional immunoglobulin kappa variable 2D-24
+      278 Probable non-functional immunoglobulin kappa variable 2D-24
+      279 Probable non-functional immunoglobulin kappa variable 2D-24
+      280 Probable non-functional immunoglobulin kappa variable 2D-24
+      281 Probable non-functional immunoglobulin kappa variable 2D-24
+      282 Probable non-functional immunoglobulin kappa variable 2D-24
+      283 Probable non-functional immunoglobulin kappa variable 2D-24
+      284 Probable non-functional immunoglobulin kappa variable 2D-24
+      285 Probable non-functional immunoglobulin kappa variable 2D-24
+      286 Probable non-functional immunoglobulin kappa variable 2D-24
+      287 Probable non-functional immunoglobulin kappa variable 2D-24
+      288 Probable non-functional immunoglobulin kappa variable 2D-24
+      289                          Immunoglobulin kappa variable 1-27
+      290                          Immunoglobulin kappa variable 1-27
+      291                          Immunoglobulin kappa variable 1-27
+      292                          Immunoglobulin kappa variable 1-27
+      293                          Immunoglobulin kappa variable 1-27
+      294                          Immunoglobulin kappa variable 1-27
+      295                          Immunoglobulin kappa variable 1-27
+      296                          Immunoglobulin kappa variable 1-27
+      297                          Immunoglobulin kappa variable 1-27
+      298                          Immunoglobulin kappa variable 1-27
+      299                          Immunoglobulin kappa variable 1-27
+      300                          Immunoglobulin kappa variable 1-27
+      301                          Immunoglobulin kappa variable 1-27
+      302                          Immunoglobulin kappa variable 1-27
+      303                          Immunoglobulin kappa variable 1-27
+      304                          Immunoglobulin kappa variable 1-27
+      305                          Immunoglobulin kappa variable 1-27
+      306                          Immunoglobulin kappa variable 1-27
+      307                          Immunoglobulin kappa variable 1-27
+      308                          Immunoglobulin kappa variable 1-27
+      309                          Immunoglobulin kappa variable 1-27
+      310                          Immunoglobulin kappa variable 1-27
+      311                          Immunoglobulin kappa variable 1-27
+      312                          Immunoglobulin kappa variable 1-27
+      313                          Immunoglobulin kappa variable 1-27
+      314                          Immunoglobulin kappa variable 1-27
+      315                          Immunoglobulin kappa variable 1-27
+      316                          Immunoglobulin kappa variable 1-27
+      317                          Immunoglobulin kappa variable 1-27
+      318                          Immunoglobulin kappa variable 1-27
+      319                          Immunoglobulin kappa variable 1-27
+      320                          Immunoglobulin kappa variable 1-27
+      321                          Immunoglobulin kappa variable 1-27
+      322                          Immunoglobulin kappa variable 1-27
+      323                          Immunoglobulin kappa variable 1-27
+      324                          Immunoglobulin kappa variable 1-27
+
+---
+
+    Code
+      D$SE
+    Output
+      class: SummarizedExperiment 
+      dim: 9 36 
+      metadata(0):
+      assays(2): intensity_norm intensity
+      rownames(9): P00711 P00761 ... A0A075B6R9 A0A075B6S5
+      rowData names(5): Protein Gene Protein.Length Organism Description
+      colnames(36): HCC_1 HCC_2 ... C_18 C_19
+      colData names(11): Sample PatientID ... Resection_Margin
+        Underlying_Liver_Disease
+
+---
+
+    Code
+      SummarizedExperiment::assays(D$SE)$intensity
+    Output
+                    HCC_1    HCC_2    HCC_3    HCC_4    HCC_5    HCC_6    HCC_7
+      P00711           NA 20.54825       NA       NA       NA       NA       NA
+      P00761     25.90084 25.36491 24.12162 24.48768 23.96909 23.73467 24.01513
+      P02666           NA       NA       NA       NA       NA       NA       NA
+      P02769     19.84800 22.79129       NA       NA 21.49955 20.39160       NA
+      A0A075B6I0       NA       NA 17.82802 16.63995       NA 17.58987       NA
+      A0A075B6I9       NA       NA       NA 17.65924       NA       NA       NA
+      A0A075B6K5 19.94302       NA 20.41611 20.01886 20.95053 19.99487 19.09308
+      A0A075B6R9 19.09757 17.85874 19.65453 19.88570 18.51800 18.85583 19.04224
+      A0A075B6S5       NA       NA 18.88806 19.94127 19.13007       NA 18.37822
+                    HCC_8    HCC_9   HCC_10   HCC_11   HCC_12   HCC_14   HCC_15
+      P00711           NA       NA       NA       NA       NA       NA       NA
+      P00761     23.70999 22.30227 24.23667 24.93779 23.87366 24.83624 24.14062
+      P02666           NA       NA       NA       NA       NA       NA       NA
+      P02769     24.42513 19.33134 20.99449 21.12432 27.12458 23.56860 18.28755
+      A0A075B6I0 15.74086 17.19907       NA       NA       NA 16.20793       NA
+      A0A075B6I9       NA       NA 16.89965       NA       NA       NA       NA
+      A0A075B6K5 20.01324 19.43368 19.46948 19.54941 18.48287 19.90155 19.19390
+      A0A075B6R9 20.11005 17.30495 19.09889 18.88355 17.03749 18.62287 18.64255
+      A0A075B6S5 17.88554       NA       NA       NA       NA       NA 17.87465
+                   HCC_16   HCC_17   HCC_18   HCC_19      C_1      C_3      C_4
+      P00711           NA       NA       NA       NA 21.50174       NA       NA
+      P00761     23.76983 23.92228 23.54623 25.03030 25.82042 24.35766 22.85962
+      P02666           NA       NA       NA       NA       NA       NA       NA
+      P02769     20.79382 19.89268 19.31500 18.47316 23.61801 19.71351 17.05196
+      A0A075B6I0       NA 18.63926       NA 16.16902 15.50858 17.41926 16.16989
+      A0A075B6I9       NA       NA       NA       NA       NA       NA       NA
+      A0A075B6K5 18.60450 21.55238 20.16237 21.16172 19.75367 18.37064 18.13545
+      A0A075B6R9 17.48459 20.33031 18.43908 19.26095 18.35682 18.98418 17.95393
+      A0A075B6S5 16.86136 20.01399 17.48627 19.51442 18.16727 18.13542 16.73378
+                      C_5      C_6      C_7      C_8      C_9     C_10     C_11
+      P00711           NA       NA 19.48874       NA       NA       NA       NA
+      P00761     23.94512 24.83505 24.75733 23.82750 22.95311 24.75930 24.11977
+      P02666           NA       NA       NA       NA       NA       NA       NA
+      P02769     20.28110 21.21431 23.47851 19.88167 21.78223 21.60159 24.68164
+      A0A075B6I0       NA 15.58958 15.92496 17.24387 15.97913 15.62184       NA
+      A0A075B6I9       NA       NA       NA       NA       NA       NA       NA
+      A0A075B6K5 18.70919 19.47279 19.23384 20.82255 19.97893 20.20033 19.71722
+      A0A075B6R9 18.09230 17.40391 18.82883 20.76069 17.53886 19.93151 18.52970
+      A0A075B6S5 16.94276       NA       NA 19.07857 17.29897 19.53063 16.95159
+                     C_12     C_13     C_14     C_15     C_16     C_17     C_18
+      P00711           NA       NA       NA       NA       NA       NA       NA
+      P00761     24.23916 24.52850 24.63018 23.69166 24.03485 23.17015 21.84052
+      P02666           NA       NA       NA       NA       NA       NA       NA
+      P02769     20.44399 17.42877 20.86646 19.96796       NA 19.97375 18.86704
+      A0A075B6I0       NA 17.01941 16.62561       NA       NA 15.69371       NA
+      A0A075B6I9       NA       NA       NA       NA       NA       NA       NA
+      A0A075B6K5 19.29272 21.15798 20.85233 18.74568 19.97312 19.86490 18.40298
+      A0A075B6R9 16.19251 19.39759 19.38221 18.03191 16.87713 18.34318       NA
+      A0A075B6S5 18.35373 19.16893 18.24126 17.29915 18.98128 18.78594 17.33445
+                     C_19
+      P00711           NA
+      P00761     25.04915
+      P02666           NA
+      P02769     18.42850
+      A0A075B6I0       NA
+      A0A075B6I9       NA
+      A0A075B6K5 20.84640
+      A0A075B6R9 18.16538
+      A0A075B6S5 18.69163
+
+---
+
+    Code
+      SummarizedExperiment::assays(D$SE)$intensity_norm
+    Output
+                    HCC_1    HCC_2    HCC_3    HCC_4    HCC_5    HCC_6    HCC_7
+      P00711           NA 19.37729       NA       NA       NA       NA       NA
+      P00761     24.18369 24.15892 24.18048 24.22779 24.19871 24.19447 24.17879
+      P02666           NA       NA       NA       NA       NA       NA       NA
+      P02769     20.72309 21.08148       NA       NA 20.61288 20.64786       NA
+      A0A075B6I0       NA       NA 16.38111 16.18440       NA 16.41863       NA
+      A0A075B6I9       NA       NA       NA 17.00493       NA       NA       NA
+      A0A075B6K5 20.12094       NA 19.75659 19.39707 20.22195 20.09741 19.72223
+      A0A075B6R9 18.59903 18.79667 18.70821 18.98647 17.96523 18.49407 18.97444
+      A0A075B6S5       NA       NA 17.86544 19.08272 18.64030       NA 18.13586
+                    HCC_8    HCC_9   HCC_10   HCC_11   HCC_12   HCC_14   HCC_15
+      P00711           NA       NA       NA       NA       NA       NA       NA
+      P00761     23.91857 24.17850 24.17181 24.17222 24.13271 24.14564 24.20149
+      P02666           NA       NA       NA       NA       NA       NA       NA
+      P02769     22.13238 20.79129 20.87812 20.86596 21.35795 23.17792 20.60045
+      A0A075B6I0 16.77349 16.38827       NA       NA       NA 16.43665       NA
+      A0A075B6I9       NA       NA 17.03627       NA       NA       NA       NA
+      A0A075B6K5 17.70680 20.49857 19.37787 19.38579 16.85439 19.58668 20.33977
+      A0A075B6R9 19.31705 17.70347 19.12698 18.75203 19.27887 18.58058 18.89264
+      A0A075B6S5 17.40962       NA       NA       NA       NA       NA 17.92259
+                   HCC_16   HCC_17   HCC_18   HCC_19      C_1      C_3      C_4
+      P00711           NA       NA       NA       NA 20.47019       NA       NA
+      P00761     24.17149 24.17820 24.21315 24.43364 24.14925 24.18430 24.38515
+      P02666           NA       NA       NA       NA       NA       NA       NA
+      P02769     20.85089 19.01746 20.49197 19.15691 22.73299 20.77391 19.76251
+      A0A075B6I0       NA 16.39222       NA 15.89193 16.45388 16.40697 16.18102
+      A0A075B6I9       NA       NA       NA       NA       NA       NA       NA
+      A0A075B6K5 19.26050 20.20804 20.79800 21.48002 19.23696 19.44642 20.74057
+      A0A075B6R9 18.75740 18.69522 18.85997 18.74577 18.44188 19.32725 19.39719
+      A0A075B6S5 18.29260 18.28552 17.89131 18.96462 18.38823 18.27604 17.92261
+                      C_5      C_6      C_7      C_8      C_9     C_10     C_11
+      P00711           NA       NA 20.28291       NA       NA       NA       NA
+      P00761     24.16591 24.12626 24.18985 24.34355 24.00416 24.23767 24.13879
+      P02666           NA       NA       NA       NA       NA       NA       NA
+      P02769     20.89359 21.00034 23.70933 20.02950 21.22430 20.89632 21.13827
+      A0A075B6I0       NA 16.49638 16.30113 16.13083 16.90958 15.97741       NA
+      A0A075B6I9       NA       NA       NA       NA       NA       NA       NA
+      A0A075B6K5 19.51791 19.71396 19.41266 20.35133 19.74507 19.12823 18.27408
+      A0A075B6R9 19.14971 17.90091 18.98072 19.77716 17.99099 19.17365 19.22009
+      A0A075B6S5 18.06121       NA       NA 18.03874 17.84737 18.92857 18.17160
+                     C_12     C_13     C_14     C_15     C_16     C_17     C_18
+      P00711           NA       NA       NA       NA       NA       NA       NA
+      P00761     24.16805 24.16616 24.23171 24.17076 24.17692 24.24191 24.17951
+      P02666           NA       NA       NA       NA       NA       NA       NA
+      P02769     20.79129 16.63388 20.42065 20.85021       NA 20.53107 20.78008
+      A0A075B6I0       NA 16.44560 16.43045       NA       NA 16.21284       NA
+      A0A075B6I9       NA       NA       NA       NA       NA       NA       NA
+      A0A075B6K5 19.77002 19.87473 20.35992 19.62340 20.01679 20.05114 19.90970
+      A0A075B6R9 16.71171 18.46861 18.93024 18.92128 17.11074 18.49396       NA
+      A0A075B6S5 18.89617 18.29792 17.81190 18.19050 19.23647 18.97786 18.30594
+                     C_19
+      P00711           NA
+      P00761     24.22991
+      P02666           NA
+      P02769     20.33274
+      A0A075B6I0       NA
+      A0A075B6I9       NA
+      A0A075B6K5 21.70003
+      A0A075B6R9 18.08713
+      A0A075B6S5 18.41437
+
+---
+
+    Code
+      SummarizedExperiment::colData(D$SE)
+    Output
+      DataFrame with 36 rows and 11 columns
+              Sample PatientID    Group   Gender       Age Tumor_Staging Lymph_Nodes
+            <factor> <integer> <factor> <factor> <integer>      <factor>    <factor>
+      HCC_1    HCC_1         1      HCC   Female        57           pT1         pN0
+      HCC_2    HCC_2         2      HCC   Male          71           pT2         pNX
+      HCC_3    HCC_3         3      HCC   Female        42           pT1         pNX
+      HCC_4    HCC_4         4      HCC   Male          73           pT1         NX 
+      HCC_5    HCC_5         5      HCC   Male          51           pT1         pN0
+      ...        ...       ...      ...      ...       ...           ...         ...
+      C_15      C_15        15        C   Female        67            NA          NA
+      C_16      C_16        16        C   Male          75            NA          NA
+      C_17      C_17        17        C   Male          57            NA          NA
+      C_18      C_18        18        C   Male          66            NA          NA
+      C_19      C_19        19        C   Female        56            NA          NA
+             Grading Bloodvessel_status Resection_Margin Underlying_Liver_Disease
+            <factor>           <factor>         <factor>                 <factor>
+      HCC_1       G3                 V0               R0                     NASH
+      HCC_2       G2                 V0               R0                     NASH
+      HCC_3       G3                 V0               R0                     NA  
+      HCC_4       G2                 V0               R0                     HepC
+      HCC_5       G1                 V0               R0                     NA  
+      ...        ...                ...              ...                      ...
+      C_15        NA                 NA               NA                       NA
+      C_16        NA                 NA               NA                       NA
+      C_17        NA                 NA               NA                       NA
+      C_18        NA                 NA               NA                       NA
+      C_19        NA                 NA               NA                       NA
+
+---
+
+    Code
+      SummarizedExperiment::rowData(D$SE)
+    Output
+      DataFrame with 9 rows and 5 columns
+                     Protein        Gene Protein.Length     Organism
+                 <character> <character>      <integer>  <character>
+      P00711          P00711       LALBA            142   Bos taurus
+      P00761          P00761          NA            231   Sus scrofa
+      P02666          P02666        CSN2            224   Bos taurus
+      P02769          P02769         ALB            607   Bos taurus
+      A0A075B6I0  A0A075B6I0    IGLV8-61            122 Homo sapiens
+      A0A075B6I9  A0A075B6I9    IGLV7-46            117 Homo sapiens
+      A0A075B6K5  A0A075B6K5     IGLV3-9            115 Homo sapiens
+      A0A075B6R9  A0A075B6R9   IGKV2D-24            120 Homo sapiens
+      A0A075B6S5  A0A075B6S5    IGKV1-27            117 Homo sapiens
+                            Description
+                            <character>
+      P00711          Alpha-lactalbumin
+      P00761                    Trypsin
+      P02666                Beta-casein
+      P02769                    Albumin
+      A0A075B6I0 Immunoglobulin lambd..
+      A0A075B6I9 Immunoglobulin lambd..
+      A0A075B6K5 Immunoglobulin lambd..
+      A0A075B6R9 Probable non-functio..
+      A0A075B6S5 Immunoglobulin kappa..
+
