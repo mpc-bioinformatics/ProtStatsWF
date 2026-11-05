@@ -194,6 +194,8 @@ prepareData <- function(dataPath,
   SE <- SummarizedExperiment::SummarizedExperiment(assays = assays,
                                                    rowData = id,
                                                    colData = sampleInfo)
+
+
   D_norm_long <- as.data.frame(SummarizedExperiment::assay(SE,
                                                            "intensity_norm"))
   D_norm_long$.feature <- rownames(D_norm_long)
@@ -232,26 +234,29 @@ prepareData <- function(dataPath,
 #' #' @importFrom tidyr pivot_longer
 #' #'
 #' #' @returns A data frame in long format.
-#' .pivotLongerSE <- function(SE, cols) {
-#'
-#'   # Extract assay
-#'   D <- as.data.frame(SummarizedExperiment::assay(SE))
-#'   D$id. <- rownames(D)
-#'
-#'   D_long <- tidyr::pivot_longer(D, -id., names_to = "sample.",
-#'                                 values_to = "value.")
-#'
-#'   # Add colData
-#'   col_data <- as.data.frame(SummarizedExperiment::colData(SE))
-#'   col_data$sample. <- rownames(col_data)
-#'   D_long <- dplyr::left_join(D_long, col_data, by = "sample.")
-#'
-#'   # Add rowData
-#'   row_data <- as.data.frame(SummarizedExperiment::rowData(SE))
-#'   row_data$id. <- rownames(row_data)
-#'   D_long <- dplyr::left_join(D_long, row_data, by = "id.")
-#'
-#' }
+.pivotLongerSE <- function(SE, assayName, cols, sampleInfo, sampleNameColumn) {
+
+  D_norm_long <- as.data.frame(SummarizedExperiment::assay(SE,assayName))
+  D_norm_long$.feature <- rownames(D_norm_long)
+  D_long <- tidyr::pivot_longer(D_norm_long, cols = -".feature",
+                                names_to = ".sample", values_to = assayName)
+  col_data <- as.data.frame(SummarizedExperiment::colData(SE))
+  col_data$.sample <- rownames(col_data)
+  D_long <- dplyr::left_join(D_long, col_data, by = ".sample")
+  row_data <- as.data.frame(SummarizedExperiment::rowData(SE))
+  row_data$.feature <- rownames(row_data)
+  D_long <- dplyr::left_join(D_long, row_data, by = ".feature")
+
+  if (!is.null(sampleInfo)) {
+    # if available bring factor levels in same order as in sampleInfo
+    D_long$.sample <- factor(D_long$.sample,
+                             levels = sampleInfo[, sampleNameColumn])
+  }
+
+  D_long <- as.data.frame(D_long)
+  return(D_long)
+
+}
 #'
 #'
 #'
