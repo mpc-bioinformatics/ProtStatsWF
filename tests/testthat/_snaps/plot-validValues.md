@@ -5,7 +5,7 @@
     Output
       # A tibble: 38 x 4
          .sample group nrvalid meanvalid
-         <fct>   <chr>   <int>     <dbl>
+         <fct>   <fct>   <int>     <dbl>
        1 HCC_1   HCC      3013     0.720
        2 HCC_2   HCC      2566     0.613
        3 HCC_3   HCC      3150     0.753

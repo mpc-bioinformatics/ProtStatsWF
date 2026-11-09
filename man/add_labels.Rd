@@ -13,20 +13,23 @@ add_labels(
 )
 }
 \arguments{
-\item{RES_Volcano}{\strong{result from \code{\link[=VolcanoPlot]{VolcanoPlot()}}} \cr
-A list containing the data.frame with the transformed data and the ggplot object.}
+\item{RES_Volcano}{\strong{ggplot} \cr
+The result from \code{\link[=VolcanoPlot]{VolcanoPlot()}}, \code{\link[=VolcanoPlot_ttest]{VolcanoPlot_ttest()}} or
+\code{\link[=VolcanoPlot_ANOVA]{VolcanoPlot_ANOVA()}}, i.e. a ggplot object containing the transformed data
+and significance categories.}
 
-\item{label_type}{\strong{character} \cr
-The label type.
-Options are "FDR" (significant after correction) or "noFDR" (significant without correction) or "index" -> define indices to label}
+\item{label_type}{\strong{character(1)} \cr
+The label type. Options are "FDR" (significant after correction), "noFDR"
+(significant without correction) or "index" (define indices to label via
+\code{ind}).}
 
 \item{ind}{\strong{integer} \cr
-The index if the label_type is "index".}
+The indices to label if \code{label_type} is "index".}
 
-\item{protein_name_column}{\strong{character} \cr
-The column name of the protein names in the RES data.frame.}
+\item{protein_name_column}{\strong{character(1)} \cr
+The column name of the protein names in the \code{RES_Volcano} data.}
 
-\item{protein_names}{\strong{character vector} \cr
+\item{protein_names}{\strong{character} \cr
 The names of the proteins.}
 }
 \value{

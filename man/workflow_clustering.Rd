@@ -77,7 +77,7 @@ The plot resolution for the heatmap.}
 \item{column_name_protein}{\strong{character(1)} \cr
 The name of the column containing the protein identifiers.}
 
-\item{...}{Additional parameters passed to \code{\link[ProtStatsWF]{Heatmap_with_groups}}.}
+\item{...}{Additional parameters passed to \code{\link[ProtStatsWF]{heatmap}}.}
 }
 \value{
 Nothing, but saves a heatmap, a set of lineplots (one per cluster)

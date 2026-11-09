@@ -16,7 +16,15 @@ Boxplots(
 }
 \arguments{
 \item{D_long}{\strong{data.frame} \cr
+<<<<<<< HEAD
 The data set given in long format.}
+=======
+The data set in long format, output object from \link{prepareData}.
+Must at least contain the columns ".sample" (sample IDs) and
+"intensity_norm" (protein intensities).
+May contain additional columns that can be used for assigning samples to
+groups for colouring.}
+>>>>>>> introduce_SE
 
 \item{method}{\strong{character} \cr
 The method used. Options are "boxplot" and "violinplot".}
@@ -42,6 +50,7 @@ boxplots and messages
 Boxplots showing the distribution of intensities over all samples
 }
 \examples{
+<<<<<<< HEAD
 \dontrun{
 prepared_data <- prepareData(...)
 
@@ -49,5 +58,14 @@ prepared_data <- prepareData(...)
 boxplot <- Boxplots(D_long = prepared_data[["D_long"]])
 }
 
+=======
+file_proteins <- system.file("extdata", "proteins_HCC.csv",
+  package = "ProtStatsWF")
+file_clinical <- system.file("extdata", "clinical_data.csv",
+  package = "ProtStatsWF")
+D <- prepareData(dataPath = file_proteins, intensityColumns = 6:43,
+  proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
+  sampleNameColumn = "Sample", verbose = FALSE)
+>>>>>>> introduce_SE
 
 }

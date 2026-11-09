@@ -1,7 +1,6 @@
 #' Export SummarizedExperiment object to an Excel file, with one assay per sheet.
 #'
 #' @param SE \strong{SummarizedExperiment object} \cr Object to be exported.
-#'      E.g. the result of \code{\link{combineComparisons}}.
 #' @param file \strong{character} \cr file path to the output Excel file.
 #'      If the file already exists, it will be overwritten.
 #'
@@ -11,6 +10,7 @@
 #' @export
 #'
 #' @examples
+<<<<<<< HEAD
 exportSE <- function(SE, file, assays = NULL) {
 
   wb <- openxlsx::createWorkbook()
@@ -28,6 +28,25 @@ exportSE <- function(SE, file, assays = NULL) {
     print(nrow(rData))
     print(nrow(mat))
 
+=======
+#' file_proteins <- system.file("extdata", "proteins_HCC.csv",
+#'   package = "ProtStatsWF")
+#' file_clinical <- system.file("extdata", "clinical_data.csv",
+#'   package = "ProtStatsWF")
+#' D_hcc <- prepareData(file_proteins, intensityColumns = 6:43,
+#'   proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
+#'   sampleNameColumn = "Sample", verbose = FALSE)
+#' exportSE(D_hcc$SE, file = file.path(tempdir(), "HCC_data.xlsx"))
+exportSE <- function(SE, file) {
+  
+  wb <- openxlsx::createWorkbook()
+  
+  rData <- as.data.frame(SummarizedExperiment::rowData(SE))
+  
+  for (assay_name in SummarizedExperiment::assayNames(SE)) {
+    openxlsx::addWorksheet(wb, assay_name)
+    mat <- as.data.frame(SummarizedExperiment::assay(SE, assay_name))
+>>>>>>> introduce_SE
     mat <- cbind(rData, mat)
     openxlsx::writeData(wb, sheet = assay_name, x = mat, rowNames = TRUE,
                         keepNA = TRUE)

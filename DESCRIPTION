@@ -1,11 +1,11 @@
 Package: ProtStatsWF
 Title: Statistics Workflows for Proteomics Data
-Version: 0.3.1
+Version: 0.3.2
 Authors@R: c(
     person("Karin", "Schork", , "karin.schork@rub.de", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-3756-4347")),
-    person("Katharina", "Neuhaus", , "katharina.neuhaus@rub.de", role = c("aut")), 
-    person("Awien", "Barwari", , , role = c("aut")), 
+    person("Katharina", "Neuhaus", , "katharina.neuhaus@rub.de", role = c("ctb")), 
+    person("Awien", "Barwari", , , role = c("ctb")), 
     person("Martin", "Eisenacher", , "martin.eisenacher@rub.de", role=c("aut", "fnd"), 
            comment = c(ORCID = "0000-0003-2687-7444")))
 Description: This package offers workflows for the statistical analysis of proteomics data.
@@ -13,41 +13,36 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 Suggests: 
+    affy,
+    amap,
     BiocStyle,
+    car,
+    circlize,
+    dendextend,
+    ggrepel,
     knitr,
+    multcomp,
+    nlme,
     RefManageR,
     rmarkdown,
     sessioninfo,
     testthat,
-    vdiffr
+    vdiffr,
+    vsn
 Config/testthat/edition: 3
 biocViews: Software
 Imports: 
-    affy,
-    amap,
-    car,
     checkmate,
-    circlize,
     ComplexHeatmap (>= 2.24.1),
-    dendextend,
     dplyr,
     ggplot2,
-    ggrepel,
-    gtools,
-    limma (>= 3.68.0),
-    magrittr,
-    matrixStats,
-    multcomp,
-    nlme,
+    limma (>= 3.62.0),
+    methods,
     openxlsx,
     pbapply,
-    reshape2,
     scales,
-    stringr,
     SummarizedExperiment,
-    tidyr,
-    vsn
+    tidyr
 URL: https://github.com/mpc-bioinformatics/ProtStatsWF
 BugReports: https://github.com/mpc-bioinformatics/ProtStatsWF/issues
-Config/roxygen2/version: 8.0.0
-RoxygenNote: 7.3.3
+Config/roxygen2/version: 8.1.0

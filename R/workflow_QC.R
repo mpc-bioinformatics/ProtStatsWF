@@ -6,85 +6,169 @@
 #'
 #' @details
 #' This function performs quality control of quantitative proteomics data.
-#' The following plots are generated: a valid value plot, boxplots, MA-plots and a PCA plot.
+#' The following plots are generated: a valid value plot, boxplots, MA-plots and
+#' a PCA plot.
 #'
-#' @param D **list** Result from [prepareDataSE()] containing the imported data.
-#' @param groupColumn **character(1)** Column name in the colData(D$SE) that contains the group
-#' information for colouring the plots. Default is NULL (no group information for colouring).
-#' @param group2Column **character(1)** Column name in the colData(D$SE) that
-#' contains a secondary group information (used in PCA_plot as shape). Default is NULL.
-#' @param groupColours **character** Vector of colours for the groups. Default is NULL
-#' (default ggplot2 colour palette will be used.)
-#' @param outPath **character(1)** Path to save the output files. The corresponding folder must exist.
-#' @param outType **character(1)** Type of output file. Default is xlsx.
-#' @param suffix **character(1)** Suffix to add to the output file names. Default is "".
-#' @param NAOut **character(1)** String to represent missing values in the output files. Default is "NA".
-#' @param verbose **logical(1)** Whether to print messages during the workflow. Default is TRUE.
-#' @param baseSize **numeric(1)** Base size for the plots. Default is 15.
-#' @param plotDevice **character(1)** Device to use for saving plots. Default is "pdf".
-#' @param plotHeight_BP_VV **numeric(1)** Height of the boxplot and valid value plots in cm. Default is 10.
-#' @param plotWidth_BP_VV **numeric(1)** Width of the boxplot and valid value plots in cm. Default is 15.
-#' @param plotHeight_PCA_MA **numeric(1)** Height of the PCA and MA plots in cm. Default is 15.
-#' @param plotWidth_PCA_MA **numeric(1)** Width of the PCA and MA plots in cm. Default is 15.
-#' @param plotDPI **numeric(1)** DPI for the plots. Default is 300.
-#' @param boxplotMethod **character(1)** Method for boxplot. Default is "boxplot".
-#' @param MAMaxPlots **numeric(1)** Maximum number of MA plots to be drawn. Default is 5000.
-#' @param MAAlpha **numeric(1)** Alpha value for MA plots. Default is 1.
-#' @param PCAImputeMethod **character(1)** Method for missing value imputation for the PCA. Default is "mean".
-#' @param PCAPropNA **numeric(1)** Allowed proportion of missing values for PCA. Default is 0.
-#' Proteins with more missing values will be removed from the PCA. The others will be imputed.
-#' @param PCAScale **logical(1)** Whether to scale data for the PCA. Default is TRUE.
-  #' @param PCAAlpha **numeric(1)** Alpha value (transparency) for points in the PCA. Default is 1.
-#' @param PCALabel **logical(1)** Whether to label PCA points. Default is FALSE.
-#' @param PCALabelSeed **numeric(1)** Seed for data point labels in the PCA. Default is NA.
-#' @param PCALabelSize **numeric(1)** Size of data point labels in the PCA. Default is 4.
-#' @param PCAXlim **numeric(2)** Limits for the x-axis in the PCA plot. Default is NULL.
-#' @param PCAYlim **numeric(2)** Limits for the y-axis in the PCA plot. Default is NULL.
-#' @param PCAPointSize **numeric(1)** Size of data points in the PCA. Default is 4.
+#' @param D **list** \cr
+#' Result from [prepareData()] containing the prepared data.
+#' @param groupColumn **character(1)** \cr
+#' Name of the column that contains the group information for colouring the
+#' plots. Default is NULL (no group information for colouring).
+#' @param group2Column **character(1)** \cr
+#' Name of the column that contains a secondary group information (used only in
+#' PCA_plot for shape of the data points). Default is NULL.
+#' @param outputPath **character(1)** \cr
+#' Path to save the output files. The corresponding folder must exist.
+#' @param outType **character(1)** \cr
+#' Type of output tables. Default is "xlsx".
+#' @param suffix **character(1)** \cr
+#' Suffix to add to the output file names. Default is "". Should ideally start
+#' with an underscore "_".
+#' @param NAOut **character(1)** \cr
+#' String to represent missing values in the output files. Default is "NA".
+#' @param groupColours **character** \cr
+#' Vector of colours for the groups. Default is NULL (default ggplot2 colour
+#' palette will be used).
+#' @param baseSize **numeric(1)** \cr
+#' Base size for the plots. Default is 15.
+#' @param plotDevice **character(1)** \cr
+#' Device to use for saving plots. Default is "pdf".
+#' @param plotHeight_BP **numeric(1)** \cr
+#' Height of the boxplots in cm. Default is 10.
+#' @param plotWidth_BP **numeric(1)** \cr
+#' Width of the boxplots in cm. Default is 15.
+#' @param plotHeight_VV **numeric(1)** \cr
+#' Height of the valid value plot in cm. Default is 10.
+#' @param plotWidth_VV **numeric(1)** \cr
+#' Width of the valid value plot in cm. Default is 15.
+#' @param plotHeight_PCA **numeric(1)** \cr
+#' Height of the PCA plot in cm. Default is 15.
+#' @param plotWidth_PCA **numeric(1)** \cr
+#' Width of the PCA plot in cm. Default is 15.
+#' @param plotHeight_MA **numeric(1)** \cr
+#' Height of the MA plots in cm. Default is 15.
+#' @param plotWidth_MA **numeric(1)** \cr
+#' Width of the MA plots in cm. Default is 15.
+#' @param plotDPI **numeric(1)** \cr
+#' DPI for the plots. Default is 300.
+#' @param boxplotMethod **character(1)** \cr
+#' Method for boxplot. Options are "boxplot" (default) and "violinplot".
+#' #@param boxplotLWD **numeric(1)** \cr
+#'  The line width for the boxplot, default is 0.5
+#' @param boxplotOutlierSize **numeric(1)** \cr
+#'  The point size of the outliers. Default is 1. If 0, outliers are not shown.
+#' @param MAMaxPlots **numeric(1)** \cr
+#' The maximum number of MA plots that should be generated. Default is 5000.
+#' This setting reduces the time and amount of space needed for MA-Plots if
+#' the number of samples is high.
+#' @param MAAlpha **numeric(1)** \cr
+#' Alpha value for MA plots. Default is 1 (no transparency).
+#' @param PCAImputeMethod **character(1)** \cr
+#' The missing value imputation method used for PCA. Options are "mean" or
+#' "median" or "none" (default).
+#' @param PCAPropNA **numeric(1)** \cr
+#' The proportion of allowed missing values for PCA for a protein, before it is
+#' discarded. It is automatically set to 0 if imputeMethod is "none".
+#' @param PCAAlpha **numeric(1)** \cr
+#' Alpha value (transparency) for points in the PCA. Default is 1.
+#' @param PCALabel **logical(1)** \cr
+#' Whether to label PCA points. Default is FALSE.
+#' @param PCALabelSeed **numeric(1)** \cr
+#' Seed for random number generator used for label placement in PCA. Default is
+#' NA (no seed), which may lead to different label placement for multiple
+#' executions of this function.
+#' @param PCALabelSize **numeric(1)** \cr
+#' Size of data point labels in the PCA. Default is 4.
+#' @param PCAPointSize **numeric(1)** \cr
+#'  Size of data points in the PCA. Default is 4.
+#' @param verbose **logical(1)** \cr
+#' Whether to print messages during the workflow. Default is TRUE.
 #'
-#' @return The workflow saves several plots and files and returns a message log of the workflow.
+#' @return The workflow saves several plots and tables.
 #' @export
 #'
+#' @importFrom checkmate assertCharacter assertDirectoryExists assertList
+#' @importFrom checkmate assertNumber assertSubset
+#' @importFrom ggplot2 ggsave
+#' @importFrom scales hue_pal
+#' @importFrom SummarizedExperiment assay colData
+#' @importFrom utils write.csv
+#'
 #' @seealso Functions used in this workflow:
-#'          [prepareDataSE()], [ValidValuePlot()], [Boxplots()], [MA_Plots()], [PCA_Plot()].
+#'          [prepareData()], [ValidValuePlot()], [Boxplots()], [MAPlots()],
+#'          [PCA_Plot()].
 #'
 #' @examples
-
+#' file_proteins <- system.file("extdata", "proteins_HCC.csv",
+#'   package = "ProtStatsWF")
+#' file_clinical <- system.file("extdata", "clinical_data.csv",
+#'   package = "ProtStatsWF")
+#' D_hcc <- prepareData(file_proteins, intensityColumns = 6:43,
+#'   proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
+#'   sampleNameColumn = "Sample", verbose = FALSE)
+#' \donttest{workflow_QC(D_hcc, groupColumn = "Group", outputPath = tempdir(),
+#'   MAMaxPlots = 0, verbose = FALSE)}
 workflow_QC <- function(D,
                         groupColumn = NULL,
                         group2Column = NULL,
-                        groupColours = NULL,
 
-                        outPath,
-                        outType = "xlsx",
+                        outputPath,
+                        outType = "xlsx",  ## TODO: does this work?
                         suffix = "",
-                        NAOut = "NA",
-                        verbose = TRUE,
+                        NAOut = "NA", ## TODO: does this work?
 
+                        groupColours = NULL,
                         baseSize = 15,
                         plotDevice = "pdf",
-                        plotHeight_BP_VV = 10,
-                        plotWidth_BP_VV = 15,
-                        plotHeight_PCA_MA = 15,
-                        plotWidth_PCA_MA = 15,
+                        plotHeight_BP = 10,
+                        plotWidth_BP = 15,
+                        plotHeight_VV = 10,
+                        plotWidth_VV = 15,
+                        plotHeight_PCA = 15,
+                        plotWidth_PCA = 15,
+                        plotHeight_MA = 15,
+                        plotWidth_MA = 15,
                         plotDPI = 300,
 
                         boxplotMethod = "boxplot",
-
+                        boxplotLWD = 0.5,
+                        boxplotOutlierSize = 1,
                         MAMaxPlots = 5000,
                         MAAlpha = 1,
-
-                        PCAImputeMethod = "mean",
+                        PCAImputeMethod = "none",
                         PCAPropNA = 0,
-                        PCAScale = TRUE,
                         PCAAlpha = 1,
                         PCALabel = FALSE,
                         PCALabelSeed = NA,
                         PCALabelSize = 4,
-                        PCAXlim = NULL,
-                        PCAYlim = NULL,
-                        PCAPointSize = 4
+                        PCAPointSize = 4,
+                        verbose = TRUE
 ){
+  if (MAMaxPlots > 0 && !requireNamespace("affy", quietly = TRUE)) {
+    stop("Package \"affy\" must be installed to plot MA plots.",
+      call. = FALSE)
+  }
+  if (PCALabel && !requireNamespace("ggrepel", quietly = TRUE)) {
+    stop("Package \"ggrepel\" must be installed to label the PCA points.",
+      call. = FALSE)
+  }
+
+  checkmate::assertList(D)
+  checkmate::assertSubset(c("SE", "D_long"), names(D))
+  checkmate::assertDirectoryExists(outputPath, access = "w")
+  checkmate::assertSubset(outType, c("xlsx", "csv"))
+  checkmate::assertCharacter(suffix, len = 1)
+  checkmate::assertCharacter(NAOut, len = 1)
+  checkmate::assertSubset(plotDevice, c("pdf", "jpeg", "tiff", "png", "svg"))
+  checkmate::assertNumber(plotHeight_BP, lower = 0)
+  checkmate::assertNumber(plotWidth_BP, lower = 0)
+  checkmate::assertNumber(plotHeight_VV, lower = 0)
+  checkmate::assertNumber(plotWidth_VV, lower = 0)
+  checkmate::assertNumber(plotHeight_PCA, lower = 0)
+  checkmate::assertNumber(plotWidth_PCA, lower = 0)
+  checkmate::assertNumber(plotHeight_MA, lower = 0)
+  checkmate::assertNumber(plotWidth_MA, lower = 0)
+  checkmate::assertNumber(plotDPI, lower = 0)
 
   # prepare group colours
   group <- SummarizedExperiment::colData(D$SE)[, groupColumn]
@@ -97,11 +181,11 @@ workflow_QC <- function(D,
                                  groupColours = groupColours,
                                  baseSize = baseSize)
 
-  ggplot2::ggsave(file.path(outPath, paste0("valid_value_plot", suffix, ".", plotDevice)),
-                  plot = vv_plot$plot, device = plotDevice, height = plotHeight_BP_VV,
-                  width = plotWidth_BP_VV, dpi = plotDPI, units = "cm")
+  ggplot2::ggsave(file.path(outputPath, paste0("valid_value_plot", suffix, ".", plotDevice)),
+                  plot = vv_plot$plot, device = plotDevice, height = plotHeight_VV,
+                  width = plotWidth_VV, dpi = plotDPI, units = "cm")
 
-  utils::write.csv(x = vv_plot$table, file = file.path(outPath,
+  utils::write.csv(x = vv_plot$table, file = file.path(outputPath,
                     paste0("D_validvalues", suffix, ".csv")), row.names = FALSE)
 
 
@@ -112,11 +196,12 @@ workflow_QC <- function(D,
                            groupColumn = groupColumn,
                            groupColours = groupColours,
                            baseSize = baseSize,
-                           method = boxplotMethod, lwd = 0.5)
+                           method = boxplotMethod, lwd = boxplotLWD,
+                       outlierSize = boxplotOutlierSize)
 
-  ggplot2::ggsave(file.path(outPath, paste0("boxplot", suffix, ".", plotDevice)),
-                  plot = boxplots, device = plotDevice, height = plotHeight_BP_VV,
-                  width = plotWidth_BP_VV, dpi = plotDPI, units = "cm")
+  ggplot2::ggsave(file.path(outputPath, paste0("boxplot", suffix, ".", plotDevice)),
+                  plot = boxplots, device = plotDevice, height = plotHeight_BP,
+                  width = plotWidth_BP, dpi = plotDPI, units = "cm")
 
 
 
@@ -127,14 +212,19 @@ workflow_QC <- function(D,
 
 
   if (MAMaxPlots > 0) {
+<<<<<<< HEAD
     ma_data <- MA_Plots(D = SummarizedExperiment::assay(D$SE),  ## TODO: assay spezifizieren!
                         outPath = outPath, suffix = suffix,
                         #labels = 1:ncol(SummarizedExperiment::assay(D$SE)),
                         #labels2 = colnames(SummarizedExperiment::assay(D$SE)),
+=======
+    ma_data <- MAPlots(D = SummarizedExperiment::assay(D$SE),  ### TODO: define which assay
+                        outputPath = outputPath, suffix = suffix,
+>>>>>>> introduce_SE
                         maxPlots = MAMaxPlots, alpha = MAAlpha,
-                        plotHeight = plotHeight_PCA_MA,
-                        plotWidth = plotWidth_PCA_MA,
-                        sampling = 1, verbose = verbose)
+                        plotHeight = plotHeight_MA,
+                        plotWidth = plotWidth_MA,
+                        verbose = verbose)
   }
 
 
@@ -147,7 +237,7 @@ workflow_QC <- function(D,
                        #impute = PCA_impute,
                        imputeMethod = PCAImputeMethod,
                        propNA = PCAPropNA,
-                       scale. = PCAScale,
+                       scale = TRUE,
                        PCx = 1, PCy = 2,
                        #groupvar1_name = groupColumn,
                        #groupvar2_name = group2Column,
@@ -156,7 +246,7 @@ workflow_QC <- function(D,
                        label = PCALabel,
                        labelSeed = PCALabelSeed,
                        labelSize = PCALabelSize,
-                       xlim = PCAXlim, ylim = PCAYlim,
+                       xlim = NULL, ylim = NULL,
                        pointSize = PCAPointSize, baseSize = baseSize,
                        verbose = verbose)
 
@@ -165,10 +255,10 @@ workflow_QC <- function(D,
   #   Loadings <- cbind(id, Loadings)
 
 
-  ggplot2::ggsave(file.path(outPath, paste0("PCA_plot", suffix, ".", plotDevice)), plot = pca_data[["plot"]],
-                  device = plotDevice, height = plotHeight_PCA_MA, width = plotWidth_PCA_MA, dpi = plotDPI, units = "cm")
-  utils::write.csv(x = pca_data$D_PCA_plot, file = file.path(outPath, paste0("D_PCA", suffix, ".csv")), row.names = FALSE)
-  utils::write.csv(x = pca_data$filtered_D, file = file.path(outPath, paste0("PCA_data_after_imputation", suffix, ".csv")), row.names = FALSE)
+  ggplot2::ggsave(file.path(outputPath, paste0("PCA_plot", suffix, ".", plotDevice)), plot = pca_data[["plot"]],
+                  device = plotDevice, height = plotHeight_PCA, width = plotWidth_PCA, dpi = plotDPI, units = "cm")
+  utils::write.csv(x = pca_data$D_PCA_plot, file = file.path(outputPath, paste0("D_PCA", suffix, ".csv")), row.names = FALSE)
+  utils::write.csv(x = pca_data$filtered_D, file = file.path(outputPath, paste0("PCA_data_after_imputation", suffix, ".csv")), row.names = FALSE)
 
   return(invisible(NULL))
 }

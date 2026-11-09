@@ -15,15 +15,8 @@ VolcanoPlot_ttest(
   logBaseP = 10,
   isFCLog = FALSE,
   isPLog = FALSE,
-  showThresLine = TRUE,
   groupName1 = "group1",
   groupName2 = "group2",
-  plotHeight = 15,
-  plotWidth = 15,
-  plotDPI = 300,
-  plotDevice = "pdf",
-  outputPath = NULL,
-  suffix = NULL,
   addAnnotation = TRUE,
   ...
 )
@@ -32,71 +25,66 @@ VolcanoPlot_ttest(
 \item{RES}{\strong{data.frame} \cr
 The results from a t-test.}
 
-\item{columnNameP}{\strong{character} \cr
+\item{columnNameP}{\strong{character(1)} \cr
 The column name for p-value.}
 
-\item{columnNamePadj}{\strong{character} \cr
-The columns name for adjusted p-value.}
+\item{columnNamePadj}{\strong{character(1)} \cr
+The column name for adjusted p-value.}
 
-\item{columnNameFC}{\strong{character} \cr
+\item{columnNameFC}{\strong{character(1)} \cr
 The column name for fold change.}
 
-\item{thresFC}{\strong{numeric} \cr
-The threshold for fold change.}
+\item{thresFC}{\strong{numeric(1)} \cr
+The threshold for fold change. Default is 2.}
 
-\item{thresP}{\strong{numeric} \cr
-The threshold for p-value.}
+\item{thresP}{\strong{numeric(1)} \cr
+The threshold for p-value. Default is 0.05.}
 
-\item{logBaseFC}{\strong{numeric} \cr
-The base for the fold changes log-transformation.}
+\item{logBaseFC}{\strong{numeric(1)} \cr
+The base for the fold changes log-transformation. Default is 2.}
 
-\item{logBaseP}{\strong{numeric} \cr
-The base for the p-values log-transformation.}
+\item{logBaseP}{\strong{numeric(1)} \cr
+The base for the p-values log-transformation. Default is 10.}
 
-\item{isFCLog}{\strong{logical} \cr
-If \code{TRUE}, fold change is already log-transformed.}
+\item{isFCLog}{\strong{logical(1)} \cr
+If \code{TRUE}, fold change is already log-transformed. Default is FALSE.}
 
-\item{isPLog}{\strong{logical} \cr
-If \code{TRUE}, p-value is already log-transformed.}
+\item{isPLog}{\strong{logical(1)} \cr
+If \code{TRUE}, p-value is already log-transformed. Default is FALSE.}
 
-\item{showThresLine}{\strong{logical} \cr
-If \code{TRUE}, threshold lines will be shown.}
+\item{groupName1}{\strong{character(1)} \cr
+The name of the first group. Default is "group1".}
 
-\item{groupName1}{\strong{character} \cr
-The name of first group.}
+\item{groupName2}{\strong{character(1)} \cr
+The name of the second group. Default is "group2".}
 
-\item{groupName2}{\strong{character} \cr
-The name of second group.}
+\item{addAnnotation}{\strong{logical(1)} \cr
+If \code{TRUE}, annotation will be added. Default is TRUE.}
 
-\item{plotHeight}{\strong{numeric} \cr
-The height of plot.}
-
-\item{plotWidth}{\strong{numeric} \cr
-The width of plot.}
-
-\item{plotDPI}{\strong{integer} \cr
-The resolution of plot.}
-
-\item{plotDevice}{\strong{character} \cr
-The plot device that is used for the resulting plot.
-Options are "pdf" and "png".}
-
-\item{outputPath}{\strong{character} \cr
-The path for output file.}
-
-\item{suffix}{\strong{character} \cr
-The suffix for output file.}
-
-\item{addAnnotation}{\strong{logical} \cr
-If \code{TRUE}, annotation will be added.}
-
-\item{...}{Additional arguments for the plot.}
+\item{...}{Additional arguments passed on to \code{\link[=VolcanoPlot]{VolcanoPlot()}}, e.g.
+\code{colour1}, \code{colour2}, \code{colour3}, \code{symmetricX},
+\code{legendPosition}, \code{baseSize}, \code{alpha}, \code{pointSize},
+\code{linewidth} or \code{showThresLine}.}
 }
 \value{
 A ggplot object of the volcano plot from a ttest result.
 }
 \description{
 Volcano plot for a t-test result.
+}
+\examples{
+file_proteins <- system.file("extdata", "proteins_HCC.csv",
+  package = "ProtStatsWF")
+file_clinical <- system.file("extdata", "clinical_data.csv",
+  package = "ProtStatsWF")
+D_hcc <- prepareData(file_proteins, intensityColumns = 6:43,
+  proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
+  sampleNameColumn = "Sample", verbose = FALSE)
+ttest_res <- ttest(D_hcc$SE, assay = "intensity_norm", groupColumn = "Group",
+  sampleColumn = "PatientID", paired = TRUE, logBeforeTest = FALSE,
+  verbose = FALSE)
+VolcanoPlot_ttest(ttest_res, columnNamePadj = "p.fdr",
+  columnNameFC = grep("^FC_", names(ttest_res), value = TRUE)[1])
 }
 \seealso{
 \code{\link[=VolcanoPlot]{VolcanoPlot()}}, \code{\link[=VolcanoPlot_ANOVA]{VolcanoPlot_ANOVA()}}, \code{\link[=add_labels]{add_labels()}}

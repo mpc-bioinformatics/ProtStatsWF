@@ -4,7 +4,7 @@
 file_proteins <- system.file("extdata", "proteins_HCC.csv", package = "ProtStatsWF")
 file_clinical  <- system.file("extdata", "clinical_data.csv", package = "ProtStatsWF")
 
-D_hcc <- prepareDataSE(dataPath = file_proteins, intensityColumns = 6:43,
+D_hcc <- prepareData(dataPath = file_proteins, intensityColumns = 6:43,
                        proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
                        sampleNameColumn = "Sample", verbose = FALSE)
 
@@ -12,14 +12,13 @@ DATA_hcc  <- as.data.frame(SummarizedExperiment::assay(D_hcc$SE, "intensity_norm
 ID_hcc    <- as.data.frame(SummarizedExperiment::rowData(D_hcc$SE))
 group_hcc <- droplevels(factor(SummarizedExperiment::colData(D_hcc$SE)[, "Group"]))
 
-ttest_res <- ttest(D = DATA_hcc, id = ID_hcc, group = group_hcc,
-                   sample = SummarizedExperiment::colData(D_hcc$SE)[, "PatientID"],
+ttest_res <- ttest(SE = D_hcc$SE, assay = "intensity_norm",
+                   groupColumn = "Group", sampleColumn = "PatientID",
                    logBeforeTest = FALSE, delogForFC = TRUE, logBase = 2,
-                   minObsPerGroup = 3, paired = TRUE)
+                   minObs = 3, paired = TRUE, verbose = FALSE)
 
 fc_col <- paste0("FC_", levels(group_hcc)[[1]], "_divided_by_", levels(group_hcc)[[2]])
-
-sig_cats   <- calculate_significance_categories_ttest(
+sig_cats   <- ProtStatsWF:::.calcSignCat_ttest(
   p = ttest_res$p, pAdj = ttest_res$p.fdr, fc = ttest_res[[fc_col]]
 )
 candidates <- which(as.character(sig_cats) == "significant after FDR correction")

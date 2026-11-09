@@ -4,59 +4,118 @@
 #' Workflow for t-test analysis of quantitative proteomics data.
 #'
 #' @details
-#' This function performs a t-test to compare two experimental groups in a quantitative proteomics dataset.
-#' The input \code{D} should be the list returned by [prepareDataSE()], which handles data import,
-#' log-transformation, and normalisation. Because the assay data is already log-transformed by
-#' [prepareDataSE()], \code{logBeforeTest} defaults to \code{FALSE}.
-#' The function generates a volcano plot, histograms of p-values and fold changes,
-#' boxplots of the significant candidates, and a heatmap of the significant candidates.
+#' This function performs a t-test to compare two experimental groups in a
+#' quantitative proteomics dataset. The input \code{D} should be the list
+#' returned by [prepareData()], which handles data import, log-transformation,
+#' and normalisation. Because the assay data is already log-transformed by
+#' [prepareData()], \code{logBeforeTest} defaults to \code{FALSE}.
+#' The function generates a volcano plot, histograms of p-values and fold
+#' changes as well as boxplots and a heatmap of the significant biomarker
+#' candidates.
 #'
-#' @param D **list** Result from [prepareDataSE()] containing \code{D$SE}
-#'   (a \code{SummarizedExperiment}) and \code{D$D_long} (the data set in long format).
-#' @param groupColumn **character(1)** Column name in \code{colData(D$SE)} that contains the
-#'   group labels. Exactly two groups must be present.
-#' @param outputPath **character(1)** Path to the output folder. The folder must already exist.
-#' @param sampleColumn **character(1)** Column name in \code{colData(D$SE)} that identifies
-#'   matched samples for a paired test. Required when \code{paired = TRUE}. Default is \code{NULL}.
-#' @param assayName **character(1)** Name of the assay in \code{D$SE} to use as input data.
-#'   Default is \code{"intensity_norm"}.
-#' @param groupColours **character** Vector of colours for the two groups. Default is \code{NULL}
+#' @param D **list** \cr
+#' Result from [prepareData()] containing the prepared data.
+#' @param groupColumn **character(1)** \cr
+#' Name of the column that contains the groups that are compared with a t-test.
+#' Exactly two groups must be present.
+#' @param outputPath **character(1)** \cr
+#' Path to the output folder. The folder must already exist.
+#' @param sampleColumn **character(1)** \cr
+#' Name of the column that identifies matched samples for a paired test.
+#' Required only when \code{paired = TRUE}. Default is \code{NULL}.
+#' @param assayName **character(1)** \cr
+#' Name of the assay in \code{D$SE} to use as input data.
+#' Default is \code{"intensity_norm"}, which corresponds to the output of
+#' [prepareData()]. Only change if you do not directly use the output from
+#' [prepareData()].
+#' @param groupColours **character** \cr
+#' Vector of colours for the two groups. Default is \code{NULL}
 #'   (default ggplot2 colour palette).
-#' @param proteinNameColumn **character(1)** Column name in \code{rowData(D$SE)} containing
-#'   protein identifiers. Default is \code{"Protein"}.
-#' @param paired **logical(1)** If \code{TRUE}, a paired test is performed. Default is \code{FALSE}.
-#' @param varEqual **logical(1)** If \code{TRUE}, variances are assumed equal. Default is \code{FALSE}.
-#' @param logBeforeTest **logical(1)** If \code{TRUE}, data will be log-transformed before
-#'   the test. Defaults to \code{FALSE} because usually data prepared with [prepareDataSE()] is already
-#'   log-transformed.
-#' @param delogForFC **logical(1)** If \code{TRUE}, fold changes are computed on the original
-#'   (de-log) scale. Default is \code{TRUE}.
-#' @param pValueZerosToMin **logical(1)** If \code{TRUE}, p-values equal to 0 are replaced
-#'   by the next smallest observed p-value. Default is \code{TRUE}.
-#' @param volcanoBaseSize **numeric(1)** Base font size for the volcano plot. Default is \code{25}.
-#' @param significantAfterFDR **logical(1)** If \code{TRUE}, only proteins significant after FDR
-#'   correction are shown in boxplots and heatmap. Default is \code{TRUE}.
+#' @param proteinNameColumn **character(1)** \cr
+#' Name of the column that contains protein identifiers (e.g. protein
+#' accessions, gene names). Default is \code{"Protein"}. This column will be
+#' used to label candidate proteins in boxplots and heatmap.
+#' @param paired **logical(1)** \cr
+#' If \code{TRUE}, a paired test is performed. Default is \code{FALSE}
+#' (unpaired t-test).
+#' @param varEqual **logical(1)** \cr
+#' If \code{TRUE}, variances in both groups are assumed equal. Default is
+#' \code{FALSE} (assuming unequal variances).
+#' @param logBeforeTest **logical(1)** \cr
+#' If \code{TRUE}, data will be log-transformed before the test. Defaults to
+#' \code{FALSE} because usually data prepared with [prepareData()] is already
+#' log-transformed.
+#' @param delogForFC **logical(1)** \cr
+#' If \code{TRUE}, fold changes are computed on the original (de-log) scale.
+#' Default is \code{TRUE}.
+#' @param minObs **integer(1)** \cr
+#' Minimum number of observations per group. For a paired t-test this is the
+#' minimum number of complete pairs. Default is 3.
+#' @param pValueZerosToMin **logical(1)**
+#' If \code{TRUE}, p-values equal to 0 are replaced
+#' by the next smallest observed p-value. Default is \code{TRUE}.
+#' @param volcanoBaseSize **numeric(1)** \cr
+#' Base size for the volcano plot. Default is 15.
+#' @param histogramBaseSize **numeric(1)** \cr
+#' Base size for the p-value and fold change histograms. Default is 15.
+#' @param heatmapTextSize **numeric(1)** \cr
+#' Text size for the heatmap. Default is 15.
+#' @param significantAfterFDR **logical(1)** \cr
+#' If \code{TRUE}, only proteins significant after FDR correction are shown in
+#' boxplots and heatmap. Default is \code{TRUE}.
+#' @param thresFC **numeric(1)** \cr
+#' Fold change threshold used to classify a candidate as significant. Default is 2.
+#' @param thresP **numeric(1)** \cr
+#' P-value threshold used to classify a candidate as significant. Default is 0.05.
 #' @param maxValidValuesOff **integer(1)** Maximum number of valid values for a protein to be
 #'   classified as "off". Default is \code{0}.
 #' @param minValidValuesOn **integer(1)** Minimum number of valid values for a protein to be
 #'   classified as "on". Default is \code{NULL} (set automatically to the smallest group size).
-#' @param suffix **character(1)** Suffix appended to all output file names. Default is \code{""}.
-#' @param plotDevice **character(1)** Output file type, e.g. \code{"pdf"} or \code{"png"}.
-#'   Default is \code{"pdf"}.
-#' @param plotHeight **numeric(1)** Plot height in cm. Default is \code{15}.
-#' @param plotWidth **numeric(1)** Plot width in cm. Default is \code{15}.
-#' @param plotDPI **integer(1)** Plot resolution in DPI. Default is \code{300}.
-#' @param verbose **logical(1)** Whether to print progress messages to the console. Default is \code{TRUE}.
+#' @param suffix **character(1)** \cr
+#' Suffix to add to the output file names. Default is "". Should ideally start
+#' with an underscore "_".
+#' @param plotDevice **character(1)** \cr
+#' Device to use for saving plots. Default is "pdf".
+#' @param plotHeight_Volcano **numeric(1)** \cr
+#' Height of the volcano plot in cm. Default is \code{25}.
+#' @param plotWidth_Volcano **numeric(1)** \cr
+#' Width of the volcano plot in cm. Default is \code{25}.
+#' @param plotHeight_Histogram **numeric(1)** \cr
+#' Height of the p-value and fold change histograms in cm. Default is \code{15}.
+#' @param plotWidth_Histogram **numeric(1)** \cr
+#' Width of the p-value and fold change histograms in cm. Default is \code{15}.
+#' @param plotHeight_Boxplot **numeric(1)** \cr
+#' Height of the boxplots of biomarker candidates in cm. Default is \code{15}.
+#' @param plotWidth_Boxplot **numeric(1)** \cr
+#' Width of the boxplots of biomarker candidates in cm. Default is \code{15}.
+#' @param plotHeight_Heatmap **numeric(1)** \cr
+#' Height of the heatmap in cm. Default is \code{15}.
+#' @param plotWidth_Heatmap **numeric(1)** \cr
+#' Width of the heatmap in cm. Default is \code{15}.
+#' @param plotDPI **integer(1)** \cr
+#' Plot resolution in DPI. Default is \code{300}.
+#' @param verbose **logical(1)** \cr
+#' Whether to print messages and progress bars during the workflow. Default is TRUE.
 #'
 #' @return A list with one element \code{"message"}: a character string log of the workflow
 #'   summarising settings and results. All output files are written to \code{outputPath}.
 #' @export
 #'
+#' @importFrom checkmate assertCharacter assertClass assertDirectoryExists assertFlag
+#' @importFrom checkmate assertInt assertList assertNumber assertSubset
+#' @importFrom ComplexHeatmap draw
+#' @importFrom ggplot2 ggsave
+#' @importFrom grDevices dev.off pdf
+#' @importFrom openxlsx write.xlsx
+#' @importFrom pbapply pboptions
+#' @importFrom scales hue_pal
+#' @importFrom SummarizedExperiment assay colData rowData
+#'
 #' @seealso [workflow_ANOVA()] for more than two groups.\cr
 #'          Functions used in this workflow:
-#'          [prepareDataSE()], [ttest()], [VolcanoPlot_ttest()], [pvalue_foldchange_histogram()],
-#'          [calculate_significance_categories_ttest()], [Boxplots_candidates()],
-#'          [Heatmap_with_groups()], [calculate_onoff()]
+#'          [prepareData()], [ttest()], [VolcanoPlot_ttest()], [pvalueFCHistogram()],
+#'          [.calcSignCat_ttest()], [BoxplotsCandidates()],
+#'          [heatmap()], [calculate_onoff()]
 #'
 #' @examples
 #' \dontrun{
@@ -84,9 +143,12 @@ workflow_ttest <- function(D,
                            varEqual = FALSE,
                            logBeforeTest = FALSE,
                            delogForFC = TRUE,
+                           minObs = 3,
                            pValueZerosToMin = TRUE,
 
-                           volcanoBaseSize = 25,
+                           volcanoBaseSize = 15,
+                           histogramBaseSize = 15,
+                           heatmapTextSize = 15,
 
                            significantAfterFDR = TRUE,
                            thresFC = 2,
@@ -96,11 +158,60 @@ workflow_ttest <- function(D,
 
                            suffix = "",
                            plotDevice = "pdf",
-                           plotHeight = 15,
-                           plotWidth = 15,
+                           plotHeight_Volcano = 25,
+                           plotWidth_Volcano = 25,
+                           plotHeight_Histogram = 15,
+                           plotWidth_Histogram = 15,
+                           plotHeight_Boxplot = 15,
+                           plotWidth_Boxplot = 15,
+                           plotHeight_Heatmap = 15,
+                           plotWidth_Heatmap = 15,
                            plotDPI = 300,
                            verbose = TRUE
                            ) {
+
+  if (!requireNamespace("amap", quietly = TRUE)) {
+    stop("Package \"amap\" must be installed to cluster the heatmap.",
+      call. = FALSE)
+  }
+  if (!requireNamespace("circlize", quietly = TRUE)) {
+    stop("Package \"circlize\" must be installed for the heatmap legend.",
+      call. = FALSE)
+  }
+
+  checkmate::assertList(D)
+  checkmate::assertSubset("SE", names(D))
+  checkmate::assertClass(D$SE, "SummarizedExperiment")
+  checkmate::assertCharacter(assayName, len = 1)
+  checkmate::assertSubset(assayName, names(SummarizedExperiment::assays(D$SE)))
+  checkmate::assertCharacter(groupColumn, len = 1)
+  checkmate::assertSubset(groupColumn, colnames(SummarizedExperiment::colData(D$SE)))
+  checkmate::assertCharacter(sampleColumn, len = 1, null.ok = TRUE)
+  if (!is.null(sampleColumn)) {
+    checkmate::assertSubset(sampleColumn, colnames(SummarizedExperiment::colData(D$SE)))
+  }
+  checkmate::assertCharacter(proteinNameColumn, len = 1)
+  checkmate::assertSubset(proteinNameColumn, colnames(SummarizedExperiment::rowData(D$SE)))
+  checkmate::assertDirectoryExists(outputPath, access = "w")
+  checkmate::assertCharacter(suffix, len = 1)
+  checkmate::assertFlag(varEqual)
+  checkmate::assertFlag(logBeforeTest)
+  checkmate::assertFlag(delogForFC)
+  checkmate::assertFlag(pValueZerosToMin)
+  checkmate::assertFlag(significantAfterFDR)
+  checkmate::assertInt(maxValidValuesOff, lower = 0)
+  checkmate::assertInt(minValidValuesOn, lower = 0, null.ok = TRUE)
+  checkmate::assertSubset(plotDevice, c("pdf", "jpeg", "tiff", "png", "svg"))
+  checkmate::assertNumber(plotHeight_Volcano, lower = 0)
+  checkmate::assertNumber(plotWidth_Volcano, lower = 0)
+  checkmate::assertNumber(plotHeight_Histogram, lower = 0)
+  checkmate::assertNumber(plotWidth_Histogram, lower = 0)
+  checkmate::assertNumber(plotHeight_Boxplot, lower = 0)
+  checkmate::assertNumber(plotWidth_Boxplot, lower = 0)
+  checkmate::assertNumber(plotHeight_Heatmap, lower = 0)
+  checkmate::assertNumber(plotWidth_Heatmap, lower = 0)
+  checkmate::assertNumber(plotDPI, lower = 0)
+  checkmate::assertFlag(verbose)
 
   #### Extract data from SummarizedExperiment ####
 
@@ -114,7 +225,11 @@ workflow_ttest <- function(D,
          paste(levels(group), collapse = ", "))
   }
 
-  if (is.null(groupColours)) groupColours <- scales::hue_pal()(length(levels(group)))
+  if (is.null(groupColours)) {
+    groupColours <- scales::hue_pal()(length(levels(group)))
+  } else {
+    checkmate::assertCharacter(groupColours, len = length(levels(group)))
+  }
 
   if (!verbose) {
     old_pbo <- pbapply::pboptions(type = "none")
@@ -124,20 +239,22 @@ workflow_ttest <- function(D,
 
   #### Calculate ttest ####
 
-  test_results <- ttest(D = DATA, id = ID,
-                        group = group, sample = sample,
+  test_results <- ttest(SE = D$SE,
+                        assay = assayName,
+                        groupColumn = groupColumn,
+                        sampleColumn = sampleColumn,
                         paired = paired, varEqual = varEqual,
                         logBeforeTest = logBeforeTest, delogForFC = delogForFC, logBase = 2,
-                        minObsPerGroup = 3, minObsPerGroupRatio = NULL)
+                        minObs = minObs, minObsRatio = NULL, verbose = verbose)
 
   openxlsx::write.xlsx(test_results,
                        file = file.path(outputPath, paste0("results_ttest", suffix, ".xlsx")),
                        overwrite = TRUE, keepNA = TRUE)
-  if (verbose) message(ifelse(paired, "Paired", "Unpaired"), " t-test complete. Results saved.")
+  if (verbose) message(ifelse(paired, "Paired", "Unpaired"),
+                       " t-test complete. Results saved.")
 
   if (pValueZerosToMin) {
     p_value_zero <- which(test_results$p == 0)
-
     if (length(p_value_zero) > 0) {
       next_smallest_value <- sort(unique(test_results$p))[2]
       test_results$p[test_results$p == 0] <- next_smallest_value
@@ -152,39 +269,43 @@ workflow_ttest <- function(D,
 
   volcano_plot <- VolcanoPlot_ttest(RES = test_results,
                                     columnNameP = "p", columnNamePadj = "p.fdr",
-                                    columnNameFC = fc_col_name, base_size = volcanoBaseSize,
+                                    columnNameFC = fc_col_name, baseSize = volcanoBaseSize,
                                     thresFC = thresFC, thresP = thresP)
 
   ggplot2::ggsave(file.path(outputPath, paste0("volcano_plot", suffix, ".", plotDevice)),
                   plot = volcano_plot, device = plotDevice,
-                  height = plotHeight, width = plotWidth, dpi = plotDPI)
+                  height = plotHeight_Volcano, width = plotWidth_Volcano, dpi = plotDPI, units = "cm")
   if (verbose) message("Volcano plot saved.")
 
   #### Create Histograms for p-values and fold changes ####
 
-  histograms <- pvalue_foldchange_histogram(RES = test_results,
-                                            columnNameP = "p", columnNamePadj = "p.fdr",
-                                            columnNameFC = fc_col_name)
+  histograms <- pvalueFCHistogram(RES = test_results,
+                                            columnP = "p", columnPadj = "p.fdr",
+                                            columnFC = fc_col_name, baseSize = histogramBaseSize)
 
   ggplot2::ggsave(file.path(outputPath, paste0("histogram_p_value", suffix, ".", plotDevice)),
                   plot = histograms[["histogram_p_value"]],
-                  device = plotDevice, height = plotHeight, width = plotWidth, dpi = plotDPI)
+                  device = plotDevice, height = plotHeight_Histogram, width = plotWidth_Histogram,
+                  dpi = plotDPI, units = "cm")
   ggplot2::ggsave(file.path(outputPath, paste0("histogram_adjusted_p_value", suffix, ".", plotDevice)),
                   plot = histograms[["histogram_adjusted_p_value"]],
-                  device = plotDevice, height = plotHeight, width = plotWidth, dpi = plotDPI)
+                  device = plotDevice, height = plotHeight_Histogram, width = plotWidth_Histogram,
+                  dpi = plotDPI, units = "cm")
   ggplot2::ggsave(file.path(outputPath, paste0("histogram_fold_change", suffix, ".", plotDevice)),
                   plot = histograms[["histogram_fold_change"]],
-                  device = plotDevice, height = plotHeight, width = plotWidth, dpi = plotDPI)
+                  device = plotDevice, height = plotHeight_Histogram, width = plotWidth_Histogram,
+                  dpi = plotDPI, units = "cm")
   if (verbose) message("p-value, adjusted p-value and fold change histograms saved.")
 
   #### Get significant candidates ####
 
-  significance <- calculate_significance_categories_ttest(p = test_results[["p"]],
-                                                          pAdj = test_results[["p.fdr"]],
-                                                          fc = test_results[[fc_col_name]],
-                                                          thresFC = thresFC, thresP = thresP)
+  significance <- .calcSignCat_ttest(p = test_results$p,
+                                     pAdj = test_results$p.fdr,
+                                     fc = test_results[[fc_col_name]],
+                                     thresFC = thresFC, thresP = thresP)
 
   candidates <- as.character(significance)
+
 
   if (significantAfterFDR) {
     candidates <- which(candidates == "significant after FDR correction")
@@ -195,17 +316,21 @@ workflow_ttest <- function(D,
                        ifelse(length(candidates) == 1, "", "s"),
                        ifelse(significantAfterFDR, " after FDR correction.", "."))
 
-
   #### Create Boxplots of Biomarker Candidates ####
 
   if (length(candidates) > 0) {
-    Boxplots_candidates(D = DATA[candidates, ],
-                        proteinNames = ID[candidates, proteinNameColumn],
-                        group = group,
+    BoxplotsCandidates(SE = D$SE[candidates, ],
+                        assay = assayName,
+                        groupColumn = groupColumn,
+                        proteinNameColumn = proteinNameColumn,
                         groupColours = groupColours,
                         suffix = suffix,
                         outputPath = outputPath,
-                        logData = logBeforeTest)
+                        plotDevice = plotDevice,
+                        plotHeight = plotHeight_Boxplot,
+                        plotWidth = plotWidth_Boxplot,
+                        plotDPI = plotDPI,
+                        verbose = verbose)
     if (verbose) message("Boxplots saved.")
   }
 
@@ -213,14 +338,15 @@ workflow_ttest <- function(D,
 
   if (length(candidates) > 1) {
     # set.seed(14)
-    t_heatmap <- Heatmap_with_groups(D = DATA[candidates, ],
+    t_heatmap <- heatmap(D = DATA[candidates, ],
                                      id = ID[candidates, ],
-                                     groups = group,
+                                     groups = data.frame(Group = group),
+                                     textSize = heatmapTextSize,
                                      verbose = verbose)
 
     if (!is.null(t_heatmap)) {
       grDevices::pdf(file.path(outputPath, paste0("heatmap", suffix, ".pdf")),
-                     height = plotHeight, width = plotWidth)
+                     height = plotHeight_Heatmap/2.54, width = plotWidth_Heatmap/2.54)
       ComplexHeatmap::draw(t_heatmap[["heatmap"]])
       grDevices::dev.off()
       if (verbose) message("Heatmap saved.")

@@ -36,5 +36,18 @@ The threshold for the p-values.}
 A factor containing the significances.
 }
 \description{
-Calculate significance categories for ANOVA.
+This function groups all proteins into the following three categories based
+on the p-values (with and without FDR correction, ANOVA and posthoc) and
+fold changes:
+\enumerate{
+\item not significant (p.anova > thresP or p_posthoc > thresPfc < thresFC)
+\item significant (p < thresP and fc > thresFC, but pAdj > thresP)
+\item significant after FDR-correction (pAdj < thresP and fc > thresFC)
+}
+}
+\examples{
+calculate_significance_categories_ANOVA(
+  p_posthoc = c(0.01, 0.2), p_anova_adj = c(0.02, 0.2),
+  p_anova = c(0.01, 0.1), fc = c(2.5, 1.2)
+)
 }

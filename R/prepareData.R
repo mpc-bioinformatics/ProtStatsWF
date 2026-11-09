@@ -21,7 +21,9 @@
 #' @param zeroToNA **logical(1)** \cr
 #' If TRUE (default), zero intensity values are converted to NA.
 #' @param doLogTrans **logical(1)** \cr
-#' If TRUE (default), intensity values are log-transformed.
+#' If TRUE (default), intensity values will be log-transformed. As it is highly
+#' recommended to log-transform proteomics intensities, only set to FALSE if the
+#' data are already log-transformed or you have a special case like TMT ratios.
 #' @param logBase **numeric(1)** \cr
 #' Base for log transformation. Default is 2.
 #' @param normMethod **character(1)** \cr
@@ -76,10 +78,10 @@
 #'   package = "ProtStatsWF")
 #' file_clinical <- system.file("extdata", "clinical_data.csv",
 #'   package = "ProtStatsWF")
-#' prepareDataSE(dataPath = file_proteins, intensityColumns = 6:43,
+#' prepareData(dataPath = file_proteins, intensityColumns = 6:43,
 #'   proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
 #'   sampleNameColumn = "Sample", verbose = FALSE)
-prepareDataSE <- function(dataPath,
+prepareData <- function(dataPath,
                           intensityColumns,
                           proteinNameColumn = "Protein",
                           sampleInfoPath = NULL,
@@ -159,31 +161,67 @@ prepareDataSE <- function(dataPath,
     if (verbose) message("Log-transformation with base ", logBase, ".")
   }
 
-  D_norm <- automatedNormalization(DATA = D, method = normMethod,
-                              is_log_transformed = doLogTrans,
+  D_norm <- .normalization(DATA = D, method = normMethod,
+                              is_log_transformed = TRUE, ## we assume that data is log-transformed!
                               log_base = logBase, lts.quantile = ltsQuantile,
                               verbose = verbose)
 
   if (!is.null(sampleInfoPath)) {
     ind <- match(sampleInfo[, sampleNameColumn], colnames(D))
+    if (anyNA(ind)) {
+      sampleInfo <- sampleInfo[!is.na(ind),]
+      ind <- na.omit(ind)
+      warning("SampleInfo describes samples that are not present in the data set. \n",
+              "Those will be skipped, please check plots for completeness.")
+    }
+
     D_norm <- D_norm[,ind] # sort columns of D like sampleInfo
     D <- D[, ind]
   } else {
     sampleInfo <- data.frame(SampleName = colnames(D))
     rownames(sampleInfo) <- colnames(D)
+    sampleNameColumn <- "SampleName"
   }
+  sampleInfo[] <- lapply(sampleInfo, function(x) if (is.character(x)) factor(x) else x)
+  # bring factor levels of the sample column in same order as in sampleInfo
+  sampleInfo[, sampleNameColumn] <- factor(sampleInfo[, sampleNameColumn],
+                                           levels = sampleInfo[, sampleNameColumn])
 
   assays <- list(intensity_norm = as.matrix(D_norm), intensity = as.matrix(D))
+
   SE <- SummarizedExperiment::SummarizedExperiment(assays = assays,
                                                    rowData = id,
                                                    colData = sampleInfo)
 
 
+<<<<<<< HEAD
   D_long <- .pivot_longer_SE(SE, NULL, assay = "intensity_norm", valueName = "intensity_norm")
 
   # bring factor levels in same order as in sampleInfo
   D_long$.sample <- factor(D_long$.sample,
                            levels = sampleInfo[, sampleNameColumn])
+=======
+  D_long <- .pivotLongerSE(SE = SE, assayName = "intensity_norm",
+                          sampleInfo = sampleInfo,
+                          sampleNameColumn = sampleNameColumn)
+
+
+  # D_norm_long <- as.data.frame(SummarizedExperiment::assay(SE,
+  #                                                          "intensity_norm"))
+  # D_norm_long$.feature <- rownames(D_norm_long)
+  # D_long <- tidyr::pivot_longer(D_norm_long, cols = -".feature",
+  #   names_to = ".sample", values_to = "intensity_norm")
+  # col_data <- as.data.frame(SummarizedExperiment::colData(SE))
+  # col_data$.sample <- rownames(col_data)
+  # D_long <- dplyr::left_join(D_long, col_data, by = ".sample")
+  # row_data <- as.data.frame(SummarizedExperiment::rowData(SE))
+  # row_data$.feature <- rownames(row_data)
+  # D_long <- dplyr::left_join(D_long, row_data, by = ".feature")
+  # # bring factor levels in same order as in sampleInfo
+  # D_long$.sample <- factor(D_long$.sample,
+  #                          levels = sampleInfo[, sampleNameColumn])
+  # D_long <- as.data.frame(D_long)
+>>>>>>> introduce_SE
 
   return(list(SE = SE, D_long = D_long))
 }
@@ -191,6 +229,7 @@ prepareDataSE <- function(dataPath,
 
 
 
+<<<<<<< HEAD
 #' Pivot SE to long format
 #'
 #' Helper function to extract assay data and pivot to long format.
@@ -216,21 +255,57 @@ prepareDataSE <- function(dataPath,
                                 names_to = ".sample", values_to = valueName)
 
 
+=======
+
+
+#'
+#' #' Pivot SE to long format
+#' #'
+#' #'helper function to extract assay data and pivot to long format.
+#' #'Also adds the information from colData and rowData.
+#' #'
+#' #' @param SE A SummarizedExperiment object.
+#' #'
+#' #' @importFrom dplyr left_join
+#' #' @importFrom SummarizedExperiment assay colData rowData
+#' #' @importFrom tidyr pivot_longer
+#' #'
+#' #' @returns A data frame in long format.
+.pivotLongerSE <- function(SE, assayName, sampleInfo, sampleNameColumn) {
+
+  D_norm_long <- as.data.frame(SummarizedExperiment::assay(SE,assayName))
+  D_norm_long$.feature <- rownames(D_norm_long)
+  D_long <- tidyr::pivot_longer(D_norm_long, cols = -".feature",
+                                names_to = ".sample", values_to = assayName)
+>>>>>>> introduce_SE
   col_data <- as.data.frame(SummarizedExperiment::colData(SE))
   col_data$.sample <- rownames(col_data)
   D_long <- dplyr::left_join(D_long, col_data, by = ".sample")
   row_data <- as.data.frame(SummarizedExperiment::rowData(SE))
   row_data$.feature <- rownames(row_data)
   D_long <- dplyr::left_join(D_long, row_data, by = ".feature")
+<<<<<<< HEAD
   D_long <- as.data.frame(D_long)
   return(D_long)
+=======
+
+  if (!is.null(sampleInfo)) {
+    # if available bring factor levels in same order as in sampleInfo
+    D_long$.sample <- factor(D_long$.sample,
+                             levels = sampleInfo[, sampleNameColumn])
+  }
+
+  D_long <- as.data.frame(D_long)
+  return(D_long)
+
+>>>>>>> introduce_SE
 }
-
-
-
-
-
-
-
-
-
+#'
+#'
+#'
+#'
+#'
+#'
+#'
+#'
+#'

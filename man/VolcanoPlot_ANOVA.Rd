@@ -6,86 +6,60 @@
 \usage{
 VolcanoPlot_ANOVA(
   RES,
-  columnname_p_ANOVA = "p.anova",
-  columnname_p_ANOVA_adj = "p.anova.fdr",
-  columns_FC,
-  columns_p_posthoc,
-  log_base_fc = 2,
-  log_base_p = 10,
-  thres_p = 0.05,
-  thres_fc = 2,
-  colour1 = "grey",
-  colour2 = "black",
-  colour3 = "orange",
-  symmetric_x = FALSE,
-  legend_position = "bottom",
-  base_size = NULL,
-  xlim = NULL,
-  ylim = NULL,
-  add_labels = FALSE
+  columnNamePAnova = "p.anova",
+  columnNamePAnovaAdj = "p.anova.fdr",
+  columnsFC,
+  columnsPPosthoc,
+  symmetricX = FALSE,
+  baseSize = NULL,
+  addLabels = FALSE,
+  ...
 )
 }
 \arguments{
 \item{RES}{\strong{data.frame} \cr
 The results from an ANOVA.}
 
-\item{columnname_p_ANOVA}{\strong{character} \cr
+\item{columnNamePAnova}{\strong{character(1)} \cr
 The column name for the p-values.}
 
-\item{columnname_p_ANOVA_adj}{\strong{character} \cr
+\item{columnNamePAnovaAdj}{\strong{character(1)} \cr
 The column name for the adjusted p-values.}
 
-\item{columns_FC}{\strong{integer vector} \cr
+\item{columnsFC}{\strong{integer} \cr
 The column indices of the fold changes.}
 
-\item{columns_p_posthoc}{\strong{integer vector} \cr
+\item{columnsPPosthoc}{\strong{integer} \cr
 The column indices for the posthoc p-values.}
 
-\item{log_base_fc}{\strong{numeric} \cr
-The base for the fold changes log-transformation.}
+\item{symmetricX}{\strong{logical(1)} \cr
+If \code{TRUE}, x-axis limits will be made symmetric (not used if xlim is
+defined). Default is FALSE.}
 
-\item{log_base_p}{\strong{numeric} \cr
-The base for the p-values log-transformation.}
+\item{baseSize}{\strong{numeric(1)} \cr
+The base size for the theme. Default is NULL.}
 
-\item{thres_p}{\strong{numeric} \cr
-The threshold for p-value.}
+\item{addLabels}{\strong{logical(1)} \cr
+If \code{TRUE}, labels will be added. Default is FALSE.}
 
-\item{thres_fc}{\strong{numeric} \cr
-The threshold for fold change.}
-
-\item{colour1}{\strong{character} \cr
-The color for not significant proteins.}
-
-\item{colour2}{\strong{character} \cr
-The color for significant proteins.}
-
-\item{colour3}{\strong{character} \cr
-The color for significant proteins after FDR correction.}
-
-\item{symmetric_x}{\strong{logical} \cr
-If \code{TRUE}, x-axis limits will be made symmetric (not used if xlim is defined).}
-
-\item{legend_position}{\strong{character} \cr
-The positioning of the legend.
-Options are "none", "left", "right", "bottom", "top" and "inside".}
-
-\item{base_size}{\strong{numeric} \cr
-The base size for theme.}
-
-\item{xlim}{\strong{numeric} \cr
-The limits for x-axis.}
-
-\item{ylim}{\strong{numeric} \cr
-The limits for y-axis.}
-
-\item{add_labels}{\strong{logical} \cr
-If \code{TRUE}, labels will be added.}
+\item{...}{Additional arguments passed on to \code{\link[=VolcanoPlot]{VolcanoPlot()}}, e.g.
+\code{logBaseFC}, \code{logBaseP}, \code{thresP}, \code{thresFC},
+\code{colour1}, \code{colour2}, \code{colour3}, \code{legendPosition},
+\code{xlim}, \code{ylim}, \code{alpha}, \code{pointSize}, \code{linewidth}
+or \code{showThresLine}.}
 }
 \value{
 A list of ggplots of the volcano plot from an ANOVA result.
 }
 \description{
 Volcano Plots for an ANOVA result.
+}
+\examples{
+anova_res <- data.frame(
+  p.anova = c(0.01, 0.3), p.anova.fdr = c(0.02, 0.3),
+  p.posthoc_A_vs_B = c(0.01, 0.2), FC_A_divided_by_B = c(2.5, 1.1)
+)
+VolcanoPlot_ANOVA(anova_res, columnsFC = 4, columnsPPosthoc = 3)
 }
 \seealso{
 \code{\link[=VolcanoPlot]{VolcanoPlot()}}, \code{\link[=VolcanoPlot_ttest]{VolcanoPlot_ttest()}}, \code{\link[=add_labels]{add_labels()}}

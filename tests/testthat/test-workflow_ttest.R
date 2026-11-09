@@ -3,7 +3,7 @@ test_that("workflow_ttest runs without error on HCC data", {
   file_proteins <- system.file("extdata", "proteins_HCC_small.csv", package = "ProtStatsWF")
   file_clinical  <- system.file("extdata", "clinical_data.csv", package = "ProtStatsWF")
 
-  D_hcc_small <- prepareDataSE(dataPath = file_proteins, intensityColumns = 6:43,
+  D_hcc_small <- prepareData(dataPath = file_proteins, intensityColumns = 6:43,
                          proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
                          sampleNameColumn = "Sample", verbose = FALSE)
 
@@ -15,12 +15,6 @@ test_that("workflow_ttest runs without error on HCC data", {
   result <- workflow_ttest(D = D_hcc_small, groupColumn = "Group", outputPath = temp_dir,
                            verbose = FALSE, thresFC = 1, thresP = 0.6,
                            significantAfterFDR = FALSE)
-
-  #
-  # result <- workflow_ttest(D = D_hcc_small, groupColumn = "Group", outputPath = "tmp",
-  #                          verbose = TRUE, thresFC = 1, thresP = 0.6,
-  #                          significantAfterFDR = FALSE)
-
 
   # Returns a message log
   expect_type(result, "list")

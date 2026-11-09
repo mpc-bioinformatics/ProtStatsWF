@@ -21,8 +21,6 @@
 # @seealso [Onoff_plus_heatmap()]
 #'
 #' @examples
-#'
-
 calculate_onoff <- function(D, id, group, maxValidValuesOff, minValidValuesOn, proteinNamesColumn = 1) {
 
   group <- droplevels(group)
@@ -39,7 +37,7 @@ calculate_onoff <- function(D, id, group, maxValidValuesOff, minValidValuesOn, p
   value <- valid_values <- valid_values_rel <- NULL # silence notes when checking the package
 
   ## calculate on/off values
-  D_onoff <- D_long %>% dplyr::group_by(group, Protein.IDs) %>%
+  D_onoff <- D_long |> dplyr::group_by(group, Protein.IDs) |>
     dplyr::summarise(valid_values = sum(!is.na(value)), valid_values_rel = mean(!is.na(value)))
 
   ## convert to wide format again
@@ -109,9 +107,9 @@ Onoff_plus_heatmap <- function(RES_onoff,
 
 
   if (relative) {
-    RES_onoff2_long$group <- stringr::str_replace(RES_onoff2_long$group, "valid_values_rel_", "")
+    RES_onoff2_long$group <- gsub("valid_values_rel_", "", RES_onoff2_long$group, fixed = TRUE)
   } else {
-    RES_onoff2_long$group <- stringr::str_replace(RES_onoff2_long$group, "valid_values_", "")
+    RES_onoff2_long$group <- gsub("valid_values_", "", RES_onoff2_long$group, fixed = TRUE)
   }
 
   #RES_onoff2_long$group <- factor(RES_onoff2_long$group, levels = levels(group))

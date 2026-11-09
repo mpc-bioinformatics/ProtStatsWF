@@ -36,6 +36,17 @@ clustering <- function(D,
                        cluster_colours = NULL,
                        colour_dend = TRUE) {
 
+  if (!requireNamespace("amap", quietly = TRUE)) {
+    stop("Package \"amap\" must be installed to perform the clustering.",
+      call. = FALSE)
+  }
+  if (is.null(nr_clusters) || colour_dend) {
+    if (!requireNamespace("dendextend", quietly = TRUE)) {
+      stop("Package \"dendextend\" must be installed to determine the number of clusters or colour the dendrogram.",
+        call. = FALSE)
+    }
+  }
+
   D2 <<- D
 
   rownames(D) <- 1:nrow(D)  # reset rownames (important to match cluster information later)
@@ -80,6 +91,11 @@ clustering <- function(D,
 #'
 #' @examples
 getClusterInfos <- function(heatmap, nr_clusters, D, id) {
+  if (!requireNamespace("dendextend", quietly = TRUE)) {
+    stop("Package \"dendextend\" must be installed to get the cluster information.",
+      call. = FALSE)
+  }
+
   ### get cluster for each protein (cluster number from heatmap doesn't correspond to apply cutree() on the dendrogram. This is why we need to get the cluster number from the heatmap directly).
   ht_draw <- ComplexHeatmap::draw(heatmap)#$heatmap)
   x <- ComplexHeatmap::row_dend(ht_draw)
@@ -133,10 +149,12 @@ Lineplots <- function(D_zscore, cluster_colours) {
     Dists_euclidean <- apply(D_tmp, 1, function(x) stats::dist(rbind(x, mean_profile)))
 
     X <- data.frame(D_tmp, Dists_euclidean, id = 1:nrow(D_tmp))
-    X_long <- reshape2::melt(X, id.vars = c("id", "Dists_euclidean"))
+    X_long <- tidyr::pivot_longer(X, cols = -c(id, Dists_euclidean),
+                                  names_to = "variable", values_to = "value")
+    X_long$variable <- factor(X_long$variable, levels = colnames(D_tmp)) # preserve original column order for the x-axis
 
     X_long <- rbind(X_long, data.frame(id = max(X_long$id) + 1, Dists_euclidean = NA,
-                                       variable = colnames(D_tmp),
+                                       variable = factor(colnames(D_tmp), levels = colnames(D_tmp)),
                                        value = mean_profile))
     X_long <- dplyr::mutate(X_long, ClusterCenter = dplyr::case_when(is.na(Dists_euclidean) ~ "Cluster Center", TRUE ~ "Cluster Members"))
 
