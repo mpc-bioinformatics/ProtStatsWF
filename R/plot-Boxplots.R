@@ -51,16 +51,24 @@ Boxplots <- function(D_long,
                      outlierSize = 1) {
   checkmate::assertDataFrame(D_long, min.cols = 2, min.rows = 1)
   checkmate::assertSubset(method, c("boxplot", "violinplot"))
-  checkmate::assertSubset(groupColumn, choices = colnames(D_long))
-  nr_groups <- length(levels(factor(D_long[, groupColumn])))
-  checkmate::assertCharacter(groupColours, len = nr_groups, null.ok = TRUE)
+  if (!is.null(groupColumn)) {
+    checkmate::assertSubset(groupColumn, choices = colnames(D_long))
+    nr_groups <- length(levels(factor(D_long[, groupColumn])))
+    checkmate::assertCharacter(groupColours, len = nr_groups, null.ok = TRUE)
+  } else {
+    checkmate::assertNull(groupColours)
+  }
   checkmate::assertNumeric(baseSize, lower = 0)
   checkmate::assertNumeric(lwd, lower = 0)
   checkmate::assertNumeric(outlierSize, lower = 0)
 
   # select only relevant columns
-  D_long <- dplyr::select(D_long, c(".sample", "intensity_norm",
-                                    group = dplyr::all_of(groupColumn)))
+  if (!is.null(groupColumn)) {
+    D_long <- dplyr::select(D_long, c(".sample", "intensity_norm",
+                                      group = dplyr::all_of(groupColumn)))
+  } else {
+    D_long <- dplyr::select(D_long, c(".sample", "intensity_norm"))
+  }
   x_axis <- sort(unique(D_long$.sample)) # save the different states for later
   D_long <- D_long[!is.na(D_long$intensity_norm),] # remove NA values
   .sample <- intensity_norm <- group <- NULL

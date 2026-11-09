@@ -31,4 +31,16 @@ test_that("Test Boxplots", {
 
 })
 
+test_that("Boxplots works without grouping", {
+  boxplots <- Boxplots(D_hcc$D_long,
+                       method = "boxplot",
+                       groupColumn = NULL,
+                       groupColours = NULL,
+                       baseSize = 15,
+                       lwd = 0.5,
+                       outlierSize = 1)
+
+  expect_s3_class(boxplots, "ggplot")
+})
+
 ## TODO: test different colours and base_size and other settings
