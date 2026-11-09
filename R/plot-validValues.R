@@ -46,20 +46,33 @@ ValidValuePlot <- function(D_long,
                            groupColours = NULL,
                            baseSize = 15) {
   checkmate::assertDataFrame(D_long, min.cols = 2, min.rows = 1)
-  checkmate::assertSubset(groupColumn, choices = colnames(D_long))
-  nr_groups <- length(levels(factor(D_long[, groupColumn])))
-  checkmate::assertCharacter(groupColours, len = nr_groups, null.ok = TRUE)
+  if (!is.null(groupColumn)) {
+    checkmate::assertSubset(groupColumn, choices = colnames(D_long))
+    nr_groups <- length(levels(factor(D_long[, groupColumn])))
+    checkmate::assertCharacter(groupColours, len = nr_groups, null.ok = TRUE)
+  } else {
+    checkmate::assertNull(groupColours)
+  }
   checkmate::assertNumeric(baseSize, lower = 0)
   # select only relevant columns
   D_long_sel <- dplyr::select(D_long, c(".sample", "intensity_norm"))
-  D_long_sel <- cbind(D_long_sel, group = D_long[, groupColumn])
+  if (!is.null(groupColumn)) {
+    D_long_sel <- cbind(D_long_sel, group = D_long[, groupColumn])
+  }
   sample_levels <- levels(D_long_sel$.sample)
   #### calculate valid value table ####
   .sample <- group <- intensity_norm <- nrvalid <- NULL  # initialize variables
-  valid_value_table <- D_long_sel |>
-    dplyr::group_by(.sample, group) |>
-    dplyr::summarize(nrvalid = sum(!is.na(intensity_norm)),
-                     meanvalid = mean(!is.na(intensity_norm)), .groups = 'drop')
+  if (!is.null(groupColumn)) {
+    valid_value_table <- D_long_sel |>
+      dplyr::group_by(.sample, group) |>
+      dplyr::summarize(nrvalid = sum(!is.na(intensity_norm)),
+                       meanvalid = mean(!is.na(intensity_norm)), .groups = "drop")
+  } else {
+    valid_value_table <- D_long_sel |>
+      dplyr::group_by(.sample) |>
+      dplyr::summarize(nrvalid = sum(!is.na(intensity_norm)),
+                       meanvalid = mean(!is.na(intensity_norm)), .groups = "drop")
+  }
   valid_value_table$.sample <- factor(valid_value_table$.sample,
                                       levels = sample_levels)
   valid_value_plot <- ggplot2::ggplot(valid_value_table) +
