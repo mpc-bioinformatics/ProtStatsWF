@@ -53,6 +53,10 @@
 #' DPI for the plots. Default is 300.
 #' @param boxplotMethod **character(1)** \cr
 #' Method for boxplot. Options are "boxplot" (default) and "violinplot".
+#' #@param boxplotLWD **numeric(1)** \cr
+#'  The line width for the boxplot, default is 0.5
+#' @param boxplotOutlierSize **numeric(1)** \cr
+#'  The point size of the outliers. Default is 1. If 0, outliers are not shown.
 #' @param MAMaxPlots **numeric(1)** \cr
 #' The maximum number of MA plots that should be generated. Default is 5000.
 #' This setting reduces the time and amount of space needed for MA-Plots if
@@ -127,6 +131,8 @@ workflow_QC <- function(D,
                         plotDPI = 300,
 
                         boxplotMethod = "boxplot",
+                        boxplotLWD = 0.5,
+                        boxplotOutlierSize = 1,
                         MAMaxPlots = 5000,
                         MAAlpha = 1,
                         PCAImputeMethod = "none",
@@ -190,7 +196,8 @@ workflow_QC <- function(D,
                            groupColumn = groupColumn,
                            groupColours = groupColours,
                            baseSize = baseSize,
-                           method = boxplotMethod, lwd = 0.5)
+                           method = boxplotMethod, lwd = boxplotLWD,
+                       outlierSize = boxplotOutlierSize)
 
   ggplot2::ggsave(file.path(outputPath, paste0("boxplot", suffix, ".", plotDevice)),
                   plot = boxplots, device = plotDevice, height = plotHeight_BP,

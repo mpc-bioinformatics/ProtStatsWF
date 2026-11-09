@@ -25,6 +25,8 @@ workflow_QC(
   plotWidth_MA = 15,
   plotDPI = 300,
   boxplotMethod = "boxplot",
+  boxplotLWD = 0.5,
+  boxplotOutlierSize = 1,
   MAMaxPlots = 5000,
   MAAlpha = 1,
   PCAImputeMethod = "none",
@@ -100,7 +102,12 @@ Width of the MA plots in cm. Default is 15.}
 DPI for the plots. Default is 300.}
 
 \item{boxplotMethod}{\strong{character(1)} \cr
-Method for boxplot. Options are "boxplot" (default) and "violinplot".}
+Method for boxplot. Options are "boxplot" (default) and "violinplot".
+#@param boxplotLWD \strong{numeric(1)} \cr
+The line width for the boxplot, default is 0.5}
+
+\item{boxplotOutlierSize}{\strong{numeric(1)} \cr
+The point size of the outliers. Default is 1. If 0, outliers are not shown.}
 
 \item{MAMaxPlots}{\strong{numeric(1)} \cr
 The maximum number of MA plots that should be generated. Default is 5000.
