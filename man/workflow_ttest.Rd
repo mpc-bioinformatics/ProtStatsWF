@@ -18,7 +18,7 @@ workflow_ttest(
   delogForFC = TRUE,
   minObs = 3,
   pValueZerosToMin = TRUE,
-  volcanoBaseSize = 25,
+  volcanoBaseSize = 15,
   histogramBaseSize = 15,
   heatmapTextSize = 15,
   significantAfterFDR = TRUE,
@@ -28,8 +28,8 @@ workflow_ttest(
   minValidValuesOn = NULL,
   suffix = "",
   plotDevice = "pdf",
-  plotHeight_Volcano = 15,
-  plotWidth_Volcano = 15,
+  plotHeight_Volcano = 25,
+  plotWidth_Volcano = 25,
   plotHeight_Histogram = 15,
   plotWidth_Histogram = 15,
   plotHeight_Boxplot = 15,
@@ -96,7 +96,7 @@ If \code{TRUE}, p-values equal to 0 are replaced
 by the next smallest observed p-value. Default is \code{TRUE}.}
 
 \item{volcanoBaseSize}{\strong{numeric(1)} \cr
-Base size for the volcano plot. Default is 25.}
+Base size for the volcano plot. Default is 15.}
 
 \item{histogramBaseSize}{\strong{numeric(1)} \cr
 Base size for the p-value and fold change histograms. Default is 15.}
@@ -128,10 +128,10 @@ with an underscore "_".}
 Device to use for saving plots. Default is "pdf".}
 
 \item{plotHeight_Volcano}{\strong{numeric(1)} \cr
-Height of the volcano plot in cm. Default is \code{15}.}
+Height of the volcano plot in cm. Default is \code{25}.}
 
 \item{plotWidth_Volcano}{\strong{numeric(1)} \cr
-Width of the volcano plot in cm. Default is \code{15}.}
+Width of the volcano plot in cm. Default is \code{25}.}
 
 \item{plotHeight_Histogram}{\strong{numeric(1)} \cr
 Height of the p-value and fold change histograms in cm. Default is \code{15}.}
