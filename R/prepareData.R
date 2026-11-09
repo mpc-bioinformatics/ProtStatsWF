@@ -180,16 +180,12 @@ prepareData <- function(dataPath,
   } else {
     sampleInfo <- data.frame(SampleName = colnames(D))
     rownames(sampleInfo) <- colnames(D)
+    sampleNameColumn <- "SampleName"
   }
   sampleInfo[] <- lapply(sampleInfo, function(x) if (is.character(x)) factor(x) else x)
 
 
   assays <- list(intensity_norm = as.matrix(D_norm), intensity = as.matrix(D))
-
-  assays2 <<- assays
-  rowData2 <<- id
-  colData2 <<- sampleInfo
-
 
   SE <- SummarizedExperiment::SummarizedExperiment(assays = assays,
                                                    rowData = id,
