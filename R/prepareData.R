@@ -183,7 +183,9 @@ prepareData <- function(dataPath,
     sampleNameColumn <- "SampleName"
   }
   sampleInfo[] <- lapply(sampleInfo, function(x) if (is.character(x)) factor(x) else x)
-
+  # bring factor levels of the sample column in same order as in sampleInfo
+  sampleInfo[, sampleNameColumn] <- factor(sampleInfo[, sampleNameColumn],
+                                           levels = sampleInfo[, sampleNameColumn])
 
   assays <- list(intensity_norm = as.matrix(D_norm), intensity = as.matrix(D))
 
@@ -192,21 +194,26 @@ prepareData <- function(dataPath,
                                                    colData = sampleInfo)
 
 
-  D_norm_long <- as.data.frame(SummarizedExperiment::assay(SE,
-                                                           "intensity_norm"))
-  D_norm_long$.feature <- rownames(D_norm_long)
-  D_long <- tidyr::pivot_longer(D_norm_long, cols = -".feature",
-    names_to = ".sample", values_to = "intensity_norm")
-  col_data <- as.data.frame(SummarizedExperiment::colData(SE))
-  col_data$.sample <- rownames(col_data)
-  D_long <- dplyr::left_join(D_long, col_data, by = ".sample")
-  row_data <- as.data.frame(SummarizedExperiment::rowData(SE))
-  row_data$.feature <- rownames(row_data)
-  D_long <- dplyr::left_join(D_long, row_data, by = ".feature")
-  # bring factor levels in same order as in sampleInfo
-  D_long$.sample <- factor(D_long$.sample,
-                           levels = sampleInfo[, sampleNameColumn])
-  D_long <- as.data.frame(D_long)
+  D_long <- .pivotLongerSE(SE = SE, assayName = "intensity_norm",
+                          sampleInfo = sampleInfo,
+                          sampleNameColumn = sampleNameColumn)
+
+
+  # D_norm_long <- as.data.frame(SummarizedExperiment::assay(SE,
+  #                                                          "intensity_norm"))
+  # D_norm_long$.feature <- rownames(D_norm_long)
+  # D_long <- tidyr::pivot_longer(D_norm_long, cols = -".feature",
+  #   names_to = ".sample", values_to = "intensity_norm")
+  # col_data <- as.data.frame(SummarizedExperiment::colData(SE))
+  # col_data$.sample <- rownames(col_data)
+  # D_long <- dplyr::left_join(D_long, col_data, by = ".sample")
+  # row_data <- as.data.frame(SummarizedExperiment::rowData(SE))
+  # row_data$.feature <- rownames(row_data)
+  # D_long <- dplyr::left_join(D_long, row_data, by = ".feature")
+  # # bring factor levels in same order as in sampleInfo
+  # D_long$.sample <- factor(D_long$.sample,
+  #                          levels = sampleInfo[, sampleNameColumn])
+  # D_long <- as.data.frame(D_long)
 
   return(list(SE = SE, D_long = D_long))
 }
@@ -223,14 +230,13 @@ prepareData <- function(dataPath,
 #' #'Also adds the information from colData and rowData.
 #' #'
 #' #' @param SE A SummarizedExperiment object.
-#' #' @param cols Columns to pivot.
 #' #'
 #' #' @importFrom dplyr left_join
 #' #' @importFrom SummarizedExperiment assay colData rowData
 #' #' @importFrom tidyr pivot_longer
 #' #'
 #' #' @returns A data frame in long format.
-.pivotLongerSE <- function(SE, assayName, cols, sampleInfo, sampleNameColumn) {
+.pivotLongerSE <- function(SE, assayName, sampleInfo, sampleNameColumn) {
 
   D_norm_long <- as.data.frame(SummarizedExperiment::assay(SE,assayName))
   D_norm_long$.feature <- rownames(D_norm_long)
