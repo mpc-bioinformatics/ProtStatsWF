@@ -9,7 +9,7 @@
 #' The following plots are generated: a valid value plot, boxplots, MA-plots and
 #' a PCA plot.
 #'
-#' @param D **list** \cr
+#' @param SE **SummarizedExperiment object** \cr
 #' Result from [prepareData()] containing the prepared data.
 #' @param groupColumn **character(1)** \cr
 #' Name of the column that contains the group information for colouring the
@@ -17,6 +17,8 @@
 #' @param group2Column **character(1)** \cr
 #' Name of the column that contains a secondary group information (used only in
 #' PCA_plot for shape of the data points). Default is NULL.
+#' @param assayName **character(1)** \cr
+#' Name of assay in SE to use. Default is "intensity_norm".
 #' @param outputPath **character(1)** \cr
 #' Path to save the output files. The corresponding folder must exist.
 #' @param outType **character(1)** \cr
@@ -108,9 +110,10 @@
 #'   sampleNameColumn = "Sample", verbose = FALSE)
 #' \donttest{workflow_QC(D_hcc, groupColumn = "Group", outputPath = tempdir(),
 #'   MAMaxPlots = 0, verbose = FALSE)}
-workflow_QC <- function(D,
+workflow_QC <- function(SE,
                         groupColumn = NULL,
                         group2Column = NULL,
+                        assayName = "intensity_norm",
 
                         outputPath,
                         outType = "xlsx",  ## TODO: does this work?
@@ -153,8 +156,8 @@ workflow_QC <- function(D,
       call. = FALSE)
   }
 
-  checkmate::assertList(D)
-  checkmate::assertSubset(c("SE", "D_long"), names(D))
+  #checkmate::assertList(D)
+  #checkmate::assertSubset(c("SE", "D_long"), names(D))
   checkmate::assertDirectoryExists(outputPath, access = "w")
   checkmate::assertSubset(outType, c("xlsx", "csv"))
   checkmate::assertCharacter(suffix, len = 1)
@@ -171,15 +174,21 @@ workflow_QC <- function(D,
   checkmate::assertNumber(plotDPI, lower = 0)
 
   # prepare group colours
-  group <- SummarizedExperiment::colData(D$SE)[, groupColumn]
+  group <- SummarizedExperiment::colData(SE)[, groupColumn]
   nr_groups <- length(levels(group))
   if (is.null(groupColours) & nr_groups >= 1) groupColours <- scales::hue_pal()(nr_groups)
 
+  # generate long format data set
+
+  D_long <- .pivotLongerSE(SE = SE, assayName = assayName)
+
+
   #### Calculate Valid Value Plot ####
-  vv_plot <- ValidValuePlot(D_long = D$D_long,
-                                 groupColumn = groupColumn,
-                                 groupColours = groupColours,
-                                 baseSize = baseSize)
+  vv_plot <- ValidValuePlot(D_long = D_long,
+                            valueColumn = assayName,
+                            groupColumn = groupColumn,
+                            groupColours = groupColours,
+                            baseSize = baseSize)
 
   ggplot2::ggsave(file.path(outputPath, paste0("valid_value_plot", suffix, ".", plotDevice)),
                   plot = vv_plot$plot, device = plotDevice, height = plotHeight_VV,
@@ -192,7 +201,7 @@ workflow_QC <- function(D,
 
   #### Calculate Boxlots ####
 
-  boxplots <- Boxplots(D_long = D$D_long,
+  boxplots <- Boxplots(D_long = D_long,
                            groupColumn = groupColumn,
                            groupColours = groupColours,
                            baseSize = baseSize,
@@ -224,7 +233,7 @@ workflow_QC <- function(D,
   #### Calculate PCA Plot ####
 
 
-  pca_data <- PCA_Plot(SE = D$SE,
+  pca_data <- PCA_Plot(SE = SE,
                        groupForColour = groupColumn,
                        groupForShape = group2Column,
                        #impute = PCA_impute,

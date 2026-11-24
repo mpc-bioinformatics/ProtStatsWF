@@ -1,6 +1,7 @@
 
 test_that("Prepare data from csv file", {
-  vvplot <- ValidValuePlot(D_hcc$D_long,
+  vvplot <- ValidValuePlot(D_long,
+                           valueColumn = "intensity_norm",
                            groupColumn = "Group",
                            groupColours = NULL,
                            baseSize = 15)
@@ -10,7 +11,8 @@ test_that("Prepare data from csv file", {
 })
 
 test_that("ValidValuePlot works without grouping", {
-  vvplot <- ValidValuePlot(D_hcc$D_long,
+  vvplot <- ValidValuePlot(D_long,
+                           valueColumn = "intensity_norm",
                            groupColumn = NULL,
                            groupColours = NULL,
                            baseSize = 15)

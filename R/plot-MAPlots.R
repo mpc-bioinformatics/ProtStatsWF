@@ -60,18 +60,19 @@
 
 #' Calculate MA plots for proteomics data set.
 #'
-#' @param D **matrix** \cr
+#' @param SE **SummarizedExperiment** \cr
 #' Data set containing peptide or protein intensities in wide format.
 #' @param outputPath **character(1)** \cr
 #' Path to a folder for saving a pdf file with the MA-Plots. Folder must exist.
 #' @param suffix **character(1)** \cr
 #' Suffix for the output file. Should start with an underscore. Default is "".
 #' @param labels **character** \cr
-#' Vector containing sample labels for each sample. Default is
-#' 'as.character(1:ncol(D))', i.e. the respective column number.
+#' Vector containing sample labels for each sample. Default is NULL, which is
+#' replaced by the respective column number.
 #' @param labels2 **character** \cr
 #' Vector containing a second set of sample labels which are printed as a
-#' second line. Default is 'colnames(D)', i.e. the respective column names.
+#' second line. Default is NULL, which is replaced by the
+#' respective column names.
 #' @param maxPlots **integer(1)** \cr
 #' The maximum number of MA plots that should be generated. Default is 5000.
 #' This setting reduces the time and amount of space needed for MA-Plots if
@@ -106,12 +107,13 @@
 #'   proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
 #'   sampleNameColumn = "Sample", verbose = FALSE)
 #'
-#' Intensities <- SummarizedExperiment::assay(D$SE)
-#'
-#' MAPlots(Intensities[,1:5], outputPath = tempdir(), verbose = FALSE)
-MAPlots <- function(D,
+#' MAPlots(SE, assayName = "intensity_norm",
+#'   outputPath = tempdir(), verbose = FALSE)
+MAPlots <- function(SE,
+                    assayName = "intensity_norm",
                     outputPath, suffix = "",
-                    labels = as.character(1:ncol(D)), labels2 = colnames(D),
+                    labels = as.character(1:ncol(D)),
+                    labels2 = colnames(D),
                     maxPlots = 5000,
                     alpha = 1,
                     plotHeight = 15, plotWidth = 15,
@@ -122,16 +124,25 @@ MAPlots <- function(D,
       call. = FALSE)
   }
 
+  D <- as.matrix(assay(SE, assayName))
+
   checkmate::assertMatrix(D, min.cols = 2, min.rows = 1)
   checkmate::assertDirectoryExists(outputPath)
   checkmate::assertCharacter(suffix, len = 1)
-  checkmate::assertCharacter(labels, len = ncol(D))
-  checkmate::assertCharacter(labels2, len = ncol(D))
+  checkmate::assertCharacter(labels, len = ncol(D), null.ok = TRUE)
+  checkmate::assertCharacter(labels2, len = ncol(D), null.ok = TRUE)
   checkmate::assertNumeric(maxPlots, lower = 0)
   checkmate::assertNumeric(alpha, lower = 0, upper = 1)
   checkmate::assertNumeric(plotHeight, lower = 0)
   checkmate::assertNumeric(plotWidth, lower = 0)
   checkmate::assertFlag(verbose)
+
+  if (is.null(labels)) {
+    labels <- as.character(1:ncol(D))
+  }
+  if (is.null(labels2)) {
+    labels2 <- colnames(D)
+  }
 
   number_states <- max(as.integer(as.factor(colnames(D))))
   number_plots <- choose(number_states,2)

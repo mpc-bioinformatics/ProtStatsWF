@@ -80,7 +80,7 @@
 #' D_hcc <- prepareData(file_proteins, intensityColumns = 6:43,
 #'   proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
 #'   sampleNameColumn = "Sample", verbose = FALSE)
-#' PCA_Plot(D_hcc$SE, groupForColour = "Group", verbose = FALSE)
+#' PCA_Plot(D_hcc, groupForColour = "Group", verbose = FALSE)
 PCA_Plot <- function(SE,
                      assay = "intensity_norm",
                      groupForColour = NULL,

@@ -1,7 +1,8 @@
 
 test_that("Test Boxplots", {
 
-  boxplots <- Boxplots(D_hcc$D_long,
+  boxplots <- Boxplots(D_long,
+                       valueColumn = "intensity_norm",
                        method = "boxplot",
                        groupColumn = "Group",
                        groupColours = NULL,
@@ -11,7 +12,9 @@ test_that("Test Boxplots", {
   vdiffr::expect_doppelganger("Boxplots_test_file_1", boxplots)
 
 
-  boxplots2 <- Boxplots(D_hcc$D_long,
+  ## test colours
+  boxplots2 <- Boxplots(D_long,
+                        valueColumn = "intensity_norm",
                        method = "boxplot",
                        groupColumn = "Group",
                        groupColours = c("green", "yellow"),
@@ -20,7 +23,9 @@ test_that("Test Boxplots", {
                        outlierSize = 0.2)
   vdiffr::expect_doppelganger("Boxplots_test_file_2", boxplots2)
 
-  violin <- Boxplots(D_hcc$D_long,
+  ## test violin plot
+  violin <- Boxplots(D_long,
+                     valueColumn = "intensity_norm",
                        method = "violinplot",
                        groupColumn = "Group",
                        groupColours = NULL,
@@ -32,7 +37,8 @@ test_that("Test Boxplots", {
 })
 
 test_that("Boxplots works without grouping", {
-  boxplots <- Boxplots(D_hcc$D_long,
+  boxplots <- Boxplots(D_long,
+                       valueColumn = "intensity_norm",
                        method = "boxplot",
                        groupColumn = NULL,
                        groupColours = NULL,
@@ -40,7 +46,6 @@ test_that("Boxplots works without grouping", {
                        lwd = 0.5,
                        outlierSize = 1)
 
-  expect_s3_class(boxplots, "ggplot")
+  vdiffr::expect_doppelganger("Boxplots_test_file_4", boxplots)
 })
 
-## TODO: test different colours and base_size and other settings

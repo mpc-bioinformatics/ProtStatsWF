@@ -6,6 +6,9 @@
 #'  "intensity_norm" (protein intensities).
 #'  May contain additional columns that can be used for assigning samples to
 #'  groups for colouring.
+#' @param valueColum **character(1)** \cr
+#'  Name of the column in D_long that contains the intensities. Defaults to
+#'  "intensity_column".
 #' @param groupColumn **character(1)** \cr
 #'  Name of the column in D_long that contains the group information for the
 #'  samples. If NULL (default), no grouping is applied.
@@ -39,9 +42,12 @@
 #'   proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
 #'   sampleNameColumn = "Sample", verbose = FALSE)
 #'
-#' ValidValuePlot(D_long = D$D_long, groupColumn = "Group")
+#' D_long <- .pivotLongerSE(SE = D, assayName = "intensity_norm")
+#'
+#' ValidValuePlot(D_long = D_long, groupColumn = "Group")
 #'
 ValidValuePlot <- function(D_long,
+                           valueColumn = "intensity_norm",
                            groupColumn = NULL,
                            groupColours = NULL,
                            baseSize = 15) {
@@ -55,23 +61,24 @@ ValidValuePlot <- function(D_long,
   }
   checkmate::assertNumeric(baseSize, lower = 0)
   # select only relevant columns
-  D_long_sel <- dplyr::select(D_long, c(".sample", "intensity_norm"))
+  D_long_sel <- dplyr::select(D_long, dplyr::all_of(c(".sample", valueColumn)))
+  colnames(D_long_sel) <- c(".sample", ".value")
   if (!is.null(groupColumn)) {
-    D_long_sel <- cbind(D_long_sel, group = D_long[, groupColumn])
+    D_long_sel <- cbind(D_long_sel, .group = D_long[, groupColumn])
   }
   sample_levels <- levels(D_long_sel$.sample)
   #### calculate valid value table ####
-  .sample <- group <- intensity_norm <- nrvalid <- NULL  # initialize variables
+  .sample <- .group <- .value <- nrvalid <- NULL  # initialize variables
   if (!is.null(groupColumn)) {
     valid_value_table <- D_long_sel |>
-      dplyr::group_by(.sample, group) |>
-      dplyr::summarize(nrvalid = sum(!is.na(intensity_norm)),
-                       meanvalid = mean(!is.na(intensity_norm)), .groups = "drop")
+      dplyr::group_by(.sample, .group) |>
+      dplyr::summarize(nrvalid = sum(!is.na(.value)),
+                       meanvalid = mean(!is.na(.value)), .groups = "drop")
   } else {
     valid_value_table <- D_long_sel |>
       dplyr::group_by(.sample) |>
-      dplyr::summarize(nrvalid = sum(!is.na(intensity_norm)),
-                       meanvalid = mean(!is.na(intensity_norm)), .groups = "drop")
+      dplyr::summarize(nrvalid = sum(!is.na(.value)),
+                       meanvalid = mean(!is.na(.value)), .groups = "drop")
   }
   valid_value_table$.sample <- factor(valid_value_table$.sample,
                                       levels = sample_levels)
@@ -85,7 +92,7 @@ ValidValuePlot <- function(D_long,
   if (!is.null(groupColumn)) {
     valid_value_plot <- valid_value_plot +
       ggplot2::geom_bar(stat = "identity", ggplot2::aes(x = .sample,
-                        y = nrvalid, fill = group)) +
+                        y = nrvalid, fill = .group)) +
       ggplot2::labs(fill = groupColumn)
     if (!is.null(groupColours)) valid_value_plot <- valid_value_plot +
         ggplot2::scale_fill_manual(values = groupColours)

@@ -1,7 +1,7 @@
 
 test_that("Test standard PCA plot", {
 
-  PCA <- PCA_Plot(D_hcc$SE,
+  PCA <- PCA_Plot(D_hcc,
                   groupForColour = "Group",
                   colourType = "discrete",
                   groupForShape = "Gender",
@@ -42,7 +42,7 @@ test_that("Test standard PCA plot", {
 
 test_that("Test PCA plot with only shape", {
 
-  PCA <- PCA_Plot(D_hcc$SE,
+  PCA <- PCA_Plot(D_hcc,
                   groupForColour = NULL,
                   colourType = "discrete",
                   groupForShape = "Gender",
@@ -83,7 +83,7 @@ test_that("Test PCA plot with only shape", {
 
 test_that("Test PCA plot with only colour and continuous colour", {
 
-  PCA <- PCA_Plot(D_hcc$SE,
+  PCA <- PCA_Plot(D_hcc,
                   groupForColour = "Age",
                   colourType = "continuous",
                   groupForShape = NULL,

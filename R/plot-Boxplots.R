@@ -6,6 +6,9 @@
 #'  "intensity_norm" (protein intensities).
 #'  May contain additional columns that can be used for assigning samples to
 #'  groups for colouring.
+#'  @param valueColum **character(1)** \cr
+#'  Name of the column in D_long that contains the intensities. Defaults to
+#'  "intensity_column".
 #' @param method **character(1)** \cr
 #'  Options are "boxplot" (default) and "violinplot".
 #' @param groupColumn **character(1)** \cr
@@ -41,8 +44,11 @@
 #'   proteinNameColumn = "Protein", sampleInfoPath = file_clinical,
 #'   sampleNameColumn = "Sample", verbose = FALSE)
 #'
-#' Boxplots(D_long = D$D_long, method = "boxplot", groupColumn = "Group")
+#' D_long <- .pivotLongerSE(SE = D, assayName = "intensity_norm")
+#'
+#' Boxplots(D_long = D_long, method = "boxplot", groupColumn = "Group")
 Boxplots <- function(D_long,
+                     valueColumn = "intensity_norm",
                      method = "boxplot",
                      groupColumn = NULL,
                      groupColours = NULL,
@@ -64,23 +70,25 @@ Boxplots <- function(D_long,
 
   # select only relevant columns
   if (!is.null(groupColumn)) {
-    D_long <- dplyr::select(D_long, c(".sample", "intensity_norm",
-                                      group = dplyr::all_of(groupColumn)))
+    D_long <- dplyr::select(D_long, dplyr::all_of(c(".sample", valueColumn,
+                                      .group = groupColumn)))
   } else {
-    D_long <- dplyr::select(D_long, c(".sample", "intensity_norm"))
+    D_long <- dplyr::select(D_long, dplyr::all_of(c(".sample", valueColumn)))
   }
+  colnames(D_long)[2] <- ".value"
+
   x_axis <- sort(unique(D_long$.sample)) # save the different states for later
-  D_long <- D_long[!is.na(D_long$intensity_norm),] # remove NA values
-  .sample <- intensity_norm <- group <- NULL
+  D_long <- D_long[!is.na(D_long$.value),] # remove NA values
+  .sample <- .value <- .group <- NULL
   if (!is.null(groupColumn)) {
    pl_boxplot <- ggplot2::ggplot(data = D_long,
-      mapping = ggplot2::aes(x = .sample, y = intensity_norm, fill = group)) +
+      mapping = ggplot2::aes(x = .sample, y = .value, fill = .group)) +
      ggplot2::labs(fill = groupColumn)
     if (!is.null(groupColours)) pl_boxplot <- pl_boxplot +
         ggplot2::scale_fill_manual(values = groupColours)
   } else {
     pl_boxplot <- ggplot2::ggplot(data = D_long,
-      mapping = ggplot2::aes(x = .sample, y = intensity_norm))
+      mapping = ggplot2::aes(x = .sample, y = .value))
   }
   pl_boxplot <- pl_boxplot +
     ggplot2::theme_bw(base_size = baseSize) +

@@ -5,7 +5,7 @@ test_that("Test MA plots", {
   dir.create(temp_dir)
   on.exit(unlink(temp_dir, recursive = TRUE))
 
-  MAPlots(D = SummarizedExperiment::assay(D_hcc$SE),
+  MAPlots(SE = D_hcc,
            outputPath = temp_dir, suffix = "",
            maxPlots = 2, alpha = 1,
            plotHeight = 15,
